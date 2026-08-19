@@ -32,10 +32,10 @@ newer is required.
 ## Development
 
 ```sh
-npm install
-npm run format:check
-npm run lint:styles
-npm run lint:js
+pnpm install
+pnpm format:check
+pnpm lint:styles
+pnpm lint:js
 ```
 
 Use the official `discourse_theme` CLI to sync to a development forum or Theme
