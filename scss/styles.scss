@@ -1,0 +1,231 @@
+html,
+body {
+  background: var(--cj-background);
+}
+
+body {
+  color: var(--primary);
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+}
+
+::selection {
+  color: var(--primary);
+  background: color-mix(in oklch, var(--cj-brand) 24%, transparent);
+}
+
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--tertiary);
+  outline-offset: 2px;
+}
+
+/*
+ * Discourse normally adds the sidebar width to every .wrap. The product uses
+ * one shared 85rem frame, with the sidebar participating inside that frame.
+ */
+
+body.has-sidebar-page .wrap {
+  max-width: var(--d-max-width);
+}
+
+/* Product header: this is the one intentionally rounded shell. */
+.d-header-wrap {
+  background: transparent;
+}
+
+.d-header {
+  background: transparent;
+
+  .wrap {
+    width: calc(100% - 5rem);
+    height: 4.5rem;
+    margin-block-start: var(--space-4);
+    padding-inline: var(--space-4);
+    box-sizing: border-box;
+    background: var(--cj-header);
+    border-radius: 1.5rem;
+  }
+
+  .contents {
+    display: flex;
+    gap: var(--space-5);
+    align-items: center;
+    height: 100%;
+  }
+
+  #site-logo {
+    width: auto;
+    max-width: 10rem;
+    height: 2.5rem;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .header-dropdown-toggle .btn,
+  .btn-sidebar-toggle {
+    color: var(--header_primary);
+    background: transparent;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--header_primary);
+      background: color-mix(in oklch, var(--header_primary) 12%, transparent);
+    }
+  }
+}
+
+/* Existing cross-product navigation, supplied by the Comparajogos header. */
+.cj-header-nav {
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--space-1);
+  align-items: center;
+  min-width: 0;
+
+  .cj-nav-item {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-height: 2.5rem;
+    padding-inline: var(--space-3);
+    color: var(--header_primary);
+    font-size: var(--font-down-1);
+    white-space: nowrap;
+    border-radius: var(--d-button-border-radius);
+
+    &:hover,
+    &.active {
+      color: var(--header_primary);
+      background: color-mix(in oklch, var(--header_primary) 12%, transparent);
+    }
+  }
+
+  .cj-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentcolor;
+  }
+}
+
+/* Keep the core category and tag filters visible with the Canvas component. */
+body .category-breadcrumb {
+  display: flex;
+}
+
+/*
+ * Canvas highlights #create-topic. Discourse 2026 renders its drafts trigger
+ * as a second DComboButton half, so both halves need the same state colors.
+ */
+
+.topic-create-button__combo.--has-menu {
+  #create-topic,
+  .d-combo-button-menu {
+    color: var(--secondary);
+    background: var(--tertiary);
+    border-color: transparent;
+
+    .d-icon {
+      color: currentcolor;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--secondary);
+      background: var(--tertiary-hover);
+    }
+  }
+}
+
+/* Blocks-based bridge from Discourse discovery to the product catalog. */
+.cj-product-bridge {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  min-width: 0;
+  min-height: 3.25rem;
+  margin-block-end: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  color: var(--primary);
+  background: var(--cj-card);
+  border: 1px solid var(--cj-border);
+  border-radius: var(--d-border-radius-large);
+
+  &:hover {
+    color: var(--primary);
+    background: var(--cj-control);
+  }
+
+  &__icon {
+    display: grid;
+    flex: 0 0 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: white;
+    background: var(--tertiary);
+    border-radius: 50%;
+    place-items: center;
+  }
+
+  &__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+
+    strong,
+    small {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      font-size: var(--font-down-1);
+    }
+
+    small {
+      color: var(--primary-medium);
+      font-size: var(--font-down-2);
+    }
+  }
+}
+
+@media (width < 768px) {
+  :root {
+    --canvas-header-height: 3.75rem;
+    --canvas-content-padding: var(--space-4);
+    --d-wrap-padding-x: var(--space-3);
+  }
+
+  .d-header {
+    background: var(--cj-header);
+    border-bottom: 1px solid var(--cj-border);
+
+    .wrap {
+      width: 100%;
+      height: 3.75rem;
+      margin-block-start: 0;
+      padding-inline: var(--space-3);
+      border-radius: 0;
+    }
+
+    #site-logo {
+      max-width: 8rem;
+      height: 2rem;
+    }
+  }
+
+  .cj-header-nav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

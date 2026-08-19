@@ -1,0 +1,77 @@
+/*
+ * Canvas properties mapped to the React client design contract.
+ * Keep product styling here so Discourse core can own component internals.
+ */
+
+:root {
+  /* React client semantic colors (client/styles/global.css). */
+  --cj-background: dark-light-choose(oklch(97% 0 0deg), oklch(20.02% 0 0deg));
+  --cj-card: dark-light-choose(oklch(98% 0 0deg), oklch(21% 0.006 285.885deg));
+  --cj-control: dark-light-choose(oklch(94% 0 0deg), oklch(25% 0 0deg));
+  --cj-border: dark-light-choose(
+    oklch(92% 0.004 286.32deg),
+    oklch(100% 0 0deg / 10%)
+  );
+  --cj-header: dark-light-choose(#fff, #000);
+  --cj-brand: #2364d8;
+
+  /* Layout: the React header and inner page both resolve to 85rem. */
+  --d-max-width: 85rem;
+  --d-wrap-padding-x: clamp(var(--space-3), 2.5vw, 2.5rem);
+  --d-main-content-gap: var(--space-5);
+  --canvas-nav-space: var(--space-3);
+  --canvas-content-padding: var(--space-5);
+  --canvas-topic-list-padding: 0.9em;
+
+  /* Base surfaces. */
+  --canvas-background: var(--cj-background);
+  --canvas-surface: var(--cj-card);
+  --canvas-border: 1px solid var(--cj-border);
+  --canvas-border-light: 1px solid var(--cj-border);
+
+  /* Quiet geometry: rounding is reserved for meaningful containers. */
+  --d-border-radius: 0.25rem;
+  --d-border-radius-large: 0.5rem;
+  --d-button-border-radius: 0.375rem;
+  --d-input-border-radius: 0.375rem;
+  --d-nav-pill-border-radius: 0.375rem;
+
+  /* Controls retain Discourse sizing and interaction behavior. */
+  --canvas-button-padding: 0.5em 0.7em;
+  --canvas-button-primary-padding: 0.5em 0.8em;
+
+  /* Floating product header. */
+  --canvas-header-height: 5.5rem;
+  --canvas-header-background: transparent;
+  --canvas-header-border: none;
+  --canvas-header-shadow: none;
+
+  /* Sidebar sits inside the same 85rem frame as the content. */
+  --d-sidebar-width: 16rem;
+  --d-sidebar-background: transparent;
+  --canvas-sidebar-border: 1px solid var(--cj-border);
+  --canvas-sidebar-scrollbar: thin;
+  --d-sidebar-row-height: 2.5em;
+  --d-sidebar-highlight-background: color-mix(
+    in oklch,
+    var(--cj-brand) 14%,
+    transparent
+  );
+
+  /* Canvas panels are restrained surfaces, not floating bubbles. */
+  --canvas-panel-background: var(--cj-card);
+  --canvas-panel-padding: var(--space-4);
+  --canvas-panel-radius: var(--d-border-radius-large);
+  --canvas-panel-border: 1px solid var(--cj-border);
+  --canvas-panel-shadow: none;
+
+  /* Banner and header-search defaults for components added later. */
+  --canvas-banner-color: var(--primary);
+  --canvas-banner-background: var(--cj-card);
+  --canvas-banner-padding: var(--space-4);
+  --canvas-banner-radius: var(--d-border-radius-large);
+  --canvas-banner-border: 1px solid var(--cj-border);
+  --canvas-banner-shadow: none;
+  --canvas-header-search-padding: 0.55em;
+  --canvas-header-search-border: 1px solid var(--cj-border);
+}
