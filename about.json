@@ -1,0 +1,44 @@
+{
+  "name": "Compara Jogos",
+  "component": false,
+  "authors": "Compara Jogos",
+  "about_url": "https://github.com/comparajogos/discourse-comparajogos-theme",
+  "license_url": "https://github.com/comparajogos/discourse-comparajogos-theme/blob/main/LICENSE",
+  "theme_version": "1.0.0",
+  "minimum_discourse_version": "3.6.0.beta1",
+  "maximum_discourse_version": null,
+  "assets": {},
+  "modifiers": {
+    "svg_icons": ["magnifying-glass"]
+  },
+  "color_schemes": {
+    "Compara Jogos Light": {
+      "primary": "242428",
+      "secondary": "f7f7f7",
+      "tertiary": "2364d8",
+      "quaternary": "2364d8",
+      "header_background": "ffffff",
+      "header_primary": "2364d8",
+      "highlight": "dce9ff",
+      "hover": "eef4ff",
+      "selected": "e3edff",
+      "danger": "dc2626",
+      "success": "15803d",
+      "love": "e11d48"
+    },
+    "Compara Jogos Dark": {
+      "primary": "f7f7f8",
+      "secondary": "191919",
+      "tertiary": "5b91f0",
+      "quaternary": "5b91f0",
+      "header_background": "000000",
+      "header_primary": "f7f7f8",
+      "highlight": "25354d",
+      "hover": "252a31",
+      "selected": "25354d",
+      "danger": "f87171",
+      "success": "4ade80",
+      "love": "fb7185"
+    }
+  }
+}

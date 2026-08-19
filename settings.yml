@@ -1,0 +1,24 @@
+show_mobile_tab_bar:
+  default: true
+  description:
+    en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
+    pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
+
+dense_topic_metadata:
+  default: true
+  description:
+    en: "Keep reply, view, and activity columns visible on wider screens."
+    pt_BR: "Mantém as colunas de respostas, visualizações e atividade em telas maiores."
+
+show_product_bridge:
+  default: true
+  description:
+    en: "Show a compact link to the Compara Jogos catalog in the discovery sidebar."
+    pt_BR: "Mostra um link compacto para o catálogo do Compara Jogos na barra lateral."
+
+product_url:
+  default: "https://www.comparajogos.com.br"
+  type: string
+  description:
+    en: "Compara Jogos product URL used by the sidebar bridge."
+    pt_BR: "Endereço do Compara Jogos usado pelo atalho na barra lateral."

@@ -1,0 +1,21 @@
+{
+  "name": "discourse-comparajogos-theme",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "https://github.com/comparajogos/discourse-comparajogos-theme",
+  "author": "Compara Jogos",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:js": "eslint .",
+    "lint:styles": "stylelint \"**/*.scss\""
+  },
+  "devDependencies": {
+    "@discourse/lint-configs": "3.3.0",
+    "ember-template-lint": "7.9.3",
+    "eslint": "10.6.0",
+    "prettier": "3.8.1",
+    "stylelint": "17.5.0"
+  }
+}
