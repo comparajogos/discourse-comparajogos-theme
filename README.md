@@ -34,6 +34,7 @@ newer is required.
 ```sh
 pnpm install
 pnpm format:check
+pnpm lint:hbs
 pnpm lint:styles
 pnpm lint:js
 ```

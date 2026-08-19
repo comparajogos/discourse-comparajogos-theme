@@ -9,14 +9,15 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint:hbs": "ember-template-lint 'javascripts/**/*.gjs' --no-error-on-unmatched-pattern",
     "lint:js": "eslint .",
     "lint:styles": "stylelint \"**/*.scss\""
   },
   "devDependencies": {
-    "@discourse/lint-configs": "3.3.0",
+    "@discourse/lint-configs": "2.43.0",
     "ember-template-lint": "7.9.3",
-    "eslint": "10.6.0",
+    "eslint": "9.39.2",
     "prettier": "3.8.1",
-    "stylelint": "17.5.0"
+    "stylelint": "17.4.0"
   }
 }
