@@ -18,7 +18,7 @@
   /* Layout: the React header and inner page both resolve to 85rem. */
   --d-max-width: 85rem;
   --d-wrap-padding-x: clamp(var(--space-3), 2.5vw, 2.5rem);
-  --d-main-content-gap: var(--space-5);
+  --d-main-content-gap: var(--space-8);
   --canvas-nav-space: var(--space-3);
   --canvas-content-padding: var(--space-5);
   --canvas-topic-list-padding: 0.9em;
@@ -41,7 +41,7 @@
   --canvas-button-primary-padding: 0.5em 0.8em;
 
   /* Floating product header. */
-  --canvas-header-height: 5.5rem;
+  --canvas-header-height: 6.125rem;
   --canvas-header-background: transparent;
   --canvas-header-border: none;
   --canvas-header-shadow: none;
@@ -59,9 +59,9 @@
   );
 
   /* Canvas panels are restrained surfaces, not floating bubbles. */
-  --canvas-panel-background: var(--cj-card);
+  --canvas-panel-background: var(--cj-header);
   --canvas-panel-padding: var(--space-4);
-  --canvas-panel-radius: var(--d-border-radius-large);
+  --canvas-panel-radius: 0.75rem;
   --canvas-panel-border: 1px solid var(--cj-border);
   --canvas-panel-shadow: none;
 

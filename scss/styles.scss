@@ -36,10 +36,10 @@ body.has-sidebar-page .wrap {
 .d-header {
   background: transparent;
 
-  .wrap {
+  &.d-header .wrap {
     width: calc(100% - 5rem);
-    height: 4.5rem;
-    margin-block-start: var(--space-4);
+    height: 4.625rem;
+    margin-block-start: 1.5rem;
     padding-inline: var(--space-4);
     box-sizing: border-box;
     background: var(--cj-header);
@@ -47,10 +47,53 @@ body.has-sidebar-page .wrap {
   }
 
   .contents {
+    position: relative;
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-6);
     align-items: center;
     height: 100%;
+  }
+
+  .header-sidebar-toggle {
+    position: absolute;
+    z-index: 1;
+    inset-inline-start: calc((var(--space-10) + var(--space-1)) * -1);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .home-logo-wrapper-outlet {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .before-header-panel-outlet {
+    order: 2;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .floating-search-input-wrapper {
+    order: 3;
+    flex: 1 1 18rem;
+    min-width: 10rem;
+
+    .floating-search-input {
+      max-width: 30rem;
+      margin-inline-start: auto;
+    }
+
+    .search-input {
+      min-height: 2.75rem;
+      background: var(--cj-card);
+      border: 0;
+      border-radius: 999px;
+    }
+  }
+
+  .panel {
+    order: 4;
+    flex: 0 0 auto;
   }
 
   #site-logo {
@@ -70,6 +113,50 @@ body.has-sidebar-page .wrap {
     &:focus-visible {
       color: var(--header_primary);
       background: color-mix(in oklch, var(--header_primary) 12%, transparent);
+    }
+  }
+
+  .btn-sidebar-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+
+    .d-icon {
+      display: none;
+    }
+
+    &::before {
+      color: currentcolor;
+      font-size: 1.75rem;
+      font-weight: 300;
+      line-height: 1;
+      content: "›";
+    }
+
+    &[aria-expanded="true"]::before {
+      content: "‹";
+    }
+  }
+
+  .sign-up-button {
+    color: var(--header_primary);
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .login-button {
+    min-height: 2.5rem;
+    padding-inline: var(--space-5);
+    color: white;
+    background: var(--cj-brand);
+    border-color: transparent;
+    border-radius: 999px;
+
+    &:hover,
+    &:focus-visible {
+      color: white;
+      background: color-mix(in oklch, var(--cj-brand) 84%, white);
     }
   }
 }
@@ -104,6 +191,95 @@ body.has-sidebar-page .wrap {
     width: 1.5rem;
     height: 1.5rem;
     fill: currentcolor;
+  }
+}
+
+/* Community presence is a product-wide pulse, not table metadata. */
+#whos-online {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  min-width: 0;
+  margin-block: 0 var(--space-5);
+  overflow: hidden;
+  white-space: nowrap;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-inline-end: var(--space-3);
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+
+    &::before {
+      width: 0.5rem;
+      height: 0.5rem;
+      margin-inline-end: var(--space-2);
+      background: var(--success);
+      border-radius: 50%;
+      content: "";
+    }
+  }
+
+  > a {
+    flex: 0 0 auto;
+    margin-inline-start: -0.1875rem;
+  }
+
+  .avatar {
+    width: 1.625rem;
+    height: 1.625rem;
+    border: 2px solid var(--cj-background);
+  }
+}
+
+/*
+ * Discovery reads as one product section: an unboxed activity rail followed
+ * by a single black topic surface. Individual rows stay square and quiet.
+ */
+
+.navigation-topics,
+.navigation-category,
+.tags-page {
+  #list-area {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .topic-list {
+    overflow: hidden;
+    background: var(--cj-header);
+    border: 1px solid var(--cj-border);
+    border-radius: 1.5rem;
+
+    .topic-list-header tr,
+    .topic-list-item {
+      border-color: var(--cj-border);
+    }
+
+    .topic-list-item {
+      transition: background-color 140ms ease-out;
+
+      &:hover {
+        background: color-mix(in oklch, var(--primary) 5%, transparent);
+      }
+    }
+
+    .main-link .title {
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: -0.012em;
+    }
+
+    .topic-excerpt,
+    .topic-list-data,
+    .topic-list-header {
+      color: var(--primary-medium);
+    }
   }
 }
 
@@ -200,12 +376,22 @@ body .category-breadcrumb {
     background: var(--cj-header);
     border-bottom: 1px solid var(--cj-border);
 
-    .wrap {
+    &.d-header .wrap {
       width: 100%;
       height: 3.75rem;
       margin-block-start: 0;
       padding-inline: var(--space-3);
       border-radius: 0;
+    }
+
+    .contents {
+      gap: var(--space-3);
+    }
+
+    .header-sidebar-toggle {
+      position: static;
+      order: 0;
+      transform: none;
     }
 
     #site-logo {
@@ -216,6 +402,15 @@ body .category-breadcrumb {
 
   .cj-header-nav {
     display: none;
+  }
+
+  .navigation-topics,
+  .navigation-category,
+  .tags-page {
+    .topic-list {
+      border-inline: 0;
+      border-radius: 0;
+    }
   }
 }
 

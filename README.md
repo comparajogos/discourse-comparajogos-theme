@@ -22,6 +22,8 @@ https://github.com/comparajogos/discourse-comparajogos-theme
 Select **Compara Jogos Light** as the default color scheme and associate
 **Compara Jogos Dark** as its dark-mode scheme. In site typography settings,
 use **Inter** for base and heading fonts to match the React client exactly.
+Set **Search experience** to **Search field in site header** so the product
+header uses the same search-first composition as the React client.
 
 The required **Canvas Settings** component is installed with the theme. Other
 Comparajogos components are deliberately not bundled into the base; validate
