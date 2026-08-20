@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 /* Plugin adjustments
  *
  * Small corrections to plugins Compara Jogos runs, kept apart from the theme's
@@ -110,4 +112,64 @@
 /* discourse-social-links: without links, the block still reserves space. */
 .iconic-user-fields {
   padding-block-end: 0;
+}
+
+/* discourse-topic-voting: the vote button ships with padding that misaligns it
+ * from the title it sits beside. */
+
+.voting.title-voting {
+  padding-block-start: 0;
+}
+
+/* Game names are long, but a tag still has to stay a tag. */
+.discourse-tag {
+  max-width: 17em;
+}
+
+/* A featured link is metadata, not a second title. */
+.location-text .label-text,
+.main-link a.topic-featured-link {
+  font-size: var(--font-down-2);
+  line-height: 1;
+  white-space: normal;
+}
+
+/* Which profile tab you are on should be readable at a glance. */
+.user-secondary-navigation li[aria-current="page"] {
+  border-inline-start: 3px solid var(--cj-action);
+}
+
+/* discourse-social-links: the card's controls collide with the fields above. */
+#user-card .usercard-controls {
+  margin-block-start: var(--space-4);
+}
+
+@include viewport.until(md) {
+  /* The collapsed profile menu is the page's primary action on mobile, so it
+   * reads as a button rather than as a link. */
+
+  .mobile-nav > li > a.expander {
+    padding-block: var(--space-2);
+    color: var(--cj-on-action);
+    font-size: var(--font-up-1);
+    background: var(--cj-action);
+    border: 0;
+    border-radius: var(--cj-radius-control);
+
+    .d-icon {
+      color: currentcolor;
+      fill: currentcolor;
+    }
+
+    .selection {
+      max-width: unset;
+    }
+  }
+
+  /* Category descriptions are how a newcomer picks a category; core hides them
+   * at this width. */
+
+  .category-list .category-description {
+    display: table-row;
+  }
 }

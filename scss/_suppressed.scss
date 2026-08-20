@@ -39,6 +39,13 @@
   display: none;
 }
 
+/* Community events are public; a private event has no audience here.
+ * TODO: positional — discourse-calendar exposes no class for this control. */
+
+.post-event-builder-modal form > div:nth-child(5) {
+  display: none;
+}
+
 /* Polls are open to everyone; the group restriction only invites mistakes. */
 .poll-ui-builder-form .options .poll-select:nth-child(3) {
   display: none;

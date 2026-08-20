@@ -9,6 +9,7 @@
 @use "copy";
 @use "suppressed";
 @use "plugins";
+@use "editor";
 @use "tab-bar" with (
   $enabled: $show_mobile_tab_bar
 );

@@ -1,0 +1,19 @@
+/* Composer toolbar
+ *
+ * Buttons the forum does not want members reaching for. The upstream override
+ * had a trailing comma in this selector list, so none of it ever applied.
+ */
+
+.d-editor-button-bar {
+  /* Images go through the upload button; the custom-toolbar plugin's size and
+   * colour controls produce markup the catalog cannot render. */
+
+  .addimg_ui_button,
+  .color_ui_button,
+  .size_ui_button,
+  /* Quoting a whole post says less than quoting the line you're answering. */
+  .btn.quote,
+  .btn.left_ui_button {
+    display: none;
+  }
+}

@@ -71,5 +71,12 @@ $height: 3.5rem;
     .header-dropdown-toggle.chat-header-icon {
       display: none;
     }
+
+    /* Full-page chat sizes itself to the viewport, so the bar's clearance would
+     * push its composer off-screen. */
+
+    html.has-full-page-chat #main-outlet {
+      padding-block-end: 0;
+    }
   }
 }
