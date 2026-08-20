@@ -74,7 +74,7 @@ body {
   --topic-title-font-weight--visited: 700;
   --title-color: var(--cj-text);
   --title-color--read: var(--cj-text-muted);
-  --d-topic-list-title-font-size: var(--font-up-2);
+  --d-topic-list-title-font-size: var(--font-0-rem);
   --d-topic-list-data-padding-y: var(--space-4);
   --d-topic-list-data-padding-x: var(--space-2);
   --d-topic-list-header-data-padding-y: var(--space-3);
@@ -284,7 +284,7 @@ a {
   .login-button {
     min-height: 2.625rem;
     padding-inline: var(--space-5);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
     font-weight: 600;
   }
 
@@ -396,7 +396,7 @@ body.has-sidebar-page .wrap {
 
   .sidebar-section-header-text {
     color: var(--cj-text-muted);
-    font-size: var(--font-down-2);
+    font-size: var(--font-down-2-rem);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -449,7 +449,7 @@ body {
 
   /* The uc-modernize flag centres the banner via its own variable name. */
   --welcome-banner-text-align: start;
-  --d-welcome-banner-header-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  --d-welcome-banner-header-size: clamp(1.25rem, 1.8vw, 1.625rem);
   --d-welcome-banner-padding-top: var(--space-8);
   --d-welcome-banner-padding-right: var(--space-8);
   --d-welcome-banner-padding-bottom: var(--space-8);
@@ -469,15 +469,24 @@ body {
     ),
     var(--cj-panel);
 
-  &__title {
+  /* The uc-modernize stylesheet sets this title's size and weight *directly*
+   * (`:where(.uc-…) .welcome-banner__title`), bypassing the
+   * --d-welcome-banner-header-size layer, so this has to match its two-class
+   * specificity rather than set the variable. */
+
+  &__wrap &__title {
     /* Core auto-centres the title with `margin-inline: auto`, which overrode the
      * start alignment as soon as a max-width was set. */
     max-width: 28ch;
     margin-inline: 0;
     color: var(--cj-text);
-    font-weight: 750;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
+
+    /* 32px was twice the topic title with nothing in between. The client's
+     * largest interface type is its section heading. */
+    font-size: var(--d-welcome-banner-header-size);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -670,7 +679,7 @@ body.has-sidebar-page .discovery-layout__content {
   > li > button {
     min-height: 2.5rem;
     padding-inline: var(--space-4);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
     font-weight: 500;
     border-radius: var(--d-nav-pill-border-radius);
     transition:
@@ -687,6 +696,10 @@ body.has-sidebar-page .discovery-layout__content {
 .btn {
   min-height: var(--button-height);
   padding-inline: var(--space-4);
+
+  /* `text-sm font-medium` in the client's Button. At body size a button
+   * competes with the content it acts on. */
+  font-size: var(--font-down-1-rem);
   font-weight: 600;
   border: 1px solid transparent;
   border-radius: var(--d-button-border-radius);
@@ -784,7 +797,7 @@ textarea,
 
   .topic-list-header {
     color: var(--cj-text-muted);
-    font-size: var(--font-down-2);
+    font-size: var(--font-down-2-rem);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -863,7 +876,7 @@ textarea,
     min-height: 1.5rem;
     padding-inline: var(--space-2);
     color: color-mix(in oklab, var(--category-badge-color) 78%, var(--cj-text));
-    font-size: var(--font-down-2);
+    font-size: var(--font-down-2-rem);
     font-weight: 500;
     background: color-mix(
       in srgb,
@@ -886,7 +899,7 @@ textarea,
 .discourse-tag {
   padding: 0.15em 0.5em;
   color: var(--cj-text-muted);
-  font-size: var(--font-down-2);
+  font-size: var(--font-down-2-rem);
   background: var(--primary-very-low);
   border-radius: 999px;
 }
@@ -965,7 +978,7 @@ textarea,
   h1 {
     max-width: 24ch;
     color: var(--cj-text);
-    font-size: clamp(var(--font-up-3), 3vw, var(--font-up-5));
+    font-size: clamp(var(--font-up-2-rem), 2.4vw, 2rem);
     font-weight: 750;
     line-height: 1.08;
     letter-spacing: -0.035em;
@@ -1019,7 +1032,7 @@ textarea,
   .cooked {
     max-width: 72ch;
     color: var(--cj-text);
-    font-size: var(--font-0);
+    font-size: var(--font-0-rem);
     line-height: 1.65;
 
     p,
@@ -1212,7 +1225,7 @@ textarea,
       min-height: 2.5rem;
       margin: 0;
       padding: var(--space-2) var(--space-3) !important;
-      font-size: var(--font-0);
+      font-size: var(--font-0-rem);
       font-weight: 500;
       line-height: 1.4;
       background: var(--cj-surface-muted);
@@ -1298,7 +1311,7 @@ textarea,
   .d-editor-input {
     padding: var(--space-3) var(--space-4) !important;
     color: var(--cj-text);
-    font-size: var(--font-0);
+    font-size: var(--font-0-rem);
     line-height: 1.55;
     border-radius: 0;
     box-shadow: none;
@@ -1625,7 +1638,7 @@ textarea,
     }
 
     .main-link .title {
-      font-size: var(--font-0);
+      font-size: var(--font-0-rem);
     }
 
     .topic-list-data {
@@ -1638,7 +1651,7 @@ textarea,
 
     h1 {
       max-width: 100%;
-      font-size: var(--font-up-3);
+      font-size: var(--font-up-3-rem);
       letter-spacing: -0.025em;
     }
   }

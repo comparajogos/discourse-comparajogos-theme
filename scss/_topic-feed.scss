@@ -17,7 +17,7 @@
   .topic-list-item {
     /* The row is the card's content, so the cell owns its own padding. */
     > .cj-feed-cell {
-      padding-block: var(--space-5);
+      padding-block: var(--space-4);
     }
   }
 }
@@ -26,14 +26,12 @@
   width: 100%;
 }
 
-/* A read topic is dimmed, never un-bolded. */
-.topic-list-item.visited .cj-feed__title a.title {
-  color: var(--title-color--read);
-}
-
 .cj-feed {
+  /* Explicit gaps rather than one flex gap: tight between byline and title,
+   * a step before the stats, more before the reply pill. Uniform spacing is
+   * what made the row feel like dead space. */
   display: flex;
-  gap: var(--space-1);
+  gap: 0.1875rem;
   flex-direction: column;
   min-width: 0;
 
@@ -43,7 +41,7 @@
     align-items: center;
     min-width: 0;
     color: var(--cj-text-muted);
-    font-size: var(--font-down-2);
+    font-size: var(--font-down-2-rem);
 
     .avatar {
       width: 1.5rem;
@@ -69,6 +67,7 @@
 
   .topic-statuses {
     margin-inline-start: auto;
+    color: var(--cj-text-muted);
   }
 
   &__title {
@@ -81,12 +80,9 @@
       display: -webkit-box;
       overflow: hidden;
 
-      /* `font-bold text-base` in TopicItem.tsx. Weight comes from core's
-       * --topic-title-* tokens; the colour is bound explicitly because an
-       * unread title otherwise falls back to the anchor's link colour. */
-      color: var(--title-color);
-      font-size: var(--font-0);
-      line-height: 1.25;
+      /* Weight, colour and visited state come from core's own
+       * `.topic-list-main-link a.title` rules, which the wrapper opts into. */
+      line-height: 1.3;
       letter-spacing: -0.012em;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -103,9 +99,9 @@
     gap: var(--space-4);
     align-items: center;
     min-width: 0;
-    margin-block-start: var(--space-1);
+    margin-block-start: 0.125rem;
     color: var(--cj-text-muted);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
   }
 
   &__stat {
@@ -125,12 +121,15 @@
     }
   }
 
+  /* At the end of the byline, so it reads as part of the row rather than
+   * floating alone at the far edge of a wide list. */
+
   &__taxonomy {
     display: flex;
     gap: var(--space-2);
     align-items: center;
     min-width: 0;
-    margin-inline-start: auto;
+    margin-inline-start: var(--space-2);
   }
 
   /* Who spoke last is the strongest signal that a thread is alive, so it gets
@@ -143,9 +142,9 @@
     align-self: start;
     max-width: 100%;
     margin-block-start: var(--space-2);
-    padding: 0.15rem var(--space-3);
+    padding: 0.125rem var(--space-3);
     color: var(--cj-text-muted);
-    font-size: var(--font-down-2);
+    font-size: var(--font-down-2-rem);
     background: var(--cj-surface-muted);
     border-radius: var(--cj-radius-pill);
     transition: background-color var(--cj-duration-fast) var(--cj-ease-out);

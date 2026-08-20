@@ -67,7 +67,7 @@
     margin-inline-start: var(--space-1);
     padding: 0 var(--space-2);
     color: var(--cj-text-muted);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
     font-weight: 600;
     line-height: normal;
     background: var(--cj-surface-muted);
@@ -121,7 +121,7 @@
     display: block;
     padding-inline-start: var(--space-1);
     color: var(--cj-text-muted);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
     font-weight: 600;
   }
 }

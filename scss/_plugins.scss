@@ -129,7 +129,7 @@
 /* A featured link is metadata, not a second title. */
 .location-text .label-text,
 .main-link a.topic-featured-link {
-  font-size: var(--font-down-2);
+  font-size: var(--font-down-2-rem);
   line-height: 1;
   white-space: normal;
 }
@@ -151,7 +151,7 @@
   .mobile-nav > li > a.expander {
     padding-block: var(--space-2);
     color: var(--cj-on-action);
-    font-size: var(--font-up-1);
+    font-size: var(--font-up-1-rem);
     background: var(--cj-action);
     border: 0;
     border-radius: var(--cj-radius-control);

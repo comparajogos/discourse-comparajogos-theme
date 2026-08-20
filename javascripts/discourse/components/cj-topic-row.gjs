@@ -43,17 +43,24 @@ export default class CjTopicRow extends Component {
             <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
               {{dAvatar this.originalPoster imageSize="small"}}
             </DUserLink>
-            <DUserLink @user={{this.originalPoster}} class="cj-feed__author">
-              {{this.originalPoster.username}}
+            <DUserLink @user={{this.originalPoster}}>
+              <span class="cj-feed__author">
+                {{this.originalPoster.username}}
+              </span>
             </DUserLink>
           {{/if}}
           <span class="cj-feed__age">
             {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
           </span>
           <TopicStatus @topic={{@topic}} @context="topic-list" />
+
+          <span class="cj-feed__taxonomy">
+            {{~dCategoryLink @topic.category~}}
+            {{~dDiscourseTags @topic mode="list"~}}
+          </span>
         </div>
 
-        <div class="cj-feed__title">
+        <div class="cj-feed__title topic-list-main-link">
           {{dTopicLink @topic}}
           <TopicPostBadges
             @unreadPosts={{@topic.unread_posts}}
@@ -76,10 +83,6 @@ export default class CjTopicRow extends Component {
             {{@topic.replyCount}}
           </span>
 
-          <span class="cj-feed__taxonomy">
-            {{~dCategoryLink @topic.category~}}
-            {{~dDiscourseTags @topic mode="list"~}}
-          </span>
         </div>
 
         {{#if this.showLastReply}}
