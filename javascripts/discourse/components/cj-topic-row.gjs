@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { htmlSafe } from "@ember/template";
 import TopicPostBadges from "discourse/components/topic-post-badges";
 import TopicStatus from "discourse/components/topic-status";
 import DUserLink from "discourse/ui-kit/d-user-link";
@@ -72,6 +73,10 @@ export default class CjTopicRow extends Component {
             />
           </div>
 
+          {{#if @topic.excerpt}}
+            <p class="cj-feed__excerpt">{{htmlSafe @topic.excerpt}}</p>
+          {{/if}}
+
           <div class="cj-feed__stats">
             <span
               class="cj-feed__stat {{if @topic.liked '--liked'}}"
@@ -82,56 +87,31 @@ export default class CjTopicRow extends Component {
             </span>
 
             <span class="cj-feed__stat">
+              {{dIcon "far-eye"}}
+              {{dNumber @topic.views numberKey="views_long"}}
+            </span>
+
+            <span class="cj-feed__stat">
               {{dIcon "far-comment"}}
               {{@topic.replyCount}}
             </span>
 
+            {{#if this.showLastReply}}
+              <a
+                href={{@topic.lastPostUrl}}
+                title={{@topic.bumpedAtTitle}}
+                class="cj-feed__last"
+              >
+                {{dAvatar this.lastPoster imageSize="small"}}
+                <span>
+                  {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
+                </span>
+              </a>
+            {{/if}}
           </div>
 
-          {{#if this.showLastReply}}
-            <a
-              href={{@topic.lastPostUrl}}
-              title={{@topic.bumpedAtTitle}}
-              class="cj-feed__last-reply"
-            >
-              {{dIcon "reply"}}
-              <span class="cj-feed__last-reply-name">
-                {{this.lastPoster.username}}
-              </span>
-              <span>
-                {{i18n (themePrefix "topic_feed.replied")}}
-                {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
-              </span>
-            </a>
-          {{/if}}
         </div>
 
-        <div class="cj-feed__aside">
-          <div class="cj-feed__participants">
-            {{#each @topic.featuredUsers as |poster|}}
-              {{#if poster.moreCount}}
-                <span class="cj-feed__more-count">{{poster.moreCount}}</span>
-              {{else}}
-                <DUserLink
-                  @username={{poster.user.username}}
-                  @href={{poster.user.path}}
-                >
-                  {{dAvatar
-                    poster
-                    avatarTemplatePath="user.avatar_template"
-                    usernamePath="user.username"
-                    namePath="user.name"
-                    imageSize="small"
-                  }}
-                </DUserLink>
-              {{/if}}
-            {{/each}}
-          </div>
-
-          <span class="cj-feed__views">
-            {{dNumber @topic.views numberKey="views_long"}}
-          </span>
-        </div>
       </div>
     </td>
   </template>

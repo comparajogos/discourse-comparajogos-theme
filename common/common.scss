@@ -578,10 +578,14 @@ body {
  * 1440 that leaves the list about 720px — too narrow for a topic title. So the
  * rail waits until there is room for all three. */
 
+/* With Discourse's own sidebar open the rail is a third column. It still earns
+ * its place at laptop width — a 1000px list of short rows beside nothing was
+ * worse than a narrower list with a rail. */
+
 body.has-sidebar-page .discovery-layout__content {
   grid-template-columns: minmax(0, 1fr);
 
-  @media (width >= 100rem) {
+  @include viewport.from(xl) {
     grid-template-columns: minmax(0, 1fr) var(--cj-rail-width);
   }
 }
@@ -855,7 +859,14 @@ textarea,
     }
   }
 
+  /* One hairline per row. The row and the cell were both drawing a border,
+   * which stacked into a thick grey line instead of a hairline. */
+
   .topic-list-data {
+    border-block-end: 0;
+  }
+
+  .topic-list-item:not(:last-child) {
     border-block-end: 1px solid var(--cj-border);
   }
 
@@ -939,9 +950,23 @@ textarea,
   min-width: 1.25rem;
   min-height: 1.25rem;
   color: var(--cj-on-action);
+
+  /* Core sizes this in em, so inside an already-reduced context it collapsed to
+   * about 10px. Pinned in rem. */
+  font-size: var(--font-down-2-rem);
   font-weight: 700;
   background: var(--cj-action);
-  border-radius: 999px;
+  border-radius: var(--cj-radius-pill);
+}
+
+/* Discourse still renders empty #user-card / #group-card placeholders inside
+ * #main-outlet — the real card is a floating menu now. They carry a fixed width,
+ * which pushed the document 21px wider than a 390px viewport and gave every
+ * mobile page a horizontal scrollbar. */
+
+#group-card,
+#user-card {
+  max-width: 100%;
 }
 
 /* Category and group indexes */

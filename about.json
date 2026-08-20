@@ -13,13 +13,15 @@
       "chevron-left",
       "chevron-right",
       "far-comment",
+      "far-eye",
       "far-heart",
       "heart",
       "magnifying-glass",
       "reply",
       "share-nodes"
     ],
-    "only_theme_color_schemes": true
+    "only_theme_color_schemes": true,
+    "serialize_topic_excerpts": true
   },
   "theme_site_settings": {
     "search_experience": "search_field"
