@@ -14,7 +14,7 @@
 body {
   /* The scheme-dependent colours live in common/color_definitions.scss, which is
    * the only file compiled per scheme. Everything below is scheme-agnostic. */
-  --cj-brand: #2364d8;
+  --cj-brand: var(--quaternary);
 
   /* The action colour follows the palette rather than being fixed, so a site
    * owner editing the scheme still gets a coherent theme. */
@@ -124,16 +124,15 @@ body {
    * on the canvas and on a panel. */
   --cj-hover: color-mix(in oklab, var(--primary) 6%, transparent);
 
-  /* Live presence green: the client's OnlineUsers dot is `bg-green-700`, fixed
-   * in both schemes. Same value as the palette's `success` in light. */
+  /* color-contract:shared:start */
+
+  /* Live presence is fixed across schemes, matching the React client. */
   --cj-online: #15803d;
-
-  /* Foreground on the action colour. */
   --cj-on-action: oklch(98.5% 0 0deg);
-
-  /* The client's `shadow-outline`, verbatim from global.css --outline-shadow.
-   * Same value in both schemes. */
   --cj-focus-ring: 0 0 0 2px rgb(66 153 225 / 70%);
+
+  /* color-contract:shared:end */
+
   --cj-radius-control: var(--d-button-border-radius);
   --cj-radius-pill: 999px;
   --cj-duration-fast: 150ms;

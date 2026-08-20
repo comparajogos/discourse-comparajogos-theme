@@ -7,5 +7,11 @@ on:
   pull_request:
 
 jobs:
+  color-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/sync-colors.mjs --check
+
   ci:
     uses: discourse/.github/.github/workflows/discourse-theme.yml@v1

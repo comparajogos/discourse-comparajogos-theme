@@ -1,0 +1,59 @@
+{
+  "schemes": {
+    "light": {
+      "name": "Compara Jogos Light",
+      "discourse": {
+        "primary": "09090b",
+        "secondary": "f5f5f5",
+        "tertiary": "006aaf",
+        "quaternary": "2364d8",
+        "header_background": "ffffff",
+        "header_primary": "2364d8",
+        "highlight": "ddf2ff",
+        "hover": "ebebeb",
+        "selected": "ddf2ff",
+        "danger": "dc2626",
+        "success": "15803d",
+        "love": "e11d48"
+      },
+      "product": {
+        "background": "oklch(97% 0 0deg)",
+        "card": "oklch(98% 0 0deg)",
+        "control": "oklch(94% 0 0deg)",
+        "border": "oklch(92% 0.004 286.32deg)",
+        "textMuted": "#71717b",
+        "headerSoft": "oklch(95% 0.03 240deg)"
+      }
+    },
+    "dark": {
+      "name": "Compara Jogos Dark",
+      "discourse": {
+        "primary": "fafafa",
+        "secondary": "161616",
+        "tertiary": "0089d0",
+        "quaternary": "2364d8",
+        "header_background": "000000",
+        "header_primary": "fafafa",
+        "highlight": "292f32",
+        "hover": "222222",
+        "selected": "292f32",
+        "danger": "f87171",
+        "success": "4ade80",
+        "love": "fb7185"
+      },
+      "product": {
+        "background": "oklch(20.02% 0 0deg)",
+        "card": "oklch(21% 0.006 285.885deg)",
+        "control": "oklch(25% 0 0deg)",
+        "border": "oklch(100% 0 0deg / 10%)",
+        "textMuted": "#9f9fa9",
+        "headerSoft": "oklch(21% 0.006 285.885deg)"
+      }
+    }
+  },
+  "shared": {
+    "onAction": "oklch(98.5% 0 0deg)",
+    "online": "#15803d",
+    "focusRing": "0 0 0 2px rgb(66 153 225 / 70%)"
+  }
+}

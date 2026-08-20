@@ -1,45 +1,34 @@
 /*
- * Per-scheme colour tokens.
- *
- * This file is compiled once *per colour scheme*. common/common.scss is compiled
- * once in total, so `dark-light-choose` there resolves against whichever palette
- * happens to be the theme default and then never switches — which froze the
- * whole token layer to a single scheme.
- *
- * Values are the React client's, verbatim from client/styles/global.css.
+ * Generated from design/colors.json by scripts/sync-colors.mjs.
+ * This file is compiled once per Discourse color scheme. Do not edit it by hand.
  */
 
 :root {
-  /* client --background */
+  /* React --background */
   --cj-background: #{dark-light-choose(oklch(97% 0 0deg), oklch(20.02% 0 0deg))};
 
-  /* client --card */
+  /* React --card */
   --cj-card: #{dark-light-choose(
       oklch(98% 0 0deg),
       oklch(21% 0.006 285.885deg)
     )};
 
-  /* client --input / --secondary */
+  /* React --input / --secondary */
   --cj-control: #{dark-light-choose(oklch(94% 0 0deg), oklch(25% 0 0deg))};
 
-  /* client --border */
+  /* React --border */
   --cj-border: #{dark-light-choose(
       oklch(92% 0.004 286.32deg),
       oklch(100% 0 0deg / 10%)
     )};
 
-  /* The client's FeaturedSection panel: bg-white dark:bg-black. */
+  /* React FeaturedSection: bg-white dark:bg-black */
   --cj-header: #{dark-light-choose(#fff, #000)};
 
-  /* client --muted-foreground. Core's --primary-medium is derived from the
-   * palette and comes out blue-tinted, so it is the wrong source for a neutral
-   * metadata tier. */
+  /* React --muted-foreground */
   --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
 
-  /* The client's in-header soft fill. NavItem's hover and the header search
-   * field's resting background are the same pair of utilities —
-   * `bg-muted dark:bg-card` — so this is one token, verbatim from global.css:
-   * light `--muted`, dark `--card`. */
+  /* React header search and navigation: --muted light, --card dark */
   --cj-header-soft: #{dark-light-choose(
       oklch(95% 0.03 240deg),
       oklch(21% 0.006 285.885deg)

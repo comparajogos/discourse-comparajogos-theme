@@ -42,6 +42,7 @@ newer is required for the ui-kit imports the topic feed row uses.
 
 ```sh
 pnpm install
+pnpm check:colors
 pnpm format:check
 pnpm lint:hbs
 pnpm lint:styles
@@ -52,6 +53,19 @@ Use the official `discourse_theme` CLI to sync to a development forum or Theme
 Creator. Validate both color schemes in Discourse's Styleguide, then cover at
 least `/latest`, `/categories`, one topic, composer, search, user profile,
 chat, and the mobile sidebar.
+
+### Colors
+
+`design/colors.json` is the color contract. Edit it, then run:
+
+```sh
+pnpm sync:colors
+```
+
+The script updates Discourse's light and dark schemes, the loaded theme tokens,
+and the inline first-paint shell. Generated values stay committed because a
+remote Discourse theme installation does not run repository build scripts. CI
+rejects changes when any generated color surface is stale.
 
 ## Design contract
 
