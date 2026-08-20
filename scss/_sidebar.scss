@@ -71,6 +71,29 @@
       color var(--cj-duration-fast) var(--cj-ease-out),
       background-color var(--cj-duration-fast) var(--cj-ease-out),
       box-shadow var(--cj-duration-fast) var(--cj-ease-out);
+
+    /* Nested rather than a sibling rule: core sizes the badge from a three-class
+     * selector, so a two-class one loses no matter the source order. */
+
+    .sidebar-section-link-content-badge {
+      font-size: var(--font-down-2-rem);
+    }
+  }
+
+  /* Core sizes the row's count badge with `var(--font-down-2)`, which is em — so
+   * inside a 14px row it resolved to 10.6px rather than 12px. The -rem variant is
+   * the same step off the root instead of off the row. */
+
+  /* On the accent row the badge and the suffix are on a blue fill, so they take
+   * the row's own foreground rather than the muted tier. */
+
+  .sidebar-section-link.active,
+  .sidebar-section-link--active,
+  .sidebar-section-link.exact-url-match {
+    .sidebar-section-link-content-badge,
+    .sidebar-section-link-suffix {
+      color: currentcolor;
+    }
   }
 
   /* Section labels are `text-xs uppercase tracking-wider` on the muted tier — a
