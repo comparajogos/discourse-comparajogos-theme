@@ -22,11 +22,11 @@ show_mobile_tab_bar:
     en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
     pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
 
-header_search_everywhere:
-  default: false
+mobile_header_search:
+  default: true
   description:
-    en: "Keep the header search field on mobile and while the welcome banner is up, as the client does. Needs a Discourse that ships the header-show-search value transformer; without it this does nothing but log one console warning."
-    pt_BR: "Mantém o campo de busca do cabeçalho no mobile e com o banner de boas-vindas visível, como no cliente. Depende de um Discourse com o transformer header-show-search."
+    en: "Keep the search field in the header on mobile and narrow desktop, collapsed to a button and expanding on focus, as the client does. Core leaves it out at those widths and shows a dropdown icon instead."
+    pt_BR: "Mantém o campo de busca no cabeçalho no mobile, recolhido como botão e expandindo ao focar, como no cliente."
 
 product_url:
   default: "https://www.comparajogos.com.br"

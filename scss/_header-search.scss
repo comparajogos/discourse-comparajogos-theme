@@ -23,145 +23,194 @@
 
 @use "lib/viewport";
 
-.d-header {
-  /*
-   * Core's header-search block binds through a five-class chain
-   * (`.header-search--enabled .floating-search-input .search-banner-inner.wrap
-   * .search-menu …`), so a two-class rule loses to it no matter the source
-   * order. Matching the chain's length puts the theme back in front — its
-   * stylesheet loads after core's, so an equal-specificity rule wins.
-   */
+@mixin cj-search-field {
+  /* The pill. Core centres it in the slot and narrows it on small viewports;
+   * the client keeps it full-width to its cap and lets the flex-1 nav push it
+   * against the account menu.
+   *
+   * The row and the positioning context are declared here rather than left to
+   * core: core sets them under its own five-class chain, so the theme's field
+   * would stack the magnifier above the input instead of overlaying it. */
 
-  .floating-search-input .search-banner-inner.wrap {
-    /* The pill. Core centres it in the slot and narrows it on small viewports;
-     * the client keeps it full-width to its cap and lets the flex-1 nav push it
-     * against the account menu. */
+  .search-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
 
-    .search-menu {
-      width: 100%;
+    /* The client's is `sm:max-w-lg` (32rem). Pulled in a step: the forum's
+     * placeholder is much longer than the catalog's, so at 32rem the field
+     * dominated the shell. */
+    max-width: 28rem;
+    min-height: 2.5rem;
+    margin-inline: auto 0;
+    background: var(--cj-header-soft);
+    border-radius: var(--cj-radius-pill);
+    transition: box-shadow 200ms ease-in-out;
 
-      /* The client's is `sm:max-w-lg` (32rem). Pulled in a step: the forum's
-       * placeholder is much longer than the catalog's, so at 32rem the field
-       * dominated the shell. */
-      max-width: 28rem;
-      min-height: 2.5rem;
-      margin-inline: auto 0;
-      background: var(--cj-header-soft);
-      border-radius: var(--cj-radius-pill);
-      transition: box-shadow 200ms ease-in-out;
+    /* `focus-within:shadow-outline` — on the pill, because the input is only
+     * one of the three things inside it. */
 
-      /* `focus-within:shadow-outline` — on the pill, because the input is only
-       * one of the three things inside it. */
-
-      &:focus-within {
-        box-shadow: var(--cj-focus-ring);
-      }
+    &:focus-within {
+      box-shadow: var(--cj-focus-ring);
     }
+  }
 
-    /* Core insets the glyph by `calc(1rem - 0.65em)` and leaves the anchor's
-     * button padding on top of it, which put the glyph ~18px in. The client's is
-     * a flat `left-3` on a bare 16px glyph. */
+  /* Core insets the glyph by `calc(1rem - 0.65em)` and leaves the anchor's
+   * button padding on top of it, which put the glyph ~18px in. The client's is
+   * a flat `left-3` on a bare 16px glyph. */
 
-    .search-menu .search-icon {
-      /* The anchor is still a .btn, so its border sat between `left-3` and the
-       * glyph and pushed it to 13px. */
+  .search-menu .search-icon {
+    /* Decoration, not a control: it overlays the field's leading padding and
+     * lets taps through to the input behind it. The anchor is still a .btn, so
+     * its border sat between `left-3` and the glyph and pushed it to 13px. */
+    position: absolute;
+    z-index: 2;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    margin-inline-start: var(--space-3);
+    background: transparent;
+    pointer-events: none;
+
+    .d-icon {
+      width: 1rem;
+      height: 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  /* The field's surface belongs to the pill. Its leading padding is what
+   * clears the absolutely positioned glyph: 2rem here plus the input's own
+   * 0.5rem puts the first character at the client's 40px. */
+
+  /* min-width: 0 the whole way down. An <input> has an intrinsic width from its
+   * `size`, and a flex item defaults to min-width: auto, so nothing between the
+   * pill and the field could shrink — the input kept its 227px and pushed the
+   * document 21px past a 375px viewport once the pill collapsed to 40px. */
+
+  .search-menu-container,
+  .search-input-wrapper {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .search-input {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 2.5rem;
+
+    /* Core pads the field vertically as well, which pushed the pill to 48px. */
+    padding-block: 0;
+    padding-inline-start: 2rem;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+
+    /* Core rings the *field* on focus, at --d-input-border-radius — a 10px
+     * rectangle inside a 999px pill. The pill's own :focus-within ring above is
+     * the indicator, so this is one marker too many, not a lost one. */
+
+    &:focus-within {
+      outline: none;
+    }
+  }
+
+  .search-term__input {
+    width: 100%;
+    min-width: 0;
+    padding-block: 0;
+    padding-inline: var(--space-2);
+    color: var(--header_primary);
+    background: transparent;
+    border: 0;
+
+    &::placeholder {
+      /* `placeholder:font-thin` — the client's placeholder is deliberately
+       * lighter than the value the member types. */
+      color: var(--header_primary);
+      font-weight: 100;
+      opacity: 0.7;
+    }
+  }
+
+  /* Core's trailing slot: the advanced-search toggle, the clear button, or the
+   * spinner while a query is in flight. It reserves a fixed `3em`, which left
+   * the control floating well inside the pill's edge. */
+
+  .search-input .searching {
+    width: auto;
+    margin-inline: var(--space-2) 0.375rem;
+
+    .btn {
+      width: 1.75rem;
+      height: 1.75rem;
+      min-height: 0;
       padding: 0;
+      color: var(--header_primary);
+      background: transparent;
       border: 0;
-      margin-inline-start: var(--space-3);
+      border-radius: var(--cj-radius-pill);
+
+      &:hover,
+      &:focus-visible {
+        /* `hover:bg-brand/10 dark:hover:bg-white/10`. */
+        color: var(--header_primary);
+        background: color-mix(in oklch, var(--header_primary) 10%, transparent);
+      }
 
       .d-icon {
         width: 1rem;
         height: 1rem;
+        color: currentcolor;
         font-size: 1rem;
       }
     }
-
-    /* The field's surface belongs to the pill. Its leading padding is what
-     * clears the absolutely positioned glyph: 2rem here plus the input's own
-     * 0.5rem puts the first character at the client's 40px. */
-
-    .search-input {
-      min-height: 2.5rem;
-      padding-inline-start: 2rem;
-      background: transparent;
-      border: 0;
-      box-shadow: none;
-
-      /* Core rings the *field* on focus, at --d-input-border-radius — a 10px
-       * rectangle inside a 999px pill. The pill's own :focus-within ring above is
-       * the indicator, so this is one marker too many, not a lost one. */
-
-      &:focus-within {
-        outline: none;
-      }
-    }
-
-    .search-term__input {
-      padding-inline: var(--space-2);
-      color: var(--header_primary);
-      background: transparent;
-      border: 0;
-
-      &::placeholder {
-        /* `placeholder:font-thin` — the client's placeholder is deliberately
-         * lighter than the value the member types. */
-        color: var(--header_primary);
-        font-weight: 100;
-        opacity: 0.7;
-      }
-    }
-
-    /* Core's trailing slot: the advanced-search toggle, the clear button, or the
-     * spinner while a query is in flight. It reserves a fixed `3em`, which left
-     * the control floating well inside the pill's edge. */
-
-    .search-input .searching {
-      width: auto;
-      margin-inline: var(--space-2) 0.375rem;
-
-      .btn {
-        width: 1.75rem;
-        height: 1.75rem;
-        min-height: 0;
-        padding: 0;
-        color: var(--header_primary);
-        background: transparent;
-        border: 0;
-        border-radius: var(--cj-radius-pill);
-
-        &:hover,
-        &:focus-visible {
-          /* `hover:bg-brand/10 dark:hover:bg-white/10`. */
-          color: var(--header_primary);
-          background: color-mix(
-            in oklch,
-            var(--header_primary) 10%,
-            transparent
-          );
-        }
-
-        .d-icon {
-          width: 1rem;
-          height: 1rem;
-          color: currentcolor;
-          font-size: 1rem;
-        }
-      }
-    }
   }
+}
 
-  /* The results drop out of the pill, so they read as its panel rather than as
-   * core's 4px-cornered menu. */
+/*
+ * Core's header-search block binds through a five-class chain
+ * (`.header-search--enabled .floating-search-input .search-banner-inner.wrap
+ * .search-menu …`), so a two-class rule loses to it no matter the source order.
+ * Matching the chain's length puts the theme back in front — its stylesheet
+ * loads after core's, so an equal-specificity rule wins.
+ *
+ * The theme's own mobile field (cj-header-search.gjs) has none of those
+ * ancestors, so core's rules never reach it and it needs the same measurements
+ * from scratch. One mixin, two roots.
+ */
 
-  .search-menu-panel {
-    background: var(--cj-panel);
-    border: 1px solid var(--cj-border);
-    border-radius: var(--d-border-radius-large);
-  }
+.d-header .floating-search-input .search-banner-inner.wrap {
+  @include cj-search-field;
+}
 
-  .search-menu .results {
-    background: transparent;
-  }
+.d-header .cj-header-search {
+  @include cj-search-field;
+}
+
+/* The outlet carries the nav on desktop and the search field below `sm`, so it
+ * is a row in both cases. */
+
+.d-header .before-header-panel-outlet {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* The results drop out of the pill, so they read as its panel rather than as
+ * core's 4px-cornered menu. */
+
+.d-header .search-menu-panel {
+  background: var(--cj-panel);
+  border: 1px solid var(--cj-border);
+  border-radius: var(--d-border-radius-large);
+}
+
+.d-header .search-menu .results {
+  background: transparent;
 }
 
 /*
@@ -175,71 +224,78 @@
  * behaviour rather than a broken one.
  */
 
-@include viewport.until(sm) {
-  .d-header {
-    .floating-search-input-wrapper {
-      flex: 0 0 2.5rem;
-      transition: flex-basis 200ms ease-in-out;
+@if $mobile_header_search == "true" {
+  @include viewport.until(sm) {
+    /* Our field replaces core's mobile search icon, which opens a floating
+     * panel to the same place. Two doors, one room. */
+
+    .d-header .header-dropdown-toggle.search-dropdown {
+      display: none;
     }
 
-    .floating-search-input {
-      width: 2.5rem;
-      transition: width 200ms ease-in-out;
-    }
+    .d-header {
+      /* The outlet is the flex child of the header row, and below `sm` the nav
+       * inside it is hidden, so the field is all it holds. */
 
-    .home-logo-wrapper-outlet {
-      transition: width 200ms ease-in-out;
-    }
+      .before-header-panel-outlet {
+        flex: 0 0 2.5rem;
+        transition: flex-basis 200ms ease-in-out;
+      }
 
-    .floating-search-input .search-banner-inner.wrap {
-      .search-menu {
+      .home-logo-wrapper-outlet {
+        transition: width 200ms ease-in-out;
+      }
+
+      .cj-header-search {
         width: 100%;
-        max-width: none;
-      }
 
-      /* Collapsed, the input has to be the whole button: the glyph is
-       * pointer-events: none and .search-input is a plain div, so with the
-       * leading padding on the wrapper only the last 8px would focus anything. */
+        .search-menu {
+          max-width: none;
+        }
 
-      .search-input {
-        padding-inline-start: 0;
-      }
+        /* Collapsed, the input has to be the whole button: the glyph is
+         * pointer-events: none and .search-input is a plain div, so with the
+         * leading padding on the wrapper only the last few px would focus
+         * anything. */
 
-      .search-term__input {
-        padding-inline-start: 2rem;
+        .search-input {
+          padding-inline-start: 0;
+        }
 
-        &::placeholder {
-          opacity: 0;
+        .search-term__input {
+          padding-inline-start: 2rem;
+
+          &::placeholder {
+            opacity: 0;
+          }
+        }
+
+        /* No room for the trailing control until the field opens. */
+        .search-input .searching {
+          display: none;
         }
       }
 
-      /* No room for the trailing control until the field opens. */
-      .search-input .searching {
-        display: none;
-      }
-    }
+      .contents:has(.cj-header-search:focus-within) {
+        .before-header-panel-outlet {
+          flex: 1 1 auto;
+        }
 
-    .contents:has(.floating-search-input:focus-within) {
-      .floating-search-input-wrapper {
-        flex: 1 1 auto;
-      }
+        /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */
+        .home-logo-wrapper-outlet {
+          width: 2.5rem;
+          overflow: hidden;
+        }
 
-      .floating-search-input {
-        width: 100%;
-      }
+        .cj-header-search {
+          .search-term__input::placeholder {
+            opacity: 0.7;
+          }
 
-      /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */
-      .home-logo-wrapper-outlet {
-        width: 2.5rem;
-        overflow: hidden;
-      }
-
-      .search-term__input::placeholder {
-        opacity: 0.7;
-      }
-
-      .search-input .searching {
-        display: flex;
+          .search-input .searching {
+            display: flex;
+          }
+        }
       }
     }
   }
