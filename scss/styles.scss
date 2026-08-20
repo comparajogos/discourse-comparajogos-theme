@@ -376,6 +376,10 @@ body.has-sidebar-page .wrap {
     display: inline-flex;
     gap: var(--space-2);
     align-items: center;
+
+    /* Stretch, or the label's opaque box is only as tall as its own text and
+     * the 24px avatars peek out above and below it as they scroll past. */
+    align-self: stretch;
     flex: 0 0 auto;
     color: var(--cj-text-muted);
     font-size: var(--font-down-1-rem);
@@ -385,8 +389,11 @@ body.has-sidebar-page .wrap {
     /* Opaque, so avatars pass behind it rather than through it. */
     background: var(--cj-background);
 
-    /* The client's `gap-4` between the label and the strip. */
-    margin-inline-end: var(--space-4);
+    /* The client's `gap-4` between the label and the strip, half carried as
+     * padding inside the opaque box so a passing avatar disappears under it
+     * before it can touch the text. */
+    padding-inline-end: var(--space-2);
+    margin-inline-end: var(--space-2);
 
     &::before {
       width: 0.5rem;
@@ -651,6 +658,37 @@ body .category-breadcrumb {
 
   .cj-header-nav {
     display: none;
+  }
+
+  /* The docked topic title. Core sizes both of its rows at 16px, which crowds
+   * the 56px shell, sits them 8px off the logo mark, and lets the tag row wrap.
+   * The theme's usual two tiers instead: a bold one-line title and a muted
+   * 12px meta row, each ellipsizing. Core hides the trailing icons in this
+   * state (.extra-info-wrapper ~ .panel), so the title owns the row. */
+
+  .d-header .two-rows.extra-info-wrapper {
+    padding-inline: var(--space-3) var(--space-2);
+
+    .header-title {
+      font-size: var(--font-down-1-rem);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .header-title .topic-link {
+      display: block;
+      overflow: hidden;
+      color: var(--header_primary);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topic-header-extra {
+      overflow: hidden;
+      color: var(--cj-text-muted);
+      font-size: var(--font-down-2-rem);
+      white-space: nowrap;
+    }
   }
 
   #main-outlet {

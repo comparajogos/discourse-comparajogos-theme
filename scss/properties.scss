@@ -63,9 +63,10 @@ body {
   --cj-header-height: 6rem;
 
   /* Sidebar sits inside the same 85rem frame as the content, at the client's
-   * own menu width (`min-w-[200px]` in MarketLayout). 16rem was 56px wider than
-   * the thing it mirrors, which the content column paid for. */
-  --d-sidebar-width: 12.5rem;
+   * own menu width (`min-w-[200px]` in MarketLayout) plus 10px: Discourse rows
+   * carry count badges and unread dots the client's menu does not, and at the
+   * client-exact width the pt-BR labels ellipsized against them. */
+  --d-sidebar-width: 13.125rem;
   --d-sidebar-background: transparent;
 
   /* Core draws a hard #373737 rule down the sidebar and under every section.
