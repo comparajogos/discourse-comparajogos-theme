@@ -94,7 +94,13 @@ body.has-sidebar-page .wrap {
    * full-width rule under the floating shell. The pill is the edge. */
   box-shadow: none;
 
-  &.d-header .wrap {
+  /* `> .wrap`, not a descendant: `.wrap` is not unique inside .d-header — the
+   * floating search banner nests its own `.search-banner-inner.wrap`, which was
+   * picking up this rule's `width: calc(100% - 5rem)` and `min-height`. With
+   * `margin-inline: auto` that turned into 40px of phantom gutter on each side of
+   * the search field and a 74px-tall banner row inside a 40px pill. */
+
+  &.d-header > .wrap {
     /* The client's header is `w-[calc(100%-5rem)] max-w-340` — a 2.5rem inset on
      * each side, capped at the 85rem content column. The cap has to be its own
      * value: --d-max-width is the 90rem *outer* frame, and the percentage
@@ -163,22 +169,11 @@ body.has-sidebar-page .wrap {
     min-width: 0;
   }
 
+  /* Placement only — the field's appearance is _header-search.scss. */
   .floating-search-input-wrapper {
     order: 4;
     flex: 1 1 18rem;
     min-width: 10rem;
-
-    .floating-search-input {
-      max-width: 30rem;
-      margin-inline-start: auto;
-    }
-
-    .search-input {
-      min-height: 2.75rem;
-      background: var(--cj-card);
-      border: 0;
-      border-radius: 999px;
-    }
   }
 
   .panel {
@@ -538,11 +533,14 @@ body .category-breadcrumb {
     /* Flush to the top, edge to edge, square: the client's `sticky sm:top-6`
      * and `rounded-3xl` are both above-`sm` only. */
 
-    &.d-header .wrap {
+    &.d-header > .wrap {
       width: 100%;
       max-width: none;
       margin-block-start: 0;
-      padding-inline: var(--space-4);
+
+      /* The client's header is `px-3 py-2 sm:p-4`, so its own inline padding
+       * below `sm` is 12px — the page frame's `px-4` is a separate thing. */
+      padding-inline: var(--space-3);
       border-radius: 0;
     }
 

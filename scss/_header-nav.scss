@@ -15,33 +15,46 @@
 .cj-header-nav {
   display: flex;
   flex: 1 1 auto;
-  gap: var(--space-1);
+
+  /* No gap: the client's nav is a bare flex row, and each item's own `px-4`
+   * supplies the whole separation. A gap on top of that made every pair 4px
+   * wider than the client's. */
+  gap: 0;
   align-items: center;
   min-width: 0;
+
+  /* The logo carries `sm:mr-2` in the client, on top of the row's own gap. */
   margin-inline-start: var(--space-2);
 
   .cj-nav-item {
     display: inline-flex;
     gap: var(--space-2);
     align-items: center;
-    min-height: 2.625rem;
+
+    /* `py-2` on a 24px icon: 40px, not 42. */
+    min-height: 2.5rem;
     padding-inline: var(--space-4);
     color: var(--header_primary);
     font-size: var(--font-down-1-rem);
     white-space: nowrap;
     border-radius: var(--cj-radius-pill);
-    transition:
-      color var(--cj-duration-fast) var(--cj-ease-out),
-      background-color var(--cj-duration-fast) var(--cj-ease-out);
 
-    &:hover,
-    &.active {
+    /* `transition-colors duration-200 ease-in-out`. */
+    transition:
+      color 200ms ease-in-out,
+      background-color 200ms ease-in-out;
+
+    /* The fill belongs to hover alone. The current item is marked by its filled
+     * icon and `font-medium` — a background as well made the header read as
+     * having a selected tab, which is not what the client does. */
+
+    &:hover {
       color: var(--header_primary);
       background: var(--cj-header-soft);
     }
 
     &.active {
-      font-weight: 600;
+      font-weight: 500;
     }
 
     &.requires-auth {

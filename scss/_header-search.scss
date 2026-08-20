@@ -1,0 +1,151 @@
+/* Header search field
+ *
+ * Discourse's `search_experience: search_field`, tuned to the client's
+ * `SearchInput` — the same field the catalog header uses. Results still come
+ * from Discourse; only the composition is shared.
+ *
+ * Core's own structure is already the client's approach: `.search-menu` is a
+ * `position: relative` box, `.search-icon` is absolutely positioned inside it
+ * with `pointer-events: none`, and the trailing controls sit in `.searching`.
+ * That is exactly how `components/common/{Input,SearchInput}.tsx` composes it.
+ * So this file only supplies the measurements and the surface, and leaves core's
+ * structure alone.
+ *
+ * The client's numbers (GlobalHeader's UrlSearchInput → SearchInput → Input):
+ *   pill      `rounded-full`, `bg-muted dark:bg-card`, `sm:max-w-lg` (32rem),
+ *             `focus-within:shadow-outline`, 40px tall
+ *   magnifier 16px glyph at `left-3`, text starts at `pl-10`
+ *   submit    28px circle (`h-7 w-7`), `mr-1.5 ml-2`, 16px glyph
+ *
+ * Scoped to `.d-header`: the same classes appear on the full search page and in
+ * the welcome banner, which are their own compositions.
+ */
+
+.d-header {
+  /*
+   * Core's header-search block binds through a five-class chain
+   * (`.header-search--enabled .floating-search-input .search-banner-inner.wrap
+   * .search-menu …`), so a two-class rule loses to it no matter the source
+   * order. Matching the chain's length puts the theme back in front — its
+   * stylesheet loads after core's, so an equal-specificity rule wins.
+   */
+
+  .floating-search-input .search-banner-inner.wrap {
+    /* The pill. Core centres it in the slot and narrows it on small viewports;
+     * the client keeps it full-width to its cap and lets the flex-1 nav push it
+     * against the account menu. */
+
+    .search-menu {
+      width: 100%;
+      max-width: 32rem;
+      min-height: 2.5rem;
+      margin-inline: auto 0;
+      background: var(--cj-header-soft);
+      border-radius: var(--cj-radius-pill);
+      transition: box-shadow 200ms ease-in-out;
+
+      /* `focus-within:shadow-outline` — on the pill, because the input is only
+       * one of the three things inside it. */
+
+      &:focus-within {
+        box-shadow: var(--cj-focus-ring);
+      }
+    }
+
+    /* Core insets the glyph by `calc(1rem - 0.65em)` and leaves the anchor's
+     * button padding on top of it, which put the glyph ~18px in. The client's is
+     * a flat `left-3` on a bare 16px glyph. */
+
+    .search-menu .search-icon {
+      /* The anchor is still a .btn, so its border sat between `left-3` and the
+       * glyph and pushed it to 13px. */
+      padding: 0;
+      border: 0;
+      margin-inline-start: var(--space-3);
+
+      .d-icon {
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
+      }
+    }
+
+    /* The field's surface belongs to the pill. Its leading padding is what
+     * clears the absolutely positioned glyph: 2rem here plus the input's own
+     * 0.5rem puts the first character at the client's 40px. */
+
+    .search-input {
+      min-height: 2.5rem;
+      padding-inline-start: 2rem;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .search-term__input {
+      padding-inline: var(--space-2);
+      color: var(--header_primary);
+      background: transparent;
+      border: 0;
+
+      &::placeholder {
+        /* `placeholder:font-thin` — the client's placeholder is deliberately
+         * lighter than the value the member types. */
+        color: var(--header_primary);
+        font-weight: 100;
+        opacity: 0.7;
+      }
+    }
+
+    /* Core's trailing slot: the advanced-search toggle, the clear button, or the
+     * spinner while a query is in flight. It reserves a fixed `3em`, which left
+     * the control floating well inside the pill's edge. */
+
+    .search-input .searching {
+      width: auto;
+      margin-inline: var(--space-2) 0.375rem;
+
+      .btn {
+        width: 1.75rem;
+        height: 1.75rem;
+        min-height: 0;
+        padding: 0;
+        color: var(--header_primary);
+        background: transparent;
+        border: 0;
+        border-radius: var(--cj-radius-pill);
+
+        &:hover,
+        &:focus-visible {
+          /* `hover:bg-brand/10 dark:hover:bg-white/10`. */
+          color: var(--header_primary);
+          background: color-mix(
+            in oklch,
+            var(--header_primary) 10%,
+            transparent
+          );
+        }
+
+        .d-icon {
+          width: 1rem;
+          height: 1rem;
+          color: currentcolor;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  /* The results drop out of the pill, so they read as its panel rather than as
+   * core's 4px-cornered menu. */
+
+  .search-menu-panel {
+    background: var(--cj-panel);
+    border: 1px solid var(--cj-border);
+    border-radius: var(--d-border-radius-large);
+  }
+
+  .search-menu .results {
+    background: transparent;
+  }
+}

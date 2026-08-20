@@ -122,6 +122,10 @@ body {
 
   /* Foreground on the action colour. */
   --cj-on-action: oklch(98.5% 0 0deg);
+
+  /* The client's `shadow-outline`, verbatim from global.css --outline-shadow.
+   * Same value in both schemes. */
+  --cj-focus-ring: 0 0 0 2px rgb(66 153 225 / 70%);
   --cj-radius-control: var(--d-button-border-radius);
   --cj-radius-pill: 999px;
   --cj-duration-fast: 150ms;

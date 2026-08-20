@@ -36,8 +36,12 @@
    * metadata tier. */
   --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
 
-  /* The client's in-header soft fill: NavItem's `hover:bg-muted dark:hover:bg-card`,
-   * which is also the search field's resting background. Exact client values
-   * rather than a mix off header_primary, which landed in the wrong hue. */
-  --cj-header-soft: #{dark-light-choose(#ddf2ff, #18181b)};
+  /* The client's in-header soft fill. NavItem's hover and the header search
+   * field's resting background are the same pair of utilities —
+   * `bg-muted dark:bg-card` — so this is one token, verbatim from global.css:
+   * light `--muted`, dark `--card`. */
+  --cj-header-soft: #{dark-light-choose(
+      oklch(95% 0.03 240deg),
+      oklch(21% 0.006 285.885deg)
+    )};
 }
