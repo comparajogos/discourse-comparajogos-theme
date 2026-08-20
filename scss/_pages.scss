@@ -31,8 +31,7 @@
 .reviewable-container,
 div.edit-category,
 .boxed.white.admin-content,
-.search-container,
-.has-full-page-chat .full-page-chat {
+.search-container {
   @include cj-panel;
 }
 
@@ -72,33 +71,6 @@ div.edit-category,
 .tags-list {
   padding-block-end: 0;
   border-bottom: none;
-}
-
-/* Full-page chat is the panel, so the column gap and the divider it ships for a
- * borderless layout both go, and its height has to account for the panel rather
- * than the viewport. */
-
-.has-full-page-chat {
-  .chat-channel {
-    height: calc(
-      var(--composer-vh, 1vh) * 92 - var(--main-outlet-offset, 0px) -
-        1px - var(--chat-header-offset, 0) - var(--composer-height, 0px)
-    );
-  }
-}
-
-body.has-sidebar-page.has-full-page-chat {
-  #main-outlet-wrapper {
-    gap: 0 var(--d-main-content-gap);
-  }
-
-  .full-page-chat {
-    border-inline-start: 1px solid var(--cj-border);
-  }
-}
-
-html.has-full-page-chat body #main-outlet .full-page-chat {
-  height: unset;
 }
 
 /* Core's sidebar footer fades its scroll edge against the sidebar's own fill.
