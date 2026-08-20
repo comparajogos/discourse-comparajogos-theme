@@ -4,7 +4,7 @@
   "authors": "Compara Jogos",
   "about_url": "https://github.com/comparajogos/discourse-comparajogos-theme",
   "license_url": "https://github.com/comparajogos/discourse-comparajogos-theme/blob/main/LICENSE",
-  "theme_version": "2.0.0-beta.8",
+  "theme_version": "2.0.0-beta.9",
   "minimum_discourse_version": "3.6.0.beta1",
   "maximum_discourse_version": null,
   "assets": {},
@@ -22,7 +22,8 @@
     "serialize_topic_excerpts": true
   },
   "theme_site_settings": {
-    "search_experience": "search_field"
+    "search_experience": "search_field",
+    "enable_welcome_banner": false
   },
   "color_schemes": {
     "Compara Jogos Light": {

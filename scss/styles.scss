@@ -341,9 +341,16 @@ body.has-sidebar-page .wrap {
    * element has to be both the Carousel's row and its scroll container. The
    * label pins rather than scrolling away with the avatars. */
   display: flex;
-  gap: var(--space-4);
+
+  /* Gap 0, not gap-4: the plugin renders the label and every avatar as siblings
+   * of one flex box, so a row gap would space the avatars apart too. The client's
+   * `gap-4` is between the label and the carousel only, so the label carries it. */
+  gap: 0;
   align-items: center;
   min-width: 0;
+
+  /* The plugin's own `padding-left: 5px; padding-bottom: 5px`. */
+  padding: 0;
   margin-block: 0 var(--space-5);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -378,6 +385,9 @@ body.has-sidebar-page .wrap {
     /* Opaque, so avatars pass behind it rather than through it. */
     background: var(--cj-background);
 
+    /* The client's `gap-4` between the label and the strip. */
+    margin-inline-end: var(--space-4);
+
     &::before {
       width: 0.5rem;
       height: 0.5rem;
@@ -391,9 +401,22 @@ body.has-sidebar-page .wrap {
     }
   }
 
+  /* Above `#whos-online.collapsed a`, which is the plugin's own overlap-and-fan
+   * interaction: -15px margins that spring to 0 on hover over a full second.
+   * That is a different idea from the client's scroller, and it fought it — the
+   * avatars ended up 1px apart only because the plugin's -15px happened to
+   * cancel most of a 16px row gap. Same specificity, and the theme's stylesheet
+   * loads after the plugin's. */
+
+  &.collapsed > a,
   > a {
     flex: 0 0 auto;
+    margin: 0;
     scroll-snap-align: start;
+
+    /* The plugin animates the margins it no longer sets; the opacity transition
+     * is its own fade for members who have just gone offline, so it stays. */
+    transition: opacity 0.5s;
 
     /* A ring, not a border: a border eats into the 24px box, so the client's
      * avatars come out visibly larger at the same nominal size. Rings overlap
