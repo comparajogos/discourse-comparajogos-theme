@@ -617,7 +617,6 @@ body .category-breadcrumb {
   .d-header {
     padding-block-start: 0;
     background: var(--cj-header);
-    border-bottom: 1px solid var(--cj-border);
 
     /* Flush to the top, edge to edge, square: the client's `sticky sm:top-6`
      * and `rounded-3xl` are both above-`sm` only. */

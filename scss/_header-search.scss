@@ -254,9 +254,17 @@
       /* The outlet is the flex child of the header row, and below `sm` the nav
        * inside it is hidden, so the field is all it holds. */
 
+      /* Trailing margin 0, not the client's `mx-3`.
+       *
+       * The client's 12px lands against its own trailing controls; core's carry
+       * 8px of dead space at the panel's leading edge plus a 4.4px glyph inset
+       * inside the icon button, so a 12px box gap reads as 24px of air — twice
+       * the gap on the logo side. Zero here puts the *glyph* 12px away, which is
+       * what the eye measures. */
+
       .before-header-panel-outlet {
         flex: 0 0 2.5rem;
-        margin-inline: auto var(--space-3);
+        margin-inline: auto 0;
         transition: flex-basis 200ms ease-in-out;
       }
 
@@ -327,7 +335,7 @@
 
         .before-header-panel-outlet {
           flex: 1 1 auto;
-          margin-inline: var(--space-3);
+          margin-inline: var(--space-3) 0;
         }
 
         /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */

@@ -1,17 +1,19 @@
 {
   "name": "discourse-comparajogos-theme",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.10",
   "private": true,
   "packageManager": "pnpm@11.20.0",
   "repository": "https://github.com/comparajogos/discourse-comparajogos-theme",
   "author": "Compara Jogos",
   "license": "MIT",
   "scripts": {
+    "check:colors": "node scripts/sync-colors.mjs --check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:hbs": "ember-template-lint 'javascripts/**/*.gjs' --no-error-on-unmatched-pattern",
     "lint:js": "eslint .",
-    "lint:styles": "stylelint \"**/*.scss\""
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "sync:colors": "node scripts/sync-colors.mjs"
   },
   "devDependencies": {
     "@discourse/lint-configs": "2.43.0",
