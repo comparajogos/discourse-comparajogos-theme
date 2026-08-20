@@ -825,9 +825,26 @@ textarea,
   border-collapse: separate;
   border-spacing: 0;
 
-  /* A table does not clip its rows, so the panel keeps block padding instead
-   * and no row ever reaches a rounded corner. */
-  padding-block: var(--space-2);
+  /* A table does not clip its rows, so a hovered first or last row squares off
+   * the panel's corner. Block padding does not fix it: at an 8px inset the
+   * panel's own fill has only reached 6px in on a 24px curve, so the row still
+   * pokes outside. The corner cells carry the radius instead. */
+
+  tr:first-child > :first-child {
+    border-start-start-radius: var(--cj-radius-panel);
+  }
+
+  tr:first-child > :last-child {
+    border-start-end-radius: var(--cj-radius-panel);
+  }
+
+  .topic-list-body tr:last-child > :first-child {
+    border-end-start-radius: var(--cj-radius-panel);
+  }
+
+  .topic-list-body tr:last-child > :last-child {
+    border-end-end-radius: var(--cj-radius-panel);
+  }
 
   .topic-list-header {
     color: var(--cj-text-muted);
