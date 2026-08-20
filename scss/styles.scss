@@ -49,6 +49,10 @@ body.has-sidebar-page .wrap {
   padding-block-start: 1.5rem;
   background: transparent;
 
+  /* Core rings the header with a hard #373737 1px shadow, which read as a
+   * full-width rule under the floating shell. The pill is the edge. */
+  box-shadow: var(--canvas-header-shadow);
+
   &.d-header .wrap {
     width: calc(100% - 5rem);
 
@@ -205,6 +209,18 @@ body.has-sidebar-page .wrap {
       color: white;
       background: color-mix(in oklch, var(--cj-brand) 84%, white);
     }
+  }
+}
+
+/* The banner's search is the page's primary field, so it matches the header's
+ * pill rather than core's bordered input. */
+
+.welcome-banner {
+  .search-menu .search-input,
+  .search-input {
+    background: var(--cj-header-soft);
+    border: 0;
+    border-radius: var(--cj-radius-pill);
   }
 }
 
