@@ -620,4 +620,21 @@ html[lang^="pt"] #cj-splash {
   .cj-splash__bar--title {
     block-size: 2.25rem;
   }
+
+  /* The booted list drops its cards for hairline-separated rows that bleed past
+   * the page gutter (see styles.scss), so the skeleton does the same — rounded
+   * cards here would be a shape the page never takes. */
+
+  .cj-splash__cards {
+    gap: 0;
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+  }
+
+  .cj-splash__card {
+    padding-inline: var(--d-wrap-padding-x);
+    border-inline: 0;
+    border-block-start: 0;
+    border-radius: 0;
+    background: none;
+  }
 }

@@ -781,9 +781,14 @@ body .category-breadcrumb {
       }
 
       .topic-list-item {
+        /* The fill goes with the radius. The client drops both below `sm` —
+         * keeping the panel colour while removing its shape is what banded the
+         * screen black / canvas / black down the page. Rows separate on the
+         * canvas by their hairline, as they do in the client. */
         border-inline: 0;
         border-block-start: 0;
         border-radius: 0;
+        background: none;
       }
 
       /* Core strips .last-visit's bottom border (it expects the separator row

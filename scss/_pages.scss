@@ -94,6 +94,33 @@ div.edit-category,
   margin-inline: var(--space-2) 0;
 }
 
+/* Below `sm` the panel gives way to the screen — the client drops the fill and
+ * the radius there so content runs to the edge, and on a 390px screen the panel
+ * was a third inset (page gutter, then its border, then its padding) around a
+ * column that had 316px left for text. */
+
+@include viewport.until(sm) {
+  .users-directory,
+  .contents.body-page,
+  .container .user-main,
+  .container.tags-index,
+  .container.badges,
+  .container.groups-index,
+  .group-index .container.group,
+  .categories-list #list-area,
+  .archetype-regular #main-outlet > .regular,
+  .reviewable-container,
+  div.edit-category,
+  .boxed.white.admin-content,
+  .search-container,
+  #upcoming-events-calendar {
+    padding-inline: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+}
+
 @include viewport.until(md) {
   /* Rows are separated by their own borders; core adds one more above the body. */
   tbody {
