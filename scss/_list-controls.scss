@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 /* Discovery list controls
  *
  * The row above the topic list, and the sheet its collapsed form opens.
@@ -16,6 +18,21 @@
  * Select's trigger: `bg-input`, `rounded-lg`, `h-10`, `px-3`, `text-sm`, with
  * `focus-visible:shadow-outline` and `data-[popup-open]:shadow-outline`.
  */
+
+/* Below `sm` the controls pin under the header as a subheader, as Horizon's
+ * `.list-controls` does — the list scrolls under a row that keeps the current
+ * tab and the compose button reachable. The canvas fill is what stops rows
+ * showing through it. */
+
+@include viewport.until(sm) {
+  .list-controls {
+    position: sticky;
+    z-index: 2;
+    inset-block-start: var(--cj-header-height);
+    padding-block: var(--space-3);
+    background: var(--cj-background);
+  }
+}
 
 .nav-pills .list-control-toggle-link-trigger {
   display: inline-flex;
