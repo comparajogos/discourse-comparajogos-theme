@@ -1,0 +1,623 @@
+/*
+ * The first-paint skeleton.
+ *
+ * Core's #d-splash is five dots in the middle of an empty page. This replaces
+ * it with the product's own shell, so the first thing painted already has the
+ * shape the booted page will have.
+ *
+ * It is REAL MARKUP (common/body_tag.html) laid out by the same tokens the
+ * booted page uses — --d-max-width, --d-sidebar-width, --cj-header-height,
+ * --space-*, the --cj-* palette. The previous version painted the whole shell
+ * on #d-splash's pseudo-elements with stacked gradients and masks, which capped
+ * it at fourteen paintable boxes, made every position a hand-measured constant
+ * valid for one locale at one viewport, and silently dropped text that fell
+ * outside a `background-clip: text` layer. Here the browser does the layout, so
+ * the geometry follows the theme when the theme changes, and every box can be
+ * measured with getBoundingClientRect and diffed against the real one.
+ *
+ * It models the ANONYMOUS discovery page — two sidebar rows, Sign Up / Log In.
+ * `_t` is HttpOnly, so nothing can know before boot whether the visitor is
+ * signed in.
+ */
+
+/* Theme settings reach SCSS as $name (Theme#scss_variables prepends them), so
+ * the logo is per-site configuration rather than an asset baked into this
+ * repo. The defaults keep working on an install that predates the settings. */
+$splash_logo: "" !default;
+$splash_logo_dark: "" !default;
+
+/* Up exactly as long as core's own splash is: core removes #d-splash when the
+ * app takes over, which is the moment this should go too. No lifecycle of its
+ * own, no initializer, nothing to keep in sync.
+ *
+ * `html body` outweighs the guard rule in body_tag.html that keeps the raw
+ * markup from ever showing unstyled. */
+
+html body:has(#d-splash) #cj-splash {
+  display: flex;
+}
+
+#d-splash {
+  /* The dots are replaced, not decorated. */
+  display: none !important;
+}
+
+/* Core hides the scrollbar while its splash is up. `scrollbar-gutter: stable`
+ * (see styles.scss) only reserves the gutter on a scrollable box, so hiding
+ * overflow made the layout viewport 7.5px wider during the splash than after
+ * it — every column jumped left the moment the app booted. Keeping the box
+ * scrollable keeps both states the same width. There is nothing to scroll
+ * while this is up, so the track is inert. */
+
+html:has(#d-splash) {
+  overflow-y: scroll !important;
+}
+
+#cj-splash {
+  --cj-splash-forum: "Forum";
+  --cj-splash-lists: "Lists";
+  --cj-splash-plays: "Plays";
+  --cj-splash-chat: "Chat";
+  --cj-splash-market: "My Market";
+  --cj-splash-search: "Search";
+  --cj-splash-sign-up: "Sign Up";
+  --cj-splash-log-in: "Log In";
+  --cj-splash-topics: "Topics";
+  --cj-splash-more: "More";
+  --cj-splash-section-categories: "Categories";
+  --cj-splash-general: "General";
+  --cj-splash-feedback: "Site Feedback";
+  --cj-splash-all-categories: "All categories";
+  --cj-splash-heading: "All latest topics";
+  --cj-splash-categories: "categories";
+  --cj-splash-tags: "tags";
+  --cj-splash-latest: "Latest";
+  --cj-splash-hot: "Hot";
+  --cj-splash-categories-tab: "Categories";
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--cj-text);
+  background: var(--cj-background);
+  font-family: var(--font-family);
+}
+
+html[lang^="pt"] #cj-splash {
+  --cj-splash-forum: "Fórum";
+  --cj-splash-lists: "Listas";
+  --cj-splash-plays: "Partidas";
+  --cj-splash-chat: "Chat";
+  --cj-splash-market: "Meu Comércio";
+  --cj-splash-search: "Pesquisar";
+  --cj-splash-sign-up: "Cadastrar-se";
+  --cj-splash-log-in: "Entrar";
+  --cj-splash-topics: "Tópicos";
+  --cj-splash-more: "Mais";
+  --cj-splash-section-categories: "Categorias";
+  --cj-splash-general: "Geral";
+  --cj-splash-feedback: "Feedback do site";
+  --cj-splash-all-categories: "Todas as categorias";
+  --cj-splash-heading: "Todos os tópicos recentes";
+  --cj-splash-categories: "categorias";
+  --cj-splash-tags: "etiquetas";
+  --cj-splash-latest: "Recentes";
+  --cj-splash-hot: "Em alta";
+  --cj-splash-categories-tab: "Categorias";
+}
+
+/* The one frame the whole product sits in: the client's `max-w-8xl` with
+ * `sm:px-10` gutters, which is what --d-max-width / --d-wrap-padding-x carry. */
+
+.cj-splash__frame {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--d-max-width);
+  margin-inline: auto;
+  padding-inline: var(--d-wrap-padding-x);
+}
+
+/* ---------------------------------------------------------------- header -- */
+.cj-splash__header {
+  flex: none;
+  box-sizing: border-box;
+  height: var(--cj-header-height);
+  padding-block-start: var(--space-6);
+}
+
+.cj-splash__shell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: 4.5rem;
+  padding-inline: var(--space-4);
+  border-radius: 1.5rem;
+  background: var(--cj-header);
+}
+
+/* `content` makes the span a replaced element, so it takes the logo's own
+ * aspect ratio exactly as #site-logo does — no hardcoded width to go stale when
+ * the logo is swapped. Both variants come from theme settings; see settings.yml. */
+
+.cj-splash__logo {
+  flex: none;
+  width: auto;
+  max-width: 10rem;
+  height: 2.5rem;
+  object-fit: contain;
+  object-position: left center;
+
+  @if $splash_logo != "" {
+    content: url($splash_logo);
+  }
+}
+
+@if $splash_logo_dark != "" {
+  @media (prefers-color-scheme: dark) {
+    .cj-splash__logo {
+      content: url($splash_logo_dark);
+    }
+  }
+}
+
+/* Core's before-header-panel outlet pads the leading edge only, so the search
+ * field starts one --space-6 gap past the last nav item, not past a trailing
+ * pad as well. */
+
+.cj-splash__nav {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-inline-start: var(--space-2);
+}
+
+.cj-splash__nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.5rem;
+  padding-inline: var(--space-4);
+  color: var(--header_primary);
+  font-size: var(--font-down-1);
+  line-height: 1;
+
+  &::before {
+    /* Icon placeholder. The booted header inlines Phosphor glyphs; a skeleton
+     * that guessed at their silhouettes would be a second copy to maintain. */
+    content: "";
+    flex: none;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 0.5rem;
+    background: currentcolor;
+    opacity: 0.25;
+  }
+
+  &.is-active {
+    font-weight: 500;
+  }
+}
+
+.cj-splash__forum::after {
+  content: var(--cj-splash-forum);
+}
+
+.cj-splash__lists::after {
+  content: var(--cj-splash-lists);
+}
+
+.cj-splash__plays::after {
+  content: var(--cj-splash-plays);
+}
+
+.cj-splash__chat::after {
+  content: var(--cj-splash-chat);
+}
+
+.cj-splash__market::after {
+  content: var(--cj-splash-market);
+}
+
+.cj-splash__search {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  height: 2.5rem;
+  padding-inline-start: var(--space-3);
+  border-radius: var(--cj-radius-pill);
+  color: var(--cj-text-muted);
+  background: var(--cj-card);
+  font-size: var(--font-down-1);
+
+  &::before {
+    content: "";
+    flex: none;
+    inline-size: 1rem;
+    block-size: 1rem;
+    border-radius: 999px;
+    background: currentcolor;
+    opacity: 0.5;
+  }
+
+  &::after {
+    content: var(--cj-splash-search);
+    padding-inline-start: var(--space-1);
+  }
+}
+
+.cj-splash__auth {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline-end: var(--space-2);
+}
+
+.cj-splash__sign-up {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  padding-inline: var(--space-3);
+  border-radius: var(--d-button-border-radius);
+  color: var(--header_primary);
+  font-size: var(--font-down-1);
+
+  &::after {
+    content: var(--cj-splash-sign-up);
+  }
+}
+
+.cj-splash__log-in {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  box-sizing: border-box;
+  height: 2.5rem;
+  padding-inline: var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--cj-radius-pill);
+  color: #fff;
+  background: var(--cj-brand);
+  font-size: var(--font-down-1);
+
+  &::before {
+    content: "";
+    flex: none;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border-radius: 999px;
+    background: currentcolor;
+    opacity: 0.7;
+  }
+
+  &::after {
+    content: var(--cj-splash-log-in);
+  }
+}
+
+/* ------------------------------------------------------------------ body -- */
+.cj-splash__body {
+  display: flex;
+  flex: 1;
+  gap: var(--d-main-content-gap);
+  min-height: 0;
+}
+
+/* -------------------------------------------------------------- sidebar -- */
+.cj-splash__sidebar {
+  box-sizing: border-box;
+  flex: none;
+  width: var(--d-sidebar-width);
+  padding: 2rem calc(var(--space-1) + 1px) var(--space-3) var(--space-1);
+}
+
+.cj-splash__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.25rem;
+  padding-inline: var(--d-sidebar-row-horizontal-padding);
+  border-radius: var(--d-button-border-radius);
+  color: var(--cj-text);
+  font-size: var(--font-down-1);
+  font-weight: 500;
+
+  & + & {
+    margin-block-start: var(--d-sidebar-vertical-gap);
+  }
+
+  &::before {
+    content: "";
+    flex: none;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 0.5rem;
+    background: currentcolor;
+    opacity: 0.3;
+  }
+
+  &.is-active {
+    color: var(--cj-on-action);
+    background: var(--cj-action);
+  }
+
+  &.is-muted {
+    background: var(--cj-control);
+  }
+}
+
+.cj-splash__row--topics::after {
+  content: var(--cj-splash-topics);
+}
+
+.cj-splash__row--more::after {
+  content: var(--cj-splash-more);
+}
+
+.cj-splash__row--general::after {
+  content: var(--cj-splash-general);
+}
+
+.cj-splash__row--feedback::after {
+  content: var(--cj-splash-feedback);
+}
+
+.cj-splash__row--all-categories::after {
+  content: var(--cj-splash-all-categories);
+}
+
+/* Aligned on the row labels, not on the row box: core indents a section header
+ * to where the labels start, past the icon column. */
+
+.cj-splash__section {
+  display: block;
+  margin-block: 1.21875rem 0.65625rem;
+  padding-inline-start: calc(
+    var(--d-sidebar-row-horizontal-padding) + 1.5rem + var(--space-2)
+  );
+  color: var(--d-sidebar-header-color);
+  font-size: var(--font-down-2);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 1.24;
+  text-transform: uppercase;
+
+  &::after {
+    content: var(--cj-splash-section-categories);
+  }
+}
+
+/* -------------------------------------------------------------- content -- */
+.cj-splash__main {
+  flex: 1;
+  min-width: 0;
+  padding-block-start: var(--space-5);
+}
+
+.cj-splash__heading {
+  font-size: var(--font-up-2);
+  font-weight: 700;
+  line-height: 1.2;
+
+  &::after {
+    content: var(--cj-splash-heading);
+  }
+}
+
+.cj-splash__controls {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-block-start: var(--space-4);
+  height: 2.375rem;
+  color: var(--cj-text);
+  font-size: 1rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    padding-inline: var(--space-2);
+  }
+}
+
+/* The two dropdowns carry a trailing chevron. The skeleton reserves its width
+ * rather than drawing it — a glyph the visitor is about to see for 200ms is not
+ * worth a second copy of core's caret. */
+
+.cj-splash__categories,
+.cj-splash__tags {
+  padding-inline-end: 2rem;
+}
+
+.cj-splash__controls-pills {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-inline-start: var(--space-3);
+  padding-inline: 0;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    padding-inline: 0.65rem;
+  }
+}
+
+.cj-splash__categories::after {
+  content: var(--cj-splash-categories);
+}
+
+.cj-splash__tags::after {
+  content: var(--cj-splash-tags);
+}
+
+/* Discovery lands on Latest, so the skeleton carries the same selected pill the
+ * booted list-controls row will show. */
+
+.cj-splash__latest {
+  border-radius: var(--d-nav-pill-border-radius);
+  color: var(--cj-action);
+  background: color-mix(in oklch, var(--cj-action) 5%, transparent);
+
+  &::after {
+    content: var(--cj-splash-latest);
+  }
+}
+
+.cj-splash__hot::after {
+  content: var(--cj-splash-hot);
+}
+
+.cj-splash__categories-tab::after {
+  content: var(--cj-splash-categories-tab);
+}
+
+.cj-splash__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: var(--space-3);
+}
+
+.cj-splash__card {
+  box-sizing: border-box;
+  padding: 0.9em var(--space-3);
+  border: 1px solid var(--cj-border);
+  border-radius: 1rem;
+  background: var(--cj-header);
+}
+
+.cj-splash__byline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 1.5rem;
+}
+
+.cj-splash__avatar {
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+.cj-splash__bar {
+  block-size: 0.65rem;
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+.cj-splash__bar--author {
+  inline-size: 4rem;
+}
+
+.cj-splash__bar--age {
+  inline-size: 2rem;
+}
+
+.cj-splash__bar--title {
+  block-size: 1rem;
+  margin-block: 0.375rem 0.5rem;
+  inline-size: 32%;
+}
+
+.cj-splash__bar--excerpt {
+  inline-size: 62%;
+  margin-block-start: 0.3125rem;
+}
+
+.cj-splash__bar--excerpt-short {
+  inline-size: 44%;
+}
+
+.cj-splash__bar--stats {
+  block-size: 0.55rem;
+  inline-size: 9rem;
+  margin-block-start: 0.75rem;
+}
+
+/* ------------------------------------------------------------- narrow -- */
+
+/* Below the sidebar breakpoint core hides the sidebar and the header collapses
+ * to logo + search button, so the skeleton drops the same pieces rather than
+ * modelling a layout the booted page never shows. */
+@media (width < 60rem) {
+  .cj-splash__sidebar,
+  .cj-splash__nav {
+    display: none;
+  }
+}
+
+@media (width < 40rem) {
+  /* The header goes full-bleed below `sm`, exactly as the client's does, so the
+   * frame's gutter is dropped here and the shell's own padding sets the inset. */
+
+  .cj-splash__header {
+    height: 3.5rem;
+    padding-block-start: 0;
+    padding-inline: 0;
+  }
+
+  .cj-splash__shell {
+    gap: var(--space-2);
+    height: 3.5rem;
+    padding-inline: var(--space-3);
+    border-radius: 0;
+  }
+
+  /* Core collapses the field to a button at this width (see the
+   * mobile_header_search setting), with the account controls after it. */
+
+  .cj-splash__search {
+    flex: none;
+    margin-inline-start: auto;
+    width: 2.5rem;
+    padding-inline-start: 0;
+    justify-content: center;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  .cj-splash__auth {
+    padding-inline-end: 0;
+  }
+
+  .cj-splash__sign-up,
+  .cj-splash__log-in {
+    justify-content: center;
+    width: 2.55rem;
+    padding-inline: 0;
+    border-radius: 999px;
+    color: var(--header_primary);
+    background: none;
+
+    &::after {
+      content: none;
+    }
+
+    &::before {
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      opacity: 0.3;
+    }
+  }
+
+  /* Still one row here — the second row the signed-in list grows (bulk select,
+   * dismiss) is not part of the anonymous page this models. */
+
+  .cj-splash__controls {
+    height: 2.5rem;
+  }
+
+  /* Titles wrap at this width, so the card is a line taller. */
+  .cj-splash__bar--title {
+    block-size: 2.25rem;
+  }
+}

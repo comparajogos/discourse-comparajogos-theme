@@ -1,6 +1,5 @@
 @import "fonts";
 @import "properties";
-@import "initial-shell";
 @import "styles";
 
 /* Compara Jogos components and overrides, one concern per file so an override
@@ -15,3 +14,4 @@
 @import "suppressed";
 @import "plugins";
 @import "tab-bar";
+@import "splash";

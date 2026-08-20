@@ -34,3 +34,17 @@ product_url:
   description:
     en: "Compara Jogos catalog URL, used by the header nav and the logo."
     pt_BR: "Endereço do catálogo, usado pela navegação do cabeçalho e pelo logo."
+
+splash_logo:
+  default: "https://uploads.comparajogos.com.br/original/3X/e/5/e58b246bf3a4d58648b88afb04535dd9d0a6c493.png"
+  type: string
+  description:
+    en: "Logo painted on the loading skeleton in the light scheme. Point it at the same image as the site logo — the skeleton is the header the visitor is about to see. Leave empty to paint no logo."
+    pt_BR: "Logo exibido no esqueleto de carregamento no esquema claro. Use a mesma imagem do logo do site. Deixe vazio para não exibir logo."
+
+splash_logo_dark:
+  default: "https://uploads.comparajogos.com.br/original/3X/0/2/02f4d56d7d6f1d7ef3e3c6b44617e09921d3ce93.png"
+  type: string
+  description:
+    en: "Logo painted on the loading skeleton in the dark scheme. Same rule as splash_logo."
+    pt_BR: "Logo exibido no esqueleto de carregamento no esquema escuro. Mesma regra do splash_logo."

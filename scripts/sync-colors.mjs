@@ -86,33 +86,6 @@ generated.set(aboutPath, `${JSON.stringify(about, null, 2)}\n`);
 
 generated.set(`${root}common/color_definitions.scss`, colorDefinitions());
 
-const headPath = `${root}common/head_tag.html`;
-const head = await readFile(headPath, "utf8");
-generated.set(
-  headPath,
-  replaceBlock(head, "initial", [
-    `--cj-initial-background: light-dark(`,
-    `  ${light.product.background},`,
-    `  ${dark.product.background}`,
-    `);`,
-    `--cj-initial-card: light-dark(`,
-    `  ${light.product.card},`,
-    `  ${dark.product.card}`,
-    `);`,
-    `--cj-initial-panel: light-dark(${hex(light.discourse.header_background)}, ${hex(dark.discourse.header_background)});`,
-    `--cj-initial-control: light-dark(${light.product.control}, ${dark.product.control});`,
-    `--cj-initial-border: light-dark(`,
-    `  ${light.product.border},`,
-    `  ${dark.product.border}`,
-    `);`,
-    `--cj-initial-action: light-dark(${hex(light.discourse.tertiary)}, ${hex(dark.discourse.tertiary)});`,
-    `--cj-initial-brand: light-dark(${hex(light.discourse.quaternary)}, ${hex(dark.discourse.quaternary)});`,
-    `--cj-initial-text: light-dark(${hex(light.discourse.primary)}, ${hex(dark.discourse.primary)});`,
-    `--cj-initial-text-muted: light-dark(${light.product.textMuted}, ${dark.product.textMuted});`,
-    `--cj-initial-on-action: ${colors.shared.onAction};`,
-  ])
-);
-
 const propertiesPath = `${root}scss/properties.scss`;
 const properties = await readFile(propertiesPath, "utf8");
 generated.set(

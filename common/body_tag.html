@@ -42,3 +42,141 @@
     />
   </symbol>
 </svg>
+
+<!--
+  First-paint skeleton. Styles live in scss/_splash.scss; this is only the
+  shape. Labels come from custom properties there, so one locale table serves
+  every string and there is nothing to translate here.
+
+  The inline rule below is the only style that must not wait for the theme
+  stylesheet: without it, a page that somehow renders before that stylesheet
+  arrives would show this markup as a stack of bare text. _splash.scss turns it
+  back on with `html body:has(#d-splash)`, which outweighs this selector, so the
+  skeleton is up exactly while core's own splash is.
+-->
+<style>
+  #cj-splash {
+    display: none;
+  }
+</style>
+
+<div id="cj-splash" aria-hidden="true">
+  <div class="cj-splash__header cj-splash__frame">
+    <div class="cj-splash__shell">
+      <span class="cj-splash__logo"></span>
+
+      <nav class="cj-splash__nav">
+        <span class="cj-splash__nav-item cj-splash__forum is-active"></span>
+        <span class="cj-splash__nav-item cj-splash__lists"></span>
+        <span class="cj-splash__nav-item cj-splash__plays"></span>
+        <span class="cj-splash__nav-item cj-splash__chat"></span>
+        <span class="cj-splash__nav-item cj-splash__market"></span>
+      </nav>
+
+      <span class="cj-splash__search"></span>
+
+      <span class="cj-splash__auth">
+        <span class="cj-splash__sign-up"></span>
+        <span class="cj-splash__log-in"></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="cj-splash__body cj-splash__frame">
+    <aside class="cj-splash__sidebar">
+      <span class="cj-splash__row cj-splash__row--topics is-active"></span>
+      <span class="cj-splash__row cj-splash__row--more is-muted"></span>
+      <span class="cj-splash__section"></span>
+      <span class="cj-splash__row cj-splash__row--general"></span>
+      <span class="cj-splash__row cj-splash__row--feedback"></span>
+      <span class="cj-splash__row cj-splash__row--all-categories"></span>
+    </aside>
+
+    <main class="cj-splash__main">
+      <div class="cj-splash__heading"></div>
+
+      <div class="cj-splash__controls">
+        <span class="cj-splash__categories"></span>
+        <span class="cj-splash__tags"></span>
+        <span class="cj-splash__controls-pills">
+          <span class="cj-splash__latest"></span>
+          <span class="cj-splash__hot"></span>
+          <span class="cj-splash__categories-tab"></span>
+        </span>
+      </div>
+
+      <div class="cj-splash__cards">
+        <div class="cj-splash__card">
+          <div class="cj-splash__byline">
+            <span class="cj-splash__avatar"></span>
+            <span class="cj-splash__bar cj-splash__bar--author"></span>
+            <span class="cj-splash__bar cj-splash__bar--age"></span>
+          </div>
+          <div class="cj-splash__bar cj-splash__bar--title"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div
+            class="cj-splash__bar cj-splash__bar--excerpt cj-splash__bar--excerpt-short"
+          ></div>
+          <div class="cj-splash__bar cj-splash__bar--stats"></div>
+        </div>
+        <div class="cj-splash__card">
+          <div class="cj-splash__byline">
+            <span class="cj-splash__avatar"></span>
+            <span class="cj-splash__bar cj-splash__bar--author"></span>
+            <span class="cj-splash__bar cj-splash__bar--age"></span>
+          </div>
+          <div class="cj-splash__bar cj-splash__bar--title"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div
+            class="cj-splash__bar cj-splash__bar--excerpt cj-splash__bar--excerpt-short"
+          ></div>
+          <div class="cj-splash__bar cj-splash__bar--stats"></div>
+        </div>
+        <div class="cj-splash__card">
+          <div class="cj-splash__byline">
+            <span class="cj-splash__avatar"></span>
+            <span class="cj-splash__bar cj-splash__bar--author"></span>
+            <span class="cj-splash__bar cj-splash__bar--age"></span>
+          </div>
+          <div class="cj-splash__bar cj-splash__bar--title"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div
+            class="cj-splash__bar cj-splash__bar--excerpt cj-splash__bar--excerpt-short"
+          ></div>
+          <div class="cj-splash__bar cj-splash__bar--stats"></div>
+        </div>
+        <div class="cj-splash__card">
+          <div class="cj-splash__byline">
+            <span class="cj-splash__avatar"></span>
+            <span class="cj-splash__bar cj-splash__bar--author"></span>
+            <span class="cj-splash__bar cj-splash__bar--age"></span>
+          </div>
+          <div class="cj-splash__bar cj-splash__bar--title"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div
+            class="cj-splash__bar cj-splash__bar--excerpt cj-splash__bar--excerpt-short"
+          ></div>
+          <div class="cj-splash__bar cj-splash__bar--stats"></div>
+        </div>
+        <div class="cj-splash__card">
+          <div class="cj-splash__byline">
+            <span class="cj-splash__avatar"></span>
+            <span class="cj-splash__bar cj-splash__bar--author"></span>
+            <span class="cj-splash__bar cj-splash__bar--age"></span>
+          </div>
+          <div class="cj-splash__bar cj-splash__bar--title"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div class="cj-splash__bar cj-splash__bar--excerpt"></div>
+          <div
+            class="cj-splash__bar cj-splash__bar--excerpt cj-splash__bar--excerpt-short"
+          ></div>
+          <div class="cj-splash__bar cj-splash__bar--stats"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
