@@ -105,7 +105,7 @@ body {
   --cj-radius-input: 0.625rem;
   --cj-radius-content: 0.75rem;
   --cj-radius-shell: 1.5rem;
-  --cj-radius-panel: 1rem;
+  --cj-radius-panel: 1.5rem;
   --cj-radius-pill: 999px;
 
   /* Live presence green, shared with the client's online strip. */
@@ -120,7 +120,7 @@ body {
    * values are it. */
   --cj-panel-padding: var(--space-6);
   --cj-panel-gap: var(--space-6);
-  --cj-rail-width: 18rem;
+  --cj-rail-width: 20rem;
   --cj-shadow-float: 0 14px 36px -28px
     color-mix(in srgb, var(--primary) 48%, transparent);
   --cj-shadow-composer: 0 -18px 48px -32px
@@ -506,6 +506,30 @@ body {
 @include viewport.until(sm) {
   .welcome-banner {
     background: none;
+  }
+}
+
+/* Section heading
+ *
+ * Core renders `h1#topic-list-heading` for screen readers only. The client
+ * labels every content section, so the heading is revealed and styled rather
+ * than a new one invented — the semantics were already right.
+ */
+
+#topic-list-heading {
+  &.sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 var(--space-4);
+    overflow: visible;
+    clip-path: none;
+    color: var(--cj-text);
+    font-size: var(--font-up-2-rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    white-space: normal;
   }
 }
 

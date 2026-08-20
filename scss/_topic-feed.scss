@@ -27,13 +27,68 @@
 }
 
 .cj-feed {
-  /* Explicit gaps rather than one flex gap: tight between byline and title,
-   * a step before the stats, more before the reply pill. Uniform spacing is
-   * what made the row feel like dead space. */
-  display: flex;
-  gap: 0.1875rem;
-  flex-direction: column;
-  min-width: 0;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+
+  /* A 1000px-wide text row leaves its right half blank. The metadata cluster
+   * fills it with information — who is in the thread and how many have read it
+   * — rather than letting the row trail off. */
+  @include viewport.from(md) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  &__main {
+    /* Explicit gaps rather than one flex gap: tight between byline and title,
+     * a step before the stats, more before the reply pill. Uniform spacing is
+     * what made the row feel like dead space. */
+    display: flex;
+    gap: 0.1875rem;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__aside {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: flex-end;
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+
+    @include viewport.until(md) {
+      display: none;
+    }
+  }
+
+  &__participants {
+    display: flex;
+    align-items: center;
+
+    /* Overlapped, as the client's AvatarStack does. */
+    > * + * {
+      margin-inline-start: -0.4rem;
+    }
+
+    .avatar {
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 2px solid var(--cj-panel);
+      border-radius: var(--cj-radius-pill);
+    }
+  }
+
+  &__more-count {
+    padding-inline-start: var(--space-1);
+    font-size: var(--font-down-2-rem);
+  }
+
+  &__views {
+    min-width: 3ch;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
 
   &__byline {
     display: flex;

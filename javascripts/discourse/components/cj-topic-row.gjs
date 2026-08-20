@@ -7,6 +7,7 @@ import dCategoryLink from "discourse/ui-kit/helpers/d-category-link";
 import dDiscourseTags from "discourse/ui-kit/helpers/d-discourse-tags";
 import dFormatDate from "discourse/ui-kit/helpers/d-format-date";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
+import dNumber from "discourse/ui-kit/helpers/d-number";
 import dTopicLink from "discourse/ui-kit/helpers/d-topic-link";
 import { i18n } from "discourse-i18n";
 
@@ -38,69 +39,99 @@ export default class CjTopicRow extends Component {
   <template>
     <td class="topic-list-data cj-feed-cell">
       <div class="cj-feed">
-        <div class="cj-feed__byline">
-          {{#if this.originalPoster}}
-            <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
-              {{dAvatar this.originalPoster imageSize="small"}}
-            </DUserLink>
-            <DUserLink @user={{this.originalPoster}}>
-              <span class="cj-feed__author">
-                {{this.originalPoster.username}}
+        <div class="cj-feed__main">
+          <div class="cj-feed__byline">
+            {{#if this.originalPoster}}
+              <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
+                {{dAvatar this.originalPoster imageSize="small"}}
+              </DUserLink>
+              <DUserLink @user={{this.originalPoster}}>
+                <span class="cj-feed__author">
+                  {{this.originalPoster.username}}
+                </span>
+              </DUserLink>
+            {{/if}}
+            <span class="cj-feed__age">
+              {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
+            </span>
+
+            <span class="cj-feed__taxonomy">
+              {{~dCategoryLink @topic.category~}}
+              {{~dDiscourseTags @topic mode="list"~}}
+            </span>
+
+            <TopicStatus @topic={{@topic}} @context="topic-list" />
+          </div>
+
+          <div class="cj-feed__title topic-list-main-link">
+            {{dTopicLink @topic}}
+            <TopicPostBadges
+              @unreadPosts={{@topic.unread_posts}}
+              @unseen={{@topic.unseen}}
+              @url={{@topic.lastUnreadUrl}}
+            />
+          </div>
+
+          <div class="cj-feed__stats">
+            <span
+              class="cj-feed__stat {{if @topic.liked '--liked'}}"
+              title={{i18n "likes_lowercase" count=@topic.like_count}}
+            >
+              {{dIcon (if @topic.liked "heart" "far-heart")}}
+              {{@topic.like_count}}
+            </span>
+
+            <span class="cj-feed__stat">
+              {{dIcon "far-comment"}}
+              {{@topic.replyCount}}
+            </span>
+
+          </div>
+
+          {{#if this.showLastReply}}
+            <a
+              href={{@topic.lastPostUrl}}
+              title={{@topic.bumpedAtTitle}}
+              class="cj-feed__last-reply"
+            >
+              {{dIcon "reply"}}
+              <span class="cj-feed__last-reply-name">
+                {{this.lastPoster.username}}
               </span>
-            </DUserLink>
+              <span>
+                {{i18n (themePrefix "topic_feed.replied")}}
+                {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
+              </span>
+            </a>
           {{/if}}
-          <span class="cj-feed__age">
-            {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
-          </span>
-          <TopicStatus @topic={{@topic}} @context="topic-list" />
-
-          <span class="cj-feed__taxonomy">
-            {{~dCategoryLink @topic.category~}}
-            {{~dDiscourseTags @topic mode="list"~}}
-          </span>
         </div>
 
-        <div class="cj-feed__title topic-list-main-link">
-          {{dTopicLink @topic}}
-          <TopicPostBadges
-            @unreadPosts={{@topic.unread_posts}}
-            @unseen={{@topic.unseen}}
-            @url={{@topic.lastUnreadUrl}}
-          />
-        </div>
+        <div class="cj-feed__aside">
+          <div class="cj-feed__participants">
+            {{#each @topic.featuredUsers as |poster|}}
+              {{#if poster.moreCount}}
+                <span class="cj-feed__more-count">{{poster.moreCount}}</span>
+              {{else}}
+                <DUserLink
+                  @username={{poster.user.username}}
+                  @href={{poster.user.path}}
+                >
+                  {{dAvatar
+                    poster
+                    avatarTemplatePath="user.avatar_template"
+                    usernamePath="user.username"
+                    namePath="user.name"
+                    imageSize="small"
+                  }}
+                </DUserLink>
+              {{/if}}
+            {{/each}}
+          </div>
 
-        <div class="cj-feed__stats">
-          <span
-            class="cj-feed__stat {{if @topic.liked '--liked'}}"
-            title={{i18n "likes_lowercase" count=@topic.like_count}}
-          >
-            {{dIcon (if @topic.liked "heart" "far-heart")}}
-            {{@topic.like_count}}
+          <span class="cj-feed__views">
+            {{dNumber @topic.views numberKey="views_long"}}
           </span>
-
-          <span class="cj-feed__stat">
-            {{dIcon "far-comment"}}
-            {{@topic.replyCount}}
-          </span>
-
         </div>
-
-        {{#if this.showLastReply}}
-          <a
-            href={{@topic.lastPostUrl}}
-            title={{@topic.bumpedAtTitle}}
-            class="cj-feed__last-reply"
-          >
-            {{dIcon "reply"}}
-            <span class="cj-feed__last-reply-name">
-              {{this.lastPoster.username}}
-            </span>
-            <span>
-              {{i18n (themePrefix "topic_feed.replied")}}
-              {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
-            </span>
-          </a>
-        {{/if}}
       </div>
     </td>
   </template>
