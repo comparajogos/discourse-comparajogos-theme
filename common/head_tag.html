@@ -92,6 +92,23 @@
   html #d-splash {
     --cj-shell-frame-start: max(2.5rem, calc((100vw - 85rem) / 2));
     --cj-shell-main-start: calc(var(--cj-shell-frame-start) + 14.625rem);
+
+    /*
+     * Geometry, measured off the booted page with `overflow: hidden` — the
+     * condition the splash paints under, where 100vw equals the layout width.
+     * Named so one edit moves every dependent offset, and so the numbers can be
+     * checked against the real thing instead of being folded into gradients.
+     *
+     *   sidebar row      36px tall on a 48px pitch, first row at y=128
+     *   discovery card  ~152px tall on a 164px pitch, first card at y=207
+     */
+    --cj-shell-row-h: 2.25rem;
+    --cj-shell-row-pitch: 3rem;
+    --cj-shell-sidebar-top: 8rem;
+    --cj-shell-sidebar-rows: 2;
+    --cj-shell-card-h: 9.5rem;
+    --cj-shell-card-pitch: 10.25rem;
+    --cj-shell-content-top: 12.9375rem;
     position: fixed;
     display: block;
     overflow: hidden;
@@ -114,18 +131,21 @@
 
   html #d-splash::after {
     position: absolute;
-    inset-block-start: 7.75rem;
+    inset-block-start: var(--cj-shell-sidebar-top);
     inset-inline-start: var(--cj-shell-frame-start);
     box-sizing: border-box;
     width: 13.125rem;
-    height: 6rem;
+    height: calc(
+      var(--cj-shell-row-pitch) * (var(--cj-shell-sidebar-rows) - 1) +
+        var(--cj-shell-row-h)
+    );
     background:
-      linear-gradient(
-          to bottom,
-          var(--cj-initial-on-action) 0 3rem,
-          var(--cj-initial-text) 3rem 6rem
-        )
-        0 0 / 100% 6rem no-repeat,
+      linear-gradient(var(--cj-initial-on-action) 0 0) 0 0 / 100%
+        var(--cj-shell-row-h) no-repeat,
+      /* An inactive row is the muted control fill, not --cj-initial-text: that
+       * token is the label colour, and as a row fill it painted a white slab. */
+      linear-gradient(var(--cj-initial-control) 0 0) 0
+        var(--cj-shell-row-pitch) / 100% var(--cj-shell-row-h) no-repeat,
       radial-gradient(
           circle,
           var(--cj-initial-on-action) 0 0.35rem,
@@ -180,7 +200,10 @@
 
   html #d-splash .preloader-image::before {
     position: absolute;
-    inset-block-start: 13.75rem;
+    inset-block-start: calc(
+      var(--cj-shell-sidebar-top) + var(--cj-shell-row-pitch) *
+        var(--cj-shell-sidebar-rows) + 0.75rem
+    );
     inset-inline-start: var(--cj-shell-frame-start);
     box-sizing: border-box;
     width: 13.125rem;
@@ -205,9 +228,9 @@
 
   html #d-splash .preloader-image::after {
     position: absolute;
-    inset-block-start: 16.375rem;
+    inset-block-start: var(--cj-shell-content-top);
     inset-inline: var(--cj-shell-main-start) var(--cj-shell-frame-start);
-    height: calc(100dvh - 17.875rem);
+    height: calc(100dvh - var(--cj-shell-content-top));
     min-height: 24rem;
     background:
       radial-gradient(
@@ -215,45 +238,50 @@
           var(--cj-initial-control) 0 0.95rem,
           transparent 1rem
         )
-        1rem 1rem / 2rem 10rem repeat-y,
+        1rem 1rem / 2rem var(--cj-shell-card-pitch) repeat-y,
       linear-gradient(
           to bottom,
           var(--cj-initial-control) 0 0.65rem,
           transparent 0.65rem
         )
-        4rem 1.35rem / 9rem 10rem repeat-y,
+        4rem 1.35rem / 9rem var(--cj-shell-card-pitch) repeat-y,
       linear-gradient(
           to bottom,
           var(--cj-initial-control) 0 1rem,
           transparent 1rem
         )
-        1rem 3.75rem / 62% 10rem repeat-y,
+        1rem 3.75rem / 62% var(--cj-shell-card-pitch) repeat-y,
       linear-gradient(
           to bottom,
           var(--cj-initial-control) 0 0.65rem,
           transparent 0.65rem
         )
-        1rem 5.5rem / 80% 10rem repeat-y,
+        1rem 5.5rem / 80% var(--cj-shell-card-pitch) repeat-y,
       linear-gradient(
           to bottom,
           var(--cj-initial-control) 0 0.65rem,
           transparent 0.65rem
         )
-        1rem 6.75rem / 55% 10rem repeat-y,
+        1rem 6.75rem / 55% var(--cj-shell-card-pitch) repeat-y,
       linear-gradient(
           to bottom,
           var(--cj-initial-control) 0 0.55rem,
           transparent 0.55rem
         )
-        1rem 8.25rem / 10rem 10rem repeat-y,
+        1rem 8.25rem / 10rem var(--cj-shell-card-pitch) repeat-y,
+      /* The cards themselves: a panel-filled band per topic with a canvas gap
+       * between, hairlined top and bottom. The theme's panel is darker than its
+       * canvas in dark mode, so the fill contrast is what reads as a card — a
+       * per-card radius would need a real element per card, and the splash has
+       * only its pseudo-elements. */
       repeating-linear-gradient(
-        to bottom,
-        transparent 0 calc(10rem - 1px),
-        var(--cj-initial-border) calc(10rem - 1px) 10rem
-      ),
-      var(--cj-initial-card);
-    border: 1px solid var(--cj-initial-border);
-    border-radius: 1.5rem;
+          to bottom,
+          var(--cj-initial-border) 0 1px,
+          var(--cj-initial-panel) 1px calc(var(--cj-shell-card-h) - 1px),
+          var(--cj-initial-border) calc(var(--cj-shell-card-h) - 1px)
+            var(--cj-shell-card-h),
+          transparent var(--cj-shell-card-h) var(--cj-shell-card-pitch)
+        );
     content: "";
   }
 
