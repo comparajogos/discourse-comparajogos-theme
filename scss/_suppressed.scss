@@ -76,6 +76,15 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
+/* Bulk select is a moderator tool sitting in the reader's way: on mobile it is
+ * a third button crowding the list controls, and the actions behind it are
+ * available from the topic itself. Parked rather than removed — it comes back
+ * the moment there is a moderation flow that wants it. */
+
+.list-controls .bulk-select {
+  display: none;
+}
+
 /* Everything is categorised; an "uncategorised" link is noise. */
 .cat-link.category-sem-categoria {
   display: none;

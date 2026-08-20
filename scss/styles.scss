@@ -57,7 +57,18 @@ body {
 
 .btn-primary,
 #create-topic {
-  padding: 0.5em 0.8em;
+  /* The client's Button is `px-4` around a `gap-2` icon/label pair. Core's
+   * 0.8em with a 0.45em icon margin read as a glyph crowding both the button's
+   * edge and its own label. */
+  padding: 0.5em 1em;
+}
+
+.btn-icon-text {
+  gap: var(--space-2);
+
+  .d-icon {
+    margin-inline-end: 0;
+  }
 }
 
 .navigation-container {
@@ -751,9 +762,20 @@ body .category-breadcrumb {
   .navigation-category,
   .tags-page {
     /* Full-bleed: the cards collapse back into separated rows, the way
-     * Horizon's card column does below `sm`. */
+     * Horizon's card column does below `sm`. Bleeding past the page gutter is
+     * the point — inside it, the row's fill stopped 16px short of the screen
+     * and the list read as one black slab with grey margins rather than a
+     * feed. The cell takes the gutter back so the text still lines up with the
+     * heading above it. */
 
     .topic-list {
+      width: calc(100% + var(--d-wrap-padding-x) * 2);
+      margin-inline: calc(var(--d-wrap-padding-x) * -1);
+
+      .cj-feed-cell {
+        padding-inline: var(--d-wrap-padding-x);
+      }
+
       .topic-list-body {
         gap: 0;
       }
