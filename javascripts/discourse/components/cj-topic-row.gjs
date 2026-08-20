@@ -96,19 +96,24 @@ export default class CjTopicRow extends Component {
               {{@topic.replyCount}}
             </span>
 
-            {{#if this.showLastReply}}
-              <a
-                href={{@topic.lastPostUrl}}
-                title={{@topic.bumpedAtTitle}}
-                class="cj-feed__last"
-              >
-                {{dAvatar this.lastPoster imageSize="small"}}
-                <span>
-                  {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
-                </span>
-              </a>
-            {{/if}}
           </div>
+
+          {{#if this.showLastReply}}
+            <a
+              href={{@topic.lastPostUrl}}
+              title={{@topic.bumpedAtTitle}}
+              class="cj-feed__last-reply"
+            >
+              {{dIcon "reply"}}
+              <span class="cj-feed__last-reply-name">
+                {{this.lastPoster.username}}
+              </span>
+              <span>
+                {{i18n (themePrefix "topic_feed.replied")}}
+                {{dFormatDate @topic.bumpedAt format="tiny" noTitle="true"}}
+              </span>
+            </a>
+          {{/if}}
 
         </div>
 
