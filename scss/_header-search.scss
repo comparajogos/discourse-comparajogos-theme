@@ -255,34 +255,47 @@
         margin-inline-start: 0;
       }
 
-      /* The outlet is the flex child of the header row, and below `sm` the nav
-       * inside it is hidden, so the field is all it holds. */
-
-      /* Trailing margin 0, not the client's `mx-3`.
+      /*
+       * The grow-swap.
        *
-       * The client's 12px lands against its own trailing controls; core's carry
-       * 8px of dead space at the panel's leading edge plus a 4.4px glyph inset
-       * inside the icon button, so a 12px box gap reads as 24px of air — twice
-       * the gap on the logo side. Zero here puts the *glyph* 12px away, which is
-       * what the eye measures. */
+       * Collapsed, the *logo wrapper* is the row's spacer (the client's `flex-1`
+       * div, absorbed into the element before the field) and the field is a
+       * 40px flex-basis; expanded, they trade `flex-grow`. Every property that
+       * changes between the states is interpolable — grow is a number, and
+       * `interpolate-size: allow-keywords` covers basis 2.5rem ↔ auto — and the
+       * margins are constant, so the field's left edge travels smoothly
+       * right-to-left and nothing after it ever moves.
+       *
+       * The first cut used `margin-inline-start: auto` as the spacer instead,
+       * and auto ↔ length does not interpolate: at frame one the margin
+       * collapsed to 12px, the still-small field jumped left, and the hamburger
+       * and avatar lurched left into the freed space before the growing field
+       * pushed them back.
+       *
+       * Scoped to :has(.cj-header-search): on mobile topic pages the field does
+       * not render (the docked title needs the row), and unscoped these rules
+       * left a phantom 40px flex-basis in the empty outlet and gave the logo
+       * wrapper a grow it would fight the title for.
+       *
+       * Trailing margin is 0, not the client's `mx-3`: core's icon buttons
+       * carry ~12px of internal air before their glyphs, so 0 is what puts the
+       * *glyph* 12px away.
+       */
 
-      /* `interpolate-size: allow-keywords` is what makes these transitions
-       * real: the collapse animates between a length and `auto`-derived sizes
-       * (flex-basis 2.5rem → auto, logo width auto → 2.5rem), which are not
-       * interpolable otherwise — the declared transitions were silently
-       * snapping. Where the property is unsupported it snaps exactly as
-       * before, so this is pure progressive enhancement. */
+      .contents:has(.cj-header-search) {
+        .home-logo-wrapper-outlet {
+          flex: 1 1 auto;
+          min-width: 2.5rem;
+          interpolate-size: allow-keywords;
+          transition: var(--cj-transition-input);
+        }
 
-      .before-header-panel-outlet {
-        flex: 0 0 2.5rem;
-        margin-inline: auto 0;
-        interpolate-size: allow-keywords;
-        transition: var(--cj-transition-input);
-      }
-
-      .home-logo-wrapper-outlet {
-        interpolate-size: allow-keywords;
-        transition: var(--cj-transition-input);
+        .before-header-panel-outlet {
+          flex: 0 0 2.5rem;
+          margin-inline: var(--space-3) 0;
+          interpolate-size: allow-keywords;
+          transition: var(--cj-transition-input);
+        }
       }
 
       .cj-header-search {
@@ -343,17 +356,16 @@
 
       .contents:has(.cj-header-search:focus-within),
       .contents:has(.cj-header-search .search-menu-panel) {
-        /* An auto margin absorbs all free space before flex-grow gets a look in,
-         * so the spacer has to go for the field to be able to open. */
-
         .before-header-panel-outlet {
           flex: 1 1 auto;
-          margin-inline: var(--space-3) 0;
         }
 
-        /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */
+        /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays.
+         * The clip is flex-basis, not width, so it rides the same
+         * interpolation as the grow-swap. */
+
         .home-logo-wrapper-outlet {
-          width: 2.5rem;
+          flex: 0 0 2.5rem;
           overflow: hidden;
         }
 
