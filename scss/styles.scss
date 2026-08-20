@@ -22,6 +22,47 @@ body {
 }
 
 /*
+ * Core selectors the theme used to reach through the Canvas component's
+ * --canvas-* forwarding layer. Canvas defined none of those properties itself —
+ * every rule in it was `core-selector { property: var(--canvas-X, default) }` —
+ * so stating the values here removes a dependency without changing a pixel.
+ */
+
+#main-outlet {
+  padding-block-start: var(--space-5);
+
+  .archetype-regular &,
+  .admin-interface &,
+  .upcoming-events & {
+    padding-block-end: var(--space-5);
+  }
+}
+
+.btn {
+  padding: 0.5em 0.7em;
+}
+
+.btn-primary,
+#create-topic {
+  padding: 0.5em 0.8em;
+}
+
+.navigation-container {
+  --nav-space: var(--space-3);
+}
+
+.sidebar-wrapper .sidebar-sections {
+  scrollbar-width: thin;
+}
+
+/* Feed rows own their padding (see _topic-feed.scss); this is for the column
+ * lists that keep core's layout. */
+
+.topic-list .topic-list-body .topic-list-item td.topic-list-data {
+  padding-block: 0.9em;
+}
+
+/*
  * Discourse normally adds the sidebar width to every .wrap. The product uses one
  * shared frame, with the sidebar participating inside it rather than widening it.
  */
@@ -42,16 +83,16 @@ body.has-sidebar-page .wrap {
    * the pill, and core's measured header offset was wrong too.
    *
    * Core caps this element's height, so the inset alone still left the pill
-   * hanging 22px past it. --canvas-header-height is exactly the inset plus the
-   * shell, and was defined for this and never consumed. */
+   * hanging 22px past it. --cj-header-height is exactly the inset plus the
+   * shell. */
   box-sizing: border-box;
-  min-height: var(--canvas-header-height);
+  min-height: var(--cj-header-height);
   padding-block-start: 1.5rem;
   background: transparent;
 
   /* Core rings the header with a hard #373737 1px shadow, which read as a
    * full-width rule under the floating shell. The pill is the edge. */
-  box-shadow: var(--canvas-header-shadow);
+  box-shadow: none;
 
   &.d-header .wrap {
     /* The client's header is `w-[calc(100%-5rem)] max-w-340` — a 2.5rem inset on
@@ -485,8 +526,7 @@ body .category-breadcrumb {
      * the client, which only drops the `sm:top-6` inset below `sm`. It was
      * 3.75rem here while the shell's own `min-height: 4.625rem` still applied
      * (min-height beats height), so the pill overhung its header box by 14px. */
-    --canvas-header-height: 4.625rem;
-    --canvas-content-padding: var(--space-4);
+    --cj-header-height: 4.625rem;
     --d-wrap-padding-x: var(--space-4);
   }
 
@@ -524,6 +564,16 @@ body .category-breadcrumb {
 
   .cj-header-nav {
     display: none;
+  }
+
+  #main-outlet {
+    padding-block-start: var(--space-4);
+
+    .archetype-regular &,
+    .admin-interface &,
+    .upcoming-events & {
+      padding-block-end: var(--space-4);
+    }
   }
 
   .navigation-topics,

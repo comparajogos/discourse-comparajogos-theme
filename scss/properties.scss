@@ -1,5 +1,5 @@
 /*
- * Canvas properties mapped to the React client design contract.
+ * Product tokens, mapped to the React client's design contract.
  * Keep product styling here so Discourse core can own component internals.
  *
  * Declared on :root *and* body. Discourse's upcoming-changes flags
@@ -36,14 +36,6 @@ body {
 
   /* The client separates columns by `gap-6` / `mr-6`. */
   --d-main-content-gap: var(--space-6);
-  --canvas-nav-space: var(--space-3);
-  --canvas-content-padding: var(--space-5);
-  --canvas-topic-list-padding: 0.9em;
-
-  /* Base surfaces. Only the properties the Canvas component actually reads are
-   * declared — it consumes every --canvas-* through a var() fallback and defines
-   * none of them itself, so an undeclared one is simply Canvas's own default. */
-  --canvas-background: var(--cj-background);
 
   /* Geometry, from the client's radius scale (`--radius: 0.625rem`):
    * buttons are `rounded-md` (--radius minus 2px = 8px) and inputs are
@@ -62,27 +54,19 @@ body {
   --input-border-color: transparent;
   --d-nav-pill-border-radius: 0.5rem;
 
-  /* Controls retain Discourse sizing and interaction behavior. */
-  --canvas-button-padding: 0.5em 0.7em;
-  --canvas-button-primary-padding: 0.5em 0.8em;
-
-  /* Floating product header. */
-  --canvas-header-height: 6.125rem;
-  --canvas-header-background: transparent;
-  --canvas-header-border: none;
-  --canvas-header-shadow: none;
+  /* Floating product header: the 1.5rem inset plus the shell itself. Core caps
+   * .d-header's height, so this is what stops the pill overhanging its own box. */
+  --cj-header-height: 6.125rem;
 
   /* Sidebar sits inside the same 85rem frame as the content. */
   --d-sidebar-width: 16rem;
   --d-sidebar-background: transparent;
-  --canvas-sidebar-border: 1px solid var(--cj-border);
 
   /* Core draws a hard #373737 rule down the sidebar and under every section.
    * The menu is separated by the gap between it and the content, not by lines —
    * these are core's own hooks, so no selector override is needed. */
   --d-sidebar-border-color: transparent;
   --d-sidebar-section-border-color: transparent;
-  --canvas-sidebar-scrollbar: thin;
 
   /*
    * Sidebar rows, from the client's Button: `px-4 py-2` on `text-sm`/`leading-5`
@@ -120,15 +104,8 @@ body {
   --sidebar-section-wrapper-padding: var(--space-5) var(--space-1)
     var(--space-3);
 
-  /* Canvas panels are restrained surfaces, not floating bubbles. */
-  --canvas-panel-background: var(--cj-header);
-  --canvas-panel-padding: var(--space-4);
-  --canvas-panel-radius: 0.75rem;
-  --canvas-panel-border: 1px solid var(--cj-border);
-  --canvas-panel-shadow: none;
-
-  /* Semantics the ported components need, derived from the tokens above so the
-   * Canvas vocabulary stays the single source. */
+  /* Semantics the ported components need, derived from the tokens above so one
+   * vocabulary stays the single source. */
   --cj-text: var(--primary);
   --cj-panel: var(--cj-header);
   --cj-surface-muted: var(--cj-control);
@@ -161,14 +138,4 @@ body {
   /* Core draws the nav pill's selected marker as a ::after bar sized by this;
    * the filled pill is the marker, so two markers for one state is one too many. */
   --d-nav-underline-height: 0;
-
-  /* Banner and header-search defaults for components added later. */
-  --canvas-banner-color: var(--primary);
-  --canvas-banner-background: var(--cj-card);
-  --canvas-banner-padding: var(--space-4);
-  --canvas-banner-radius: var(--d-border-radius-large);
-  --canvas-banner-border: 1px solid var(--cj-border);
-  --canvas-banner-shadow: none;
-  --canvas-header-search-padding: 0.55em;
-  --canvas-header-search-border: 1px solid var(--cj-border);
 }

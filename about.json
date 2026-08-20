@@ -52,8 +52,5 @@
       "success": "4ade80",
       "love": "fb7185"
     }
-  },
-  "components": [
-    "https://gitlab.com/manuelkostka/discourse/canvas/component.git"
-  ]
+  }
 }

@@ -1,14 +1,13 @@
 # Compara Jogos Discourse theme
 
-The full Discourse theme for the Compara Jogos community. Version 2 uses
-[Manuel Kostka's Canvas Theme Template](https://meta.discourse.org/t/canvas-theme-template/352730)
-as its compatibility-first foundation and maps the React client's design
-tokens onto Discourse's public custom properties.
+The full Discourse theme for the Compara Jogos community. It maps the React
+client's design tokens onto Discourse's public custom properties and depends on
+no theme components.
 
 The theme intentionally keeps its CSS surface small. Discourse core owns the
 composer, topic posts, form controls, menus, and responsive behavior. The
 theme owns product-level color tokens, the shared frame, the header, the
-sidebar's row geometry, and the discovery feed row.
+sidebar's row geometry, the page panels, and the discovery feed row.
 
 ## Install
 
@@ -25,7 +24,6 @@ use **Inter** for base and heading fonts to match the React client exactly.
 Set **Search experience** to **Search field in site header** so the product
 header uses the same search-first composition as the React client.
 
-The required **Canvas Settings** component is installed with the theme. Other
 Comparajogos components are deliberately not bundled into the base; validate
 the base first, then enable the production component set one at a time.
 
@@ -54,7 +52,7 @@ chat, and the mobile sidebar.
 ## Design contract
 
 - Keep native Discourse semantics and behavior.
-- Prefer Canvas and Discourse custom properties over component selectors.
+- Prefer Discourse's own custom properties over component selectors.
 - Extend `--cj-*` tokens before adding isolated values.
 - Use logical properties for direction-safe spacing.
 - Preserve visible focus and reduced-motion handling.

@@ -1,0 +1,147 @@
+@use "lib/viewport";
+
+/* Page panels
+ *
+ * Discourse has no single container for "the page's content". Each route ships
+ * its own, so giving a product a consistent page surface means naming them.
+ * This list came from the Canvas component, which the theme used to depend on
+ * for it; every selector below was checked against current core (or against a
+ * plugin Compara Jogos actually runs) before being carried over.
+ *
+ * The radius is the theme's own 1rem, not Canvas's 0.75rem: under Canvas the
+ * profile, badges, groups and search pages had 12px corners while discovery and
+ * the header had 24px, and nothing recorded that as a decision. Wide panels get
+ * 1rem plus a hairline — see the design-system notes on why the client's
+ * `rounded-4xl` does not transfer to a 1000px surface.
+ *
+ * Discovery is deliberately absent: styles.scss panels `.topic-list` itself so
+ * the rows can reach the panel's edge, and a panel on `#list-area` as well would
+ * be a box inside a box.
+ */
+
+@mixin cj-panel {
+  box-sizing: border-box;
+  padding: var(--space-5);
+  background: var(--cj-panel);
+  border: 1px solid var(--cj-border);
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+.users-directory,
+.contents.body-page,
+.container .user-main,
+.container.tags-index,
+.container.badges,
+.container.groups-index,
+.group-index .container.group,
+.categories-list #list-area,
+.archetype-regular #main-outlet > .regular,
+.reviewable-container,
+div.edit-category,
+.boxed.white.admin-content,
+.search-container,
+.has-full-page-chat .full-page-chat {
+  @include cj-panel;
+}
+
+/* Discourse-calendar's month view. */
+#upcoming-events-calendar {
+  @include cj-panel;
+}
+
+/* The static pages are prose, so they get a measure rather than the full width
+ * of a 1360px panel. */
+
+.contents.body-page {
+  max-width: unset;
+
+  div[itemprop="mainContentOfPage"] {
+    max-width: 66ch;
+  }
+}
+
+/* Search is a panel now, so its inner bars stop being surfaces of their own. */
+.search-container {
+  .search-header,
+  .search-bar,
+  .search-filters,
+  .search-filters .search-advanced-filters {
+    background: transparent;
+  }
+}
+
+/* Core draws a hard rule under the tag list and a bare <hr> above it, both of
+ * which land inside the panel. */
+
+.tags-page .tags-index > hr {
+  display: none;
+}
+
+.tags-list {
+  padding-block-end: 0;
+  border-bottom: none;
+}
+
+/* Full-page chat is the panel, so the column gap and the divider it ships for a
+ * borderless layout both go, and its height has to account for the panel rather
+ * than the viewport. */
+
+.has-full-page-chat {
+  .chat-channel {
+    height: calc(
+      var(--composer-vh, 1vh) * 92 - var(--main-outlet-offset, 0px) -
+        1px - var(--chat-header-offset, 0) - var(--composer-height, 0px)
+    );
+  }
+}
+
+body.has-sidebar-page.has-full-page-chat {
+  #main-outlet-wrapper {
+    gap: 0 var(--d-main-content-gap);
+  }
+
+  .full-page-chat {
+    border-inline-start: 1px solid var(--cj-border);
+  }
+}
+
+html.has-full-page-chat body #main-outlet .full-page-chat {
+  height: unset;
+}
+
+/* Core's sidebar footer fades its scroll edge against the sidebar's own fill.
+ * Ours is transparent, so the fade is a grey smear over the canvas. */
+
+.sidebar-footer-wrapper .sidebar-footer-container {
+  &::before {
+    background: none;
+  }
+
+  .admin-interface & {
+    background: var(--d-sidebar-admin-background);
+  }
+}
+
+/* The New Topic button belongs at the end of the controls row, not wherever
+ * core's tooltip wrapper happens to land it. */
+
+.navigation-controls .fk-d-button-tooltip {
+  order: 1;
+  margin-inline: var(--space-2) 0;
+}
+
+@include viewport.until(md) {
+  /* Rows are separated by their own borders; core adds one more above the body. */
+  tbody {
+    border-top: none;
+  }
+
+  /* Selection is a fill, so the ring core adds on top of it is a second marker. */
+  .topic-list tr.selected td:first-of-type,
+  .topic-list .topic-list-item.selected td:first-of-type,
+  .topic-list .latest-topic-list-item.selected,
+  .search-results .fps-result.selected {
+    box-shadow: none;
+  }
+}
