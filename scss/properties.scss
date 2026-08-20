@@ -138,6 +138,19 @@ body {
   --cj-duration-fast: 150ms;
   --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /*
+   * Core's universal hairline: 200+ rules borrow --content-border-color for the
+   * rule under the topic map, between posts, around menus and across admin. It
+   * defaults to --primary-low — the hard #373737 the theme has been chasing out
+   * surface by surface. One mapping retires the class; --table-border-color
+   * follows it in core.
+   */
+  --content-border-color: var(--cj-border);
+
+  /* Core's metadata tier defaults to --primary-medium, which is derived from the
+   * palette and comes out blue-tinted — the same reason --cj-text-muted exists. */
+  --metadata-color: var(--cj-text-muted);
+
   /* Core's own hooks for the topic title, rather than out-specificity-ing its
    * `.visited a.title` rule. A read topic is dimmed, never un-bolded, so the
    * column of titles stays scannable. */
