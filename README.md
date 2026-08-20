@@ -7,8 +7,8 @@ tokens onto Discourse's public custom properties.
 
 The theme intentionally keeps its CSS surface small. Discourse core owns the
 composer, topic posts, form controls, menus, and responsive behavior. The
-theme owns product-level color tokens, the shared 85rem shell, the header, and
-the optional Blocks product bridge.
+theme owns product-level color tokens, the shared frame, the header, the
+sidebar's row geometry, and the discovery feed row.
 
 ## Install
 
@@ -32,11 +32,9 @@ the base first, then enable the production component set one at a time.
 The theme styles the existing `.cj-header-nav` integration when present. The
 underlying Discourse header and navigation still work without it.
 
-It also uses Discourse's 2026 Blocks API for a small `sidebar-discovery`
-product bridge. The block is route-safe, localized, configurable, and can be
-disabled with the `show_product_bridge` theme setting. Native topic and post
-surfaces are deliberately not replaced by Blocks. Discourse 3.6.0.beta1 or
-newer is required.
+Cross-product navigation lives in the header, not in a sidebar card, so there
+is exactly one door between the forum and the catalog. Discourse 3.6.0.beta1 or
+newer is required for the ui-kit imports the topic feed row uses.
 
 ## Development
 

@@ -60,13 +60,6 @@ $height: 3.5rem;
       }
     }
 
-    /* Chat has its own tab, so the header icon would be a second door to the
-     * same room. */
-
-    .header-dropdown-toggle.chat-header-icon {
-      display: none;
-    }
-
     /* Full-page chat sizes itself to the viewport, so the bar's clearance would
      * push its composer off-screen. */
 

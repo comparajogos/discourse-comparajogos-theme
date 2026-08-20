@@ -3,6 +3,7 @@ import { concat } from "@ember/helper";
 import { service } from "@ember/service";
 import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
+import ChatUnreadIndicator from "discourse/plugins/chat/discourse/components/chat/header/icon/unread-indicator";
 
 /**
  * The client's `GlobalHeader` navigation, rendered inside Discourse's own header
@@ -12,6 +13,12 @@ import { i18n } from "discourse-i18n";
  * destinations go through `getURL` so they keep Discourse's routing and work at
  * any mount point. Icons come from the Phosphor sprite in `body_tag.html`,
  * matching the `react-icons/pi` glyphs the client uses.
+ *
+ * The Chat item carries chat's unread indicator, the way the client's own nav
+ * item does. It is core's component rather than a count of our own, so the
+ * member's `chat_header_indicator_preference` still decides what shows. That
+ * makes the header chat icon a second door to the same room, so
+ * `_suppressed.scss` hides it.
  */
 export default class CjHeaderNav extends Component {
   /* The docked topic title needs the whole header width. */
@@ -61,6 +68,7 @@ export default class CjHeaderNav extends Component {
         icon: "chats-circle",
         requiresAuth: !username,
         active: route.startsWith("chat"),
+        unread: true,
       });
     }
 
@@ -94,6 +102,9 @@ export default class CjHeaderNav extends Component {
                 href={{concat "#cj-" link.icon (if link.active "-fill" "")}}
               ></use>
             </svg>
+            {{#if link.unread}}
+              <ChatUnreadIndicator />
+            {{/if}}
             <span class="cj-nav-item__label">
               {{i18n (themePrefix (concat "header_nav." link.key))}}
             </span>

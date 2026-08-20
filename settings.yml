@@ -22,15 +22,9 @@ show_mobile_tab_bar:
     en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
     pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
 
-show_product_bridge:
-  default: true
-  description:
-    en: "Show a compact link to the Compara Jogos catalog in the discovery sidebar."
-    pt_BR: "Mostra um link compacto para o catálogo do Compara Jogos na barra lateral."
-
 product_url:
   default: "https://www.comparajogos.com.br"
   type: string
   description:
-    en: "Compara Jogos product URL used by the sidebar bridge."
-    pt_BR: "Endereço do Compara Jogos usado pelo atalho na barra lateral."
+    en: "Compara Jogos catalog URL, used by the header nav and the logo."
+    pt_BR: "Endereço do catálogo, usado pela navegação do cabeçalho e pelo logo."

@@ -54,6 +54,21 @@
     height: 1.5rem;
     fill: currentcolor;
   }
+
+  /* Chat's unread indicator, pinned to the icon's top-right corner the way the
+   * client's `ChatCountIndicator` is (`right-1 top-0`). The item is the
+   * positioning context, and the label is hidden below `lg`, so the anchor has
+   * to be the icon rather than the item's trailing edge. */
+
+  .cj-nav-item {
+    position: relative;
+  }
+
+  .chat-channel-unread-indicator {
+    position: absolute;
+    top: var(--space-1);
+    inset-inline-start: calc(var(--space-4) + var(--space-3));
+  }
 }
 
 /* The client shows nav icons without labels until `lg` (`hidden lg:inline`). */

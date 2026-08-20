@@ -1,7 +1,4 @@
 en:
-  product_bridge:
-    label: "Compare games"
-    description: "Catalog, prices, lists and plays"
   header_nav:
     label: "Compara Jogos"
     forum: "Forum"

@@ -56,6 +56,15 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
+/* Chat has one door: the header nav item, which carries chat's own unread
+ * indicator (see cj-header-nav.gjs). The core header icon is the same
+ * destination one control to its right, and on mobile the tab bar is a third.
+ * Hiding it does not disable chat or its tracking. */
+
+.header-dropdown-toggle.chat-header-icon {
+  display: none;
+}
+
 /* Navigation the product does not use: tags are browsed from the catalog, the
  * member map lives in the client, and chat threads are not enabled. */
 

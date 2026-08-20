@@ -428,50 +428,6 @@ body .category-breadcrumb {
 }
 
 /*
- * Discovery layout
- *
- * Registering a block in `sidebar-discovery` makes core wrap discovery in
- * `.discovery-layout` — and core ships no CSS for it, so the rail stacks under
- * the list at full width. This is the client's homepage shape: one main column
- * with a rail beside it, folding under the content when there is no room.
- */
-
-.discovery-layout {
-  &__content {
-    display: grid;
-    gap: var(--d-main-content-gap);
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-
-    @include viewport.from(lg) {
-      grid-template-columns: minmax(0, 1fr) 20rem;
-    }
-  }
-
-  &__list {
-    min-width: 0;
-  }
-
-  &__sidebar {
-    display: flex;
-    gap: var(--d-main-content-gap);
-    flex-direction: column;
-    min-width: 0;
-  }
-}
-
-/* With Discourse's own sidebar open the rail is a third column, so it waits for
- * room rather than squeezing the list. */
-
-body.has-sidebar-page .discovery-layout__content {
-  grid-template-columns: minmax(0, 1fr);
-
-  @include viewport.from(xl) {
-    grid-template-columns: minmax(0, 1fr) 20rem;
-  }
-}
-
-/*
  * Core renders `h1#topic-list-heading` for screen readers only. The client
  * labels every content section, so the heading is revealed rather than a new one
  * invented — the semantics were already right.
@@ -490,59 +446,6 @@ body.has-sidebar-page .discovery-layout__content {
   line-height: 1.2;
   letter-spacing: -0.02em;
   white-space: normal;
-}
-
-/* Blocks-based bridge from Discourse discovery to the product catalog. */
-.cj-product-bridge {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  min-width: 0;
-  min-height: 3.25rem;
-  margin-block-end: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  color: var(--primary);
-  background: var(--cj-card);
-  border: 1px solid var(--cj-border);
-  border-radius: var(--d-border-radius-large);
-
-  &:hover {
-    color: var(--primary);
-    background: var(--cj-control);
-  }
-
-  &__icon {
-    display: grid;
-    flex: 0 0 2rem;
-    width: 2rem;
-    height: 2rem;
-    color: white;
-    background: var(--tertiary);
-    border-radius: 50%;
-    place-items: center;
-  }
-
-  &__copy {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-
-    strong,
-    small {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    strong {
-      font-size: var(--font-down-1-rem);
-    }
-
-    small {
-      color: var(--primary-medium);
-      font-size: var(--font-down-2);
-    }
-  }
 }
 
 @media (width < 768px) {
