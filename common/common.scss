@@ -11,6 +11,7 @@
 @use "plugins";
 @use "editor";
 @use "list-styles";
+@use "topic-feed";
 @use "tab-bar" with (
   $enabled: $show_mobile_tab_bar
 );
@@ -65,6 +66,14 @@ body {
   );
   --d-nav-border-color--active: transparent;
   --d-nav-underline-height: 0;
+
+  /* Core's own hooks for the title, rather than out-specificity-ing its
+   * `.visited a.title` rule. A read topic is dimmed, not un-bolded, so the
+   * column of titles stays scannable. */
+  --topic-title-font-weight: 700;
+  --topic-title-font-weight--visited: 700;
+  --title-color: var(--cj-text);
+  --title-color--read: var(--cj-text-muted);
   --d-topic-list-title-font-size: var(--font-up-2);
   --d-topic-list-data-padding-y: var(--space-4);
   --d-topic-list-data-padding-x: var(--space-2);
@@ -437,10 +446,13 @@ body.has-sidebar-page .wrap {
 :root,
 body {
   --d-welcome-banner-text-alignment: start;
+
+  /* The uc-modernize flag centres the banner via its own variable name. */
+  --welcome-banner-text-align: start;
   --d-welcome-banner-header-size: clamp(1.75rem, 3.2vw, 2.5rem);
-  --d-welcome-banner-padding-top: var(--space-10);
+  --d-welcome-banner-padding-top: var(--space-8);
   --d-welcome-banner-padding-right: var(--space-8);
-  --d-welcome-banner-padding-bottom: var(--space-10);
+  --d-welcome-banner-padding-bottom: var(--space-8);
   --d-welcome-banner-padding-left: var(--space-8);
   --d-welcome-banner-title-margin-bottom: var(--space-5);
 }
@@ -458,7 +470,10 @@ body {
     var(--cj-panel);
 
   &__title {
+    /* Core auto-centres the title with `margin-inline: auto`, which overrode the
+     * start alignment as soon as a max-width was set. */
     max-width: 28ch;
+    margin-inline: 0;
     color: var(--cj-text);
     font-weight: 750;
     line-height: 1.08;

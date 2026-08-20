@@ -28,6 +28,12 @@ header_logo_links_to_product:
     en: "Point the header logo at the Compara Jogos catalog, as the client's header does."
     pt_BR: "Faz o logo do cabeçalho apontar para o catálogo do Compara Jogos, como no cliente."
 
+topic_list_feed:
+  default: true
+  description:
+    en: "Show discovery lists as feed rows — author, title, engagement, last reply — instead of a column table."
+    pt_BR: "Mostra as listas como linhas de feed — autor, título, engajamento, última resposta — em vez de tabela."
+
 show_product_bridge:
   default: true
   description:

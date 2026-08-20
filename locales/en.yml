@@ -9,3 +9,5 @@ en:
     plays: "Plays"
     chat: "Chat"
     market: "My Market"
+  topic_feed:
+    replied: "replied"

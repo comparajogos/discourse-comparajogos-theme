@@ -9,3 +9,5 @@ pt_BR:
     plays: "Partidas"
     chat: "Chat"
     market: "Meu Comércio"
+  topic_feed:
+    replied: "respondeu"

@@ -12,7 +12,11 @@
     "svg_icons": [
       "chevron-left",
       "chevron-right",
+      "far-comment",
+      "far-heart",
+      "heart",
       "magnifying-glass",
+      "reply",
       "share-nodes"
     ],
     "only_theme_color_schemes": true

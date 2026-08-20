@@ -1,0 +1,196 @@
+@use "lib/viewport";
+
+/* Topic feed row
+ *
+ * Styling for javascripts/discourse/components/cj-topic-row.gjs, which replaces
+ * the topic-list columns with one cell. Proportions come from the client's
+ * `components/forum/TopicItem.tsx`: an 11px byline, a 16px/1.15 two-line title,
+ * a 14px stats row with the category pushed right, and the last-reply pill.
+ */
+
+/* A feed has no column labels, and nothing to sort by. */
+.topic-list.--cj-feed {
+  .topic-list-header {
+    display: none;
+  }
+
+  .topic-list-item {
+    /* The row is the card's content, so the cell owns its own padding. */
+    > .cj-feed-cell {
+      padding-block: var(--space-5);
+    }
+  }
+}
+
+.cj-feed-cell {
+  width: 100%;
+}
+
+/* A read topic is dimmed, never un-bolded. */
+.topic-list-item.visited .cj-feed__title a.title {
+  color: var(--title-color--read);
+}
+
+.cj-feed {
+  display: flex;
+  gap: var(--space-1);
+  flex-direction: column;
+  min-width: 0;
+
+  &__byline {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-width: 0;
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-2);
+
+    .avatar {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: var(--cj-radius-pill);
+    }
+  }
+
+  &__author {
+    overflow: hidden;
+    color: var(--cj-text-muted);
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--cj-text);
+    }
+  }
+
+  /* Status icons (pinned, closed) belong at the end of the byline, as they do
+   * in the client. */
+
+  .topic-statuses {
+    margin-inline-start: auto;
+  }
+
+  &__title {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    min-width: 0;
+
+    a.title {
+      display: -webkit-box;
+      overflow: hidden;
+
+      /* `font-bold text-base` in TopicItem.tsx. Weight comes from core's
+       * --topic-title-* tokens; the colour is bound explicitly because an
+       * unread title otherwise falls back to the anchor's link colour. */
+      color: var(--title-color);
+      font-size: var(--font-0);
+      line-height: 1.25;
+      letter-spacing: -0.012em;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      transition: opacity var(--cj-duration-fast) var(--cj-ease-out);
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+
+  &__stats {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    min-width: 0;
+    margin-block-start: var(--space-1);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1);
+  }
+
+  &__stat {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+
+    .d-icon {
+      width: 0.9em;
+      height: 0.9em;
+    }
+
+    /* A like the reader gave is the one stat that earns colour. */
+    &.--liked .d-icon {
+      color: var(--love);
+    }
+  }
+
+  &__taxonomy {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-width: 0;
+    margin-inline-start: auto;
+  }
+
+  /* Who spoke last is the strongest signal that a thread is alive, so it gets
+   * its own line as a quiet pill rather than another number in the row. */
+
+  &__last-reply {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    align-self: start;
+    max-width: 100%;
+    margin-block-start: var(--space-2);
+    padding: 0.15rem var(--space-3);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-2);
+    background: var(--cj-surface-muted);
+    border-radius: var(--cj-radius-pill);
+    transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+    &:hover {
+      color: var(--cj-text);
+      background: var(--cj-hover);
+    }
+
+    .d-icon {
+      width: 0.85em;
+      height: 0.85em;
+      opacity: 0.7;
+    }
+  }
+
+  &__last-reply-name {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@include viewport.until(sm) {
+  .topic-list.--cj-feed .topic-list-item > .cj-feed-cell {
+    padding-block: var(--space-4);
+  }
+
+  .cj-feed {
+    &__byline .avatar {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    &__stats {
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    /* At this width the category cannot sit on the far right without crowding
+     * the counts, so it wraps to its own place in the row. */
+
+    &__taxonomy {
+      margin-inline-start: 0;
+    }
+  }
+}
