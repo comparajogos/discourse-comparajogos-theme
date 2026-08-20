@@ -208,6 +208,34 @@ body.has-sidebar-page .wrap {
   }
 }
 
+/*
+ * Scroll docking
+ *
+ * The client's header sits 1.5rem down the page and slides flush as you scroll
+ * (`top: max(0, 24 - scrollY)`), squaring its top corners when it lands. This is
+ * the scroll-driven equivalent — no scroll listener, and it degrades to a
+ * permanently floating shell where scroll timelines are unsupported.
+ */
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .d-header > .wrap {
+      animation: cj-header-dock linear both;
+      animation-range: 0 1.5rem;
+      animation-timeline: scroll();
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes cj-header-dock {
+  to {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    transform: translateY(-1.5rem);
+  }
+}
+
 /* Community presence is a product-wide pulse, not table metadata. */
 #whos-online {
   display: flex;
