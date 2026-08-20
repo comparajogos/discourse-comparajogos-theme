@@ -138,6 +138,11 @@ body {
   --cj-duration-fast: 150ms;
   --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* The client's Input container transitions everything at once:
+   * `transition-all duration-200 ease-in-out`. One token, so the header search
+   * pill and its mobile collapse can never drift from it — or from each other. */
+  --cj-transition-input: all 200ms ease-in-out;
+
   /*
    * Core's universal hairline: 200+ rules borrow --content-border-color for the
    * rule under the topic map, between posts, around menus and across admin. It

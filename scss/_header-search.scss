@@ -46,7 +46,11 @@
     margin-inline: auto 0;
     background: var(--cj-header-soft);
     border-radius: var(--cj-radius-pill);
-    transition: box-shadow 200ms ease-in-out;
+
+    /* The client's Input transition, shared via token. `all` is what the client
+     * ships (`transition-all`), so the pill's shadow, colour and — on mobile —
+     * its width all move on the same clock. */
+    transition: var(--cj-transition-input);
 
     /* `focus-within:shadow-outline` — on the pill, because the input is only
      * one of the three things inside it. */
@@ -262,14 +266,23 @@
        * the gap on the logo side. Zero here puts the *glyph* 12px away, which is
        * what the eye measures. */
 
+      /* `interpolate-size: allow-keywords` is what makes these transitions
+       * real: the collapse animates between a length and `auto`-derived sizes
+       * (flex-basis 2.5rem → auto, logo width auto → 2.5rem), which are not
+       * interpolable otherwise — the declared transitions were silently
+       * snapping. Where the property is unsupported it snaps exactly as
+       * before, so this is pure progressive enhancement. */
+
       .before-header-panel-outlet {
         flex: 0 0 2.5rem;
         margin-inline: auto 0;
-        transition: flex-basis 200ms ease-in-out;
+        interpolate-size: allow-keywords;
+        transition: var(--cj-transition-input);
       }
 
       .home-logo-wrapper-outlet {
-        transition: width 200ms ease-in-out;
+        interpolate-size: allow-keywords;
+        transition: var(--cj-transition-input);
       }
 
       .cj-header-search {
