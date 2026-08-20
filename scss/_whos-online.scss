@@ -1,0 +1,80 @@
+/* Who's online
+ *
+ * The client shows a live presence strip under the header: a pulsing dot, the
+ * count, then a long horizontally scrollable row of member avatars. The forum's
+ * whos-online widget adopts the same reading.
+ *
+ * Merged from the site's two standalone iterations, which disagreed: the first
+ * styled the count inline, the second made the row scroll and pushed the count
+ * out of flow. The scrolling row is the one that matches the client, so the
+ * count is positioned and the avatars own the scroll.
+ *
+ * Simplified along the way: flex `gap` replaces the opposing negative margins,
+ * and the vendor-prefixed animation copies are gone — unprefixed `@keyframes`
+ * has been universal for years.
+ */
+
+#whos-online {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  padding-block-end: var(--space-3);
+  padding-inline-start: 8.5rem;
+  color: var(--cj-text-muted);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The count stays put while the avatars scroll past it. */
+  > span {
+    position: absolute;
+    inset-inline-start: 0;
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    font-weight: 500;
+
+    &::before {
+      flex: 0 0 auto;
+      width: 0.625rem;
+      height: 0.625rem;
+      background: var(--cj-online);
+      border-radius: var(--cj-radius-pill);
+      animation: cj-online-pulse 1s ease-out infinite;
+      content: "";
+    }
+  }
+
+  /* Avatars overlap, as they do in the client's strip. */
+  a {
+    flex: 0 0 auto;
+    margin-inline-end: -0.25rem;
+  }
+}
+
+/* The outlet is the positioning context for the pinned count. */
+.discovery-list-container-top-outlet {
+  position: relative;
+}
+
+@keyframes cj-online-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Presence is carried by the dot's existence, not by its pulse. */
+@media (prefers-reduced-motion: reduce) {
+  #whos-online > span::before {
+    animation: none;
+  }
+}

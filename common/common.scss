@@ -1,16 +1,26 @@
 @use "lib/viewport";
 
+/* Compara Jogos components ported from the site's standalone overrides. */
+@use "header-nav";
+@use "product-bridge";
+@use "whos-online";
+
 /*
  * Compara Jogos theme tokens
  *
  * Core --d-* variables are the public Discourse customization layer. --cj-*
  * variables only describe Compara Jogos semantics that core does not name.
+ *
+ * Tokens whose light and dark values are not derivable from a core color live
+ * in common/color_definitions.scss, which is compiled once per color scheme.
  */
 
 :root {
+  /* `Layout.tsx` is a 90rem frame with 2.5rem gutters, so the content column is
+   * 85rem and its edges land exactly under the floating header's. */
   --d-max-width: 90rem;
-  --d-wrap-padding-x: clamp(var(--space-3), 2.5vw, 2.5rem);
-  --d-main-content-gap: var(--space-4);
+  --d-wrap-padding-x: 2.5rem;
+  --d-main-content-gap: var(--cj-panel-gap);
   --main-outlet-padding-top: var(--space-3);
   --main-outlet-padding-x: 0;
   --main-outlet-padding-bottom: var(--space-10);
@@ -18,7 +28,7 @@
   --d-border-radius-large: 0.75rem;
   --d-button-border-radius: 0.5rem;
   --d-input-border-radius: 0.625rem;
-  --d-nav-pill-border-radius: 0.5rem;
+  --d-nav-pill-border-radius: var(--cj-radius-pill);
   --d-input-bg-color: var(--hover);
   --d-input-text-color: var(--primary);
   --d-input-border: 1px solid transparent;
@@ -40,14 +50,13 @@
   --d-topic-list-data-padding-x: var(--space-2);
   --d-topic-list-header-data-padding-y: var(--space-3);
   --d-topic-list-header-data-padding-x: var(--space-2);
-  --d-topic-list-data-padding-inline-start: var(--space-4);
-  --d-topic-list-data-padding-inline-end: var(--space-4);
+  --d-topic-list-data-padding-inline-start: var(--space-6);
+  --d-topic-list-data-padding-inline-end: var(--space-6);
   --button-height: var(--space-9);
   --webkit-font-smoothing: antialiased;
   --cj-canvas: var(--secondary);
   --cj-surface: var(--secondary);
-  --cj-surface-raised: var(--primary-very-low);
-  --cj-surface-muted: var(--hover);
+  --cj-panel: var(--header_background);
   --cj-header: var(--header_background);
   --cj-text: var(--primary);
   --cj-text-muted: var(--primary-medium);
@@ -58,9 +67,26 @@
   --cj-border: color-mix(in srgb, var(--primary) 8%, transparent);
   --cj-border-strong: color-mix(in srgb, var(--primary) 14%, transparent);
   --cj-focus: color-mix(in srgb, var(--cj-action) 72%, white);
+  --cj-tint: var(--highlight);
   --cj-radius-control: 0.5rem;
+  --cj-radius-input: 0.625rem;
   --cj-radius-content: 0.75rem;
   --cj-radius-shell: 1.5rem;
+  --cj-radius-panel: 2rem;
+  --cj-radius-pill: 999px;
+
+  /* Live presence green, shared with the client's online strip. */
+  --cj-online: #62bd19;
+
+  /* The client's in-header soft fill (`bg-muted dark:bg-card`), used by both the
+   * nav hover and the search field. Translucent so it holds on either header. */
+  --cj-header-soft: color-mix(in srgb, var(--header_primary) 10%, transparent);
+
+  /* React groups content into `bg-white dark:bg-black rounded-4xl p-6` cards
+   * laid out on a gap-6 grid. `FeaturedSection` is the primitive; these three
+   * values are it. */
+  --cj-panel-padding: var(--space-6);
+  --cj-panel-gap: var(--space-6);
   --cj-shadow-float: 0 14px 36px -28px
     color-mix(in srgb, var(--primary) 48%, transparent);
   --cj-shadow-composer: 0 -18px 48px -32px
@@ -135,7 +161,7 @@ a {
   background: transparent;
   box-shadow: none;
 
-  .wrap {
+  > .wrap {
     min-height: 4.5rem;
     background: var(--cj-header);
     border: 0;
@@ -145,13 +171,14 @@ a {
 
   .contents {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-6);
     align-items: center;
     min-height: inherit;
   }
 
-  .title {
-    min-width: 0;
+  .title,
+  .home-logo-wrapper-outlet {
+    flex: 0 0 auto;
   }
 
   #site-logo {
@@ -167,10 +194,42 @@ a {
     gap: var(--space-2);
   }
 
+  .panel {
+    order: 2;
+    margin-inline-start: auto;
+  }
+
+  .floating-search-input-wrapper {
+    flex: 0 1 32rem;
+    order: 1;
+    min-width: 0;
+    background: transparent;
+  }
+
+  .floating-search-input {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    min-height: 2.625rem;
+    background: var(--cj-header-soft);
+    border: 0;
+    border-radius: var(--cj-radius-pill);
+
+    .search-banner,
+    .search-banner-inner {
+      min-height: inherit;
+      background: transparent;
+      border-radius: inherit;
+    }
+  }
+
   .header-dropdown-toggle .btn,
   .btn-sidebar-toggle {
-    width: 2.625rem;
-    height: 2.625rem;
+    width: 2.25rem;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    min-height: 2.25rem;
+    padding: 0;
     color: var(--header_primary);
     background: transparent;
     border: 0;
@@ -178,6 +237,11 @@ a {
     &:hover {
       background: var(--cj-surface-muted);
     }
+  }
+
+  .btn-sidebar-toggle .d-icon {
+    width: 0.875rem;
+    height: 0.875rem;
   }
 
   .sign-up-button,
@@ -199,48 +263,15 @@ a {
   }
 }
 
-/* Existing cross-product navigation integration on comparajogos.com.br. */
-.cj-header-nav {
-  display: flex;
-  flex: 1 1 auto;
-  gap: var(--space-1);
-  align-items: center;
-  min-width: 0;
-
-  .cj-nav-item {
-    display: inline-flex;
-    gap: var(--space-2);
-    align-items: center;
-    min-height: 2.625rem;
-    padding-inline: var(--space-4);
-    color: var(--header_primary);
-    font-size: var(--font-down-1);
-    white-space: nowrap;
-    border-radius: var(--cj-radius-control);
-    transition:
-      color var(--cj-duration-fast) var(--cj-ease-out),
-      background-color var(--cj-duration-fast) var(--cj-ease-out);
-
-    &:hover,
-    &.active {
-      color: var(--header_primary);
-      background: var(--cj-surface-muted);
-    }
-
-    &.requires-auth {
-      opacity: 0.62;
-    }
-  }
-
-  .cj-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    fill: currentcolor;
-  }
-}
-
 #main-outlet-wrapper {
   min-width: 0;
+}
+
+/* Core normally grows the wrapper by the sidebar width. The React shell keeps
+ * one shared 90rem outer frame, so the sidebar participates inside it. */
+
+body.has-sidebar-page .wrap {
+  max-width: var(--d-max-width);
 }
 
 #main-outlet {
@@ -252,10 +283,64 @@ a {
   min-width: 0;
 }
 
+/* Content panels
+ *
+ * `FeaturedSection` is the client's only content-grouping primitive:
+ * `bg-white dark:bg-black rounded-4xl p-6` on a `gap-6` grid, dissolved to the
+ * bare canvas below the `sm` breakpoint. Discourse's own content regions reuse
+ * it so a member moving between catalog and community stays on one surface.
+ *
+ * The panel is deliberately low-contrast — white on #f5f5f5, black on #161616.
+ * Grouping and radius carry the shape; the fill only separates.
+ */
+
+@mixin cj-panel($padding: var(--cj-panel-padding)) {
+  padding: $padding;
+  background: var(--cj-panel);
+  border-radius: var(--cj-radius-panel);
+}
+
+@mixin cj-panel-flat {
+  padding-inline: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+/* Regions that are already tables or lists carry their own inner padding, so
+ * they take the panel without the padding shorthand. */
+
+.sidebar-sections,
+.welcome-banner,
+.post-stream,
+.categories-list,
+.category-list,
+.groups-boxes,
+.directory-table,
+.user-table,
+.topic-list {
+  background: var(--cj-panel);
+  border-radius: var(--cj-radius-panel);
+}
+
+@include viewport.until(sm) {
+  .sidebar-sections,
+  .welcome-banner,
+  .post-stream,
+  .categories-list,
+  .category-list,
+  .groups-boxes,
+  .directory-table,
+  .user-table,
+  .topic-list {
+    background: transparent;
+    border-radius: 0;
+  }
+}
+
 /* Sidebar */
 .sidebar-wrapper {
   background: transparent;
-  border-inline-end: 1px solid var(--cj-border);
+  border-inline-end: 0;
 
   .sidebar-container {
     color: var(--cj-text);
@@ -263,9 +348,7 @@ a {
 
   .sidebar-sections {
     padding: var(--space-3);
-    background: transparent;
     border: 0;
-    border-radius: 0;
   }
 
   .sidebar-section-header-text {
@@ -300,64 +383,6 @@ a {
   }
 }
 
-.cj-product-bridge {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  min-width: 0;
-  min-height: 3.5rem;
-  margin-block-end: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  color: var(--cj-text);
-  background: var(--cj-surface-muted);
-  border: 0;
-  border-radius: var(--cj-radius-control);
-  transition:
-    color var(--cj-duration-fast) var(--cj-ease-out),
-    background-color var(--cj-duration-fast) var(--cj-ease-out),
-    border-color var(--cj-duration-fast) var(--cj-ease-out);
-
-  &:hover {
-    color: var(--cj-text);
-    background: var(--cj-surface-raised);
-    border-color: color-mix(in srgb, var(--cj-brand) 32%, transparent);
-  }
-
-  &__icon {
-    display: grid;
-    flex: 0 0 2.25rem;
-    width: 2.25rem;
-    height: 2.25rem;
-    color: var(--cj-on-action);
-    background: var(--cj-action);
-    border-radius: 999px;
-    place-items: center;
-  }
-
-  &__copy {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-
-    strong,
-    small {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    strong {
-      font-size: var(--font-down-1);
-      font-weight: 700;
-    }
-
-    small {
-      color: var(--cj-text-muted);
-      font-size: var(--font-down-2);
-    }
-  }
-}
-
 /* Discovery navigation */
 .list-controls {
   margin-block-end: var(--space-4);
@@ -389,6 +414,45 @@ a {
       color: var(--cj-text);
       background: var(--cj-surface-raised);
       border-color: var(--cj-action);
+    }
+  }
+}
+
+/* Keep the native 2026 combo-button behavior; change its product variant so
+ * default, hover, focus and the drafts half remain one coherent action. */
+
+.topic-create-button__combo {
+  .btn {
+    color: var(--cj-on-action);
+    background: var(--cj-action);
+    border-color: transparent;
+
+    .d-icon {
+      color: currentcolor;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &[aria-expanded="true"] {
+      color: var(--cj-on-action);
+      background: color-mix(in srgb, var(--cj-action) 88%, black);
+      border-color: transparent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--cj-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  &.--has-menu {
+    .d-combo-button-button,
+    .d-combo-button-menu {
+      border-color: transparent;
+    }
+
+    .d-combo-button-menu {
+      margin-inline-start: 1px;
     }
   }
 }
@@ -504,11 +568,13 @@ textarea,
 
 /* Topic lists */
 .topic-list {
-  background: transparent;
   border: 0;
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: 0;
+
+  /* A table does not clip its rows, so the panel keeps block padding instead
+   * and no row ever reaches a rounded corner. */
+  padding-block: var(--space-2);
 
   .topic-list-header {
     color: var(--cj-text-muted);
@@ -526,7 +592,7 @@ textarea,
 
     &:hover,
     &:focus-within {
-      background: var(--cj-surface-muted);
+      background: var(--cj-tint);
     }
 
     &:last-child > td {
@@ -678,12 +744,25 @@ textarea,
 
 .topic-map {
   overflow: hidden;
-  background: var(--cj-surface);
+  background: var(--cj-surface-raised);
   border: 1px solid var(--cj-border);
   border-radius: var(--cj-radius-content);
 
   .buttons .btn {
     border-radius: 0;
+  }
+}
+
+.post-stream {
+  padding: var(--cj-panel-padding);
+
+  @include viewport.until(sm) {
+    padding-inline: 0;
+  }
+
+  .topic-post:last-child {
+    margin-block-end: 0;
+    border-block-end: 0;
   }
 }
 
@@ -854,6 +933,7 @@ textarea,
   }
 
   .title-and-category {
+    flex-wrap: wrap !important;
     gap: var(--space-2) !important;
     padding: var(--space-2) var(--space-4) !important;
     border-block-end: 1px solid var(--cj-border);
@@ -862,6 +942,9 @@ textarea,
   .category-input,
   .tags-input,
   .user-selector {
+    flex: 1 1 calc(50% - var(--space-1));
+    width: auto !important;
+    max-width: none !important;
     min-width: 0;
     margin: 0 !important;
     border: 0;
@@ -887,6 +970,9 @@ textarea,
   }
 
   .title-input {
+    order: -1;
+    flex: 1 1 100%;
+    width: 100%;
     min-width: 0;
     padding-inline: 0;
     border: 0;
@@ -895,8 +981,9 @@ textarea,
       min-height: 2.5rem;
       margin: 0;
       padding: var(--space-2) var(--space-3) !important;
-      font-size: var(--font-up-1);
-      line-height: 1.25;
+      font-size: var(--font-0);
+      font-weight: 500;
+      line-height: 1.4;
       background: var(--cj-surface-muted);
       border: 1px solid transparent;
       border-radius: var(--cj-radius-control);
@@ -905,6 +992,11 @@ textarea,
       &:focus {
         border-color: var(--cj-action);
         box-shadow: 0 0 0 2px var(--cj-brand-soft);
+      }
+
+      &::placeholder {
+        color: var(--cj-text-muted);
+        font-weight: 500;
       }
     }
 
@@ -1000,20 +1092,6 @@ textarea,
     }
   }
 
-  /* Theme/plugin fields yielded above the editor should remain compact. */
-  .composer-fields > :not(.title-and-category, .title-input) {
-    margin-inline: var(--space-4);
-
-    :is(h1, h2, h3) {
-      font-size: var(--font-up-1);
-      line-height: 1.25;
-    }
-
-    :is(button, .btn, input, .select-kit-header) {
-      border-radius: var(--cj-radius-control);
-    }
-  }
-
   .composer-footer {
     gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
@@ -1023,7 +1101,13 @@ textarea,
   .composer-footer__toolbar {
     min-width: 0;
     padding: 0;
+    background: transparent;
     border: 0;
+  }
+
+  .d-editor-button-bar__wrap,
+  .d-editor-button-bar {
+    background: transparent;
   }
 
   .d-editor-button-bar {
@@ -1175,28 +1259,41 @@ textarea,
 
 /* Desktop shell and progressive scroll docking. */
 
-@include viewport.from(md) {
+@include viewport.from(sm) {
   .d-header {
-    padding-block-start: var(--space-4);
+    padding-block-start: var(--space-6);
 
-    .wrap {
+    > .wrap {
+      box-sizing: border-box;
       width: calc(100% - 5rem);
       max-width: 85rem;
       padding-inline: var(--space-4);
     }
+
+    /* Keep the logo on the same leading gutter as React. The native sidebar
+     * control follows it without displacing the brand. */
+
+    .home-logo-wrapper-outlet,
+    .title {
+      order: -2;
+    }
+
+    .header-sidebar-toggle {
+      order: -1;
+      margin-inline-start: calc(var(--space-3) * -1);
+    }
+  }
+
+  body.has-sidebar-page .d-header > .wrap {
+    max-width: 85rem;
   }
 
   .sidebar-wrapper {
     padding-block: var(--space-4);
-    padding-inline-start: var(--space-4);
 
     .sidebar-sections {
       height: calc(100% - var(--space-8));
     }
-  }
-
-  body.has-sidebar-page #main-outlet {
-    padding-inline-end: var(--d-wrap-padding-x);
   }
 
   #reply-control {
@@ -1205,7 +1302,7 @@ textarea,
   }
 
   @supports (animation-timeline: scroll()) {
-    .d-header .wrap {
+    .d-header > .wrap {
       animation: cj-header-dock linear both;
       animation-range: 0 var(--space-6);
       animation-timeline: scroll();
@@ -1217,26 +1314,26 @@ textarea,
   to {
     border-start-start-radius: 0;
     border-start-end-radius: 0;
-    transform: translateY(calc(var(--space-4) * -1));
+    transform: translateY(calc(var(--space-6) * -1));
   }
 }
 
 /* Mobile keeps the client's edge-to-edge header and content rhythm. */
 
-@include viewport.until(md) {
+/* Below `sm` the client drops the floating shell and the panel fills, and
+ * content runs to the screen edge. */
+
+@include viewport.until(sm) {
   :root {
     --d-wrap-padding-x: var(--space-3);
     --main-outlet-padding-top: var(--space-4);
-    --d-topic-list-data-padding-y: var(--space-3);
-    --d-topic-list-data-padding-inline-start: var(--space-3);
-    --d-topic-list-data-padding-inline-end: var(--space-3);
   }
 
   .d-header {
-    background: var(--cj-surface-raised);
+    background: var(--cj-panel);
     border-block-end: 1px solid var(--cj-border);
 
-    .wrap {
+    > .wrap {
       width: 100%;
       min-height: 3.75rem;
       padding-inline: var(--space-3);
@@ -1259,6 +1356,14 @@ textarea,
 
   .cj-header-nav {
     display: none;
+  }
+}
+
+@include viewport.until(md) {
+  :root {
+    --d-topic-list-data-padding-y: var(--space-3);
+    --d-topic-list-data-padding-inline-start: var(--space-3);
+    --d-topic-list-data-padding-inline-end: var(--space-3);
   }
 
   .navigation-container {
@@ -1285,8 +1390,6 @@ textarea,
   }
 
   .topic-list {
-    border-radius: 0;
-
     .topic-list-item {
       position: relative;
     }

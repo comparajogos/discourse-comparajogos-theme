@@ -2,3 +2,10 @@ pt_BR:
   product_bridge:
     label: "Comparar jogos"
     description: "Catálogo, preços, listas e partidas"
+  header_nav:
+    label: "Compara Jogos"
+    forum: "Fórum"
+    lists: "Listas"
+    plays: "Partidas"
+    chat: "Chat"
+    market: "Meu Comércio"

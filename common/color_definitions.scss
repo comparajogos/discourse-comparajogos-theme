@@ -1,0 +1,18 @@
+/*
+ * Scheme-dependent Compara Jogos tokens.
+ *
+ * `common.scss` is compiled once, so `dark-light-choose` there would freeze
+ * against whichever scheme happens to be the theme default and never switch.
+ * This file is compiled per color scheme, so it is the only correct home for a
+ * token whose light and dark values are not derivable from a core color.
+ *
+ * Values are read from the React client's `styles/global.css` and are exact.
+ */
+
+:root {
+  /* client `--card`: a surface that sits *between* canvas and panel. */
+  --cj-surface-raised: #{dark-light-choose(#f8f8f8, #18181b)};
+
+  /* client `--input` / `--secondary`: quiet fills for chips and fields. */
+  --cj-surface-muted: #{dark-light-choose(#ebebeb, #242424)};
+}

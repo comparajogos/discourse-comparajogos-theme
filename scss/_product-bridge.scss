@@ -1,0 +1,98 @@
+/* Product bridge
+ *
+ * Compact link from the community back into the catalog, rendered as a block in
+ * the discovery sidebar by javascripts/discourse/blocks/block-product-bridge.gjs.
+ */
+
+.cj-product-bridge {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  min-width: 0;
+  min-height: 3.5rem;
+  margin-block-end: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  color: var(--cj-text);
+  background: var(--cj-surface-muted);
+  border: 0;
+  border-radius: var(--cj-radius-control);
+  transition:
+    color var(--cj-duration-fast) var(--cj-ease-out),
+    background-color var(--cj-duration-fast) var(--cj-ease-out),
+    border-color var(--cj-duration-fast) var(--cj-ease-out);
+
+  &:hover {
+    color: var(--cj-text);
+    background: var(--cj-surface-raised);
+    border-color: color-mix(in srgb, var(--cj-brand) 32%, transparent);
+  }
+
+  &__icon {
+    display: grid;
+    flex: 0 0 2.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--cj-on-action);
+    background: var(--cj-action);
+    border-radius: 999px;
+    place-items: center;
+  }
+
+  &__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+
+    strong,
+    small {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      font-size: var(--font-down-1);
+      font-weight: 700;
+    }
+
+    small {
+      color: var(--cj-text-muted);
+      font-size: var(--font-down-2);
+    }
+  }
+}
+
+/* Welcome banner
+ *
+ * Core exposes a complete --d-welcome-banner-* layer, so the product variant is
+ * a matter of proportion, not of restyling the component. The client has no
+ * hero, so this stays a compact panel rather than a landing block. */
+
+:root {
+  --d-welcome-banner-header-size: var(--font-up-3);
+  --d-welcome-banner-padding-top: var(--space-6);
+  --d-welcome-banner-padding-right: var(--space-6);
+  --d-welcome-banner-padding-bottom: var(--space-6);
+  --d-welcome-banner-padding-left: var(--space-6);
+  --d-welcome-banner-title-margin-bottom: var(--space-4);
+}
+
+.welcome-banner {
+  margin-block-end: var(--cj-panel-gap);
+
+  &__title {
+    color: var(--cj-text);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .search-menu .search-input,
+  .search-input {
+    max-width: 32rem;
+    margin-inline: auto;
+    background: var(--cj-surface-muted);
+    border: 0;
+    border-radius: var(--cj-radius-pill);
+  }
+}

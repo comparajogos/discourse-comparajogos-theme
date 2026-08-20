@@ -4,11 +4,23 @@ show_mobile_tab_bar:
     en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
     pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
 
+use_sidebar_chevrons:
+  default: true
+  description:
+    en: "Replace the sidebar hamburger with state-aware expand and collapse chevrons."
+    pt_BR: "Substitui o menu hambúrguer por setas que indicam expandir e recolher a barra lateral."
+
 dense_topic_metadata:
   default: true
   description:
     en: "Keep reply, view, and activity columns visible on wider screens."
     pt_BR: "Mantém as colunas de respostas, visualizações e atividade em telas maiores."
+
+show_header_nav:
+  default: true
+  description:
+    en: "Show the Compara Jogos cross-product navigation in the forum header."
+    pt_BR: "Mostra a navegação do Compara Jogos no cabeçalho do fórum."
 
 show_product_bridge:
   default: true
