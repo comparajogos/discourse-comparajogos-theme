@@ -732,10 +732,13 @@ textarea,
     border-block-end: 1px solid var(--cj-border);
   }
 
+  /* 700 on every row flattens the hierarchy — the list reads as a wall of
+   * headings. 600 keeps titles dominant against the metadata beside them. */
+
   .main-link .title {
     color: var(--cj-text);
-    font-weight: 700;
-    line-height: 1.25;
+    font-weight: 600;
+    line-height: 1.35;
     letter-spacing: -0.012em;
   }
 
