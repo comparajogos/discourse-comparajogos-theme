@@ -60,7 +60,12 @@ body {
    * The shell is 4.5rem, from the client's `sm:p-4` around an `h-10` logo:
    * 16 + 40 + 16 = 72px. It was 74px, which read as a slightly chunkier header
    * than the catalog's. */
+  --cj-header-shell-height: 4.5rem;
   --cj-header-height: 6rem;
+
+  /* The shell's own radius, from the client's `sm:rounded-3xl`. Named because
+   * the loading skeleton draws the same pill before the header exists. */
+  --cj-radius-shell: 1.5rem;
 
   /* Sidebar sits inside the same 85rem frame as the content, at the client's
    * own menu width (`min-w-[200px]` in MarketLayout) plus 10px: Discourse rows

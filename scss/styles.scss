@@ -129,11 +129,11 @@ body.has-sidebar-page .wrap {
      * has to be the same height in both states.
      *
      * 4.5rem is the client's `sm:p-4` around an `h-10` logo. */
-    min-height: 4.5rem;
+    min-height: var(--cj-header-shell-height);
     padding-inline: var(--space-4);
     box-sizing: border-box;
     background: var(--cj-header);
-    border-radius: 1.5rem;
+    border-radius: var(--cj-radius-shell);
   }
 
   .contents {
@@ -530,10 +530,8 @@ body.has-sidebar-page .wrap {
     }
 
     .topic-list-item {
+      @include cj-panel-surface;
       display: block;
-      background: var(--cj-header);
-      border: 1px solid var(--cj-border);
-      border-radius: 1rem;
       transition: background-color 140ms ease-out;
 
       &:hover {
@@ -663,7 +661,9 @@ body .category-breadcrumb {
     /* Below `sm` the client's header is `px-3 py-2` around the same `h-10` logo:
      * 8 + 40 + 8 = 56px, and it is flush to the top, so the shell and the header
      * box are the same 3.5rem. It was 4.625rem, which is the desktop shell. */
+    --cj-header-shell-height: 3.5rem;
     --cj-header-height: 3.5rem;
+    --cj-radius-shell: 0;
     --d-wrap-padding-x: var(--space-4);
   }
 
@@ -681,9 +681,9 @@ body .category-breadcrumb {
 
       /* The client's header is `px-3 py-2 sm:p-4`, so its own inline padding
        * below `sm` is 12px — the page frame's `px-4` is a separate thing. */
-      min-height: 3.5rem;
+      min-height: var(--cj-header-shell-height);
       padding-inline: var(--space-3);
-      border-radius: 0;
+      border-radius: var(--cj-radius-shell);
     }
 
     .header-sidebar-toggle {

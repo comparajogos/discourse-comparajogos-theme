@@ -37,8 +37,11 @@ html body:has(#d-splash) #cj-splash {
   display: flex;
 }
 
+/* Core's splash carries its own <style> in the body, which is later in
+ * document order than this stylesheet and therefore wins at equal specificity —
+ * hence !important on both of these, not as a shortcut. */
+
 #d-splash {
-  /* The dots are replaced, not decorated. */
   display: none !important;
 }
 
@@ -131,9 +134,9 @@ html[lang^="pt"] #cj-splash {
   display: flex;
   align-items: center;
   gap: var(--space-6);
-  height: 4.5rem;
+  height: var(--cj-header-shell-height);
   padding-inline: var(--space-4);
-  border-radius: 1.5rem;
+  border-radius: var(--cj-radius-shell);
   background: var(--cj-header);
 }
 
@@ -319,7 +322,7 @@ html[lang^="pt"] #cj-splash {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  height: 2.25rem;
+  height: var(--d-sidebar-row-height);
   padding-inline: var(--d-sidebar-row-horizontal-padding);
   border-radius: var(--d-button-border-radius);
   color: var(--cj-text);
@@ -484,11 +487,11 @@ html[lang^="pt"] #cj-splash {
 }
 
 .cj-splash__card {
-  box-sizing: border-box;
+  @include cj-panel-surface;
+
+  /* The booted card's cell owns this padding (--space-4 block, see
+   * _topic-feed.scss), which is what puts its byline at y+15.4. */
   padding: 0.9em var(--space-3);
-  border: 1px solid var(--cj-border);
-  border-radius: 1rem;
-  background: var(--cj-header);
 }
 
 .cj-splash__byline {
@@ -558,16 +561,13 @@ html[lang^="pt"] #cj-splash {
    * frame's gutter is dropped here and the shell's own padding sets the inset. */
 
   .cj-splash__header {
-    height: 3.5rem;
     padding-block-start: 0;
     padding-inline: 0;
   }
 
   .cj-splash__shell {
     gap: var(--space-2);
-    height: 3.5rem;
     padding-inline: var(--space-3);
-    border-radius: 0;
   }
 
   /* Core collapses the field to a button at this width (see the
