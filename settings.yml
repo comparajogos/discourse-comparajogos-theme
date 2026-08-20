@@ -22,6 +22,12 @@ show_header_nav:
     en: "Show the Compara Jogos cross-product navigation in the forum header."
     pt_BR: "Mostra a navegação do Compara Jogos no cabeçalho do fórum."
 
+header_logo_links_to_product:
+  default: true
+  description:
+    en: "Point the header logo at the Compara Jogos catalog, as the client's header does."
+    pt_BR: "Faz o logo do cabeçalho apontar para o catálogo do Compara Jogos, como no cliente."
+
 show_product_bridge:
   default: true
   description:

@@ -1,0 +1,113 @@
+/* Plugin adjustments
+ *
+ * Small corrections to plugins Compara Jogos runs, kept apart from the theme's
+ * own surfaces so an upstream fix is easy to drop.
+ */
+
+/* discourse-ratings: give the star control room to breathe in the composer. */
+#reply-control .composer-controls-rating {
+  width: inherit;
+}
+
+/* discourse-locations: the tile layer is a photographic image, so a dark scheme
+ * needs it filtered rather than recoloured. */
+@media (prefers-color-scheme: dark) {
+  .locations-map {
+    --cj-map-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg)
+      saturate(0.3) brightness(0.7);
+
+    .leaflet-tile-pane {
+      filter: var(--cj-map-filter);
+    }
+
+    /* Marker shadows read as smudges once the tiles are inverted. */
+    .leaflet-marker-shadow {
+      display: none;
+    }
+
+    .leaflet-marker-icon div span {
+      color: #000;
+    }
+  }
+}
+
+.location-and-website.map-location-enabled .user-location-widget {
+  align-items: center;
+}
+
+/* discourse-tag-game-card: the card's own popovers overflow its menu. */
+[data-identifier="tag-game-card-contents"] .fk-d-menu__inner-content {
+  overflow: visible;
+}
+
+/* discourse-category-banners: the banner supplies its own padding, and the
+ * category icon belongs on the same line as the name. */
+
+[class^="category-title-header"] {
+  padding-block-start: 0;
+
+  .category-title-contents {
+    padding: var(--space-5);
+
+    h1.category-title {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* The icon sits on the category's own colour, so it needs a fixed contrast
+     * rather than the category hue. */
+
+    .category-icon .d-icon {
+      width: 1.5em;
+      height: 1.5em;
+      color: #fff;
+    }
+  }
+}
+
+/* Tags naming a content format are what members scan for first. */
+.discourse-tags .discourse-tag {
+  &[data-tag-name="arquivo"],
+  &[data-tag-name="podcast"],
+  &[data-tag-name="video"] {
+    order: -1;
+  }
+}
+
+/* Game names are long; a tag row should wrap rather than truncate to nothing. */
+.select-kit-row .discourse-tag {
+  max-width: 22em;
+}
+
+.autocomplete.ac-category-or-tag {
+  width: auto;
+}
+
+/* Category names carry as much weight as titles in this catalog. */
+.topic-list-data .category-name,
+.title-wrapper > .topic-category .category-name {
+  margin-inline-end: 0.125em;
+  font-size: 1.05em;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+/* The login modal's user fields inherit a float layout that breaks the column. */
+.user-fields .user-field {
+  padding: 0;
+
+  .controls {
+    float: none;
+    text-align: start;
+  }
+}
+
+#login-buttons button {
+  white-space: nowrap;
+}
+
+/* discourse-social-links: without links, the block still reserves space. */
+.iconic-user-fields {
+  padding-block-end: 0;
+}

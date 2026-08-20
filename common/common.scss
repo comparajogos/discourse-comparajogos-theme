@@ -1,9 +1,17 @@
 @use "lib/viewport";
 
-/* Compara Jogos components ported from the site's standalone overrides. */
+/* Compara Jogos components and overrides ported from the site's standalone
+ * customisations. Each file is one concern so an override can be retired
+ * without reading the whole stylesheet. */
 @use "header-nav";
 @use "product-bridge";
 @use "whos-online";
+@use "copy";
+@use "suppressed";
+@use "plugins";
+@use "tab-bar" with (
+  $enabled: $show_mobile_tab_bar
+);
 
 /*
  * Compara Jogos theme tokens
@@ -1228,26 +1236,6 @@ textarea,
   box-shadow: none;
 }
 
-@if $show_mobile_tab_bar == "true" {
-  .d-tab-bar {
-    background: var(--cj-surface-raised);
-    border-block-start: 1px solid var(--cj-border);
-    box-shadow: none;
-
-    .tab {
-      color: var(--cj-text-muted);
-
-      &.active {
-        color: var(--cj-brand);
-      }
-
-      .title {
-        letter-spacing: 0.025em;
-      }
-    }
-  }
-}
-
 @if $dense_topic_metadata == "false" {
   @include viewport.until(lg) {
     .topic-list .views,
@@ -1466,22 +1454,6 @@ textarea,
     background: transparent;
     border: 0;
     border-radius: 0;
-  }
-
-  @if $show_mobile_tab_bar == "true" {
-    html {
-      #main-outlet {
-        padding-block-end: calc(4rem + env(safe-area-inset-bottom));
-      }
-
-      #topic-progress-wrapper:not(.docked) {
-        bottom: calc(3.5rem + env(safe-area-inset-bottom));
-      }
-
-      #reply-control.draft {
-        bottom: calc(3.5rem + env(safe-area-inset-bottom));
-      }
-    }
   }
 }
 

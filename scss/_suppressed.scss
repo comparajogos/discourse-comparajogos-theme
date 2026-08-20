@@ -1,0 +1,73 @@
+/* Deliberate suppressions
+ *
+ * Fields and links Compara Jogos does not use. Each one is a product decision,
+ * not a style choice, so they live together where they can be reviewed as a
+ * set rather than rediscovered one at a time.
+ *
+ * Hiding a control does not disable it. Where a suppression exists only because
+ * the real fix is server-side, the comment says so.
+ */
+
+/* Signup asks only for what the catalog account already knows. */
+#login-form .user-fields,
+.login-form .user-fields {
+  display: none;
+}
+
+/* Location comes from the catalog profile (user_legal / seller_location), so the
+ * forum's own location and timezone preferences would fork the source of truth. */
+
+.control-group.pref-location,
+.control-group.pref-timezone,
+.control-group.region {
+  display: none;
+}
+
+/* Location is the field members actually come here to set. */
+.user-location-selector {
+  order: -1;
+}
+
+.user-preferences .form-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Events are always public and always in America/Sao_Paulo. */
+.event-field.timezone,
+.add-event-controls .control:last-of-type {
+  display: none;
+}
+
+/* Polls are open to everyone; the group restriction only invites mistakes. */
+.poll-ui-builder-form .options .poll-select:nth-child(3) {
+  display: none;
+}
+
+/* Tag info is a staff tool. */
+body:not(.staff) #show-tag-info {
+  display: none;
+}
+
+/* Navigation the product does not use: tags are browsed from the catalog, the
+ * member map lives in the client, and chat threads are not enabled. */
+
+.sidebar-section-link-wrapper[data-list-item-name="all-tags"],
+.sidebar-section-link-wrapper[data-list-item-name="users map"],
+[data-section-name="user-threads"],
+.chat-channel-row.--threads,
+.nav-item_nearby {
+  display: none;
+}
+
+/* Everything is categorised; an "uncategorised" link is noise. */
+.cat-link.category-sem-categoria {
+  display: none;
+}
+
+/* The composer's rating control belongs on replies, not on the first post.
+ * TODO: this is a server-side concern — the control should not be rendered. */
+
+.reply-area.with-tags .composer-controls-rating {
+  display: none;
+}

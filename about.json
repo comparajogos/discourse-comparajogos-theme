@@ -9,7 +9,12 @@
   "maximum_discourse_version": null,
   "assets": {},
   "modifiers": {
-    "svg_icons": ["chevron-left", "chevron-right", "magnifying-glass"],
+    "svg_icons": [
+      "chevron-left",
+      "chevron-right",
+      "magnifying-glass",
+      "share-nodes"
+    ],
     "only_theme_color_schemes": true
   },
   "theme_site_settings": {

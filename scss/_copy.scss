@@ -1,0 +1,127 @@
+/* Injected copy
+ *
+ * Portuguese labels the forum needs but that core does not expose as
+ * translations — mostly cases where a generic Discourse action carries a
+ * specific meaning inside a Compara Jogos category or tag.
+ *
+ * These are hardcoded pt-BR because the forum's interface language is pt-BR
+ * (PRODUCT.md). Anything that core *does* translate belongs in locales/, not
+ * here.
+ */
+
+/* On the game-sheet and image tags, replying is really submitting a review or
+ * uploading photos, so the button says so. */
+@mixin cj-relabel($label) {
+  .d-button-label {
+    display: none;
+  }
+
+  &::after {
+    margin-inline-start: var(--space-1);
+    content: $label;
+  }
+}
+
+.tag-ficha {
+  #reply-control:not(.composer-action-edit) .btn-primary.create,
+  .topic-footer-main-buttons .btn-primary.create {
+    @include cj-relabel("Enviar avaliação");
+  }
+}
+
+.tag-imagem .btn-primary.create {
+  @include cj-relabel("Enviar imagens");
+}
+
+/* The rating tip is the call to action, so it carries the sentence itself
+ * rather than a link the eye slides past. */
+
+.topic-rating-tip {
+  a {
+    display: none;
+  }
+
+  &::after {
+    padding: 0 var(--space-1);
+    font-weight: 500;
+    content: "• Envie sua avaliação deste jogo neste tópico";
+  }
+}
+
+/* A first post and its replies read as two things; core draws no line between
+ * them. */
+
+.post-stream:has(#post_2) #post_1::after {
+  display: block;
+  padding: var(--space-8) var(--space-4) var(--space-4);
+  color: var(--cj-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  content: "Respostas";
+}
+
+/* Who wrote the topic matters in a marketplace thread. */
+.topic-post.topic-owner article:not(#post_1) .topic-meta-data .names .first {
+  &::after {
+    display: inline-block;
+    margin-inline-start: var(--space-1);
+    padding: 0 var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1);
+    font-weight: 600;
+    line-height: normal;
+    background: var(--cj-surface-muted);
+    border-radius: var(--cj-radius-control);
+    content: "Autor(a)";
+  }
+}
+
+/* Wiki posts are community-owned; say it instead of implying it with a tint. */
+.wiki .topic-body {
+  animation: none;
+}
+
+.post-info.edits .wiki::before {
+  margin-inline-end: var(--space-1);
+  padding: 0 var(--space-2);
+  color: var(--success);
+  font-weight: 500;
+  border: 1px solid var(--success);
+  border-radius: var(--cj-radius-control);
+  content: "Wiki";
+}
+
+/* Search groups its results but does not name the groups. */
+.search-result-category::before {
+  content: "Categorias";
+}
+
+.search-result-group::before {
+  content: "Grupos";
+}
+
+.search-result-tag::before {
+  content: "Jogos";
+}
+
+.search-result-topic::before {
+  content: "Tópicos";
+}
+
+.search-result-user::before {
+  content: "Usuários";
+}
+
+.search-result-category,
+.search-result-group,
+.search-result-tag,
+.search-result-topic,
+.search-result-user {
+  &::before {
+    display: block;
+    padding-inline-start: var(--space-1);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1);
+    font-weight: 600;
+  }
+}
