@@ -62,3 +62,24 @@ chat, and the mobile sidebar.
 - Preserve visible focus and reduced-motion handling.
 - Never restyle `#reply-control`; composer compatibility belongs to core.
 - Test production theme components one at a time after the base passes.
+
+## Screenshots and layout audit
+
+`scripts/screenshots.mjs` captures every surface in both colour schemes plus
+mobile, and audits for defects that are hard to see but easy to measure:
+separators that do not span their row, doubled borders, unrounded fills inside a
+rounded panel, horizontal overflow, and the sub-11px type that Discourse's
+em-based `--font-*` scale produces when sizes compound. It reports the ancestor
+that set a too-small size, not the leaf that inherited it.
+
+Playwright is deliberately not a dependency — it downloads browsers on install,
+which would slow CI for a tool only used locally. Install it when you need it:
+
+```bash
+pnpm add -D playwright && pnpm exec playwright install chromium
+THEME_BASE_URL=http://localhost:3000 node scripts/screenshots.mjs
+```
+
+Signing in uses the local dev impersonation route, so the Discourse server has to
+be started with `DISCOURSE_DEV_ALLOW_ANON_TO_IMPERSONATE=1`. Output goes to
+`.shots/`, or `SHOTS_DIR` if set.
