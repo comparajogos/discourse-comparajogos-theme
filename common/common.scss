@@ -10,6 +10,7 @@
 @use "suppressed";
 @use "plugins";
 @use "editor";
+@use "list-styles";
 @use "tab-bar" with (
   $enabled: $show_mobile_tab_bar
 );
@@ -64,7 +65,7 @@ body {
   );
   --d-nav-border-color--active: transparent;
   --d-nav-underline-height: 0;
-  --d-topic-list-title-font-size: var(--font-up-1);
+  --d-topic-list-title-font-size: var(--font-up-2);
   --d-topic-list-data-padding-y: var(--space-4);
   --d-topic-list-data-padding-x: var(--space-2);
   --d-topic-list-header-data-padding-y: var(--space-3);
@@ -411,8 +412,76 @@ body.has-sidebar-page .wrap {
     background: var(--cj-selected);
   }
 
+  /* Category and tag icons carry their own colour — that is how a member scans
+   * the list. Flattening them to the brand blue made the whole rail monochrome. */
+
   .sidebar-section-link-prefix.icon {
-    color: var(--cj-brand);
+    color: inherit;
+  }
+
+  .sidebar-section-link-prefix.icon .d-icon {
+    color: var(--cj-text-muted);
+  }
+}
+
+/* Welcome banner
+ *
+ * The forum homepage needs one focal point; without it the page is a bare
+ * table. Core exposes a complete --d-welcome-banner-* layer, so this is a
+ * matter of proportion and alignment rather than restyling the component.
+ *
+ * Left-aligned, not centred, carrying a restrained brand tint rather than a
+ * decorated hero — the brand is refined editorial, never playful.
+ */
+
+:root,
+body {
+  --d-welcome-banner-text-alignment: start;
+  --d-welcome-banner-header-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  --d-welcome-banner-padding-top: var(--space-10);
+  --d-welcome-banner-padding-right: var(--space-8);
+  --d-welcome-banner-padding-bottom: var(--space-10);
+  --d-welcome-banner-padding-left: var(--space-8);
+  --d-welcome-banner-title-margin-bottom: var(--space-5);
+}
+
+.welcome-banner {
+  margin-block-end: var(--cj-panel-gap);
+
+  /* A tint of the brand over the panel, so the hero belongs to Compara Jogos
+   * without becoming a coloured block. */
+  background:
+    linear-gradient(
+      color-mix(in oklab, var(--cj-brand) 7%, transparent),
+      color-mix(in oklab, var(--cj-brand) 7%, transparent)
+    ),
+    var(--cj-panel);
+
+  &__title {
+    max-width: 28ch;
+    color: var(--cj-text);
+    font-weight: 750;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  /* The banner's search is the page's primary action, so it is wider and
+   * weightier than the header's utility field. */
+
+  .search-menu,
+  .search-input {
+    max-width: 34rem;
+    margin-inline: 0;
+    background: var(--cj-surface-muted);
+    border: 0;
+    border-radius: var(--cj-radius-pill);
+  }
+}
+
+@include viewport.until(sm) {
+  .welcome-banner {
+    background: none;
   }
 }
 
@@ -778,13 +847,24 @@ textarea,
   .badge-category {
     min-height: 1.5rem;
     padding-inline: var(--space-2);
+    color: color-mix(in oklab, var(--category-badge-color) 78%, var(--cj-text));
     font-size: var(--font-down-2);
+    font-weight: 500;
     background: color-mix(
       in srgb,
-      var(--category-badge-color) 13%,
+      var(--category-badge-color) 16%,
       transparent
     );
-    border-radius: 999px;
+    border-radius: var(--cj-radius-pill);
+    transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
+  }
+
+  &:hover .badge-category {
+    background: color-mix(
+      in srgb,
+      var(--category-badge-color) 26%,
+      transparent
+    );
   }
 }
 

@@ -1,0 +1,106 @@
+@use "lib/viewport";
+
+/* List Styles component integration
+ *
+ * The discourse-list-styles component turns discovery into a card grid, which is
+ * the client's shape — its homepage is rows of cards, not a table. The component
+ * exposes a --list-styles-* layer, so this file only maps that layer onto the
+ * theme's tokens and hands the grid the surfaces it should have had.
+ *
+ * Additive: with the component absent, none of this matches anything.
+ */
+
+:root,
+body {
+  --list-styles-card-background: var(--cj-panel);
+  --list-styles-card-radius: var(--cj-radius-panel);
+  --list-styles-card-padding: var(--space-4);
+
+  /* Elevation is reserved for menus, modals and the composer. A card on the
+   * canvas is separated by a hairline, like every other panel. */
+  --list-styles-card-shadow: none;
+
+  /* The client's cards sit four to a row at this width. */
+  --list-styles-grid-min: 15rem;
+  --list-styles-grid-gap: var(--cj-panel-gap);
+
+  /* The image bleeds to the card edge, as it does on the client's cards; the
+   * card's own overflow clips it to the corner radius. */
+  --list-styles-thumb-radius: 0;
+}
+
+/* In cards mode the grid *is* the layout, so the table underneath must stop
+ * being a panel — otherwise every card sits inside a second card. */
+
+.topic-list.--grid-cards {
+  padding-block: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.list-styles-card {
+  border: 1px solid var(--cj-border);
+  transition:
+    border-color var(--cj-duration-fast) var(--cj-ease-out),
+    background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+  &:hover,
+  &:focus-within {
+    background: var(--cj-hover);
+    border-color: color-mix(in oklab, var(--cj-action) 40%, transparent);
+  }
+
+  &__title .raw-topic-link {
+    color: var(--cj-text);
+    letter-spacing: -0.012em;
+  }
+
+  .topic-excerpt,
+  &__meta {
+    color: var(--cj-text-muted);
+  }
+
+  &__meta {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Most forum topics have no thumbnail, so the component's rotating animal
+ * placeholder would be the loudest thing on most cards — and the brand is
+ * never playful. A card without an image is a text card; the grid stretches
+ * them to the same height either way. */
+
+.list-styles-card__image:has(.list-styles-thumbnail__placeholder) {
+  display: none;
+}
+
+/* Kept for the case where a placeholder does surface, so that it recedes. */
+.list-styles-thumbnail__placeholder {
+  background: var(--cj-surface-muted);
+
+  .d-icon {
+    color: var(--cj-text-muted);
+    opacity: 0.3;
+  }
+}
+
+/* A text card needs its own top inset, since it no longer starts at an image. */
+.list-styles-card:not(:has(.list-styles-card__image)) {
+  padding-block-start: var(--list-styles-card-padding);
+}
+
+/* The viewer's style selector is a quiet control beside the discovery tabs. */
+.list-styles-style-selector .btn {
+  color: var(--cj-text-muted);
+  background: transparent;
+  border: 1px solid var(--cj-border);
+  border-radius: var(--cj-radius-pill);
+
+  &:hover,
+  &.active {
+    color: var(--cj-text);
+    background: var(--cj-hover);
+    border-color: transparent;
+  }
+}
