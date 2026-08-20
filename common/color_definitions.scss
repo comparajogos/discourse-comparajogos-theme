@@ -1,0 +1,43 @@
+/*
+ * Per-scheme colour tokens.
+ *
+ * This file is compiled once *per colour scheme*. common/common.scss is compiled
+ * once in total, so `dark-light-choose` there resolves against whichever palette
+ * happens to be the theme default and then never switches — which froze the
+ * whole token layer to a single scheme.
+ *
+ * Values are the React client's, verbatim from client/styles/global.css.
+ */
+
+:root {
+  /* client --background */
+  --cj-background: #{dark-light-choose(oklch(97% 0 0deg), oklch(20.02% 0 0deg))};
+
+  /* client --card */
+  --cj-card: #{dark-light-choose(
+      oklch(98% 0 0deg),
+      oklch(21% 0.006 285.885deg)
+    )};
+
+  /* client --input / --secondary */
+  --cj-control: #{dark-light-choose(oklch(94% 0 0deg), oklch(25% 0 0deg))};
+
+  /* client --border */
+  --cj-border: #{dark-light-choose(
+      oklch(92% 0.004 286.32deg),
+      oklch(100% 0 0deg / 10%)
+    )};
+
+  /* The client's FeaturedSection panel: bg-white dark:bg-black. */
+  --cj-header: #{dark-light-choose(#fff, #000)};
+
+  /* client --muted-foreground. Core's --primary-medium is derived from the
+   * palette and comes out blue-tinted, so it is the wrong source for a neutral
+   * metadata tier. */
+  --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
+
+  /* The client's in-header soft fill: NavItem's `hover:bg-muted dark:hover:bg-card`,
+   * which is also the search field's resting background. Exact client values
+   * rather than a mix off header_primary, which landed in the wrong hue. */
+  --cj-header-soft: #{dark-light-choose(#ddf2ff, #18181b)};
+}

@@ -1,3 +1,27 @@
+show_header_nav:
+  default: true
+  description:
+    en: "Show the Compara Jogos cross-product navigation in the forum header."
+    pt_BR: "Mostra a navegação do Compara Jogos no cabeçalho do fórum."
+
+header_logo_links_to_product:
+  default: true
+  description:
+    en: "Point the header logo at the Compara Jogos catalog, as the client's header does."
+    pt_BR: "Faz o logo do cabeçalho apontar para o catálogo do Compara Jogos, como no cliente."
+
+topic_list_feed:
+  default: true
+  description:
+    en: "Show discovery lists as feed rows — author, title, engagement, last reply — instead of a column table."
+    pt_BR: "Mostra as listas como linhas de feed — autor, título, engajamento, última resposta — em vez de tabela."
+
+show_mobile_tab_bar:
+  default: true
+  description:
+    en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
+    pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
+
 show_product_bridge:
   default: true
   description:

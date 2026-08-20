@@ -1,19 +1,24 @@
 /*
  * Canvas properties mapped to the React client design contract.
  * Keep product styling here so Discourse core can own component internals.
+ *
+ * Declared on :root *and* body. Discourse's upcoming-changes flags
+ * (uc-modernize-foundation-theme and friends, visible as uc-* classes on <body>)
+ * redefine --d-* properties inside `:where(.uc-…)`. Custom properties inherit
+ * from the nearest ancestor that declares them, so a value on body beats any
+ * value on :root no matter how specific the selector — it was silently
+ * reinstating core's input border, nav underline and radii.
  */
 
-:root {
-  /* React client semantic colors (client/styles/global.css). */
-  --cj-background: dark-light-choose(oklch(97% 0 0deg), oklch(20.02% 0 0deg));
-  --cj-card: dark-light-choose(oklch(98% 0 0deg), oklch(21% 0.006 285.885deg));
-  --cj-control: dark-light-choose(oklch(94% 0 0deg), oklch(25% 0 0deg));
-  --cj-border: dark-light-choose(
-    oklch(92% 0.004 286.32deg),
-    oklch(100% 0 0deg / 10%)
-  );
-  --cj-header: dark-light-choose(#fff, #000);
+:root,
+body {
+  /* The scheme-dependent colours live in common/color_definitions.scss, which is
+   * the only file compiled per scheme. Everything below is scheme-agnostic. */
   --cj-brand: #2364d8;
+
+  /* The action colour follows the palette rather than being fixed, so a site
+   * owner editing the scheme still gets a coherent theme. */
+  --cj-action: var(--tertiary);
 
   /* Layout: the React header and inner page both resolve to 85rem. */
   --d-max-width: 85rem;
@@ -64,6 +69,41 @@
   --canvas-panel-radius: 0.75rem;
   --canvas-panel-border: 1px solid var(--cj-border);
   --canvas-panel-shadow: none;
+
+  /* Semantics the ported components need, derived from the tokens above so the
+   * Canvas vocabulary stays the single source. */
+  --cj-text: var(--primary);
+  --cj-panel: var(--cj-header);
+  --cj-surface-muted: var(--cj-control);
+
+  /* Hover is not information, so it is a neutral translucent lift rather than a
+   * colour — tinting every hover with the action blue made blue the ambient
+   * temperature of the interface. Selection *is* information, so it keeps the
+   * accent. Translucent, so one value works on the canvas and on a panel. */
+  --cj-hover: color-mix(in oklab, var(--primary) 6%, transparent);
+  --cj-selected: color-mix(in oklab, var(--cj-action) 14%, transparent);
+
+  /* Live presence green, shared with the client's online strip. */
+  --cj-online: #62bd19;
+
+  /* Foreground on the action colour. */
+  --cj-on-action: oklch(98.5% 0 0deg);
+  --cj-radius-control: var(--d-button-border-radius);
+  --cj-radius-pill: 999px;
+  --cj-duration-fast: 150ms;
+  --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Core's own hooks for the topic title, rather than out-specificity-ing its
+   * `.visited a.title` rule. A read topic is dimmed, never un-bolded, so the
+   * column of titles stays scannable. */
+  --topic-title-font-weight: 700;
+  --topic-title-font-weight--visited: 700;
+  --title-color: var(--cj-text);
+  --title-color--read: var(--cj-text-muted);
+
+  /* Core draws the nav pill's selected marker as a ::after bar sized by this;
+   * the filled pill is the marker, so two markers for one state is one too many. */
+  --d-nav-underline-height: 0;
 
   /* Banner and header-search defaults for components added later. */
   --canvas-banner-color: var(--primary);
