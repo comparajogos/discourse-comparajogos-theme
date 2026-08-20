@@ -109,6 +109,11 @@
     --cj-shell-card-h: 9.5rem;
     --cj-shell-card-pitch: 10.25rem;
 
+    /* Radii, from the live theme: discovery cards are 1rem, sidebar rows are
+     * --d-button-border-radius (0.5rem). */
+    --cj-shell-card-r: 1rem;
+    --cj-shell-row-r: 0.5rem;
+
     /* The content column, top to bottom: heading, then the list-controls row,
      * then the cards. All three measured off the booted page, and kept together
      * so moving one cannot leave another overlapping it. */
@@ -145,6 +150,56 @@
       var(--cj-shell-row-pitch) * (var(--cj-shell-sidebar-rows) - 1) +
         var(--cj-shell-row-h)
     );
+    mask-image:
+      radial-gradient(
+        circle var(--cj-shell-row-r) at var(--cj-shell-row-r)
+          var(--cj-shell-row-r),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-row-r) at 0 var(--cj-shell-row-r),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-row-r) at var(--cj-shell-row-r)
+          calc(var(--cj-shell-row-h) - var(--cj-shell-row-r)),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-row-r) at 0
+          calc(var(--cj-shell-row-h) - var(--cj-shell-row-r)),
+        #000 99%,
+        #0000 100%
+      ),
+      linear-gradient(
+        #000 0 var(--cj-shell-row-h),
+        #0000 var(--cj-shell-row-h) var(--cj-shell-row-pitch)
+      ),
+      linear-gradient(
+        #0000 0 var(--cj-shell-row-r),
+        #000 var(--cj-shell-row-r)
+          calc(var(--cj-shell-row-h) - var(--cj-shell-row-r)),
+        #0000 calc(var(--cj-shell-row-h) - var(--cj-shell-row-r))
+          var(--cj-shell-row-pitch)
+      );
+    mask-size:
+      var(--cj-shell-row-r) var(--cj-shell-row-pitch),
+      var(--cj-shell-row-r) var(--cj-shell-row-pitch),
+      var(--cj-shell-row-r) var(--cj-shell-row-pitch),
+      var(--cj-shell-row-r) var(--cj-shell-row-pitch),
+      calc(100% - 2 * var(--cj-shell-row-r)) var(--cj-shell-row-pitch),
+      100% var(--cj-shell-row-pitch);
+    mask-position:
+      0 0,
+      100% 0,
+      0 0,
+      100% 0,
+      var(--cj-shell-row-r) 0,
+      0 0;
+    mask-repeat: repeat-y;
     background:
       linear-gradient(var(--cj-initial-on-action) 0 0) 0 0 / 100%
         var(--cj-shell-row-h) no-repeat,
@@ -288,6 +343,61 @@
             var(--cj-shell-card-h),
           transparent var(--cj-shell-card-h) var(--cj-shell-card-pitch)
         );
+    /* A gradient cannot carry a border-radius, so the corners are cut with a
+     * mask: four quarter-disc layers, each in a strip one radius wide and one
+     * pitch tall so it repeats once per row, plus two straight layers for the
+     * interior. Core gives the splash no spare element to be a card, so masking
+     * the repeated paint is the only way to round it. */
+    mask-image:
+      radial-gradient(
+        circle var(--cj-shell-card-r) at var(--cj-shell-card-r)
+          var(--cj-shell-card-r),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-card-r) at 0 var(--cj-shell-card-r),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-card-r) at var(--cj-shell-card-r)
+          calc(var(--cj-shell-card-h) - var(--cj-shell-card-r)),
+        #000 99%,
+        #0000 100%
+      ),
+      radial-gradient(
+        circle var(--cj-shell-card-r) at 0
+          calc(var(--cj-shell-card-h) - var(--cj-shell-card-r)),
+        #000 99%,
+        #0000 100%
+      ),
+      linear-gradient(
+        #000 0 var(--cj-shell-card-h),
+        #0000 var(--cj-shell-card-h) var(--cj-shell-card-pitch)
+      ),
+      linear-gradient(
+        #0000 0 var(--cj-shell-card-r),
+        #000 var(--cj-shell-card-r)
+          calc(var(--cj-shell-card-h) - var(--cj-shell-card-r)),
+        #0000 calc(var(--cj-shell-card-h) - var(--cj-shell-card-r))
+          var(--cj-shell-card-pitch)
+      );
+    mask-size:
+      var(--cj-shell-card-r) var(--cj-shell-card-pitch),
+      var(--cj-shell-card-r) var(--cj-shell-card-pitch),
+      var(--cj-shell-card-r) var(--cj-shell-card-pitch),
+      var(--cj-shell-card-r) var(--cj-shell-card-pitch),
+      calc(100% - 2 * var(--cj-shell-card-r)) var(--cj-shell-card-pitch),
+      100% var(--cj-shell-card-pitch);
+    mask-position:
+      0 0,
+      100% 0,
+      0 0,
+      100% 0,
+      var(--cj-shell-card-r) 0,
+      0 0;
+    mask-repeat: repeat-y;
     content: "";
   }
 
@@ -327,13 +437,16 @@
 
   html #d-splash .dots:nth-child(-n + 3)::before,
   html #d-splash .dots:nth-child(-n + 2)::after {
+    /* The real nav glyph is 24px (`.cj-icon`), so the placeholder ring takes
+     * that footprint instead of the 15px it had — at this size what reads is
+     * the weight of the mark, not its shape. */
     background: radial-gradient(
         circle,
-        transparent 0 0.31rem,
-        currentcolor 0.34rem 0.43rem,
-        transparent 0.46rem
+        transparent 0 0.62rem,
+        currentcolor 0.66rem 0.75rem,
+        transparent 0.79rem
       )
-      1rem center / 1.25rem 1.25rem no-repeat;
+      1rem center / 1.5rem 1.5rem no-repeat;
   }
 
   html #d-splash .dots:nth-child(1)::before {
