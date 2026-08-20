@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 html,
 body {
   background: var(--cj-background);
@@ -34,12 +36,27 @@ body.has-sidebar-page .wrap {
 }
 
 .d-header {
+  /* The inset belongs to the header, not to the shell inside it. As a margin on
+   * .wrap the pill overflowed its own header box — the box measured 52px while
+   * the pill reached 98px — so the sidebar and content sat 46px too high, under
+   * the pill, and core's measured header offset was wrong too.
+   *
+   * Core caps this element's height, so the inset alone still left the pill
+   * hanging 22px past it. --canvas-header-height is exactly the inset plus the
+   * shell, and was defined for this and never consumed. */
+  box-sizing: border-box;
+  min-height: var(--canvas-header-height);
+  padding-block-start: 1.5rem;
   background: transparent;
 
   &.d-header .wrap {
     width: calc(100% - 5rem);
-    height: 4.625rem;
-    margin-block-start: 1.5rem;
+
+    /* min-height on the row, not height on the wrap: core hides the floating
+     * search input while the welcome banner is visible, so a content-driven
+     * header collapsed at the top of the page and grew once scrolled. The shell
+     * has to be the same height in both states. */
+    min-height: 4.625rem;
     padding-inline: var(--space-4);
     box-sizing: border-box;
     background: var(--cj-header);
@@ -51,15 +68,24 @@ body.has-sidebar-page .wrap {
     display: flex;
     gap: var(--space-6);
     align-items: center;
-    height: 100%;
+    min-height: inherit;
   }
+
+  /*
+   * The toggle floats just below the shell, aligned to the frame's leading edge,
+   * so it reads as the handle on a closable menu rather than a glyph wedged into
+   * the 2.5rem gutter — which is narrower than the control, so it always
+   * straddled the pill's rounded edge.
+   *
+   * Offsets resolve against .contents, which is positioned, so the shell's own
+   * inline padding is backed out to reach the frame edge.
+   */
 
   .header-sidebar-toggle {
     position: absolute;
     z-index: 1;
-    inset-inline-start: calc((var(--space-10) + var(--space-1)) * -1);
-    top: 50%;
-    transform: translateY(-50%);
+    inset-inline-start: calc(var(--space-4) * -1);
+    top: calc(100% + var(--space-3));
   }
 
   .home-logo-wrapper-outlet {
@@ -67,14 +93,26 @@ body.has-sidebar-page .wrap {
     flex: 0 0 auto;
   }
 
-  .before-header-panel-outlet {
+  /* The docked topic title. Core injects it with no order, so it sorted ahead of
+   * every ordered sibling and threw the logo to the far right of the shell. It
+   * also takes the free space, since the search input is hidden in this state
+   * and nothing else would push the account menu right. */
+
+  .two-rows,
+  .header-title {
     order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .before-header-panel-outlet {
+    order: 3;
     flex: 0 1 auto;
     min-width: 0;
   }
 
   .floating-search-input-wrapper {
-    order: 3;
+    order: 4;
     flex: 1 1 18rem;
     min-width: 10rem;
 
@@ -92,8 +130,9 @@ body.has-sidebar-page .wrap {
   }
 
   .panel {
-    order: 4;
+    order: 5;
     flex: 0 0 auto;
+    margin-inline-start: auto;
   }
 
   #site-logo {
@@ -117,10 +156,18 @@ body.has-sidebar-page .wrap {
   }
 
   .btn-sidebar-toggle {
-    width: 2.25rem;
-    height: 2.25rem;
+    /* A bordered surface, not a bare character: it has to look pressable. */
+    width: 2rem;
+    height: 2rem;
     padding: 0;
-    border: 0;
+    background: var(--cj-header);
+    border: 1px solid var(--cj-border);
+    border-radius: var(--cj-radius-pill);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--cj-hover);
+    }
 
     .d-icon {
       display: none;
@@ -161,39 +208,6 @@ body.has-sidebar-page .wrap {
   }
 }
 
-/* Existing cross-product navigation, supplied by the Comparajogos header. */
-.cj-header-nav {
-  display: flex;
-  flex: 1 1 auto;
-  gap: var(--space-1);
-  align-items: center;
-  min-width: 0;
-
-  .cj-nav-item {
-    display: inline-flex;
-    gap: var(--space-2);
-    align-items: center;
-    min-height: 2.5rem;
-    padding-inline: var(--space-3);
-    color: var(--header_primary);
-    font-size: var(--font-down-1);
-    white-space: nowrap;
-    border-radius: var(--d-button-border-radius);
-
-    &:hover,
-    &.active {
-      color: var(--header_primary);
-      background: color-mix(in oklch, var(--header_primary) 12%, transparent);
-    }
-  }
-
-  .cj-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    fill: currentcolor;
-  }
-}
-
 /* Community presence is a product-wide pulse, not table metadata. */
 #whos-online {
   display: flex;
@@ -210,7 +224,7 @@ body.has-sidebar-page .wrap {
     flex: 0 0 auto;
     margin-inline-end: var(--space-3);
     color: var(--primary-medium);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
 
     &::before {
       width: 0.5rem;
@@ -269,6 +283,26 @@ body.has-sidebar-page .wrap {
       }
     }
 
+    /* A table does not clip its rows, so `overflow: hidden` above does not stop
+     * a hovered first or last row from squaring off the panel's corner. The
+     * corner cells carry the radius. */
+
+    tr:first-child > :first-child {
+      border-start-start-radius: 1.5rem;
+    }
+
+    tr:first-child > :last-child {
+      border-start-end-radius: 1.5rem;
+    }
+
+    .topic-list-body tr:last-child > :first-child {
+      border-end-start-radius: 1.5rem;
+    }
+
+    .topic-list-body tr:last-child > :last-child {
+      border-end-end-radius: 1.5rem;
+    }
+
     .main-link .title {
       color: var(--primary);
       font-weight: 600;
@@ -281,6 +315,26 @@ body.has-sidebar-page .wrap {
       color: var(--primary-medium);
     }
   }
+}
+
+/*
+ * Discourse still renders empty #user-card / #group-card placeholders inside
+ * #main-outlet — the real card is a floating menu now. They carry a fixed width,
+ * which pushed the document past a 390px viewport and gave every mobile page a
+ * horizontal scrollbar.
+ */
+
+#group-card,
+#user-card {
+  max-width: 100%;
+}
+
+/* Core's --font-* scale is in em, so a size set inside an already-sized element
+ * multiplies. This one collapsed to about 10px. */
+
+.badge-notification,
+.topic-post-badges .badge-notification {
+  font-size: var(--font-down-2-rem);
 }
 
 /* Keep the core category and tag filters visible with the Canvas component. */
@@ -296,8 +350,11 @@ body .category-breadcrumb {
 .topic-create-button__combo.--has-menu {
   #create-topic,
   .d-combo-button-menu {
-    color: var(--secondary);
-    background: var(--tertiary);
+    /* Not --secondary: that is the canvas colour, which is near-black in dark
+     * mode, so the label and icon came out dark on a blue button. The
+     * foreground on an action surface is fixed. */
+    color: var(--cj-on-action);
+    background: var(--cj-action);
     border-color: transparent;
 
     .d-icon {
@@ -306,10 +363,89 @@ body .category-breadcrumb {
 
     &:hover,
     &:focus-visible {
-      color: var(--secondary);
-      background: var(--tertiary-hover);
+      color: var(--cj-on-action);
+      background: color-mix(in oklch, var(--cj-action) 88%, black);
+
+      /* Core colours .btn:hover .d-icon on its own, so currentcolor alone does
+       * not survive the hover state. */
+
+      .d-icon {
+        color: currentcolor;
+      }
     }
   }
+}
+
+/* The floating sidebar handle sits over this region, so the menu starts below
+ * it rather than under it. */
+
+.sidebar-wrapper .sidebar-sections {
+  padding-block-start: var(--space-8);
+}
+
+/*
+ * Discovery layout
+ *
+ * Registering a block in `sidebar-discovery` makes core wrap discovery in
+ * `.discovery-layout` — and core ships no CSS for it, so the rail stacks under
+ * the list at full width. This is the client's homepage shape: one main column
+ * with a rail beside it, folding under the content when there is no room.
+ */
+
+.discovery-layout {
+  &__content {
+    display: grid;
+    gap: var(--d-main-content-gap);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+
+    @include viewport.from(lg) {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+    }
+  }
+
+  &__list {
+    min-width: 0;
+  }
+
+  &__sidebar {
+    display: flex;
+    gap: var(--d-main-content-gap);
+    flex-direction: column;
+    min-width: 0;
+  }
+}
+
+/* With Discourse's own sidebar open the rail is a third column, so it waits for
+ * room rather than squeezing the list. */
+
+body.has-sidebar-page .discovery-layout__content {
+  grid-template-columns: minmax(0, 1fr);
+
+  @include viewport.from(xl) {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+/*
+ * Core renders `h1#topic-list-heading` for screen readers only. The client
+ * labels every content section, so the heading is revealed rather than a new one
+ * invented — the semantics were already right.
+ */
+
+#topic-list-heading.sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0 0 var(--space-4);
+  overflow: visible;
+  clip-path: none;
+  color: var(--primary);
+  font-size: var(--font-up-2-rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: normal;
 }
 
 /* Blocks-based bridge from Discourse discovery to the product catalog. */
@@ -355,7 +491,7 @@ body .category-breadcrumb {
     }
 
     strong {
-      font-size: var(--font-down-1);
+      font-size: var(--font-down-1-rem);
     }
 
     small {

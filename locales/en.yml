@@ -2,3 +2,12 @@ en:
   product_bridge:
     label: "Compare games"
     description: "Catalog, prices, lists and plays"
+  header_nav:
+    label: "Compara Jogos"
+    forum: "Forum"
+    lists: "Lists"
+    plays: "Plays"
+    chat: "Chat"
+    market: "My Market"
+  topic_feed:
+    replied: "replied"

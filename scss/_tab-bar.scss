@@ -1,0 +1,77 @@
+@use "lib/viewport";
+
+/* Mobile tab bar
+ *
+ * Styling for the separate discourse-tab-bar-theme component, which gives the
+ * forum the same bottom navigation the client has. Only active when the
+ * component is installed, so every rule here is additive.
+ */
+
+/* The bar's own height, used by anything that has to clear it. */
+$height: 3.5rem;
+
+@if $show_mobile_tab_bar == "true" {
+  .d-tab-bar {
+    background: var(--cj-panel);
+    border-block-start: 1px solid var(--cj-border);
+    box-shadow: none;
+
+    .tab {
+      color: var(--cj-text-muted);
+
+      &.active {
+        color: var(--cj-brand);
+      }
+
+      .title {
+        margin-block-start: 0.125rem;
+        font-size: var(--font-down-2-rem);
+        line-height: 1rem;
+        letter-spacing: -0.025em;
+      }
+    }
+  }
+
+  /* The bar is the primary navigation on mobile, so it does not hide on scroll
+   * the way the component defaults to. */
+
+  body.tab-bar-hidden .d-tab-bar {
+    bottom: 0;
+  }
+
+  @include viewport.until(md) {
+    #main-outlet {
+      padding-block-end: calc($height + env(safe-area-inset-bottom));
+    }
+
+    /* Floating controls have to clear the bar rather than sit under it. */
+    #reply-control.draft,
+    #topic-progress-wrapper:not(.docked) {
+      bottom: calc($height + env(safe-area-inset-bottom));
+    }
+
+    html:not(.anon) {
+      .d-toc-toggle {
+        margin-block-end: $height;
+      }
+
+      .posts-filtered-notice {
+        bottom: $height;
+      }
+    }
+
+    /* Chat has its own tab, so the header icon would be a second door to the
+     * same room. */
+
+    .header-dropdown-toggle.chat-header-icon {
+      display: none;
+    }
+
+    /* Full-page chat sizes itself to the viewport, so the bar's clearance would
+     * push its composer off-screen. */
+
+    html.has-full-page-chat #main-outlet {
+      padding-block-end: 0;
+    }
+  }
+}

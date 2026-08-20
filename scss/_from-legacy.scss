@@ -1,0 +1,126 @@
+/* From legacy — parked for review
+ *
+ * Rules carried over from the site's years of accumulated overrides that I could
+ * not verify, either because they target a theme component I cannot see from
+ * here, or because they are a product decision rather than a style choice.
+ *
+ * NOTHING IN THIS FILE IS ACTIVE. common/common.scss does not `@use` it. To
+ * enable a block, move it into the partial where it belongs (_plugins.scss for
+ * a plugin or component, _suppressed.scss for a deliberate hide) and delete it
+ * from here.
+ *
+ * Each block says what it did and what question decides its fate.
+ */
+
+/* ── 1. Featured cards component ──────────────────────────────────────────────
+ * Q: is the featured-cards theme component still installed?
+ * It renders in `above-main-container-outlet`, and the dev forum's DOM still
+ * shows that outlet, so it probably is. The override made the card shadow
+ * opaque against the header colour. Under the new panel system a card on a
+ * panel should not need a shadow at all, so this may simply be obsolete.
+ */
+
+:root {
+  --card-shadow: rgb(var(--header_background-rgb));
+}
+
+/* ── 2. discourse-homepage-feature-component ──────────────────────────────────
+ * Q: is that component still installed?
+ * Absent from core, so it cannot be checked here. The original used `$font-up-1`
+ * and a stack of `!important`, both of which would now fail or fight the theme;
+ * rewritten below against current tokens. Sizes are the originals.
+ */
+
+.featured-topic-wrapper {
+  min-height: 14.375rem;
+  margin-block-start: 1em;
+
+  @media (width < 28.125rem) {
+    min-height: 13.4375rem;
+  }
+
+  .featured-topic h3 {
+    font-size: var(--font-up-1-rem);
+  }
+
+  .featured-topic-image {
+    height: 10.625rem;
+  }
+}
+
+/* ── 3. Icon-only topic footer controls ───────────────────────────────────────
+ * Q: keep it? The original comment called it an "Experiment".
+ * Drops the labels from the topic footer buttons on desktop, leaving icons. It
+ * saves a row of width but costs discoverability, and it is the kind of thing
+ * that reads as broken to a new member.
+ */
+
+#topic-footer-buttons
+  .topic-footer-main-buttons
+  > .btn.btn-default:not(.assign) {
+  .d-button-label {
+    display: none;
+  }
+
+  .d-icon {
+    margin: 0;
+  }
+}
+
+/* ── 4. Trimmed topic map on the last post ───────────────────────────────────
+ * Q: do you still want this?
+ * The original never ran — the selector contained a stray `{l`, so the whole
+ * block was a parse error for however long it sat there. Intent: when the first
+ * post is also the last, shrink its topic map to the view count alone. Rewritten
+ * against the current markup, untested against a real single-post topic.
+ */
+
+body:not(.archetype-private_message) .topic-post.regular:last-of-type {
+  #post_1 .topic-map {
+    width: max-content;
+
+    nav.buttons {
+      display: none;
+    }
+
+    ul li:not(.secondary.views) {
+      display: none;
+    }
+  }
+}
+
+/* ── 5. Marker cluster radius (JS, not CSS) ──────────────────────────────────
+ * The legacy initializer called
+ *   L.MarkerClusterGroup.mergeOptions({ maxClusterRadius: 60 });
+ * at boot. Not ported: it reaches for a Leaflet global that discourse-locations
+ * loads lazily, so at initializer time `L` is often undefined. If the member map
+ * clusters too aggressively, the right fix is a plugin setting or a hook that
+ * runs after the map loads — not a boot-time global.
+ */
+
+/*
+ * ── Confirmed dead, recorded so they are not rediscovered ────────────────────
+ *
+ * Verified absent from current Discourse, so these were no-ops:
+ *   .nav.nav-pills .navigation-toggle    — the class is gone from core
+ *   .category-badge-icon                 — the class is gone from core
+ *   .sidebar { width: 11em !important }  — pre-2023 sidebar markup
+ *   .container.list-container.has-sidebar — same
+ *   z("dropdown") on .d-tab-bar          — the z() function was removed
+ *   api.includePostAttributes("topicMap") — widget-era post attributes
+ *   modifyClass("component:edit-category-settings") — old form, and the voting
+ *                                          plugin registers the view itself now
+ *   modifyClass("controller:user", { canExpandProfile: false }) — that is a
+ *                                          getter now, and forceExpand is gone
+ *
+ * Superseded by the --d-* token layer (all of the "rounded X" and box-shadow
+ * overrides, #create-topic, #search-term, the dark header shadow, the darker
+ * sidebar, and --d-border-radius: 0.25rem, which actively fought the theme).
+ *
+ * ── Ported but worth a second look ───────────────────────────────────────────
+ *
+ * _suppressed.scss hides the timezone, region and location preferences on the
+ * assumption that location lives in the catalog profile (user_legal /
+ * seller_location) and the forum should not fork it. That was true of the
+ * legacy overrides too, so this is not a regression — but it is an assumption.
+ */

@@ -9,7 +9,20 @@
   "maximum_discourse_version": null,
   "assets": {},
   "modifiers": {
-    "svg_icons": ["magnifying-glass"]
+    "svg_icons": [
+      "far-comment",
+      "far-eye",
+      "far-heart",
+      "heart",
+      "magnifying-glass",
+      "reply",
+      "share-nodes"
+    ],
+    "only_theme_color_schemes": true,
+    "serialize_topic_excerpts": true
+  },
+  "theme_site_settings": {
+    "search_experience": "search_field"
   },
   "color_schemes": {
     "Compara Jogos Light": {

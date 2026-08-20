@@ -1,3 +1,12 @@
 @import "fonts";
 @import "properties";
 @import "styles";
+
+/* Compara Jogos components and overrides, one concern per file so an override
+ * can be retired without reading the whole stylesheet. */
+@import "header-nav";
+@import "topic-feed";
+@import "copy";
+@import "suppressed";
+@import "plugins";
+@import "tab-bar";
