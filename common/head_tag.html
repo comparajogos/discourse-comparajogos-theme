@@ -108,6 +108,12 @@
     --cj-shell-sidebar-rows: 2;
     --cj-shell-card-h: 9.5rem;
     --cj-shell-card-pitch: 10.25rem;
+
+    /* The content column, top to bottom: heading, then the list-controls row,
+     * then the cards. All three measured off the booted page, and kept together
+     * so moving one cannot leave another overlapping it. */
+    --cj-shell-heading-top: 7.25rem;
+    --cj-shell-controls-top: 9.8125rem;
     --cj-shell-content-top: 12.9375rem;
     position: fixed;
     display: block;
@@ -416,21 +422,21 @@
   }
 
   html #d-splash .dots:nth-child(4)::after {
-    inset-block-start: 10.625rem;
+    inset-block-start: var(--cj-shell-heading-top);
     inset-inline: var(--cj-shell-main-start) var(--cj-shell-frame-start);
     justify-content: flex-start;
-    height: 1.5rem;
+    height: 1.5625rem;
     padding: 0;
-    font-size: 1.25rem;
+    font-size: 1.3125rem;
     font-weight: 700;
     content: var(--cj-shell-all-latest);
   }
 
   html #d-splash .dots:nth-child(5)::after {
-    inset-block-start: 13.25rem;
+    inset-block-start: var(--cj-shell-controls-top);
     inset-inline: var(--cj-shell-main-start) var(--cj-shell-frame-start);
     justify-content: flex-start;
-    height: 2.5rem;
+    height: 2.375rem;
     padding: 0;
     font-size: 1rem;
     white-space: pre;
