@@ -24,7 +24,17 @@
  * in common/color_definitions.scss, which is compiled once per color scheme.
  */
 
-:root {
+/* Both :root and body.
+ *
+ * Discourse's upcoming-changes flags (uc-modernize-foundation-theme and friends)
+ * redefine --d-* properties inside `:where(.uc-…)` on <body>. Custom properties
+ * inherit from the nearest ancestor that declares them, so a value on body beats
+ * anything on :root no matter how specific — it was silently reinstating a grey
+ * 1px input border and the 2px nav underline. Declaring on body as well keeps
+ * the theme in control, and `body` outranks `:where()` on the same element. */
+
+:root,
+body {
   /* `Layout.tsx` is a 90rem frame with 2.5rem gutters, so the content column is
    * 85rem and its edges land exactly under the floating header's. */
   --d-max-width: 90rem;
@@ -72,15 +82,20 @@
   --cj-action: var(--tertiary);
   --cj-on-action: oklch(98.5% 0 0deg);
   --cj-brand-soft: color-mix(in srgb, var(--cj-action) 12%, transparent);
+
+  /* Interaction states are tinted toward the action blue, never neutral: a grey
+   * wash on a grey surface is the dated-forum read the brand rules out. Both are
+   * translucent so one pair works on the canvas and on a panel. */
+  --cj-hover: color-mix(in oklab, var(--cj-action) 9%, transparent);
+  --cj-selected: color-mix(in oklab, var(--cj-action) 16%, transparent);
   --cj-border: color-mix(in srgb, var(--primary) 8%, transparent);
   --cj-border-strong: color-mix(in srgb, var(--primary) 14%, transparent);
   --cj-focus: color-mix(in srgb, var(--cj-action) 72%, white);
-  --cj-tint: var(--highlight);
   --cj-radius-control: 0.5rem;
   --cj-radius-input: 0.625rem;
   --cj-radius-content: 0.75rem;
   --cj-radius-shell: 1.5rem;
-  --cj-radius-panel: 2rem;
+  --cj-radius-panel: 1rem;
   --cj-radius-pill: 999px;
 
   /* Live presence green, shared with the client's online strip. */
@@ -95,6 +110,7 @@
    * values are it. */
   --cj-panel-padding: var(--space-6);
   --cj-panel-gap: var(--space-6);
+  --cj-rail-width: 18rem;
   --cj-shadow-float: 0 14px 36px -28px
     color-mix(in srgb, var(--primary) 48%, transparent);
   --cj-shadow-composer: 0 -18px 48px -32px
@@ -170,6 +186,7 @@ a {
   box-shadow: none;
 
   > .wrap {
+    position: relative;
     min-height: 4.5rem;
     background: var(--cj-header);
     border: 0;
@@ -233,17 +250,18 @@ a {
 
   .header-dropdown-toggle .btn,
   .btn-sidebar-toggle {
-    width: 2.25rem;
-    min-width: 2.25rem;
-    height: 2.25rem;
-    min-height: 2.25rem;
+    width: 2.625rem;
+    min-width: 2.625rem;
+    height: 2.625rem;
+    min-height: 2.625rem;
     padding: 0;
     color: var(--header_primary);
     background: transparent;
     border: 0;
+    border-radius: var(--cj-radius-pill);
 
     &:hover {
-      background: var(--cj-surface-muted);
+      background: var(--cj-hover);
     }
   }
 
@@ -331,7 +349,6 @@ body.has-sidebar-page .wrap {
 }
 
 @include viewport.until(sm) {
-  .sidebar-sections,
   .welcome-banner,
   .post-stream,
   .categories-list,
@@ -341,6 +358,7 @@ body.has-sidebar-page .wrap {
   .user-table,
   .topic-list {
     background: transparent;
+    border-inline: 0;
     border-radius: 0;
   }
 }
@@ -348,7 +366,7 @@ body.has-sidebar-page .wrap {
 /* Sidebar */
 .sidebar-wrapper {
   background: transparent;
-  border-inline-end: 0;
+  border-inline-end: 1px solid var(--cj-border);
 
   .sidebar-container {
     color: var(--cj-text);
@@ -356,7 +374,14 @@ body.has-sidebar-page .wrap {
 
   .sidebar-sections {
     padding: var(--space-3);
+    background: transparent;
     border: 0;
+  }
+
+  /* Tight within a section, a step between them — not one gap everywhere. */
+  .sidebar-section + .sidebar-section,
+  .sidebar-custom-sections + .sidebar-section {
+    margin-block-start: var(--space-4);
   }
 
   .sidebar-section-header-text {
@@ -376,18 +401,96 @@ body.has-sidebar-page .wrap {
       background-color var(--cj-duration-fast) var(--cj-ease-out);
 
     &:hover {
-      background: var(--cj-surface-muted);
+      background: var(--cj-hover);
     }
   }
 
   .sidebar-section-link-wrapper.active .sidebar-row {
-    color: var(--cj-brand);
+    color: var(--cj-action);
     font-weight: 600;
-    background: var(--cj-brand-soft);
+    background: var(--cj-selected);
   }
 
   .sidebar-section-link-prefix.icon {
     color: var(--cj-brand);
+  }
+}
+
+/* Discovery layout
+ *
+ * Registering a block in `sidebar-discovery` makes core wrap discovery in
+ * `.discovery-layout` — and core ships no CSS for it, so the two-column
+ * arrangement is the theme's to build. Without it the rail stacks under the
+ * list, which is what it was doing.
+ *
+ * This is the client's homepage shape: one main column with a rail of cards
+ * beside it. The rail folds under the content below `lg`, as it does there.
+ */
+
+.discovery-layout {
+  &__content {
+    display: grid;
+    gap: var(--cj-panel-gap);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+
+    @include viewport.from(lg) {
+      grid-template-columns: minmax(0, 1fr) var(--cj-rail-width);
+    }
+  }
+
+  &__list {
+    min-width: 0;
+  }
+
+  &__sidebar {
+    display: flex;
+    gap: var(--cj-panel-gap);
+    flex-direction: column;
+    min-width: 0;
+  }
+}
+
+/* With Discourse's own sidebar open the rail would be a third column, and at
+ * 1440 that leaves the list about 720px — too narrow for a topic title. So the
+ * rail waits until there is room for all three. */
+
+body.has-sidebar-page .discovery-layout__content {
+  grid-template-columns: minmax(0, 1fr);
+
+  @media (width >= 100rem) {
+    grid-template-columns: minmax(0, 1fr) var(--cj-rail-width);
+  }
+}
+
+/* Rail blocks are panels, like the cards in the client's right rail. */
+.sidebar-discovery {
+  &__layout {
+    display: flex;
+    gap: var(--cj-panel-gap);
+    flex-direction: column;
+  }
+
+  &__block {
+    padding: var(--cj-panel-padding);
+    background: var(--cj-panel);
+    border: 1px solid var(--cj-border);
+    border-radius: var(--cj-radius-panel);
+
+    @include viewport.until(sm) {
+      padding-inline: 0;
+      background: transparent;
+      border-inline: 0;
+      border-radius: 0;
+    }
+
+    /* The block is the container. A block that carries its own fill would be a
+     * card inside a card. */
+
+    > * {
+      padding: 0;
+      background: transparent;
+    }
   }
 }
 
@@ -405,13 +508,17 @@ body.has-sidebar-page .wrap {
     gap: var(--space-2);
   }
 
+  /* These sit beside the discovery tabs, so they are quiet filter controls
+   * rather than filled fields: a hairline at rest, tinted on hover, matching
+   * the pill shape of the tabs next to them. */
+
   .select-kit.combo-box .select-kit-header {
     min-height: 2.5rem;
-    padding-inline: var(--space-3);
+    padding-inline: var(--space-4);
     color: var(--cj-text-muted);
-    background: var(--d-input-bg-color);
-    border: 1px solid var(--cj-border-strong);
-    border-radius: var(--cj-radius-control);
+    background: transparent;
+    border: 1px solid var(--cj-border);
+    border-radius: var(--cj-radius-pill);
     transition:
       color var(--cj-duration-fast) var(--cj-ease-out),
       border-color var(--cj-duration-fast) var(--cj-ease-out),
@@ -420,8 +527,8 @@ body.has-sidebar-page .wrap {
     &:hover,
     &:focus-visible {
       color: var(--cj-text);
-      background: var(--cj-surface-raised);
-      border-color: var(--cj-action);
+      background: var(--cj-hover);
+      border-color: transparent;
     }
   }
 }
@@ -468,6 +575,13 @@ body.has-sidebar-page .wrap {
 .nav-pills {
   gap: var(--space-1);
 
+  /* --d-nav-underline-height does not reach this; core draws the bar as a
+   * pseudo-element. The filled pill is the selected state. */
+
+  li a::after {
+    content: none;
+  }
+
   > li > a,
   > li > button {
     min-height: 2.5rem;
@@ -508,7 +622,7 @@ body.has-sidebar-page .wrap {
     border-color: var(--cj-border);
 
     &:hover {
-      background: var(--cj-tint);
+      background: var(--cj-hover);
       border-color: var(--cj-border-strong);
     }
   }
@@ -588,6 +702,12 @@ textarea,
     color: var(--cj-text-muted);
     font-size: var(--font-down-2);
     font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .topic-list-header .topic-list-data {
+    border-block-end: 1px solid var(--cj-border);
   }
 
   .topic-list-header tr {
@@ -600,7 +720,7 @@ textarea,
 
     &:hover,
     &:focus-within {
-      background: var(--cj-tint);
+      background: var(--cj-hover);
     }
 
     &:last-child > td {
@@ -706,7 +826,7 @@ textarea,
     transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
 
     &:hover {
-      background: var(--cj-surface-muted);
+      background: var(--cj-hover);
     }
   }
 
@@ -735,7 +855,7 @@ textarea,
 
     &:hover {
       border-color: var(--category-color, var(--cj-brand));
-      background: var(--cj-surface-muted);
+      background: var(--cj-hover);
     }
   }
 }
@@ -850,7 +970,7 @@ textarea,
 
     &:hover {
       color: var(--cj-brand);
-      background: var(--cj-surface-muted);
+      background: var(--cj-hover);
     }
   }
 }
@@ -936,7 +1056,7 @@ textarea,
       &:hover,
       &:focus-visible {
         color: var(--cj-text);
-        background: var(--cj-surface-muted);
+        background: var(--cj-hover);
       }
     }
   }
@@ -1143,7 +1263,7 @@ textarea,
       &.--active,
       &.-expanded {
         color: var(--cj-text);
-        background: var(--cj-surface-muted);
+        background: var(--cj-hover);
       }
 
       &.--active {
@@ -1176,7 +1296,7 @@ textarea,
       &:hover,
       &:focus-visible {
         color: var(--cj-text);
-        background: var(--cj-surface-muted);
+        background: var(--cj-hover);
       }
     }
 
@@ -1230,7 +1350,7 @@ textarea,
 
 .chat-message-container:hover,
 .chat-channel-row:hover {
-  background: var(--cj-surface-muted);
+  background: var(--cj-hover);
 }
 
 /* Optional components already used by Compara Jogos. */
@@ -1271,9 +1391,17 @@ textarea,
       order: -2;
     }
 
+    /* The client's header has no sidebar control, so this one floats in the
+     * canvas gutter beside the pill rather than displacing the logo. The gutter
+     * is a fixed 2.5rem wherever the pill floats, so it always fits. */
+
+    /* The client has no sidebar control, so this one is shaped like the nav
+     * items beside it and sits in the same cluster as the brand. In the gutter
+     * it read as a loose chevron; in flow, as a pill, it reads as navigation. */
+
     .header-sidebar-toggle {
       order: -1;
-      margin-inline-start: calc(var(--space-3) * -1);
+      margin-inline-end: calc(var(--space-4) * -1);
     }
   }
 
@@ -1284,8 +1412,19 @@ textarea,
   .sidebar-wrapper {
     padding-block: var(--space-4);
 
+    /* A card hugs its content. Core stretches the wrapper to the viewport and
+     * lets the sections flex into it, which left several hundred pixels of
+     * empty panel under the last link. Cap instead of stretch, so a long
+     * category list still scrolls inside the card. */
+
+    .sidebar-container,
+    .sidebar-wrapper {
+      height: auto;
+    }
+
     .sidebar-sections {
-      height: calc(100% - var(--space-8));
+      flex: 0 1 auto;
+      max-height: calc(100vh - var(--space-8) - 6rem);
     }
   }
 
