@@ -1,0 +1,15 @@
+/* Composer
+ *
+ * The site runs core's composer redesign (`uc-enable-composer-redesign`), which
+ * treats the title as a headline rather than a form field: no border, a
+ * --font-up-3 size, and no fill of its own — it leaves the surface to the input
+ * tokens. Ours make every input the client's filled control
+ * (--d-input-bg-color / --d-input-border-radius, see properties.scss), which is
+ * right for a form and wrong here: it put a rounded grey slab where the
+ * redesign wants a bare line above the body.
+ */
+
+.uc-enable-composer-redesign #reply-title {
+  border-radius: 0;
+  background: transparent;
+}
