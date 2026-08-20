@@ -461,43 +461,76 @@ body.has-sidebar-page .wrap {
     box-shadow: none;
   }
 
-  .topic-list {
-    overflow: hidden;
-    background: var(--cj-header);
-    border: 1px solid var(--cj-border);
-    border-radius: 1.5rem;
+  /*
+   * Discovery is a column of topic cards, not one boxed table — Horizon's
+   * `--d-topic-cards` pattern, built with the theme's own tokens. The single
+   * 1.5rem panel put every row inside one 1100px surface whose right half was
+   * empty air (row content measures 360–700px); as cards, each topic owns a
+   * bounded surface and the space between them is canvas, not dead panel.
+   *
+   * Core renders the list as a <table>, so the card column re-displays the
+   * table elements the way Horizon does: flex column on the body, block rows.
+   */
 
-    .topic-list-header tr,
-    .topic-list-item {
-      border-color: var(--cj-border);
+  .topic-list {
+    background: transparent;
+    border: 0;
+
+    .topic-list-body {
+      display: flex;
+      gap: var(--space-3);
+      flex-direction: column;
+      border: 0;
     }
 
-    .topic-list-item {
-      transition: background-color 140ms ease-out;
+    /* Core's "last visit" marker is a table row squeezed to 2px once the body
+     * goes flex. As its own quiet line between cards: text centred between two
+     * hairlines, in the metadata tier rather than core's red. */
 
-      &:hover {
-        background: color-mix(in oklch, var(--primary) 5%, transparent);
+    .topic-list-item-separator {
+      display: block;
+
+      > td {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+        padding-block: var(--space-1);
+        color: var(--cj-text-muted);
+        font-size: var(--font-down-2-rem);
+
+        /* Core underlines the whole row in danger-red; the hairlines below are
+         * the separator. */
+        border: 0;
+
+        &::before,
+        &::after {
+          flex: 1 1 auto;
+          height: 1px;
+          background: var(--cj-border);
+          content: "";
+        }
+
+        span {
+          color: inherit;
+        }
       }
     }
 
-    /* A table does not clip its rows, so `overflow: hidden` above does not stop
-     * a hovered first or last row from squaring off the panel's corner. The
-     * corner cells carry the radius. */
+    .topic-list-item {
+      display: block;
+      background: var(--cj-header);
+      border: 1px solid var(--cj-border);
+      border-radius: 1rem;
+      transition: background-color 140ms ease-out;
 
-    tr:first-child > :first-child {
-      border-start-start-radius: 1.5rem;
-    }
+      &:hover {
+        background: color-mix(in oklch, var(--primary) 4%, var(--cj-header));
+      }
 
-    tr:first-child > :last-child {
-      border-start-end-radius: 1.5rem;
-    }
-
-    .topic-list-body tr:last-child > :first-child {
-      border-end-start-radius: 1.5rem;
-    }
-
-    .topic-list-body tr:last-child > :last-child {
-      border-end-end-radius: 1.5rem;
+      > .cj-feed-cell {
+        display: block;
+        width: auto;
+      }
     }
 
     .main-link .title {
@@ -704,19 +737,25 @@ body .category-breadcrumb {
   .navigation-topics,
   .navigation-category,
   .tags-page {
-    /* Full-bleed, so the panel's corner radii go with its inline borders — the
-     * corner *cells* carry them (a table does not clip its rows), so zeroing the
-     * table alone left four notches on the first and last row. */
+    /* Full-bleed: the cards collapse back into separated rows, the way
+     * Horizon's card column does below `sm`. */
 
     .topic-list {
-      border-inline: 0;
-      border-radius: 0;
+      .topic-list-body {
+        gap: 0;
+      }
 
-      tr:first-child > :first-child,
-      tr:first-child > :last-child,
-      .topic-list-body tr:last-child > :first-child,
-      .topic-list-body tr:last-child > :last-child {
+      .topic-list-item {
+        border-inline: 0;
+        border-block-start: 0;
         border-radius: 0;
+      }
+
+      /* Core strips .last-visit's bottom border (it expects the separator row
+       * to follow); as full-bleed rows every card keeps its rule. */
+
+      > .topic-list-body > .topic-list-item.last-visit {
+        border-block-end: 1px solid var(--cj-border);
       }
     }
   }
