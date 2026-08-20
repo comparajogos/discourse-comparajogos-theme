@@ -22,8 +22,8 @@ body {
 }
 
 /*
- * Discourse normally adds the sidebar width to every .wrap. The product uses
- * one shared 85rem frame, with the sidebar participating inside that frame.
+ * Discourse normally adds the sidebar width to every .wrap. The product uses one
+ * shared frame, with the sidebar participating inside it rather than widening it.
  */
 
 body.has-sidebar-page .wrap {
@@ -54,7 +54,14 @@ body.has-sidebar-page .wrap {
   box-shadow: var(--canvas-header-shadow);
 
   &.d-header .wrap {
+    /* The client's header is `w-[calc(100%-5rem)] max-w-340` — a 2.5rem inset on
+     * each side, capped at the 85rem content column. The cap has to be its own
+     * value: --d-max-width is the 90rem *outer* frame, and the percentage
+     * resolves against the full-width .d-header, so left to core's max-width the
+     * pill grew to viewport-minus-80 and overhung the content beneath it. */
     width: calc(100% - 5rem);
+    max-width: 85rem;
+    margin-inline: auto;
 
     /* min-height on the row, not height on the wrap: core hides the floating
      * search input while the welcome banner is visible, so a content-driven
@@ -137,6 +144,24 @@ body.has-sidebar-page .wrap {
     order: 5;
     flex: 0 0 auto;
     margin-inline-start: auto;
+  }
+
+  /* Core renders this outlet whether or not anything fills it, and it carries no
+   * order — so it sorted ahead of every ordered sibling above and the row's 24px
+   * gap pushed the logo 24px off the shell's padding edge, where the client has
+   * it flush. Ordered last it only moved the gap to the other end, insetting the
+   * account menu by 40px instead of 16px.
+   *
+   * `:empty` does not catch it (Glimmer leaves a comment marker inside), but
+   * `:has(*)` asks the question that matters — whether anything actually
+   * rendered. Filled by a plugin, it takes its place after the account menu. */
+
+  .after-header-panel-outlet {
+    order: 6;
+
+    &:not(:has(*)) {
+      display: none;
+    }
   }
 
   #site-logo {
@@ -274,7 +299,7 @@ body.has-sidebar-page .wrap {
       width: 0.5rem;
       height: 0.5rem;
       margin-inline-end: var(--space-2);
-      background: var(--success);
+      background: var(--cj-online);
       border-radius: 50%;
       content: "";
     }
@@ -449,21 +474,35 @@ body .category-breadcrumb {
 }
 
 @media (width < 768px) {
-  :root {
-    --canvas-header-height: 3.75rem;
+  /* `:root, body`, not `:root`: properties.scss declares these on body too, and
+   * a custom property inherits from the nearest ancestor that declares it — so a
+   * :root-only override inside a media query silently lost to the base value and
+   * the mobile gutter stayed at the desktop's 2.5rem. */
+
+  :root,
+  body {
+    /* The shell is the same height as on desktop — it is the same component in
+     * the client, which only drops the `sm:top-6` inset below `sm`. It was
+     * 3.75rem here while the shell's own `min-height: 4.625rem` still applied
+     * (min-height beats height), so the pill overhung its header box by 14px. */
+    --canvas-header-height: 4.625rem;
     --canvas-content-padding: var(--space-4);
-    --d-wrap-padding-x: var(--space-3);
+    --d-wrap-padding-x: var(--space-4);
   }
 
   .d-header {
+    padding-block-start: 0;
     background: var(--cj-header);
     border-bottom: 1px solid var(--cj-border);
 
+    /* Flush to the top, edge to edge, square: the client's `sticky sm:top-6`
+     * and `rounded-3xl` are both above-`sm` only. */
+
     &.d-header .wrap {
       width: 100%;
-      height: 3.75rem;
+      max-width: none;
       margin-block-start: 0;
-      padding-inline: var(--space-3);
+      padding-inline: var(--space-4);
       border-radius: 0;
     }
 
@@ -490,9 +529,20 @@ body .category-breadcrumb {
   .navigation-topics,
   .navigation-category,
   .tags-page {
+    /* Full-bleed, so the panel's corner radii go with its inline borders — the
+     * corner *cells* carry them (a table does not clip its rows), so zeroing the
+     * table alone left four notches on the first and last row. */
+
     .topic-list {
       border-inline: 0;
       border-radius: 0;
+
+      tr:first-child > :first-child,
+      tr:first-child > :last-child,
+      .topic-list-body tr:last-child > :first-child,
+      .topic-list-body tr:last-child > :last-child {
+        border-radius: 0;
+      }
     }
   }
 }

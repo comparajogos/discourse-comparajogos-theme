@@ -5,6 +5,7 @@
 /* Compara Jogos components and overrides, one concern per file so an override
  * can be retired without reading the whole stylesheet. */
 @import "header-nav";
+@import "sidebar";
 @import "topic-feed";
 @import "copy";
 @import "suppressed";

@@ -1,0 +1,105 @@
+/* Sidebar rows
+ *
+ * The client's account menu (`components/layout/MarketLayout.tsx`) is the prior
+ * art: every row is the shared `Button` at its default `secondary` variant, and
+ * the current row is the same button `primary`. So a row is a *filled* surface
+ * at rest and the accent one when selected — the inverse of Discourse's default,
+ * where rows are bare text and only the selected one takes a fill.
+ *
+ * Geometry is `Button`'s: `px-4 py-2` on `text-sm`/`leading-5`, `gap-2`,
+ * `rounded-md` (8px), `shadow-sm`, with `gap-3` between rows. Most of that lands
+ * through core's own --d-sidebar-* properties (see properties.scss), so the
+ * selectors below only cover what has no token.
+ *
+ * Where this departs from the client: the client's menu is six destinations, and
+ * the forum sidebar is that plus every category and chat channel. Twenty filled
+ * slabs is a wall, and it competes with the content panel beside it — which is
+ * the same mistake as making the whole sidebar a card. So the fill marks the
+ * *destination menu* (the sections with no heading: the client's actual
+ * analogue), and the headed sections below it — Categories, Channels, DMs — stay
+ * flat text, because they are a list of things rather than a menu of places.
+ * Selection is the accent in both, and it is the only accent in the menu.
+ */
+
+.sidebar-wrapper {
+  /* Rows in an unheaded section are the product menu. */
+  .sidebar-section-wrapper:not(:has(.sidebar-section-header-wrapper))
+    .sidebar-section-link {
+    background: var(--cj-control);
+
+    /* Tailwind's shadow-sm — what separates one filled row from the next
+     * without drawing a border between them. */
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+
+    &:hover,
+    &:focus-visible {
+      /* `hover:shadow` on the client's secondary button: the fill holds and the
+       * row lifts, rather than changing colour under the cursor. */
+      background: var(--cj-control);
+      box-shadow:
+        0 1px 3px 0 rgb(0 0 0 / 10%),
+        0 1px 2px -1px rgb(0 0 0 / 10%);
+    }
+
+    /* The resting fill above is more specific than core's own active rule (a
+     * :not()/:has() pair carries the specificity of its argument), so the accent
+     * has to be restated here rather than inherited. */
+
+    &.active,
+    &--active,
+    &.exact-url-match {
+      background: var(--d-sidebar-active-background);
+      box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+
+      &:hover,
+      &:focus-visible {
+        background: color-mix(in oklch, var(--cj-action) 90%, transparent);
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+      }
+    }
+  }
+
+  .sidebar-section-link {
+    font-size: var(--font-down-1-rem);
+    font-weight: 500;
+    line-height: 1.25rem;
+
+    /* Core takes the radius from --d-nav-pill-border-radius only when the Canvas
+     * component is installed; the row has to be 8px either way. */
+    border-radius: var(--d-button-border-radius);
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out),
+      box-shadow var(--cj-duration-fast) var(--cj-ease-out);
+  }
+
+  /* Section labels are `text-xs uppercase tracking-wider` on the muted tier — a
+   * label for the group, not a row in it. */
+
+  .sidebar-section-header {
+    font-size: var(--font-down-2-rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: transparent;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--primary);
+      background: transparent;
+    }
+  }
+
+  /* The "more" list is a menu on top of the menu, so its rows stay flat — filled
+   * rows inside a popover would read as a second nesting level. */
+
+  .sidebar-more-section-links-details-content .sidebar-section-link {
+    background: transparent;
+    box-shadow: none;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--cj-hover);
+      box-shadow: none;
+    }
+  }
+}
