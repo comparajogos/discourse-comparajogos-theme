@@ -93,11 +93,15 @@ body {
   --cj-on-action: oklch(98.5% 0 0deg);
   --cj-brand-soft: color-mix(in srgb, var(--cj-action) 12%, transparent);
 
-  /* Interaction states are tinted toward the action blue, never neutral: a grey
-   * wash on a grey surface is the dated-forum read the brand rules out. Both are
-   * translucent so one pair works on the canvas and on a panel. */
-  --cj-hover: color-mix(in oklab, var(--cj-action) 9%, transparent);
-  --cj-selected: color-mix(in oklab, var(--cj-action) 16%, transparent);
+  /* Hover is not information, so it is a neutral lift rather than a colour:
+   * tinting every hover with the action blue made blue the ambient temperature
+   * of the interface, and the brand spends it sparingly — one accent per
+   * surface. Translucent, so the same value works on canvas and on a panel, and
+   * never the opaque grey slab that reads as a dated forum.
+   *
+   * Selection *is* information, so that keeps the accent. */
+  --cj-hover: color-mix(in oklab, var(--primary) 6%, transparent);
+  --cj-selected: color-mix(in oklab, var(--cj-action) 14%, transparent);
   --cj-border: color-mix(in srgb, var(--primary) 8%, transparent);
   --cj-border-strong: color-mix(in srgb, var(--primary) 14%, transparent);
   --cj-focus: color-mix(in srgb, var(--cj-action) 72%, white);
@@ -113,13 +117,19 @@ body {
 
   /* The client's in-header soft fill (`bg-muted dark:bg-card`), used by both the
    * nav hover and the search field. Translucent so it holds on either header. */
-  --cj-header-soft: color-mix(in srgb, var(--header_primary) 10%, transparent);
+  --cj-header-soft: color-mix(in srgb, var(--header_primary) 8%, transparent);
 
   /* React groups content into `bg-white dark:bg-black rounded-4xl p-6` cards
    * laid out on a gap-6 grid. `FeaturedSection` is the primitive; these three
    * values are it. */
   --cj-panel-padding: var(--space-6);
+
+  /* Three distinct steps, per the brand's density rule: generous between zones,
+   * medium between related sections, tight inside a grouping. One value for all
+   * three is the tell. */
+  --cj-zone-gap: var(--space-8);
   --cj-panel-gap: var(--space-6);
+  --cj-section-gap: var(--space-4);
   --cj-rail-width: 20rem;
   --cj-shadow-float: 0 14px 36px -28px
     color-mix(in srgb, var(--primary) 48%, transparent);
@@ -346,7 +356,6 @@ body.has-sidebar-page .wrap {
  * they take the panel without the padding shorthand. */
 
 .sidebar-sections,
-.welcome-banner,
 .post-stream,
 .categories-list,
 .category-list,
@@ -450,24 +459,21 @@ body {
   /* The uc-modernize flag centres the banner via its own variable name. */
   --welcome-banner-text-align: start;
   --d-welcome-banner-header-size: clamp(1.25rem, 1.8vw, 1.625rem);
-  --d-welcome-banner-padding-top: var(--space-8);
-  --d-welcome-banner-padding-right: var(--space-8);
-  --d-welcome-banner-padding-bottom: var(--space-8);
-  --d-welcome-banner-padding-left: var(--space-8);
+  --d-welcome-banner-padding-top: var(--space-4);
+  --d-welcome-banner-padding-right: 0;
+  --d-welcome-banner-padding-bottom: 0;
+  --d-welcome-banner-padding-left: 0;
   --d-welcome-banner-title-margin-bottom: var(--space-5);
 }
 
 .welcome-banner {
-  margin-block-end: var(--cj-panel-gap);
-
-  /* A tint of the brand over the panel, so the hero belongs to Compara Jogos
-   * without becoming a coloured block. */
-  background:
-    linear-gradient(
-      color-mix(in oklab, var(--cj-brand) 7%, transparent),
-      color-mix(in oklab, var(--cj-brand) 7%, transparent)
-    ),
-    var(--cj-panel);
+  /* No card. A greeting and a search field do not earn a container, and as a
+   * tinted box this was the emptiest thing on the page and the first thing the
+   * eye landed on. It sits on the canvas and lets the content below lead. */
+  margin-block-end: var(--cj-zone-gap);
+  background: none;
+  border: 0;
+  border-radius: 0;
 
   /* The uc-modernize stylesheet sets this title's size and weight *directly*
    * (`:where(.uc-…) .welcome-banner__title`), bypassing the
@@ -521,7 +527,7 @@ body {
     position: static;
     width: auto;
     height: auto;
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--cj-section-gap);
     overflow: visible;
     clip-path: none;
     color: var(--cj-text);
@@ -547,7 +553,7 @@ body {
 .discovery-layout {
   &__content {
     display: grid;
-    gap: var(--cj-panel-gap);
+    gap: var(--cj-zone-gap);
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
 
