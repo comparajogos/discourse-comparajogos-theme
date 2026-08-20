@@ -90,7 +90,13 @@
   }
 
   html #d-splash {
-    --cj-shell-frame-start: max(2.5rem, calc((100vw - 85rem) / 2));
+    /* `100%`, not `100vw`: #d-splash is fixed to inset 0, so its own box is the
+     * layout viewport — which excludes the scrollbar gutter, exactly as the
+     * booted page's frame does. 100vw includes the gutter, so the skeleton
+     * painted 7.5px right of where the real shell lands and everything jumped
+     * left at handover. Only ever consumed by inset-* properties, so the
+     * percentage resolves against the containing block's width. */
+    --cj-shell-frame-start: max(2.5rem, calc((100% - 85rem) / 2));
     --cj-shell-main-start: calc(var(--cj-shell-frame-start) + 14.625rem);
 
     /*
@@ -429,7 +435,10 @@
     padding-inline: 1rem;
     color: var(--cj-initial-text);
     font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.875rem;
+
+    /* Core's --font-down-1 resolves to 13.9296px, not 14 — its scale is em
+     * based, so a round rem here drifts against the real label. */
+    font-size: 0.8706rem;
     font-weight: 400;
     line-height: 1;
     white-space: nowrap;
@@ -453,6 +462,9 @@
     inset-inline-start: calc(var(--cj-shell-frame-start) + 12.06rem);
     width: 6.64rem;
     padding-inline-start: 3rem;
+
+    /* Forum is the current item, and `.cj-nav-item.active` is font-medium. */
+    font-weight: 500;
     content: var(--cj-shell-forum);
   }
 
@@ -538,9 +550,13 @@
     inset-block-start: var(--cj-shell-heading-top);
     inset-inline: var(--cj-shell-main-start) var(--cj-shell-frame-start);
     justify-content: flex-start;
+
+    /* The shared .dots rule pads 1rem inline for the header labels; the content
+     * column starts flush at --cj-shell-main-start. */
+    padding-inline: 0;
     height: 1.5625rem;
     padding: 0;
-    font-size: 1.3125rem;
+    font-size: 1.31955rem;
     font-weight: 700;
     content: var(--cj-shell-all-latest);
   }
@@ -549,6 +565,10 @@
     inset-block-start: var(--cj-shell-controls-top);
     inset-inline: var(--cj-shell-main-start) var(--cj-shell-frame-start);
     justify-content: flex-start;
+
+    /* The shared .dots rule pads 1rem inline for the header labels; the content
+     * column starts flush at --cj-shell-main-start. */
+    padding-inline: 0;
     height: 2.375rem;
     padding: 0;
     font-size: 1rem;

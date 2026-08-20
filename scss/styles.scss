@@ -5,6 +5,19 @@ body {
   background: var(--cj-background);
 }
 
+/*
+ * Reserve the scrollbar gutter always.
+ *
+ * Core hides overflow while #d-splash paints, so the layout viewport was 7.5px
+ * wider during the splash than after it — every column shifted left the moment
+ * the app booted. Reserving the gutter makes both states the same width, which
+ * also stops short pages from shifting against long ones.
+ */
+
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   color: var(--primary);
   font-synthesis: none;
