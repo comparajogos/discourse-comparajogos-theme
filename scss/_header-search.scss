@@ -234,11 +234,29 @@
     }
 
     .d-header {
+      /* The client's row has no gap below `sm` (`sm:gap-6`) and a `flex-1`
+       * spacer right after the logo, so the collapsed button lands beside the
+       * account controls rather than beside the logo. `margin-inline-start: auto`
+       * is that spacer; the trailing 12px is the field's own `mx-3`. */
+
+      .contents {
+        gap: 0;
+      }
+
+      /* The outlet's auto margin is the spacer, and .panel carries one too — two
+       * auto margins split the free space between them, so the button floated
+       * 28px short of the controls instead of sitting 12px from them. */
+
+      .panel {
+        margin-inline-start: 0;
+      }
+
       /* The outlet is the flex child of the header row, and below `sm` the nav
        * inside it is hidden, so the field is all it holds. */
 
       .before-header-panel-outlet {
         flex: 0 0 2.5rem;
+        margin-inline: auto var(--space-3);
         transition: flex-basis 200ms ease-in-out;
       }
 
@@ -251,6 +269,32 @@
 
         .search-menu {
           max-width: none;
+        }
+
+        /* Collapsed, the glyph is the whole button, so it centres rather than
+         * sitting at `left-3`. Centred by `inset-inline: 0` + auto margins so it
+         * holds whatever the button's width turns out to be, instead of relying
+         * on 12px happening to be half of (40 - 16). */
+
+        .search-menu .search-icon {
+          inset-inline: 0;
+          margin-inline: auto;
+        }
+
+        /* The results are a sheet under the header, not a dropdown hanging off a
+         * 40px button: fixed, so it escapes the field's box entirely. Core
+         * maintains --header-offset as the shell's height. */
+
+        .search-menu-panel {
+          position: fixed;
+          inset-inline: 0;
+          top: var(--header-offset, 3.5rem);
+          width: auto;
+          max-width: none;
+          max-height: calc(100vh - var(--header-offset, 3.5rem));
+          border-inline: 0;
+          border-start-start-radius: 0;
+          border-start-end-radius: 0;
         }
 
         /* Collapsed, the input has to be the whole button: the glyph is
@@ -276,9 +320,14 @@
         }
       }
 
-      .contents:has(.cj-header-search:focus-within) {
+      .contents:has(.cj-header-search:focus-within),
+      .contents:has(.cj-header-search .search-menu-panel) {
+        /* An auto margin absorbs all free space before flex-grow gets a look in,
+         * so the spacer has to go for the field to be able to open. */
+
         .before-header-panel-outlet {
           flex: 1 1 auto;
+          margin-inline: var(--space-3);
         }
 
         /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */
@@ -288,6 +337,11 @@
         }
 
         .cj-header-search {
+          .search-menu .search-icon {
+            inset-inline: 0 auto;
+            margin-inline-start: var(--space-3);
+          }
+
           .search-term__input::placeholder {
             opacity: 0.7;
           }

@@ -184,6 +184,13 @@ body.has-sidebar-page .wrap {
     margin-inline-start: auto;
   }
 
+  /* `flex items-center gap-2 shrink-0` on the client's trailing controls. Core
+   * leaves them flush, so the avatar sat against the hamburger. */
+
+  .panel .d-header-icons {
+    gap: var(--space-2);
+  }
+
   /* Core renders this outlet whether or not anything fills it, and it carries no
    * order — so it sorted ahead of every ordered sibling above and the row's 24px
    * gap pushed the logo 24px off the shell's padding edge, where the client has
@@ -602,10 +609,6 @@ body .category-breadcrumb {
       min-height: 3.5rem;
       padding-inline: var(--space-3);
       border-radius: 0;
-    }
-
-    .contents {
-      gap: var(--space-3);
     }
 
     .header-sidebar-toggle {
