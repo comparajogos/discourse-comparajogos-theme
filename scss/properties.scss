@@ -121,8 +121,9 @@ body {
    * on the canvas and on a panel. */
   --cj-hover: color-mix(in oklab, var(--primary) 6%, transparent);
 
-  /* Live presence green, shared with the client's online strip. */
-  --cj-online: #62bd19;
+  /* Live presence green: the client's OnlineUsers dot is `bg-green-700`, fixed
+   * in both schemes. Same value as the palette's `success` in light. */
+  --cj-online: #15803d;
 
   /* Foreground on the action colour. */
   --cj-on-action: oklch(98.5% 0 0deg);
@@ -143,7 +144,9 @@ body {
   --title-color: var(--cj-text);
   --title-color--read: var(--cj-text-muted);
 
-  /* Core draws the nav pill's selected marker as a ::after bar sized by this;
-   * the filled pill is the marker, so two markers for one state is one too many. */
+  /* Core marks the selected nav pill with a ::after bar sized by this. The tint
+   * in _list-controls.scss is the marker instead, matching how the mobile sheet
+   * and the sidebar mark selection — an underline as well would be two markers
+   * for one state. */
   --d-nav-underline-height: 0;
 }

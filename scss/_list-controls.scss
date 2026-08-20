@@ -1,0 +1,158 @@
+/* Discovery list controls
+ *
+ * The row above the topic list, and the sheet its collapsed form opens.
+ *
+ * Below `md` core collapses the nav pills into one trigger
+ * (`.list-control-toggle-link-trigger`) that opens a float-kit bottom sheet.
+ * The trigger ships with no padding, no surface and an 18px/700 label, so it
+ * reads as a second heading under the real one rather than as a control.
+ *
+ * The client's analogue is `components/common/Select` — the right one, rather
+ * than `MarketLayout`'s mobile Button: that Button is full-width because it *is*
+ * the page's whole navigation, whereas this trigger shares a row with a
+ * list-style toggle and the New Topic button. Three full-width slabs in a 343px
+ * row is the heavy version; a content-width Select is the honest one.
+ *
+ * Select's trigger: `bg-input`, `rounded-lg`, `h-10`, `px-3`, `text-sm`, with
+ * `focus-visible:shadow-outline` and `data-[popup-open]:shadow-outline`.
+ */
+
+.nav-pills .list-control-toggle-link-trigger {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  min-height: 2.5rem;
+  padding-inline: var(--space-3);
+  color: var(--primary);
+  font-size: var(--font-down-1-rem);
+  font-weight: 500;
+  background: var(--cj-control);
+  border: 0;
+  border-radius: var(--d-input-border-radius);
+  transition:
+    background-color var(--cj-duration-fast) var(--cj-ease-out),
+    box-shadow var(--cj-duration-fast) var(--cj-ease-out);
+
+  &:hover {
+    color: var(--primary);
+    background: var(--cj-control);
+  }
+
+  /* Select marks the open state with the same ring it uses for focus. */
+  &:focus-visible,
+  &[aria-expanded="true"] {
+    color: var(--primary);
+    background: var(--cj-control);
+    box-shadow: var(--cj-focus-ring);
+  }
+
+  .d-icon {
+    color: var(--cj-text-muted);
+  }
+
+  .list-control-toggle-link__text {
+    font-weight: inherit;
+  }
+}
+
+/*
+ * The sheet.
+ *
+ * Core gives the container `--d-border-radius` (4px) and the canvas colour, then
+ * lays square-cornered, 700-weight rows 4px from its edges — a hard-edged bar
+ * inside a rounded box, on a surface the same colour as the page behind it.
+ * Select's popup is `bg-popover border border-border rounded-lg shadow-lg p-1`
+ * with `rounded-lg` rows, so the rows sit inside the container's radius instead
+ * of fighting it.
+ *
+ * Scoped to .fk-d-menu-modal: .d-modal__container is every modal in Discourse.
+ */
+
+.fk-d-menu-modal {
+  .d-modal__container {
+    background: var(--cj-panel);
+
+    /* It slides up from the bottom edge and has a drag grip, so only the top
+     * corners are corners. */
+    border-start-start-radius: 1rem;
+    border-start-end-radius: 1rem;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .fk-d-menu-modal__grip {
+    background: var(--cj-text-muted);
+  }
+
+  .dropdown-menu {
+    /* Core paints the selected row from these, through a five-class selector.
+     * Scoping the tokens beats out-specificity-ing it — and it has to be scoped:
+     * --d-selected also drives select-kit, the editor, nav pills, post lists and
+     * --token-color-surface-selected, none of which should change here.
+     *
+     * The values are the client's mobile sheet row (`MarketMenuItems`):
+     * `text-primary font-medium bg-primary/5` — accent text on a 5% accent tint,
+     * not a filled slab. A solid accent row is the sidebar's language, where the
+     * menu is the page's primary navigation; in a four-item sheet it shouts. */
+    --d-selected: color-mix(in oklch, var(--cj-action) 5%, transparent);
+    --d-selected-text-color: var(--cj-action);
+
+    /* Select's popup `p-1`, which core already agrees with. */
+    padding: var(--space-1);
+  }
+}
+
+/*
+ * The rows.
+ *
+ * Core styles them through
+ * `.mobile-view .fk-d-menu-modal.list-control-toggle-link-content .dropdown-menu a`
+ * — four classes, and it sets `display: block` and the link colour there — so a
+ * shorter selector loses silently and the row stays a bold white block. Matched
+ * rather than escalated: the theme's stylesheet loads after core's.
+ *
+ * The client's row is `flex items-center gap-3 px-4 py-3 text-sm`, muted by
+ * default, `hover:text-foreground hover:bg-secondary`, and `text-primary
+ * font-medium` when selected. Core's block padding is already the client's; the
+ * 16px/700 label was the mismatch.
+ */
+
+.mobile-view .fk-d-menu-modal.list-control-toggle-link-content .dropdown-menu {
+  a,
+  button {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    font-weight: 500;
+    border-radius: var(--d-input-border-radius);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--primary);
+      background: var(--cj-control);
+    }
+
+    &.active {
+      color: var(--d-selected-text-color);
+      font-weight: 500;
+
+      .d-icon {
+        color: currentcolor;
+      }
+    }
+  }
+}
+
+/*
+ * The desktop nav pills mark selection the same way the mobile sheet does. With
+ * --d-nav-underline-height at 0 and no fill, the selected pill was carried by
+ * its colour alone — the weakest marker in the theme, on the control that says
+ * which list you are looking at.
+ */
+
+.nav-pills > li > a.active {
+  background: color-mix(in oklch, var(--cj-action) 5%, transparent);
+}

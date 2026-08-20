@@ -145,27 +145,6 @@
 }
 
 @include viewport.until(md) {
-  /* The collapsed profile menu is the page's primary action on mobile, so it
-   * reads as a button rather than as a link. */
-
-  .mobile-nav > li > a.expander {
-    padding-block: var(--space-2);
-    color: var(--cj-on-action);
-    font-size: var(--font-up-1-rem);
-    background: var(--cj-action);
-    border: 0;
-    border-radius: var(--cj-radius-control);
-
-    .d-icon {
-      color: currentcolor;
-      fill: currentcolor;
-    }
-
-    .selection {
-      max-width: unset;
-    }
-  }
-
   /* Category descriptions are how a newcomer picks a category; core hides them
    * at this width. */
 
