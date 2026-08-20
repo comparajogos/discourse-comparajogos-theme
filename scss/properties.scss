@@ -55,8 +55,12 @@ body {
   --d-nav-pill-border-radius: 0.5rem;
 
   /* Floating product header: the 1.5rem inset plus the shell itself. Core caps
-   * .d-header's height, so this is what stops the pill overhanging its own box. */
-  --cj-header-height: 6.125rem;
+   * .d-header's height, so this is what stops the pill overhanging its own box.
+   *
+   * The shell is 4.5rem, from the client's `sm:p-4` around an `h-10` logo:
+   * 16 + 40 + 16 = 72px. It was 74px, which read as a slightly chunkier header
+   * than the catalog's. */
+  --cj-header-height: 6rem;
 
   /* Sidebar sits inside the same 85rem frame as the content. */
   --d-sidebar-width: 16rem;

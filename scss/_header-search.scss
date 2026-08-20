@@ -21,6 +21,8 @@
  * the welcome banner, which are their own compositions.
  */
 
+@use "lib/viewport";
+
 .d-header {
   /*
    * Core's header-search block binds through a five-class chain
@@ -37,7 +39,11 @@
 
     .search-menu {
       width: 100%;
-      max-width: 32rem;
+
+      /* The client's is `sm:max-w-lg` (32rem). Pulled in a step: the forum's
+       * placeholder is much longer than the catalog's, so at 32rem the field
+       * dominated the shell. */
+      max-width: 28rem;
       min-height: 2.5rem;
       margin-inline: auto 0;
       background: var(--cj-header-soft);
@@ -80,6 +86,14 @@
       background: transparent;
       border: 0;
       box-shadow: none;
+
+      /* Core rings the *field* on focus, at --d-input-border-radius — a 10px
+       * rectangle inside a 999px pill. The pill's own :focus-within ring above is
+       * the indicator, so this is one marker too many, not a lost one. */
+
+      &:focus-within {
+        outline: none;
+      }
     }
 
     .search-term__input {
@@ -147,5 +161,86 @@
 
   .search-menu .results {
     background: transparent;
+  }
+}
+
+/*
+ * Below `sm` the client's field is a 40px round button that expands to take the
+ * row when it gets focus, clipping the logo to its mark
+ * (`width={isSearchOpen ? undefined : "w-10 sm:w-full"}` plus `w-10
+ * overflow-hidden` on the logo link).
+ *
+ * :focus-within drives it here, so there is no state to hold and no listener.
+ * Without :has() support the field simply stays expanded, which is the old
+ * behaviour rather than a broken one.
+ */
+
+@include viewport.until(sm) {
+  .d-header {
+    .floating-search-input-wrapper {
+      flex: 0 0 2.5rem;
+      transition: flex-basis 200ms ease-in-out;
+    }
+
+    .floating-search-input {
+      width: 2.5rem;
+      transition: width 200ms ease-in-out;
+    }
+
+    .home-logo-wrapper-outlet {
+      transition: width 200ms ease-in-out;
+    }
+
+    .floating-search-input .search-banner-inner.wrap {
+      .search-menu {
+        width: 100%;
+        max-width: none;
+      }
+
+      /* Collapsed, the input has to be the whole button: the glyph is
+       * pointer-events: none and .search-input is a plain div, so with the
+       * leading padding on the wrapper only the last 8px would focus anything. */
+
+      .search-input {
+        padding-inline-start: 0;
+      }
+
+      .search-term__input {
+        padding-inline-start: 2rem;
+
+        &::placeholder {
+          opacity: 0;
+        }
+      }
+
+      /* No room for the trailing control until the field opens. */
+      .search-input .searching {
+        display: none;
+      }
+    }
+
+    .contents:has(.floating-search-input:focus-within) {
+      .floating-search-input-wrapper {
+        flex: 1 1 auto;
+      }
+
+      .floating-search-input {
+        width: 100%;
+      }
+
+      /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays. */
+      .home-logo-wrapper-outlet {
+        width: 2.5rem;
+        overflow: hidden;
+      }
+
+      .search-term__input::placeholder {
+        opacity: 0.7;
+      }
+
+      .search-input .searching {
+        display: flex;
+      }
+    }
   }
 }

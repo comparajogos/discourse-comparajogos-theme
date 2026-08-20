@@ -113,8 +113,10 @@ body.has-sidebar-page .wrap {
     /* min-height on the row, not height on the wrap: core hides the floating
      * search input while the welcome banner is visible, so a content-driven
      * header collapsed at the top of the page and grew once scrolled. The shell
-     * has to be the same height in both states. */
-    min-height: 4.625rem;
+     * has to be the same height in both states.
+     *
+     * 4.5rem is the client's `sm:p-4` around an `h-10` logo. */
+    min-height: 4.5rem;
     padding-inline: var(--space-4);
     box-sizing: border-box;
     background: var(--cj-header);
@@ -521,7 +523,11 @@ body .category-breadcrumb {
      * the client, which only drops the `sm:top-6` inset below `sm`. It was
      * 3.75rem here while the shell's own `min-height: 4.625rem` still applied
      * (min-height beats height), so the pill overhung its header box by 14px. */
-    --cj-header-height: 4.625rem;
+
+    /* Below `sm` the client's header is `px-3 py-2` around the same `h-10` logo:
+     * 8 + 40 + 8 = 56px, and it is flush to the top, so the shell and the header
+     * box are the same 3.5rem. It was 4.625rem, which is the desktop shell. */
+    --cj-header-height: 3.5rem;
     --d-wrap-padding-x: var(--space-4);
   }
 
@@ -540,6 +546,7 @@ body .category-breadcrumb {
 
       /* The client's header is `px-3 py-2 sm:p-4`, so its own inline padding
        * below `sm` is 12px — the page frame's `px-4` is a separate thing. */
+      min-height: 3.5rem;
       padding-inline: var(--space-3);
       border-radius: 0;
     }
@@ -554,9 +561,13 @@ body .category-breadcrumb {
       transform: none;
     }
 
+    /* The client keeps `h-10 max-w-40` at every width; the logo was being
+     * shrunk to 32px here, which is what made the mobile header read as a
+     * taller box around a smaller mark. */
+
     #site-logo {
-      max-width: 8rem;
-      height: 2rem;
+      max-width: 10rem;
+      height: 2.5rem;
     }
   }
 
