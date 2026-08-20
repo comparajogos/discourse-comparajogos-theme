@@ -37,11 +37,11 @@
   --d-button-border-radius: 0.5rem;
   --d-input-border-radius: 0.625rem;
   --d-nav-pill-border-radius: var(--cj-radius-pill);
-  --d-input-bg-color: var(--hover);
+  --d-input-bg-color: var(--cj-surface-muted);
   --d-input-text-color: var(--primary);
   --d-input-border: 1px solid transparent;
   --d-input-focused-color: var(--tertiary);
-  --d-nav-color: var(--primary-medium);
+  --d-nav-color: var(--cj-text-muted);
   --d-nav-bg-color: transparent;
   --d-nav-color--hover: var(--primary);
   --d-nav-bg-color--hover: var(--primary-very-low);
@@ -67,7 +67,6 @@
   --cj-panel: var(--header_background);
   --cj-header: var(--header_background);
   --cj-text: var(--primary);
-  --cj-text-muted: var(--primary-medium);
   --cj-brand: #2364d8;
   --cj-action: var(--tertiary);
   --cj-on-action: oklch(98.5% 0 0deg);
@@ -508,7 +507,7 @@ body.has-sidebar-page .wrap {
     border-color: var(--cj-border);
 
     &:hover {
-      background: var(--selected);
+      background: var(--cj-tint);
       border-color: var(--cj-border-strong);
     }
   }
@@ -629,6 +628,11 @@ textarea,
   .topic-list-data.activity {
     color: var(--cj-text-muted);
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Core gives the posts badge its own colour, so `inherit` never reaches it. */
+  .num .badge-posts[href] {
+    color: var(--cj-text-muted);
   }
 
   .posters a {

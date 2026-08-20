@@ -13,6 +13,10 @@
   /* client `--card`: a surface that sits *between* canvas and panel. */
   --cj-surface-raised: #{dark-light-choose(#f8f8f8, #18181b)};
 
+  /* client `--muted-foreground`: the one quieter metadata tier. Core's
+   * --primary-medium is derived from the palette and comes out blue-tinted. */
+  --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
+
   /* client `--input` / `--secondary`: quiet fills for chips and fields. */
   --cj-surface-muted: #{dark-light-choose(#ebebeb, #242424)};
 }
