@@ -221,7 +221,10 @@
        * so their combined width is constant on every frame. Animating between
        * `auto` and 2.5rem briefly over-allocated that pair in some mobile
        * browsers and pushed the Login action outside the header before it
-       * settled.
+       * settled. Keep this swap immediate: the same selectors begin matching
+       * when the topic title unmounts and this search remounts, so transitioning
+       * flex-grow would drag the magnifier and avatar across the header during
+       * an unrelated scroll-state handoff.
        *
        * Scoped to :has(.cj-header-search) because the field does not render on
        * mobile topic pages, where the docked title needs the row. */
@@ -230,20 +233,12 @@
         .home-logo-wrapper-outlet {
           flex: 1 1 0;
           min-width: 2.5rem;
-
-          @media (prefers-reduced-motion: no-preference) {
-            transition: flex-grow 200ms var(--cj-ease-out);
-          }
         }
 
         .before-header-panel-outlet {
           flex: 0 1 0;
           min-width: 2.5rem;
           margin-inline: var(--space-2);
-
-          @media (prefers-reduced-motion: no-preference) {
-            transition: flex-grow 200ms var(--cj-ease-out);
-          }
         }
 
         /* Core gives the signed-in icon list its own 0.5em leading margin.
