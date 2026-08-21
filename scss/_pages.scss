@@ -96,6 +96,15 @@ $panels:
     border-radius: 0;
     background: none;
   }
+
+  /* Core places the read-state container in the mobile page gutter, then
+   * offsets its 6px SVG another 2px beyond that container. Invisible read dots
+   * still contribute to scroll overflow, making an iPhone topic 2px wider than
+   * its layout viewport. Keep the dot inside the gutter box. */
+
+  .topic-post .topic-meta-data .read-state svg {
+    right: 0;
+  }
 }
 
 @include viewport.until(md) {
