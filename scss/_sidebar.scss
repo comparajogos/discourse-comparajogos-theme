@@ -118,9 +118,8 @@
  * core's utility icons. It is our own button in `before-main-outlet`
  * (cj-sidebar-toggle.gjs) rather than core's moved with CSS: the header pill
  * animates `transform` to dock on scroll, which makes it a containing block, so
- * `fixed` on anything inside the header resolves against the pill. Below `md`
- * the same control attaches beneath the header's leading edge, keeping
- * navigation discoverable without crowding the header row. */
+ * `fixed` on anything inside the header resolves against the pill. Mobile uses
+ * core's own hamburger instead, repositioned below the header row. */
 
 .cj-sidebar-toggle {
   position: fixed;
@@ -162,36 +161,57 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
 }
 
 @include viewport.until(md) {
+  /* The custom control is deliberately outside the header for desktop, but
+   * that made it visually detach during mobile rubber-band scrolling and cover
+   * the category rail. Keep core's working trigger on mobile: it shares the
+   * header's containing block, while this margin reserves the space it occupies
+   * below the row. */
+
+  .d-header-wrap {
+    margin-block-end: 2.5rem;
+  }
+
   .cj-sidebar-toggle {
+    display: none;
+  }
+
+  /* Core makes `.panel` the containing block for its icons. Release only the
+   * mobile header panel so the repositioned hamburger anchors to `.contents`
+   * (the full header row) instead of the narrow avatar column. */
+
+  .d-header .panel:has(.hamburger-dropdown) {
+    position: static;
+  }
+
+  /* The list glyph distinguishes navigation from the floating create action.
+   * The flat top edge makes the control read as a tab belonging to the header,
+   * not another card floating over the carousel. */
+
+  .d-header .header-dropdown-toggle.hamburger-dropdown {
+    position: absolute;
     z-index: z("dropdown");
-    inset-block-start: calc(
-      var(--header-offset, var(--cj-header-height)) - 1px
-    );
-    inset-block-end: auto;
-    inset-inline-start: 0;
+    inset-block-start: 100%;
+    inset-inline-start: calc(-1 * var(--space-3));
+    display: block;
     width: 2.5rem;
     height: 2.5rem;
-    color: var(--cj-text);
-    background: var(--cj-header);
-    border-block-start: 0;
-    border-inline-start: 0;
-    border-start-start-radius: 0;
-    border-start-end-radius: 0;
-    border-end-start-radius: 0;
-    border-end-end-radius: var(--d-button-border-radius);
-    box-shadow: 0 8px 18px -8px rgb(0 0 0 / 40%);
+
+    .btn {
+      width: 100%;
+      height: 100%;
+      color: var(--header_primary);
+      background: var(--cj-header);
+      border-radius: 0 0 var(--d-button-border-radius) 0;
+      box-shadow: 0 8px 18px -10px rgb(0 0 0 / 40%);
+    }
+
+    .d-icon {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 
-  body:not(.has-sidebar-page) .cj-sidebar-toggle {
-    inset-inline-start: 0;
-  }
-
-  /* Core renders its navigation drawer through the hamburger dropdown on
-   * mobile, not through `.header-sidebar-toggle`. Our fixed control invokes the
-   * same header event as that button, so only one handle should remain. */
-
-  .d-header .header-sidebar-toggle,
-  .d-header .header-dropdown-toggle.hamburger-dropdown {
+  .d-header .header-sidebar-toggle {
     display: none;
   }
 }

@@ -8,9 +8,19 @@ export default apiInitializer((api) => {
   const router = api.container.lookup("service:router");
 
   api.onPageChange(() => {
-    const match = /^discovery\.(\w+)/i.exec(router.currentRouteName || "");
+    const routeName = router.currentRouteName || "";
+    const match = /^discovery\.(\w+)/i.exec(routeName);
 
     if (!match) {
+      /* A selected tag uses a `tag.*` route even though its ordering control is
+       * still the discovery Latest picker. Keep the same default glyph there;
+       * deleting the marker made the icon disappear exactly when a tag was
+       * selected. */
+      if (/^tags?\./i.test(routeName)) {
+        document.body.dataset.cjFilter = "latest";
+        return;
+      }
+
       delete document.body.dataset.cjFilter;
       return;
     }
