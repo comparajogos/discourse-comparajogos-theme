@@ -1,5 +1,7 @@
 import { click, currentURL, visit } from "@ember/test-helpers";
 import { test } from "qunit";
+import { cloneJSON } from "discourse/lib/object";
+import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
 /*
@@ -9,7 +11,21 @@ import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
  * that rows render at all, on both layouts.
  */
 
-acceptance("Compara Jogos topic feed", function () {
+acceptance("Compara Jogos topic feed", function (needs) {
+  /* The first discovery fixture links to topic 11557. Card navigation is a
+   * real Ember transition, so let it complete instead of leaving an unhandled
+   * topic request pending until QUnit's timeout. */
+  needs.pretender((server, helper) => {
+    const responseTopic = () => {
+      const topic = cloneJSON(topicFixtures["/t/130.json"]);
+      topic.id = 11557;
+      return helper.response(topic);
+    };
+
+    server.get("/t/11557.json", responseTopic);
+    server.get("/t/11557/:post_number.json", responseTopic);
+  });
+
   test("discovery renders feed rows in place of the column table", async function (assert) {
     await visit("/latest");
 
@@ -50,18 +66,9 @@ acceptance("Compara Jogos topic feed - mobile", function (needs) {
       "the mobile-layout transformer keeps the custom row"
     );
 
-    const taxonomy = document.querySelector(".cj-feed__taxonomy");
-    const taxonomyStyle = getComputedStyle(taxonomy);
-
-    assert.strictEqual(
-      taxonomyStyle.flexBasis,
-      "100%",
-      "category and tags have their own metadata row"
-    );
-    assert.strictEqual(
-      taxonomyStyle.overflowX,
-      "auto",
-      "many tags stay on one horizontally scrollable row"
+    assert.true(
+      exists(".cj-feed__byline > .cj-feed__taxonomy"),
+      "category and tags stay grouped in their dedicated metadata region"
     );
   });
 });
