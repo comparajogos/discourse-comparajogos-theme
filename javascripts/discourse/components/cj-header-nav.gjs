@@ -70,7 +70,7 @@ export default class CjHeaderNav extends Component {
         icon: "chats-circle",
         requiresAuth: !username,
         active: route.startsWith("chat"),
-        unread: true,
+        unread: Boolean(ChatUnreadIndicator),
       });
     }
 
