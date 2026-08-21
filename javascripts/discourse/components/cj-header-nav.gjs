@@ -3,7 +3,9 @@ import { concat } from "@ember/helper";
 import { service } from "@ember/service";
 import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
-import ChatUnreadIndicator from "discourse/plugins/chat/discourse/components/chat/header/icon/unread-indicator";
+import ChatUnreadIndicator from "discourse/plugins/chat/discourse/components/chat/header/icon/unread-indicator" with {
+  discourseImport: "optional",
+};
 
 /**
  * The client's `GlobalHeader` navigation, rendered inside Discourse's own header

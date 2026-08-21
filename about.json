@@ -17,7 +17,8 @@
       "magnifying-glass",
       "pencil",
       "reply",
-      "share-nodes"
+      "share-nodes",
+      "table-columns"
     ],
     "only_theme_color_schemes": true,
     "serialize_topic_excerpts": true

@@ -3,6 +3,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { getOwner } from "@ember/owner";
 import { service } from "@ember/service";
+import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { i18n } from "discourse-i18n";
 
 /**
@@ -16,15 +17,18 @@ import { i18n } from "discourse-i18n";
  * transformed ancestor, so the button can sit at the foot of the sidebar column
  * in both states — the sidebar itself is unmounted when collapsed, so a control
  * inside it could never bring it back. On mobile the same control replaces the
- * header hamburger and opens the slide-out navigation.
+ * header hamburger and opens the slide-out navigation from the header's own
+ * event path.
  *
  * `toggleSidebar` lives on the application controller and is passed down as an
  * argument, not exposed as a service, so there is nothing to inject.
  * `_sidebar.scss` hides core's header button wherever this one shows.
  */
 export default class CjSidebarToggle extends Component {
+  @service appEvents;
   @service site;
   @service currentUser;
+  @service header;
 
   get show() {
     return this.site.mobileView || this.currentUser;
@@ -32,7 +36,13 @@ export default class CjSidebarToggle extends Component {
 
   @action
   toggle() {
-    getOwner(this).lookup("controller:application").toggleSidebar();
+    if (this.site.mobileView) {
+      this.appEvents.trigger("header:keyboard-trigger", {
+        type: "hamburger",
+      });
+    } else {
+      getOwner(this).lookup("controller:application").toggleSidebar();
+    }
   }
 
   <template>
@@ -42,9 +52,13 @@ export default class CjSidebarToggle extends Component {
         class="btn btn-flat cj-sidebar-toggle"
         title={{i18n "sidebar.title"}}
         aria-label={{i18n "sidebar.title"}}
-        aria-controls="d-sidebar"
+        aria-controls={{unless this.site.mobileView "d-sidebar"}}
+        aria-expanded={{if
+          this.site.mobileView
+          (if this.header.hamburgerVisible "true" "false")
+        }}
         {{on "click" this.toggle}}
-      >&lsaquo;</button>
+      >{{dIcon "table-columns"}}</button>
     {{/if}}
   </template>
 }

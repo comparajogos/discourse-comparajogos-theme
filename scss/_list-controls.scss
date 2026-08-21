@@ -488,12 +488,12 @@ $hidden_filter_tags: "" !default;
 
   .topic-create-button__combo #create-topic,
   .topic-create-button__combo .d-combo-button-menu {
-    min-height: 3.5rem;
+    min-height: 3rem;
     box-shadow: none;
   }
 
   .topic-create-button__combo #create-topic {
-    padding-inline: var(--space-5);
+    padding-inline: var(--space-4);
   }
 
   .topic-create-button__combo:not(.--has-menu) #create-topic {

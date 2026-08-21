@@ -46,8 +46,7 @@ $height: 3.5rem;
       bottom: calc($height + env(safe-area-inset-bottom));
     }
 
-    .navigation-controls,
-    .cj-sidebar-toggle {
+    .navigation-controls {
       inset-block-end: calc(
         $height + var(--space-3) + env(safe-area-inset-bottom)
       );

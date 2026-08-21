@@ -1,4 +1,4 @@
-import { visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -25,7 +25,14 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
     );
     assert.true(
       exists(".cj-sidebar-toggle"),
-      "the left-hand navigation trigger replaces the header hamburger"
+      "the attached navigation trigger replaces the header hamburger"
+    );
+
+    await click(".cj-sidebar-toggle");
+
+    assert.true(
+      exists(".hamburger-panel"),
+      "the custom trigger opens the mobile navigation drawer"
     );
   });
 });

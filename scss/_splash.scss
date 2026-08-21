@@ -143,6 +143,10 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
+.cj-splash__sidebar-toggle {
+  display: none;
+}
+
 /* KNOWN LIMITATION: follows the OS, not the scheme Discourse served, so a
  * cookie-forced scheme gets the wrong logo until boot. A per-scheme *image*
  * needs color_definitions, where `dark-light-choose()` on a string evaluates to
@@ -579,19 +583,36 @@ html[lang^="pt"] #cj-splash {
 
   .cj-splash__shell {
     padding-inline: var(--space-3);
+  }
 
-    /* With the sidebar docked into a drawer, core puts its toggle at the head
-     * of the shell — 34px of button in a 50px box before the logo. */
+  /* The booted trigger is a small tab attached beneath the header's leading
+   * edge, so reserve the same surface instead of shifting the skeleton logo
+   * for a hamburger that no longer exists in the header row. */
+
+  .cj-splash__sidebar-toggle {
+    position: fixed;
+    z-index: 2;
+    inset-block-start: calc(var(--cj-header-height) - 1px);
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--cj-text-muted);
+    background: var(--cj-header);
+    border: 1px solid var(--cj-border);
+    border-block-start: 0;
+    border-inline-start: 0;
+    border-end-end-radius: var(--d-button-border-radius);
 
     &::before {
       content: "";
-      flex: none;
-      inline-size: 2.125rem;
-      block-size: 2.125rem;
-      margin-inline-end: var(--space-4);
-      border-radius: 999px;
+      width: 1rem;
+      height: 1rem;
       background: currentcolor;
-      opacity: 0.25;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h16v14H4V5Zm2 2v10h3V7H6Zm5 0v10h7V7h-7Z'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+      opacity: 0.65;
     }
   }
 

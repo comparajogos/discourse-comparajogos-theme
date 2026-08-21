@@ -119,8 +119,8 @@
  * (cj-sidebar-toggle.gjs) rather than core's moved with CSS: the header pill
  * animates `transform` to dock on scroll, which makes it a containing block, so
  * `fixed` on anything inside the header resolves against the pill. Below `md`
- * the same control becomes the left-hand counterpart to the New Topic cluster,
- * keeping navigation out of the crowded header. */
+ * the same control attaches beneath the header's leading edge, keeping
+ * navigation discoverable without crowding the header row. */
 
 .cj-sidebar-toggle {
   position: fixed;
@@ -131,12 +131,15 @@
   height: 2rem;
   padding: 0;
   color: var(--cj-text-muted);
-  font-size: 1.75rem;
-  font-weight: 300;
   line-height: 1;
   background: var(--cj-panel);
   border: 1px solid var(--cj-border);
   border-radius: var(--cj-radius-pill);
+
+  .d-icon {
+    width: 1rem;
+    height: 1rem;
+  }
 
   &:hover,
   &:focus-visible {
@@ -150,7 +153,6 @@
 
 body:not(.has-sidebar-page) .cj-sidebar-toggle {
   inset-inline-start: var(--space-1);
-  transform: rotate(180deg);
 }
 
 @include viewport.from(md) {
@@ -162,22 +164,31 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
 @include viewport.until(md) {
   .cj-sidebar-toggle {
     z-index: z("dropdown");
-    inset-block-end: calc(var(--space-5) + env(safe-area-inset-bottom));
-    inset-inline-start: var(--d-wrap-padding-x);
-    width: 2.75rem;
-    height: 2.75rem;
+    inset-block-start: calc(
+      var(--header-offset, var(--cj-header-height)) - 1px
+    );
+    inset-block-end: auto;
+    inset-inline-start: 0;
+    width: 2.5rem;
+    height: 2.5rem;
     color: var(--cj-text);
-    font-size: 2rem;
-    box-shadow: 0 8px 24px -6px rgb(0 0 0 / 35%);
+    background: var(--cj-header);
+    border-block-start: 0;
+    border-inline-start: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: var(--d-button-border-radius);
+    box-shadow: 0 8px 18px -8px rgb(0 0 0 / 40%);
   }
 
   body:not(.has-sidebar-page) .cj-sidebar-toggle {
-    inset-inline-start: var(--d-wrap-padding-x);
+    inset-inline-start: 0;
   }
 
   /* Core renders its navigation drawer through the hamburger dropdown on
    * mobile, not through `.header-sidebar-toggle`. Our fixed control invokes the
-   * same application-level sidebar state, so only one handle should remain. */
+   * same header event as that button, so only one handle should remain. */
 
   .d-header .header-sidebar-toggle,
   .d-header .header-dropdown-toggle.hamburger-dropdown {
