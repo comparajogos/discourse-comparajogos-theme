@@ -58,13 +58,14 @@ export default class CjGameRail extends Component {
       <:loading></:loading>
       <:empty></:empty>
       <:content as |games|>
+        {{! No visible caption: the chip is self-evidently a game, and the
+            topic's own title sits directly beneath it saying the same name. The
+            label stays as the region's accessible name so the landmark is still
+            announced. }}
         <section
           class="cj-game-rail"
           aria-label={{i18n (themePrefix "game_card.rail_label")}}
         >
-          <h2 class="cj-game-rail__label">
-            {{i18n (themePrefix "game_card.rail_label")}}
-          </h2>
           <ul class="cj-game-rail__track">
             {{#each games key="slug" as |game|}}
               <li class="cj-game-rail__item">

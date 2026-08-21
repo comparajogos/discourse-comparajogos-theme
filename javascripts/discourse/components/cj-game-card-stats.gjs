@@ -12,10 +12,9 @@ import CjGameCardStat from "./cj-game-card-stat";
  * Awesome the way the old component's `award` and `star-half-alt` did.
  *
  * @param {object} game normalized catalog game
- * @param {boolean} [labels=true] whether each figure names itself. Hosts with
- *   no room for them turn the labels off here rather than hiding them in CSS.
- *   The tag panel's narrow-viewport case is a media query, so that one stays in
- *   the stylesheet.
+ * @param {boolean} [labels=true] whether each figure also names itself in
+ *   writing. Off, the figures are the bare glyph-and-number pairs of the
+ *   client's card; the name still reaches the reader as the figure's `title`.
  */
 export default class CjGameCardStats extends Component {
   get players() {
@@ -34,14 +33,14 @@ export default class CjGameCardStats extends Component {
     return formatDecimal(this.args.game.rating, 1);
   }
 
+  get showLabels() {
+    return this.args.labels ?? true;
+  }
+
   get hasAny() {
     return Boolean(
       this.players || this.playtime || this.complexity || this.rating
     );
-  }
-
-  get showLabels() {
-    return this.args.labels ?? true;
   }
 
   <template>
@@ -50,25 +49,26 @@ export default class CjGameCardStats extends Component {
         <CjGameCardStat
           @icon="users"
           @value={{this.players}}
-          @label={{if this.showLabels (i18n (themePrefix "game_card.players"))}}
+          @label={{i18n (themePrefix "game_card.players")}}
+          @showLabel={{this.showLabels}}
         />
         <CjGameCardStat
           @icon="clock"
           @value={{this.playtime}}
-          @label={{if this.showLabels (i18n (themePrefix "game_card.minutes"))}}
+          @label={{i18n (themePrefix "game_card.minutes")}}
+          @showLabel={{this.showLabels}}
         />
         <CjGameCardStat
           @icon="graduation-cap"
           @value={{this.complexity}}
-          @label={{if
-            this.showLabels
-            (i18n (themePrefix "game_card.complexity"))
-          }}
+          @label={{i18n (themePrefix "game_card.complexity")}}
+          @showLabel={{this.showLabels}}
         />
         <CjGameCardStat
           @icon="star"
           @value={{this.rating}}
-          @label={{if this.showLabels (i18n (themePrefix "game_card.rating"))}}
+          @label={{i18n (themePrefix "game_card.rating")}}
+          @showLabel={{this.showLabels}}
         />
       </div>
     {{/if}}

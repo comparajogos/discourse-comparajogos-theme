@@ -10,10 +10,10 @@ import CjGameCardStats from "./cj-game-card-stats";
 /**
  * The game behind a tag, at full detail.
  *
- * One component serves two homes — the panel above a tag's topic list and the
- * card a `#tag` mention opens — because they answer the same question and
- * differ only in how much width they get. `@variant` picks the container; the
- * content is identical by decision.
+ * One component, one look, three sizes. The panel above a tag's topic list and
+ * the card a `#tag` mention opens answer the same question, so `@variant` picks
+ * only the scale — cover width and padding. Nothing about the anatomy changes
+ * with it.
  *
  * @param {object} game normalized catalog game (lib/game-catalog.js)
  * @param {"panel"|"popup"} variant
@@ -26,10 +26,8 @@ export default class CjGameCard extends Component {
     return this.args.variant ?? "panel";
   }
 
-  /* The popup is a 24rem card beside a 5.5rem cover; four labelled figures do
-   * not fit there, and the reader has just tapped the game's own name so the
-   * glyphs have context. */
-  get showsStatLabels() {
+  /* The tag panel is the forum's item page and has the room; the popup does not. */
+  get namesFigures() {
     return this.variant === "panel";
   }
 
@@ -41,20 +39,29 @@ export default class CjGameCard extends Component {
     return this.args.tagName ? getURL(`/tag/${this.args.tagName}`) : null;
   }
 
-  /* Year, kind and publisher read as one line of provenance. Anything the
-   * catalog does not know simply drops out rather than leaving a separator
-   * behind. `game` is the unmarked case: naming it would be noise on a board
-   * game forum, while "Expansão" or "Acessório" is the whole point. */
-  get provenance() {
-    const { year, type, publisher } = this.args.game;
+  /* Rank if it has one, otherwise what kind of thing it is — the client's rule
+   * (components/product/ProductCard.tsx). `game` is the unmarked case: naming it
+   * would be noise on a board game forum, while "Expansão" or "Acessório" is the
+   * whole point, and an expansion has no rank of its own to show instead. */
+  get badge() {
+    const { ranking, type } = this.args.game;
 
-    return [
-      year ? formatInteger(year) : null,
-      type && type !== "game"
-        ? i18n(themePrefix(`game_card.type.${type}`))
-        : null,
-      publisher,
-    ].filter(Boolean);
+    if (ranking) {
+      return i18n(themePrefix("game_card.ranking"), { count: ranking });
+    }
+
+    return type && type !== "game"
+      ? i18n(themePrefix(`game_card.type.${type}`))
+      : null;
+  }
+
+  /* Year and publisher, for telling two printings apart. The client's card
+   * leaves them to the item page, but a forum reader arrives at this card from a
+   * tag they may not recognise, so one muted line earns its place. */
+  get provenance() {
+    const { year, publisher } = this.args.game;
+
+    return [year ? formatInteger(year) : null, publisher].filter(Boolean);
   }
 
   <template>
@@ -75,24 +82,16 @@ export default class CjGameCard extends Component {
         {{else}}
           {{dIcon "puzzle-piece" class="cj-game-card__cover-fallback"}}
         {{/if}}
+
+        {{#if this.badge}}
+          <span class="cj-game-card__badge">{{this.badge}}</span>
+        {{/if}}
       </a>
 
       <div class="cj-game-card__body">
-        <div class="cj-game-card__heading">
-          <a href={{this.itemUrl}} class="cj-game-card__name">
-            {{@game.name}}
-          </a>
-
-          {{#if @game.ranking}}
-            <span
-              class="cj-game-card__ranking"
-              title={{i18n (themePrefix "game_card.ranking_title")}}
-            >
-              {{dIcon "trophy"}}
-              {{i18n (themePrefix "game_card.ranking") count=@game.ranking}}
-            </span>
-          {{/if}}
-        </div>
+        <a href={{this.itemUrl}} class="cj-game-card__name">
+          {{@game.name}}
+        </a>
 
         {{#if this.provenance.length}}
           <p class="cj-game-card__provenance">
@@ -102,7 +101,7 @@ export default class CjGameCard extends Component {
           </p>
         {{/if}}
 
-        <CjGameCardStats @game={{@game}} @labels={{this.showsStatLabels}} />
+        <CjGameCardStats @game={{@game}} @labels={{this.namesFigures}} />
         <CjGameCardPlayers @game={{@game}} />
 
         <div class="cj-game-card__footer">

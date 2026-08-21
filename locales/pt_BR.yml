@@ -26,7 +26,6 @@ pt_BR:
     used: "usado"
     unavailable: "Indisponível"
     ranking: "%{count}º"
-    ranking_title: "Ranking do BoardGameGeek"
     visit_item: "Ver no catálogo"
     visit_tag: "Ver tópicos"
     rail_label: "Jogos deste tópico"

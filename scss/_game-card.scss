@@ -4,10 +4,12 @@
  * (cj-game-card-panel), inside the card a `#tag` mention opens
  * (cj-game-card-popup), and as a chip in a topic's rail (cj-game-mini).
  *
- * Proportions from the client's components/product/ProductHeaderInfo.tsx and
- * ProductCard.tsx: square box art contained and top-aligned, a two-line title,
- * a hairline above the four-figure stat row, player-count chips, and the price
- * with its cents set as a superscript. */
+ * The client's ProductCard (components/product/ProductCard.tsx) laid on its
+ * side: box art flush to the card's own edge with a rank-or-kind badge dropped
+ * over it, a two-line title, four unlabelled glyph-and-number figures under a
+ * hairline, and the price with its cents set as a superscript. Vertical there
+ * because a carousel cell is narrow; horizontal here because a forum gives the
+ * card a full content column and a stack would waste it. */
 
 /* Box art, at whatever size the surface has room for. Square-ish but never
  * exactly square, and the interesting half is the top — so contain and
@@ -15,6 +17,7 @@
  * everything the panel, the popup and the rail chip agree on. */
 
 @mixin cj-game-cover {
+  position: relative;
   display: flex;
   flex: none;
   align-items: flex-start;
@@ -22,12 +25,34 @@
   overflow: hidden;
   background: var(--cj-surface-muted);
 
+  /* `cover`, not `contain`: flush against the card edge the art has to fill its
+   * box or the seam shows as a band of empty surface. The client's card clips
+   * the same way (`[clip-path:inset(0_round_…)]`), and box art crops safely from
+   * the bottom — the title is at the top. */
+
   img {
     inline-size: 100%;
     block-size: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: top;
   }
+}
+
+/* The chip the client drops over the top of its cover: only the bottom corners
+ * are rounded, so it reads as hanging from the card's edge rather than floating. */
+
+@mixin cj-game-badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: var(--space-2);
+  padding: 0.15rem var(--space-2);
+  color: var(--cj-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  background: var(--cj-panel);
+  border-end-start-radius: var(--d-border-radius);
+  border-end-end-radius: var(--d-border-radius);
 }
 
 /* The glyph shown when the catalog has no art for a game. */
@@ -47,14 +72,21 @@
 .cj-game-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-4);
-  align-items: start;
+  align-items: stretch;
+
+  /* The art runs the full height of the card and takes the card's own radius on
+   * the leading edge — the horizontal counterpart of the client's full-bleed
+   * top image. The host supplies the radius, since only it knows its corner. */
 
   &__cover {
     @include cj-game-cover;
-    inline-size: 8rem;
-    block-size: 8rem;
-    border-radius: var(--d-border-radius-large);
+    inline-size: 8.5rem;
+  }
+
+  &__badge {
+    @include cj-game-badge;
+    font-size: var(--font-down-1-rem);
+    font-weight: 500;
   }
 
   &__cover-fallback {
@@ -66,6 +98,7 @@
     gap: var(--space-2);
     flex-direction: column;
     min-width: 0;
+    padding: var(--space-4);
   }
 
   &__heading {
@@ -74,6 +107,17 @@
     align-items: baseline;
     justify-content: space-between;
     min-width: 0;
+  }
+
+  /* The client's item header sets the rank as plain text at the end of the title
+   * line — no chip, no glyph. It is a fact about the game, not a control. */
+
+  &__rank {
+    flex: none;
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
   &__name {
@@ -91,28 +135,6 @@
     &:hover {
       color: var(--cj-text);
       opacity: 0.75;
-    }
-  }
-
-  /* The ranking is the one figure that is a rank rather than a measurement, so
-   * it sits apart from the stat row and keeps its own chip. */
-
-  &__ranking {
-    display: inline-flex;
-    gap: var(--space-1);
-    flex: none;
-    align-items: center;
-    padding: 0.125rem var(--space-2);
-    color: var(--cj-text-muted);
-    font-size: var(--font-down-1-rem);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    background: var(--cj-surface-muted);
-    border-radius: var(--cj-radius-pill);
-
-    .d-icon {
-      inline-size: 0.85em;
-      block-size: 0.85em;
     }
   }
 
@@ -143,6 +165,7 @@
     display: flex;
     gap: var(--space-4);
     flex-wrap: wrap;
+    align-items: center;
     margin-block-start: var(--space-1);
     padding-block-start: var(--space-2);
     color: var(--cj-text-muted);
@@ -176,14 +199,10 @@
 
   &__players {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-1);
     flex-wrap: wrap;
     align-items: center;
     font-size: var(--font-down-2-rem);
-  }
-
-  &__players-label {
-    color: var(--cj-text-muted);
   }
 
   /* Two levels of recommendation on one hue: the community's favourite counts
@@ -213,12 +232,13 @@
 
   &__footer {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex-wrap: wrap;
     align-items: end;
     justify-content: space-between;
     margin-block-start: auto;
     padding-block-start: var(--space-2);
+    border-block-start: 1px solid var(--cj-border);
   }
 
   &__price {
@@ -272,26 +292,41 @@
 }
 
 /* --------------------------------------------------------------------------
- * A price, cents set as a superscript beside the integer
+ * A price, set as the client sets one
  * -------------------------------------------------------------------------- */
 
 .cj-game-money {
   display: inline-flex;
-  align-items: flex-start;
-  font-weight: 600;
+  align-items: baseline;
   font-variant-numeric: tabular-nums;
-  line-height: 1.1;
+  line-height: 1;
   white-space: nowrap;
+
+  /* Pinned to the top of the integer's box, not raised off its baseline. Both
+   * small parts share the client's 0.6em size and 0.1em nudge. */
 
   &__currency,
   &__fraction {
+    align-self: flex-start;
+    margin-block-start: 0.1em;
     font-size: 0.6em;
-    font-weight: 500;
-    top: 0;
+    line-height: 1;
   }
 
   &__currency {
-    margin-inline-end: 0.15em;
+    margin-inline-end: 0.1em;
+  }
+
+  &__fraction {
+    margin-inline-start: 0.1em;
+  }
+
+  /* Only the integer is emphasised — the symbol and the cents stay quiet, which
+   * is what makes the number itself the thing you read. */
+
+  &__integer {
+    font-weight: 600;
+    line-height: 1;
   }
 }
 
@@ -301,8 +336,8 @@
 
 .cj-game-card-panel {
   @include cj-panel-surface;
+  overflow: hidden;
   margin-block-end: var(--space-4);
-  padding: var(--space-5);
 
   /* The card arrives after the catalog answers, which is necessarily after the
    * list is painted. Fading in reads as the page filling out rather than as
@@ -324,29 +359,54 @@
   }
 }
 
-@include viewport.until(sm) {
-  .cj-game-card-panel {
-    padding: var(--space-4);
-  }
+/* --------------------------------------------------------------------------
+ * Tag route: the forum's item header
+ * -------------------------------------------------------------------------- */
 
+.cj-game-card--panel {
+  /* Inset and rounded rather than flush: the item header treats the cover as an
+   * object on the surface, and the tag page has the width to afford the margin.
+   * The popup, which is a card, keeps its art full-bleed. */
+
+  .cj-game-card__cover {
+    inline-size: 8.5rem;
+    block-size: 8.5rem;
+    margin: var(--space-4) 0 var(--space-4) var(--space-4);
+    border-radius: var(--d-border-radius-large);
+
+    /* Contained, not cropped: with a margin around it there is no seam to fill,
+     * and box art keeps its whole composition. */
+
+    img {
+      object-fit: contain;
+    }
+  }
+}
+
+@include viewport.until(sm) {
   .cj-game-card--panel {
     gap: var(--space-3);
 
     .cj-game-card__cover {
       inline-size: 5.5rem;
       block-size: 5.5rem;
+      margin: var(--space-3) 0 var(--space-3) var(--space-3);
+    }
+
+    .cj-game-card__body {
+      padding: var(--space-3);
+    }
+
+    /* The labels are what push the fourth figure onto a second row at this
+     * width, and a lone "nota média" under three others reads as a mistake. The
+     * client drops them here too (CardIcon's `inline` variant). */
+
+    .cj-game-card__stat-label {
+      display: none;
     }
 
     .cj-game-card__stats {
       gap: var(--space-3);
-    }
-
-    /* The labels are what push the fourth figure onto a second row here, and a
-     * lone "rating" under three others reads as a mistake. The client hides
-     * them at this width too (CardIcon's `inline` variant). */
-
-    .cj-game-card__stat-label {
-      display: none;
     }
 
     /* Below `sm` the price and the links cannot share a line without one of
@@ -367,17 +427,22 @@
   width: auto;
   max-width: calc(100vw - var(--space-6));
 
+  /* The card runs to the menu's own edges, so the padding belongs to the card's
+   * body and the radius has to clip the art. Without this the cover is an inset
+   * square and the flush look the card is built around is lost. */
+
   .fk-d-menu__inner-content {
     min-width: 0;
-    padding: var(--space-4);
+    overflow: hidden;
+    padding: 0;
+    border-radius: var(--d-border-radius-large);
   }
 
   .cj-game-card--popup {
-    inline-size: min(24rem, calc(100vw - var(--space-8)));
+    inline-size: min(26rem, calc(100vw - var(--space-8)));
 
     .cj-game-card__cover {
-      inline-size: 5.5rem;
-      block-size: 5.5rem;
+      inline-size: 6.5rem;
     }
 
     .cj-game-card__stats {
@@ -392,13 +457,6 @@
 
 .cj-game-rail {
   margin-block-end: var(--space-4);
-
-  &__label {
-    margin: 0 0 var(--space-2);
-    color: var(--cj-text-muted);
-    font-size: var(--font-down-1-rem);
-    font-weight: 500;
-  }
 
   /* A plain scroll container: at one or two chips there is nothing for overflow
    * controls to do, and native inline scrolling is what a thumb reaches for. */
@@ -415,30 +473,25 @@
     scrollbar-width: thin;
   }
 
+  /* Sized to its content, not to the column: a chip is an object sitting above
+   * the topic, and stretching it to the full width left a lake of empty surface
+   * to the right of the price. */
+
   &__item {
     display: flex;
     flex: 0 0 auto;
-    inline-size: min(20rem, 80%);
+    max-inline-size: min(22rem, 85%);
     scroll-snap-align: start;
-
-    /* One game is the common case, and a chip stranded at a fixed width in a
-     * wide topic reads as a fragment of a row that never arrived. */
-
-    &:only-child {
-      flex: 1 1 auto;
-      inline-size: auto;
-      max-inline-size: 28rem;
-    }
   }
 }
 
 .cj-game-mini {
   @include cj-panel-surface;
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  overflow: hidden;
+  align-items: stretch;
   inline-size: 100%;
-  padding: var(--space-3);
   color: var(--cj-text);
   transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
 
@@ -447,11 +500,20 @@
     background: var(--cj-hover);
   }
 
+  /* The card's own anatomy at chip scale: art flush to the leading edge, badge
+   * over it, everything else in a padded column. */
+
   &__cover {
     @include cj-game-cover;
-    inline-size: 3.25rem;
-    block-size: 3.25rem;
-    border-radius: var(--d-border-radius);
+    inline-size: 4.25rem;
+  }
+
+  &__badge {
+    @include cj-game-badge;
+    inset-inline-end: 0;
+    padding-inline: 0.3rem;
+    font-size: var(--font-down-2-rem);
+    font-weight: 500;
   }
 
   &__cover-fallback {
@@ -462,7 +524,28 @@
     display: flex;
     gap: 0.125rem;
     flex-direction: column;
+    justify-content: center;
     min-width: 0;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  &__heading {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  /* The client's item header sets the rank as plain text at the end of the title
+   * line — no chip, no glyph. It is a fact about the game, not a control. */
+
+  &__rank {
+    flex: none;
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
   &__name {

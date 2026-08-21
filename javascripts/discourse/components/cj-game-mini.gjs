@@ -29,6 +29,17 @@ export default class CjGameMini extends Component {
     return !this.args.game.minPriceNew && Boolean(this.args.game.minPriceUsed);
   }
 
+  /* A rank only, unlike the full card's rank-or-kind badge. "Expansão" is wider
+   * than a chip's cover, so the kind would sit on top of the art instead of
+   * over a corner of it — and a rank is at most four characters. */
+  get badge() {
+    const { ranking } = this.args.game;
+
+    return ranking
+      ? i18n(themePrefix("game_card.ranking"), { count: ranking })
+      : null;
+  }
+
   <template>
     <a href={{this.itemUrl}} class="cj-game-mini" title={{@game.name}}>
       <div class="cj-game-mini__cover">
@@ -41,6 +52,10 @@ export default class CjGameMini extends Component {
           />
         {{else}}
           {{dIcon "puzzle-piece" class="cj-game-mini__cover-fallback"}}
+        {{/if}}
+
+        {{#if this.badge}}
+          <span class="cj-game-mini__badge">{{this.badge}}</span>
         {{/if}}
       </div>
 

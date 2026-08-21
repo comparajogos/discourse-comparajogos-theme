@@ -21,10 +21,11 @@ export default class CjGameCardPlayers extends Component {
 
   <template>
     {{#if this.groups.length}}
-      <div class="cj-game-card__players">
-        <span class="cj-game-card__players-label">
-          {{i18n (themePrefix "game_card.player_count")}}
-        </span>
+      <div
+        class="cj-game-card__players"
+        role="group"
+        aria-label={{i18n (themePrefix "game_card.player_count")}}
+      >
         {{#each this.groups key="range" as |group|}}
           <span
             class="cj-game-card__player-group

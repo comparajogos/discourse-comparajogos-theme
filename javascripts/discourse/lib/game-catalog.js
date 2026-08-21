@@ -117,16 +117,23 @@ function formatter(key, build) {
   return cached;
 }
 
-/* Split rather than formatted whole: the client sets the cents as a superscript
- * beside a large integer, and that needs the parts separately. Going through
- * Intl rather than splitting the number's own string is what gets the thousands
- * separator right — the previous implementation rendered 1234.5 as "1234,5". */
+/* Split the way the client's components/common/Money.tsx splits it: the symbol
+ * and the cents set small and top-aligned beside a large integer.
+ *
+ * Integer and cents are computed arithmetically rather than read out of
+ * `formatToParts`, exactly as Money does. That is what keeps the cents a bare
+ * two digits — the locale's decimal separator belongs to a whole number, not to
+ * a superscript hanging off one. The symbol and the accessible label still come
+ * from Intl, so a locale that puts the symbol last, or spaces it differently,
+ * is still described correctly. */
 export function currencyParts(value) {
   if (value === null || value === undefined || isNaN(value)) {
     return null;
   }
 
-  const parts = formatter(
+  const amount = Number(value);
+  const cents = Math.round(amount * 100);
+  const money = formatter(
     "currency",
     (locale) =>
       new Intl.NumberFormat(locale, {
@@ -135,19 +142,36 @@ export function currencyParts(value) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })
-  ).formatToParts(Number(value));
+  );
 
-  const pick = (types) =>
-    parts
-      .filter((part) => types.includes(part.type))
-      .map((part) => part.value)
-      .join("");
+  const symbol = money
+    .formatToParts(amount)
+    .filter((part) => part.type === "currency")
+    .map((part) => part.value)
+    .join("")
+    .trim();
 
   return {
-    currency: pick(["currency"]).trim(),
-    integer: pick(["integer", "group"]),
-    fraction: pick(["decimal", "fraction"]),
+    currency: symbol,
+    integer: groupedInteger(Math.trunc(cents / 100)),
+    fraction: String(Math.abs(cents % 100)).padStart(2, "0"),
+    /* The three parts are decorative once assembled; this is what a screen
+     * reader should hear instead. */
+    label: money.format(amount).replace(/\u00A0/g, " "),
   };
+}
+
+/* Money keeps its thousands separator; `formatInteger` deliberately drops it,
+ * because the integers it formats are years and player counts. */
+function groupedInteger(value) {
+  return formatter(
+    "grouped-integer",
+    (locale) =>
+      new Intl.NumberFormat(locale, {
+        maximumFractionDigits: 0,
+        useGrouping: true,
+      })
+  ).format(value);
 }
 
 export function formatDecimal(value, places = 1) {

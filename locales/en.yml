@@ -26,7 +26,6 @@ en:
     used: "used"
     unavailable: "Unavailable"
     ranking: "#%{count}"
-    ranking_title: "BoardGameGeek ranking"
     visit_item: "View in the catalog"
     visit_tag: "View topics"
     rail_label: "Games in this topic"
