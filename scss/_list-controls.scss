@@ -267,3 +267,66 @@ body[data-cj-filter="categories"] .list-control-toggle-link-trigger::before {
 body[data-cj-filter="top"] .list-control-toggle-link-trigger::before {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z'/%3E%3C/svg%3E");
 }
+
+/* The rail goes above the controls, because the controls are what stays put.
+ *
+ * Below `md` .list-controls is pinned under the header (see above), so anything
+ * between it and the list slides underneath it as you scroll — which is exactly
+ * where the rail was. Above it, the rail scrolls away like page content and the
+ * pinned row sits directly on the list it orders. A horizontally scrolling strip
+ * also reads as navigation up there, rather than as a third scroll axis wedged
+ * between the controls and a vertically scrolling list.
+ *
+ * The two are siblings in an unclassed div, so the parent has to become a flex
+ * column for `order` to mean anything. Scoped with `:has()` so it only applies
+ * where the rail exists — the carousel is a separate component and may not be
+ * installed. A browser without `:has()` simply keeps core's order.
+ *
+ * This would sit better in the component itself; it is here because the flex
+ * column it needs belongs to the page, not the rail. */
+
+div:has(> .cj-category-carousel) {
+  display: flex;
+  flex-direction: column;
+}
+
+.cj-category-carousel {
+  order: -1;
+}
+
+/* The filter leads, and the two scope controls end up next to each other.
+ *
+ * Core renders one .category-breadcrumb holding both the category and the tag
+ * chooser, at the head of the row. The carousel component hides the category
+ * half and shows those as its own rail below, which left `tags ›` alone in the
+ * first slot — the orphaned half of a control whose other half moved. Nobody
+ * chose that order; it is residue.
+ *
+ * So the pills come first, since below `md` they collapse into the trigger that
+ * carries the page's title (see below) and a title leads. `tags ›` follows
+ * them, directly above the rail, so "what am I looking at" reads as one group
+ * under "how is it ordered". */
+
+.navigation-container {
+  .nav-pills {
+    order: -1;
+
+    /* Core gives the tabs a trailing `auto` margin, which claimed the row's
+     * free space and pushed everything after them to the right; only the button
+     * cluster should do that. !important because the declaration is not
+     * reachable through the CSSOM — no rule matching this element sets a margin,
+     * yet the used value is the distributed free space — so there is no selector
+     * to outweigh. */
+    margin-inline-end: 0 !important;
+  }
+
+  /* Core spaces the row's three groups apart, which left `tags ›` adrift
+   * between the tabs and the buttons — reading as one of the buttons. Packed
+   * from the start instead, with only the button cluster pushed right, so the
+   * tabs and the tag filter stay together. */
+  justify-content: flex-start;
+
+  .navigation-controls {
+    margin-inline-start: auto;
+  }
+}
