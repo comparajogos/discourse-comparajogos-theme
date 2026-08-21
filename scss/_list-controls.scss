@@ -6,8 +6,10 @@
  *
  * Below `md` core collapses the nav pills into one trigger
  * (`.list-control-toggle-link-trigger`) that opens a float-kit bottom sheet.
- * The trigger ships with no padding, no surface and an 18px/700 label, so it
- * reads as a second heading under the real one rather than as a control.
+ * The trigger ships with no padding, no surface and an 18px/700 label. That
+ * read as a second heading while the discovery h1 was visible; now that the
+ * heading is back to being screen-reader-only (styles.scss), the trigger *is*
+ * the page title, and below `md` it goes back to looking like one.
  *
  * The client's analogue is `components/common/Select` — the right one, rather
  * than `MarketLayout`'s mobile Button: that Button is full-width because it *is*
@@ -185,4 +187,19 @@
 
 .nav-pills > li > a.active {
   background: color-mix(in oklch, var(--cj-action) 5%, transparent);
+}
+
+/* Appended after the Select styling above so it wins on order: below `md` the
+ * trigger is the page's title, not a control sitting where one should be. It
+ * names the list the way a heading would, and its caret says it can be changed. */
+
+@include viewport.until(md) {
+  .nav-pills .list-control-toggle-link-trigger {
+    padding-inline: 0;
+    border-radius: 0;
+    background: none;
+    font-size: var(--font-up-2-rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
 }

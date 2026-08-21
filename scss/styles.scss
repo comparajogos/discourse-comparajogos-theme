@@ -537,43 +537,6 @@ body .category-breadcrumb {
   padding-block-start: var(--space-8);
 }
 
-/*
- * Core renders `h1#topic-list-heading` for screen readers only. The client
- * labels every content section, so the heading is revealed rather than a new one
- * invented — the semantics were already right.
- */
-
-#topic-list-heading.sr-only {
-  position: static;
-  width: auto;
-  height: auto;
-  margin: 0 0 var(--space-4);
-  overflow: visible;
-  clip-path: none;
-  color: var(--primary);
-  font-size: var(--font-up-2-rem);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  white-space: normal;
-
-  /* Below `md` it goes back to being read, not seen. Two lines of a 21px
-   * heading is a sixth of a phone screen spent restating what the sort control
-   * and the category rail already show, and it is the bulk of what the pinned
-   * controls carry (see _list-controls.scss). The element and its semantics
-   * stay exactly as core made them. */
-
-  @include viewport.until(md) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-}
-
 @media (width < 768px) {
   /* `:root, body`, not `:root`: properties.scss declares these on body too, and
    * a custom property inherits from the nearest ancestor that declares it — so a

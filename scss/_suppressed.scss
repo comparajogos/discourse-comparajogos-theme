@@ -85,6 +85,16 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
+/* Registration happens in the catalog, not here — the forum's own Sign Up
+ * button would start a second account flow. There is no site setting that
+ * removes just the button: `canSignUp` (application.js:99) is
+ * `!invite_only && allow_new_registrations && !enable_discourse_connect`, and
+ * each of those changes who can register at all. */
+
+.sign-up-button {
+  display: none;
+}
+
 /* Everything is categorised; an "uncategorised" link is noise. */
 .cat-link.category-sem-categoria {
   display: none;
