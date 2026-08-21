@@ -233,6 +233,37 @@ div:has(> .cj-category-carousel) {
 
 .cj-category-carousel {
   order: -1;
+
+  /* The label is a flex sibling of the pills, so it indented the whole rail —
+   * pills and description both — past the frame edge that the tabs, the cards
+   * and the header all share. It is `aria-hidden` and the nav carries its own
+   * `aria-label`, so nothing is lost by dropping it. */
+
+  .cj-category-carousel__title {
+    display: none;
+  }
+
+  /* The rail is a `.container`, which core `@extend`s from `.clearfix` —
+   * `content: " "` on both pseudo-elements. In a flex container those become
+   * flex items, and each one spent a 12px gap, so the pills and the description
+   * sat 12px inside the edge the tabs and cards share. */
+
+  &::before,
+  &::after {
+    content: none;
+  }
+
+  /* The selected category's description is the page's subtitle, so it sits with
+   * the pill it belongs to rather than floating between the two control rows. A
+   * measure keeps it a line of prose instead of a 1100px band. */
+
+  .cj-category-carousel__description {
+    max-width: 66ch;
+    margin-block-start: var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    line-height: 1.45;
+  }
 }
 
 /* The pills lead, since below `md` they collapse into the trigger that carries
