@@ -2,6 +2,25 @@
      form controls in the right scheme from the very first frame. -->
 <meta name="color-scheme" content="light dark" />
 
+<!-- The loading shell discovers its configured wordmark through theme CSS,
+     which is otherwise too late to compete with app startup on a cold load.
+     These site-specific URLs mirror the splash_logo defaults in settings.yml. -->
+<link rel="preconnect" href="https://uploads.comparajogos.com.br" crossorigin />
+<link
+  rel="preload"
+  as="image"
+  href="https://uploads.comparajogos.com.br/original/3X/e/5/e58b246bf3a4d58648b88afb04535dd9d0a6c493.png"
+  media="(prefers-color-scheme: light)"
+  fetchpriority="high"
+/>
+<link
+  rel="preload"
+  as="image"
+  href="https://uploads.comparajogos.com.br/original/3X/0/2/02f4d56d7d6f1d7ef3e3c6b44617e09921d3ce93.png"
+  media="(prefers-color-scheme: dark)"
+  fetchpriority="high"
+/>
+
 <!-- Core paints its inline five-dot loader before it emits theme styles or the
      theme header field. Suppress only those dots at the earliest theme-owned
      insertion point; the measured skeleton remains the one visual source. -->
