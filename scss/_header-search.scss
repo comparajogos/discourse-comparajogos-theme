@@ -208,28 +208,34 @@
       }
 
       /* The grow-swap: collapsed, the logo wrapper is the row's spacer and the
-       * field is a 40px basis; expanded, they trade `flex-grow`. Everything that
-       * changes is interpolable (grow is a number, and `interpolate-size` covers
-       * 2.5rem ↔ auto), so the field's edge travels smoothly and nothing after it
-       * moves. An `auto` margin as the spacer does *not* interpolate — that
-       * version made the whole row lurch at frame one.
+       * field is a 40px minimum; expanded, they trade `flex-grow`. Both siblings
+       * keep a numeric zero basis and their grow factors remain complementary,
+       * so their combined width is constant on every frame. Animating between
+       * `auto` and 2.5rem briefly over-allocated that pair in some mobile
+       * browsers and pushed the Login action outside the header before it
+       * settled.
        *
        * Scoped to :has(.cj-header-search) because the field does not render on
        * mobile topic pages, where the docked title needs the row. */
 
       .contents:has(.cj-header-search) {
         .home-logo-wrapper-outlet {
-          flex: 1 1 auto;
+          flex: 1 1 0;
           min-width: 2.5rem;
-          interpolate-size: allow-keywords;
-          transition: var(--cj-transition-input);
+
+          @media (prefers-reduced-motion: no-preference) {
+            transition: flex-grow 200ms var(--cj-ease-out);
+          }
         }
 
         .before-header-panel-outlet {
-          flex: 0 0 2.5rem;
+          flex: 0 1 0;
+          min-width: 2.5rem;
           margin-inline: var(--space-2);
-          interpolate-size: allow-keywords;
-          transition: var(--cj-transition-input);
+
+          @media (prefers-reduced-motion: no-preference) {
+            transition: flex-grow 200ms var(--cj-ease-out);
+          }
         }
 
         /* Core gives the signed-in icon list its own 0.5em leading margin.
@@ -297,14 +303,15 @@
       .contents:has(.cj-header-search:focus-within),
       .contents:has(.cj-header-search .search-menu-panel) {
         .before-header-panel-outlet {
-          flex: 1 1 auto;
+          flex-grow: 1;
         }
 
         /* `w-10 overflow-hidden`: the wordmark clips away, the mark stays. The
-         * clip is flex-basis so it rides the grow-swap's interpolation. */
+         * wrapper rides the complementary grow transition down to its 40px
+         * minimum. */
 
         .home-logo-wrapper-outlet {
-          flex: 0 0 2.5rem;
+          flex-grow: 0;
           overflow: hidden;
         }
 
