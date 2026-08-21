@@ -2,6 +2,8 @@
 @use "sass:string";
 @use "lib/viewport";
 
+$mobile-category-rail-height: 4.5rem;
+
 /* The row above the topic list, and the sheet its collapsed form opens.
  *
  * Below `md` core collapses the nav pills into one trigger that opens a float-kit
@@ -22,10 +24,32 @@
 @include viewport.until(sm) {
   .list-controls {
     position: sticky;
-    z-index: 2;
+    z-index: z("base") + 1;
     inset-block-start: var(--cj-header-height);
     padding-block: var(--space-3);
     background: var(--cj-background);
+  }
+
+  /* The category rail and the filters are consecutive siblings. Give the rail
+   * a stable one-line mobile slot, then pin the filters directly beneath it so
+   * they behave as one context header without wrapping utility actions into the
+   * reading area. The offset applies only while the optional carousel exists. */
+
+  #main-outlet > .cj-category-carousel {
+    position: sticky;
+    z-index: z("base") + 1;
+    inset-block-start: var(--cj-header-height);
+    box-sizing: border-box;
+    block-size: $mobile-category-rail-height;
+    margin-block: 0;
+    padding-block: var(--space-1);
+    background: var(--cj-background);
+  }
+
+  #main-outlet:has(> .cj-category-carousel) > .list-controls {
+    inset-block-start: calc(
+      var(--cj-header-height) + $mobile-category-rail-height
+    );
   }
 }
 
@@ -412,22 +436,45 @@ $hidden_filter_tags: "" !default;
   }
 }
 
-/* Below `md` New Topic floats bottom-end rather than sharing the title's row.
- * Three controls do not fit in 358px, and composing is the one action worth a
- * permanent target — which is what frees the row for the tag filter.
+/* Below `md` the navigation actions float bottom-end rather than sharing the
+ * filter row. Utilities stay immediately before New Topic, which remains the
+ * visually dominant action and frees the sticky region for browsing context.
  *
  * The tab-bar component's own clearance is added in _tab-bar.scss, which is the
- * file that knows whether the bar is installed. Here it clears only the safe
- * area, so the button is right with the component absent too. */
+ * file that knows whether the bar is installed. Here the cluster clears only
+ * the safe area, so it is correct with the component absent too. */
 
 @include viewport.until(md) {
-  .navigation-controls .fk-d-button-tooltip:has(#create-topic),
-  .navigation-controls .topic-create-button__combo {
+  .navigation-controls {
     position: fixed;
-    z-index: 5;
+    z-index: z("dropdown");
     inset-block-end: calc(var(--space-5) + env(safe-area-inset-bottom));
     inset-inline-end: var(--d-wrap-padding-x);
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+    align-items: center;
+    max-inline-size: calc(
+      100vw - var(--d-wrap-padding-x) - var(--d-wrap-padding-x)
+    );
     margin-inline: 0;
+  }
+
+  .navigation-controls > * {
+    flex: none;
+  }
+
+  /* DOM order puts category notifications after New Topic. Ordering both forms
+   * of the create action last keeps every route-specific utility to its left. */
+
+  .navigation-controls .fk-d-button-tooltip:has(#create-topic),
+  .navigation-controls .topic-create-button__combo {
+    order: 1;
+  }
+
+  /* Utility actions remain quieter, but meet the mobile touch-target floor. */
+  .navigation-controls > .btn:not(#create-topic) {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
   }
 
   /* The drafts menu stays attached to the primary action. The group carries the
