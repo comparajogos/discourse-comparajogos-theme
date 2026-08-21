@@ -27,6 +27,10 @@
     background: transparent;
     border: 0;
 
+    &.--cj-feed .topic-list-item {
+      cursor: pointer;
+    }
+
     .topic-list-body {
       display: flex;
       gap: var(--space-3);
@@ -68,7 +72,8 @@
       display: block;
       transition: background-color 140ms ease-out;
 
-      &:hover {
+      &:hover,
+      &:focus-within {
         background: color-mix(in oklch, var(--primary) 4%, var(--cj-header));
       }
 

@@ -1,4 +1,4 @@
-import { visit } from "@ember/test-helpers";
+import { click, currentURL, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -22,6 +22,20 @@ acceptance("Compara Jogos topic feed", function () {
       exists(".cj-feed .cj-feed__byline .avatar"),
       "the byline carries the author avatar"
     );
+  });
+
+  test("the card surface opens its topic", async function (assert) {
+    await visit("/latest");
+
+    const row = document.querySelector(
+      ".topic-list.--cj-feed .topic-list-item"
+    );
+    const topicLink = row.querySelector(".cj-feed__title a.title");
+    const destination = new URL(topicLink.href).pathname;
+
+    await click(row.querySelector(".cj-feed__stats"));
+
+    assert.strictEqual(currentURL(), destination);
   });
 });
 
