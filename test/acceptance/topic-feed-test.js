@@ -1,6 +1,7 @@
 import { click, currentURL, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
+import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -16,6 +17,12 @@ acceptance("Compara Jogos topic feed", function (needs) {
    * real Ember transition, so let it complete instead of leaving an unhandled
    * topic request pending until QUnit's timeout. */
   needs.pretender((server, helper) => {
+    server.get("/latest.json", () => {
+      const response = cloneJSON(discoveryFixtures["/latest.json"]);
+      response.topic_list.topics[0].excerpt = "A topic with :heart: emoji";
+      return helper.response(response);
+    });
+
     const responseTopic = () => {
       const topic = cloneJSON(topicFixtures["/t/130.json"]);
       topic.id = 11557;
@@ -38,6 +45,14 @@ acceptance("Compara Jogos topic feed", function (needs) {
       exists(".cj-feed .cj-feed__byline .avatar"),
       "the byline carries the author avatar"
     );
+  });
+
+  test("topic excerpts restore cooked emoji", async function (assert) {
+    await visit("/latest");
+
+    assert
+      .dom(".cj-feed__excerpt img.emoji")
+      .exists("the excerpt uses Discourse's emoji-aware rendering path");
   });
 
   test("the card surface opens its topic", async function (assert) {

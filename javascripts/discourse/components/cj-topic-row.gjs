@@ -1,10 +1,10 @@
 import Component from "@glimmer/component";
-import { htmlSafe } from "@ember/template";
 import TopicPostBadges from "discourse/components/topic-post-badges";
 import TopicStatus from "discourse/components/topic-status";
 import DUserLink from "discourse/ui-kit/d-user-link";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import dCategoryLink from "discourse/ui-kit/helpers/d-category-link";
+import dDirSpan from "discourse/ui-kit/helpers/d-dir-span";
 import dDiscourseTags from "discourse/ui-kit/helpers/d-discourse-tags";
 import dFormatDate from "discourse/ui-kit/helpers/d-format-date";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
@@ -103,7 +103,9 @@ export default class CjTopicRow extends Component {
           </div>
 
           {{#if @topic.excerpt}}
-            <p class="cj-feed__excerpt">{{htmlSafe @topic.excerpt}}</p>
+            <p class="cj-feed__excerpt">
+              {{dDirSpan @topic.escapedExcerpt htmlSafe="true"}}
+            </p>
           {{/if}}
 
           <div class="cj-feed__stats">
