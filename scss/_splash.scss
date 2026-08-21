@@ -592,27 +592,24 @@ html[lang^="pt"] #cj-splash {
   .cj-splash__sidebar-toggle {
     position: fixed;
     z-index: 2;
-    inset-block-start: calc(var(--cj-header-height) - 1px);
+    inset-block-start: calc(var(--cj-header-height) - var(--space-4));
     inset-inline-start: 0;
     display: grid;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    color: var(--cj-text-muted);
+    width: 2rem;
+    height: 2rem;
+    color: var(--header_primary);
     background: var(--cj-header);
-    border: 1px solid var(--cj-border);
-    border-block-start: 0;
-    border-inline-start: 0;
-    border-end-end-radius: var(--d-button-border-radius);
+    border-radius: 0 0 var(--d-button-border-radius)
+      var(--d-button-border-radius);
 
     &::before {
       content: "";
-      width: 1rem;
-      height: 1rem;
+      width: 0.9375rem;
+      height: 0.9375rem;
       background: currentcolor;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 513 513'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M64.125 0C28.0547 0 0 29.0566 0 64.125V399.75C0 435.82 28.0547 463.875 64.125 463.875H448.875C483.943 463.875 513 435.82 513 399.75V64.125C513 29.0566 483.943 0 448.875 0H64.125ZM219.375 407.75H56.125V56.1875H219.375V407.75ZM272.5 56.1875H455.875V407.75H272.5V56.1875ZM96 96C91.5817 96 88 99.5817 88 104V128C88 132.418 91.5817 136 96 136H184C188.418 136 192 132.418 192 128V104C192 99.5817 188.418 96 184 96H96ZM88 184C88 179.582 91.5817 176 96 176H184C188.418 176 192 179.582 192 184V208C192 212.418 188.418 216 184 216H96C91.5817 216 88 212.418 88 208V184ZM96 256C91.5817 256 88 259.582 88 264V288C88 292.418 91.5817 296 96 296H184C188.418 296 192 292.418 192 288V264C192 259.582 188.418 256 184 256H96Z'/%3E%3C/svg%3E")
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,36H40A20,20,0,0,0,20,56V200a20,20,0,0,0,20,20H216a20,20,0,0,0,20-20V56A20,20,0,0,0,216,36ZM44,104H72v20H44ZM72,60V80H44V60ZM44,148H72v48H44Zm168,48H96V60H212Z'/%3E%3C/svg%3E")
         center / contain no-repeat;
-      opacity: 0.65;
     }
   }
 
