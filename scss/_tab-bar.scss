@@ -46,6 +46,12 @@ $height: 3.5rem;
       bottom: calc($height + env(safe-area-inset-bottom));
     }
 
+    .navigation-controls .topic-create-button__combo {
+      inset-block-end: calc(
+        $height + var(--space-3) + env(safe-area-inset-bottom)
+      );
+    }
+
     html:not(.anon) {
       .d-toc-toggle {
         margin-block-end: $height;

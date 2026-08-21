@@ -48,9 +48,13 @@
     background: transparent;
     pointer-events: none;
 
+    /* `text-brand dark:text-card-foreground` on the client's glyph, which is
+     * exactly what --header_primary carries in each scheme. */
+
     .d-icon {
       width: 1rem;
       height: 1rem;
+      color: var(--header_primary);
       font-size: 1rem;
     }
   }
@@ -92,15 +96,19 @@
     min-width: 0;
     padding-block: 0;
     padding-inline: var(--space-2);
-    color: var(--header_primary);
+    color: var(--cj-text);
     background: transparent;
     border: 0;
 
-    /* `placeholder:font-thin`. */
+    /* `text-foreground` with `placeholder-muted-foreground placeholder:font-thin`
+     * (components/common/Input.tsx) — the content tiers, not the header accent.
+     * Both painted with --header_primary at 0.7 made the placeholder a pale
+     * blue-grey and typed text brand-blue, where the client has grey then near
+     * black. */
+
     &::placeholder {
-      color: var(--header_primary);
+      color: var(--cj-text-muted);
       font-weight: 100;
-      opacity: 0.7;
     }
   }
 

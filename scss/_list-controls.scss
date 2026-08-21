@@ -179,47 +179,38 @@
   gap: var(--space-2);
 }
 
-.nav-pills > li[class*="nav-item_"] > a::before,
-.dropdown-menu > li[class*="nav-item_"] > a::before,
-body[data-cj-filter] .list-control-toggle-link-trigger::before {
-  content: "";
-  flex: none;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-  background: currentcolor;
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-size: contain;
-}
+$filter-glyphs: (
+  "latest":
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,88a40,40,0,1,0,40,40A40,40,0,0,0,128,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,152Zm73.71,7.14a80,80,0,0,1-14.08,22.2,8,8,0,0,1-11.92-10.67,63.95,63.95,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67,80.08,80.08,0,0,1,14.08,84.47ZM69,103.09a64,64,0,0,0,11.26,67.58,8,8,0,0,1-11.92,10.67,79.93,79.93,0,0,1,0-106.67A8,8,0,1,1,80.29,85.34,63.77,63.77,0,0,0,69,103.09ZM248,128a119.58,119.58,0,0,1-34.29,84,8,8,0,1,1-11.42-11.2,103.9,103.9,0,0,0,0-145.56A8,8,0,1,1,213.71,44,119.58,119.58,0,0,1,248,128ZM53.71,200.78A8,8,0,1,1,42.29,212a119.87,119.87,0,0,1,0-168,8,8,0,1,1,11.42,11.2,103.9,103.9,0,0,0,0,145.56Z'/%3E%3C/svg%3E"),
+  "new":
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V56A16,16,0,0,1,48,40h80a8,8,0,0,1,0,16H48V208H200V128a8,8,0,0,1,16,0Zm16-68a36,36,0,1,1-36-36A36,36,0,0,1,232,60Zm-16,0a20,20,0,1,0-20,20A20,20,0,0,0,216,60Z'/%3E%3C/svg%3E"),
+  "hot":
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z'/%3E%3C/svg%3E"),
+  "categories":
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z'/%3E%3C/svg%3E"),
+  "top":
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z'/%3E%3C/svg%3E"),
+);
 
-.nav-pills > li.nav-item_latest > a::before,
-.dropdown-menu > li.nav-item_latest > a::before,
-body[data-cj-filter="latest"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,88a40,40,0,1,0,40,40A40,40,0,0,0,128,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,152Zm73.71,7.14a80,80,0,0,1-14.08,22.2,8,8,0,0,1-11.92-10.67,63.95,63.95,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67,80.08,80.08,0,0,1,14.08,84.47ZM69,103.09a64,64,0,0,0,11.26,67.58,8,8,0,0,1-11.92,10.67,79.93,79.93,0,0,1,0-106.67A8,8,0,1,1,80.29,85.34,63.77,63.77,0,0,0,69,103.09ZM248,128a119.58,119.58,0,0,1-34.29,84,8,8,0,1,1-11.42-11.2,103.9,103.9,0,0,0,0-145.56A8,8,0,1,1,213.71,44,119.58,119.58,0,0,1,248,128ZM53.71,200.78A8,8,0,1,1,42.29,212a119.87,119.87,0,0,1,0-168,8,8,0,1,1,11.42,11.2,103.9,103.9,0,0,0,0,145.56Z'/%3E%3C/svg%3E");
-}
+/* One rule per known filter, carrying the box as well as the glyph. Keyed only
+ * on values in the map: a shared `body[data-cj-filter]` block painted a solid
+ * 20px square for any route the map does not name — `discovery.category`, for
+ * one, which is what a category's default list actually is. */
 
-.nav-pills > li.nav-item_new > a::before,
-.dropdown-menu > li.nav-item_new > a::before,
-body[data-cj-filter="new"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V56A16,16,0,0,1,48,40h80a8,8,0,0,1,0,16H48V208H200V128a8,8,0,0,1,16,0Zm16-68a36,36,0,1,1-36-36A36,36,0,0,1,232,60Zm-16,0a20,20,0,1,0-20,20A20,20,0,0,0,216,60Z'/%3E%3C/svg%3E");
-}
-
-.nav-pills > li.nav-item_hot > a::before,
-.dropdown-menu > li.nav-item_hot > a::before,
-body[data-cj-filter="hot"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z'/%3E%3C/svg%3E");
-}
-
-.nav-pills > li.nav-item_categories > a::before,
-.dropdown-menu > li.nav-item_categories > a::before,
-body[data-cj-filter="categories"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z'/%3E%3C/svg%3E");
-}
-
-.nav-pills > li.nav-item_top > a::before,
-.dropdown-menu > li.nav-item_top > a::before,
-body[data-cj-filter="top"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z'/%3E%3C/svg%3E");
+@each $filter, $glyph in $filter-glyphs {
+  .nav-pills > li.nav-item_#{$filter} > a::before,
+  .dropdown-menu > li.nav-item_#{$filter} > a::before,
+  body[data-cj-filter="#{$filter}"] .list-control-toggle-link-trigger::before {
+    content: "";
+    flex: none;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    background: currentcolor;
+    mask-image: $glyph;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
 }
 
 /* The tag filter is the rail's counterpart — the other thing that says what you
@@ -242,6 +233,37 @@ body[data-cj-filter="top"] .list-control-toggle-link-trigger::before {
 .tag-drop .select-kit-header-wrapper .select-kit-selected-name {
   display: flex;
   align-items: center;
+}
+
+/* A selected tag that has an icon of its own brings it — the tag-icon component
+ * renders it inside the selected name — so the generic glyph stands down rather
+ * than sitting beside it. The trailing caret is a sibling, not a child, so it
+ * does not trip this. */
+
+.tag-drop
+  .select-kit-header-wrapper
+  .select-kit-selected-name:has(svg, .d-icon)::before {
+  display: none;
+}
+
+/* Below `md` the carousel marks the breadcrumb `hidden`, which took the tag
+ * filter with it — but the rail replaced only the *category* half, so the tag
+ * half has no substitute at that width. It comes back beside the title, where
+ * the New Topic button used to sit before it became a floating action.
+ *
+ * `.hidden` is 0,2,0, so `body` has to carry the override. */
+
+@include viewport.until(md) {
+  body .category-breadcrumb.hidden {
+    display: flex;
+  }
+
+  /* Room for the title first: the tag filter takes its content width and gives
+   * the rest back. */
+
+  .navigation-container .category-breadcrumb {
+    flex: 0 0 auto;
+  }
 }
 
 /* The rail goes above the controls, because the controls are what stays put:
@@ -292,10 +314,16 @@ div:has(> .cj-category-carousel) {
     display: block;
     overflow: hidden;
     max-width: 66ch;
-    margin-block-start: var(--space-2);
+    margin-block-start: var(--space-1);
     color: var(--cj-text-muted);
-    font-size: var(--font-down-1-rem);
-    line-height: 1.45;
+    font-size: var(--font-down-2-rem);
+
+    /* styles.scss turns synthesis off globally so nothing gets faux-bolded, and
+     * Inter ships here without an italic face — so the slant needs an explicit
+     * opt-in or `font-style` is silently inert. */
+    font-synthesis: style;
+    font-style: italic;
+    line-height: 1.4;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -361,6 +389,39 @@ $hidden_filter_tags: "" !default;
 
 @each $tag in cj-split($hidden_filter_tags) {
   .tag-drop .select-kit-row[data-value="#{$tag}"] {
+    display: none;
+  }
+}
+
+/* Below `md` New Topic floats bottom-end rather than sharing the title's row.
+ * Three controls do not fit in 358px, and composing is the one action worth a
+ * permanent target — which is what frees the row for the tag filter.
+ *
+ * The tab-bar component's own clearance is added in _tab-bar.scss, which is the
+ * file that knows whether the bar is installed. Here it clears only the safe
+ * area, so the button is right with the component absent too. */
+
+@include viewport.until(md) {
+  .navigation-controls .fk-d-button-tooltip:has(#create-topic),
+  .navigation-controls .topic-create-button__combo {
+    position: fixed;
+    z-index: 5;
+    inset-block-end: calc(var(--space-5) + env(safe-area-inset-bottom));
+    inset-inline-end: var(--d-wrap-padding-x);
+    margin-inline: 0;
+  }
+
+  .topic-create-button__combo #create-topic {
+    min-height: 3.5rem;
+    padding-inline: var(--space-5);
+    border-radius: var(--cj-radius-pill);
+    box-shadow: 0 8px 24px -6px rgb(0 0 0 / 45%);
+  }
+
+  /* The drafts half of the split button is a secondary path; a floating action
+   * is one target. */
+
+  .topic-create-button__combo .d-combo-button-menu {
     display: none;
   }
 }

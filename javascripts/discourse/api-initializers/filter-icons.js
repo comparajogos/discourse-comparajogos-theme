@@ -8,14 +8,23 @@ export default apiInitializer((api) => {
   const router = api.container.lookup("service:router");
 
   api.onPageChange(() => {
-    const match = /^discovery\.(?:category)?(\w+)/i.exec(
-      router.currentRouteName || ""
-    );
+    const match = /^discovery\.(\w+)/i.exec(router.currentRouteName || "");
 
-    if (match) {
-      document.body.dataset.cjFilter = match[1].toLowerCase();
-    } else {
+    if (!match) {
       delete document.body.dataset.cjFilter;
+      return;
     }
+
+    /* Core names these after the scope as well as the filter, and on either side
+     * of it: `discovery.category` for a category's default list (which *is*
+     * latest), `discovery.topCategory` for its Top. Strip the scope from both
+     * ends and default the remainder. */
+    const filter =
+      match[1]
+        .replace(/category$/i, "")
+        .replace(/^category/i, "")
+        .toLowerCase() || "latest";
+
+    document.body.dataset.cjFilter = filter;
   });
 });
