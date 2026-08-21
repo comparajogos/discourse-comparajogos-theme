@@ -163,6 +163,18 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
+/* KNOWN LIMITATION: this follows the OS, not the scheme Discourse served.
+ * Discourse can force a scheme with a cookie — which reaches anonymous
+ * visitors, the ones this skeleton models — so an OS-light visitor given the
+ * dark theme gets the light logo on black until boot.
+ *
+ * The fix wants a per-scheme *image*, and the only file compiled once per
+ * scheme is the generated color_definitions. Both
+ * `dark-light-choose($splash_logo, $splash_logo_dark)` and a numeric probe of
+ * it evaluate to null there, which makes Sass drop the declaration entirely and
+ * leaves the skeleton with no logo at all — worse than the wrong one. Core
+ * branches on `forced_light_mode?` server-side; a theme has no equivalent. */
+
 @if $splash_logo_dark != "" {
   @media (prefers-color-scheme: dark) {
     .cj-splash__logo {
