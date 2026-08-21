@@ -112,67 +112,37 @@
 
 .sidebar-wrapper .sidebar-sections {
   scrollbar-width: thin;
-}
 
-/* The collapse control sits at the foot of the sidebar column, in line with
- * core's utility icons. It is our own button in `before-main-outlet`
- * (cj-sidebar-toggle.gjs) rather than core's moved with CSS: the header pill
- * animates `transform` to dock on scroll, which makes it a containing block, so
- * `fixed` on anything inside the header resolves against the pill. Mobile uses
- * core's own hamburger instead, repositioned below the header row. */
+  /* Plugin sections expose stable names. Let core and other plugins keep their
+   * source order, then place voice rooms between public chat and DMs. */
 
-.cj-sidebar-toggle {
-  position: fixed;
-  z-index: 2;
-  inset-block-end: var(--space-2);
-  inset-inline-start: calc(var(--d-wrap-padding-x) + var(--space-2));
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  color: var(--cj-text-muted);
-  line-height: 1;
-  background: var(--cj-panel);
-  border: 1px solid var(--cj-border);
-  border-radius: var(--cj-radius-pill);
-
-  .d-icon {
-    width: 1rem;
-    height: 1rem;
+  > [data-section-name="resenha-rooms"] {
+    order: 1;
   }
 
-  &:hover,
-  &:focus-visible {
-    color: var(--cj-text);
-    background: var(--cj-control);
+  > [data-section-name="chat-dms"] {
+    order: 2;
   }
-}
-
-/* Collapsed, the content column takes the sidebar's place, so the button moves
- * out of it and into the page gutter. */
-
-body:not(.has-sidebar-page) .cj-sidebar-toggle {
-  inset-inline-start: var(--space-1);
 }
 
 @include viewport.from(md) {
-  .d-header .header-sidebar-toggle {
+  /* Desktop is the persistent-navigation layout: the initializer restores the
+   * sidebar when a saved preference says collapsed, and neither core nor the
+   * theme offers a collapse control at this width. */
+
+  .d-header .header-sidebar-toggle,
+  .d-header .hamburger-dropdown {
     display: none;
   }
 }
 
 @include viewport.until(md) {
-  /* The custom control is deliberately outside the header for desktop, but
-   * that made it visually detach during mobile rubber-band scrolling and cover
-   * the category rail. Keep core's working trigger on mobile: it shares the
-   * header's containing block, while this margin reserves the space it occupies
-   * below the row. */
+  /* Core's working mobile trigger stays structurally attached to the header.
+   * The reserved 24px row is exactly its visible footprint; a transparent
+   * pseudo-element grows the touch target without moving the content again. */
 
   .d-header-wrap {
-    margin-block-end: 1rem;
-  }
-
-  .cj-sidebar-toggle {
-    display: none;
+    margin-block-end: 1.5rem;
   }
 
   /* Core makes `.panel` the containing block for its icons. Release only the
@@ -189,11 +159,11 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
   .d-header .header-dropdown-toggle.hamburger-dropdown {
     position: absolute;
     z-index: z("dropdown");
-    inset-block-start: calc(100% - var(--space-4));
+    inset-block-start: 100%;
     inset-inline-start: calc(-1 * var(--space-3));
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
 
     #toggle-hamburger-menu {
       position: relative;
@@ -212,13 +182,13 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
       &::after {
         position: absolute;
         content: "";
-        inset: -0.5rem;
+        inset: -0.625rem;
       }
     }
 
     .d-icon {
-      width: 0.9375rem;
-      height: 0.9375rem;
+      width: 0.8125rem;
+      height: 0.8125rem;
       color: currentcolor;
     }
   }

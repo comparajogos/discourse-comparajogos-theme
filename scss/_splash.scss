@@ -572,6 +572,14 @@ html[lang^="pt"] #cj-splash {
    * `min-width: 48rem`). The shell's height and radius follow the tokens, so
    * only the frame's gutter has to be dropped by hand. */
 
+  /* The booted header wrap reserves the trigger's complete row before main
+   * content. The splash has a different shell, so reproduce that handoff here
+   * instead of letting its category rail jump down when Ember takes over. */
+
+  .cj-splash__body {
+    padding-block-start: 1.5rem;
+  }
+
   .cj-splash__sidebar {
     display: none;
   }
@@ -592,12 +600,12 @@ html[lang^="pt"] #cj-splash {
   .cj-splash__sidebar-toggle {
     position: fixed;
     z-index: 2;
-    inset-block-start: calc(var(--cj-header-height) - var(--space-4));
+    inset-block-start: var(--cj-header-height);
     inset-inline-start: 0;
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     color: var(--header_primary);
     background: var(--cj-header);
     border-radius: 0 0 var(--d-button-border-radius)
@@ -605,8 +613,8 @@ html[lang^="pt"] #cj-splash {
 
     &::before {
       content: "";
-      width: 0.9375rem;
-      height: 0.9375rem;
+      width: 0.8125rem;
+      height: 0.8125rem;
       background: currentcolor;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,36H40A20,20,0,0,0,20,56V200a20,20,0,0,0,20,20H216a20,20,0,0,0,20-20V56A20,20,0,0,0,216,36ZM44,104H72v20H44ZM72,60V80H44V60ZM44,148H72v48H44Zm168,48H96V60H212Z'/%3E%3C/svg%3E")
         center / contain no-repeat;

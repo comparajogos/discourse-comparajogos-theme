@@ -24,10 +24,6 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .floating-search-input"),
       "core's own field stays absent, so only one SearchMenu mounts"
     );
-    assert.false(
-      exists(".cj-sidebar-toggle"),
-      "the detached desktop control stays out of the mobile layout"
-    );
     assert.true(
       exists(".d-header .hamburger-dropdown #toggle-hamburger-menu"),
       "core's navigation trigger remains attached to the header"
@@ -56,6 +52,17 @@ acceptance("Compara Jogos header search - desktop", function () {
     assert.false(
       exists(".d-header .cj-header-search"),
       "the theme field only exists on the widths core declines"
+    );
+    assert.true(
+      document.body.classList.contains("has-sidebar-page"),
+      "desktop always opens with the sidebar"
+    );
+    assert
+      .dom(".d-header .header-sidebar-toggle")
+      .isNotVisible("desktop does not offer core's collapse control");
+    assert.false(
+      exists(".cj-sidebar-toggle"),
+      "the theme adds no second toggle"
     );
   });
 });
