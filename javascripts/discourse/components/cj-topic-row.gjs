@@ -12,6 +12,8 @@ import dNumber from "discourse/ui-kit/helpers/d-number";
 import dTopicLink from "discourse/ui-kit/helpers/d-topic-link";
 import { i18n } from "discourse-i18n";
 
+const UPDATED_AFTER_LAST_POST_THRESHOLD_MS = 24 * 60 * 60 * 1000;
+
 /**
  * A feed row, replacing the whole set of topic-list columns with one cell.
  *
@@ -32,9 +34,36 @@ export default class CjTopicRow extends Component {
     return this.args.topic.lastPosterUser;
   }
 
+  /* A bump is not always a reply: an edit, a category change or a recategorise
+   * moves bumped_at past last_posted_at without anyone speaking. Saying
+   * "{name} replied" against that timestamp is simply false, so the pill drops
+   * the name and says the topic was updated instead. The one-day threshold is
+   * Horizon's (themes/horizon/javascripts/discourse/lib/topic-activity.js) —
+   * below it the difference is housekeeping nobody means to read as activity. */
+  get wasUpdatedAfterLastPost() {
+    const { bumpedAt, last_posted_at: lastPostedAt } = this.args.topic;
+
+    if (!bumpedAt || !lastPostedAt) {
+      return false;
+    }
+
+    const bumped = new Date(bumpedAt).getTime();
+    const posted = new Date(lastPostedAt).getTime();
+
+    return bumped - posted > UPDATED_AFTER_LAST_POST_THRESHOLD_MS;
+  }
+
   /* Only worth showing when someone other than the author has spoken. */
   get showLastReply() {
-    return this.args.topic.replyCount > 0 && this.lastPoster;
+    return (
+      this.args.topic.replyCount > 0 &&
+      this.lastPoster &&
+      !this.wasUpdatedAfterLastPost
+    );
+  }
+
+  get showUpdated() {
+    return this.wasUpdatedAfterLastPost;
   }
 
   <template>
@@ -116,6 +145,20 @@ export default class CjTopicRow extends Component {
                     "5 hours ago" / "5 horas atrás" from core's own strings,
                     rather than a preposition glued onto the theme's label,
                     which would read wrong the moment the date turns absolute. }}
+                {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
+              </span>
+            </a>
+          {{/if}}
+
+          {{#if this.showUpdated}}
+            <a
+              href={{@topic.lastPostUrl}}
+              title={{@topic.bumpedAtTitle}}
+              class="cj-feed__last-reply cj-feed__last-reply--updated"
+            >
+              {{dIcon "pencil"}}
+              <span>
+                {{i18n (themePrefix "topic_feed.updated")}}
                 {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
               </span>
             </a>
