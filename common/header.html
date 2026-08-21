@@ -163,6 +163,52 @@
     </aside>
 
     <div class="cj-splash__main">
+      <!-- Topic routes have a stable, recognisable structure even before the
+           application knows their content: title and taxonomy, then a post
+           with an author rail, metadata, cooked copy, and actions. Keeping the
+           placeholder unboxed mirrors core's reading layout and avoids the
+           generic route's large rectangular panel. Data-driven outlets above
+           the title (such as a linked game) are deliberately not guessed. -->
+      <div class="cj-splash__topic">
+        <div class="cj-splash__topic-heading">
+          <span class="cj-splash__bar cj-splash__bar--topic-title"></span>
+          <div class="cj-splash__topic-taxonomy">
+            <span class="cj-splash__bar cj-splash__bar--topic-category"></span>
+            <span class="cj-splash__bar cj-splash__bar--topic-tag"></span>
+          </div>
+        </div>
+
+        <div class="cj-splash__topic-post">
+          <span class="cj-splash__topic-avatar"></span>
+          <div class="cj-splash__topic-content">
+            <div class="cj-splash__topic-meta">
+              <span class="cj-splash__bar cj-splash__bar--topic-author"></span>
+              <span class="cj-splash__bar cj-splash__bar--topic-age"></span>
+            </div>
+            <div class="cj-splash__topic-copy">
+              <span class="cj-splash__bar"></span>
+              <span class="cj-splash__bar"></span>
+              <span
+                class="cj-splash__bar cj-splash__bar--topic-line-short"
+              ></span>
+              <span
+                class="cj-splash__bar cj-splash__bar--topic-subheading"
+              ></span>
+              <span class="cj-splash__bar"></span>
+              <span
+                class="cj-splash__bar cj-splash__bar--topic-line-medium"
+              ></span>
+            </div>
+            <div class="cj-splash__topic-actions">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Non-discovery routes keep the shared product shell but do not pretend
            that a topic feed, category component, or list controls will mount. -->
       <div class="cj-splash__generic">

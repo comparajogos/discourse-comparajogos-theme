@@ -50,6 +50,7 @@ html:has(#d-splash) {
 @media (forced-colors: active) {
   .cj-splash__shell,
   .cj-splash__card,
+  .cj-splash__topic-post,
   .cj-splash__tab-bar,
   .cj-splash__search,
   .cj-splash__row.is-active,
@@ -60,6 +61,8 @@ html:has(#d-splash) {
 
   .cj-splash__bar,
   .cj-splash__avatar,
+  .cj-splash__topic-avatar,
+  .cj-splash__topic-actions > span,
   .cj-splash__rail-pill,
   .cj-splash__rail-description::after {
     border: 1px solid CanvasText;
@@ -375,6 +378,16 @@ html:not(.anon) .cj-splash__log-in {
   padding-block-start: var(--space-5);
 }
 
+/* Declare the neutral primitive before its size modifiers. Keeping this near
+ * the start of the content section prevents the base height from flattening
+ * title, heading, and copy placeholders later in the cascade. */
+
+.cj-splash__bar {
+  block-size: 0.65rem;
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
 /* Generic is the conservative default. Discovery-only structures are enabled
  * below from the request path that core renders before this header field. This
  * avoids showing category or feed UI on chat, topics, profiles, admin, search,
@@ -383,6 +396,114 @@ html:not(.anon) .cj-splash__log-in {
 .cj-splash__generic {
   display: block;
   padding-block-start: var(--space-3);
+}
+
+.cj-splash__topic {
+  display: none;
+  max-inline-size: 72ch;
+  padding-block-start: var(--space-3);
+}
+
+.cj-splash__topic-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-block-size: 3.5rem;
+}
+
+.cj-splash__bar--topic-title {
+  inline-size: min(29rem, 68%);
+  block-size: 1.75rem;
+}
+
+.cj-splash__topic-taxonomy {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 1rem;
+}
+
+.cj-splash__bar--topic-category {
+  inline-size: 4.25rem;
+}
+
+.cj-splash__bar--topic-tag {
+  inline-size: 7.5rem;
+}
+
+.cj-splash__topic-post {
+  display: grid;
+  grid-template-columns: 2.8125rem minmax(0, 1fr);
+  margin-block-start: var(--space-4);
+  border-block-start: 1px solid var(--primary-low);
+}
+
+.cj-splash__topic-avatar {
+  inline-size: 2.8125rem;
+  block-size: 2.8125rem;
+  margin-block-start: var(--space-4);
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+.cj-splash__topic-content {
+  min-width: 0;
+  padding-block: var(--space-3) var(--space-4);
+}
+
+.cj-splash__topic-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 1.5rem;
+}
+
+.cj-splash__bar--topic-author {
+  inline-size: 6.5rem;
+}
+
+.cj-splash__bar--topic-age {
+  inline-size: 2rem;
+}
+
+.cj-splash__topic-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: var(--space-3) var(--space-3) var(--space-1);
+
+  > .cj-splash__bar {
+    inline-size: 100%;
+    block-size: 0.75rem;
+  }
+
+  > .cj-splash__bar--topic-line-short {
+    inline-size: 58%;
+  }
+
+  > .cj-splash__bar--topic-line-medium {
+    inline-size: 76%;
+  }
+
+  > .cj-splash__bar--topic-subheading {
+    inline-size: 9rem;
+    block-size: 1rem;
+    margin-block-start: var(--space-3);
+  }
+}
+
+.cj-splash__topic-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-block-start: var(--space-4);
+
+  > span {
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: var(--d-button-border-radius);
+    background: var(--cj-control);
+  }
 }
 
 .cj-splash__generic-panel {
@@ -420,6 +541,19 @@ html:not(.anon) .cj-splash__log-in {
 .cj-splash__list-controls,
 .cj-splash__cards {
   display: none;
+}
+
+/* A topic's data is not available at first paint, but its reading hierarchy is.
+ * Use that stable route shape instead of the generic page-sized rectangle. */
+
+body:has(> noscript[data-path*="/t/"]) #cj-splash {
+  .cj-splash__generic {
+    display: none;
+  }
+
+  .cj-splash__topic {
+    display: block;
+  }
 }
 
 /* Known discovery entry points. Suffix selectors keep the theme correct when
@@ -603,12 +737,6 @@ body:has(
   flex: none;
   inline-size: 1.5rem;
   block-size: 1.5rem;
-  border-radius: 999px;
-  background: var(--cj-control);
-}
-
-.cj-splash__bar {
-  block-size: 0.65rem;
   border-radius: 999px;
   background: var(--cj-control);
 }
@@ -876,6 +1004,42 @@ body:has(
 
   .cj-splash__generic {
     padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__topic {
+    max-inline-size: none;
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__bar--topic-title {
+    inline-size: min(25rem, 78%);
+    block-size: 1.5rem;
+  }
+
+  .cj-splash__topic-post {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+    padding-inline: var(--d-wrap-padding-x);
+  }
+
+  .cj-splash__topic-avatar {
+    inline-size: 2rem;
+    block-size: 2rem;
+    margin-block-start: var(--space-3);
+  }
+
+  .cj-splash__topic-content {
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__topic-copy {
+    gap: var(--space-2);
+    padding-inline-end: 0;
+  }
+
+  .cj-splash__topic-actions {
+    justify-content: flex-start;
+    padding-inline-start: var(--space-3);
   }
 
   .cj-splash__generic-panel {
