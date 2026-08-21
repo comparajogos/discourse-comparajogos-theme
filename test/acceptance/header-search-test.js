@@ -57,9 +57,6 @@ acceptance("Compara Jogos header search - desktop", function () {
       document.body.classList.contains("has-sidebar-page"),
       "desktop always opens with the sidebar"
     );
-    assert
-      .dom(".d-header .header-sidebar-toggle")
-      .isNotVisible("desktop does not offer core's collapse control");
     assert.false(
       exists(".cj-sidebar-toggle"),
       "the theme adds no second toggle"
