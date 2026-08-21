@@ -39,7 +39,12 @@ export default class CjHeaderSearch extends Component {
   }
 
   @service interfaceColor;
+  @service router;
   @service siteSettings;
+
+  get isChatRoute() {
+    return this.router.currentRouteName?.startsWith("chat");
+  }
 
   get smallLogoUrl() {
     const url = this.siteSettings.site_logo_small_url;
@@ -66,36 +71,38 @@ export default class CjHeaderSearch extends Component {
   }
 
   <template>
-    <div class="cj-header-search">
-      {{#if this.smallLogoUrl}}
-        <span class="cj-header-search__small-logo" aria-hidden="true">
-          {{#if this.hasDistinctDarkLogo}}
-            <picture>
-              <source
-                srcset={{this.smallLogoDarkUrl}}
-                media={{this.darkMediaQuery}}
-              />
+    {{#unless this.isChatRoute}}
+      <div class="cj-header-search">
+        {{#if this.smallLogoUrl}}
+          <span class="cj-header-search__small-logo" aria-hidden="true">
+            {{#if this.hasDistinctDarkLogo}}
+              <picture>
+                <source
+                  srcset={{this.smallLogoDarkUrl}}
+                  media={{this.darkMediaQuery}}
+                />
+                <img src={{this.smallLogoUrl}} alt="" />
+              </picture>
+            {{else}}
               <img src={{this.smallLogoUrl}} alt="" />
-            </picture>
-          {{else}}
-            <img src={{this.smallLogoUrl}} alt="" />
-          {{/if}}
-        </span>
-      {{/if}}
+            {{/if}}
+          </span>
+        {{/if}}
 
-      <div class="search-menu">
-        <DButton
-          @icon="magnifying-glass"
-          @title="search.open_advanced"
-          @href="/search?expanded=true"
-          class="btn search-icon"
-        />
+        <div class="search-menu">
+          <DButton
+            @icon="magnifying-glass"
+            @title="search.open_advanced"
+            @href="/search?expanded=true"
+            class="btn search-icon"
+          />
 
-        <SearchMenu
-          @location="header"
-          @searchInputId="cj-header-search-input"
-        />
+          <SearchMenu
+            @location="header"
+            @searchInputId="cj-header-search-input"
+          />
+        </div>
       </div>
-    </div>
+    {{/unless}}
   </template>
 }

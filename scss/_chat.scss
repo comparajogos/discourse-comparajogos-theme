@@ -42,6 +42,25 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
   height: unset;
 }
 
+/* Chat owns its navigation and search. The forum-wide search has different
+ * semantics, while the floating forum drawer handle would introduce a second
+ * navigation model over the conversation. The component gate keeps our field
+ * out of the DOM; these selectors also cover core's field and route-transition
+ * frames. */
+
+html.has-full-page-chat {
+  .d-header .cj-header-search,
+  .d-header .floating-search-input-wrapper {
+    display: none;
+  }
+}
+
+@include viewport.until(md) {
+  html.has-full-page-chat .d-header .header-dropdown-toggle.hamburger-dropdown {
+    display: none;
+  }
+}
+
 /* Below `sm` the panel gives way to the screen, as every other surface does —
  * chat runs edge to edge with no radius, hairline or top gap. */
 
