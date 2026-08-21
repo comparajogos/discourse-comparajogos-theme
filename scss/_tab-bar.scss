@@ -11,7 +11,7 @@ $height: 3.5rem;
 }
 
 @if $show_mobile_tab_bar == "true" {
-  :root {
+  html:has(.d-tab-bar) {
     --cj-mobile-tab-bar-clearance: var(--cj-mobile-nav-height);
   }
 
@@ -52,23 +52,23 @@ $height: 3.5rem;
   }
 
   @include viewport.until(md) {
-    #main-outlet {
+    body:has(.d-tab-bar) #main-outlet {
       padding-block-end: calc($height + env(safe-area-inset-bottom));
     }
 
     /* Floating controls have to clear the bar rather than sit under it. */
-    #reply-control.draft,
-    #topic-progress-wrapper:not(.docked) {
+    body:has(.d-tab-bar) #reply-control.draft,
+    body:has(.d-tab-bar) #topic-progress-wrapper:not(.docked) {
       bottom: calc($height + env(safe-area-inset-bottom));
     }
 
-    .navigation-controls {
+    body:has(.d-tab-bar) .navigation-controls {
       inset-block-end: calc(
         $height + var(--space-3) + env(safe-area-inset-bottom)
       );
     }
 
-    html:not(.anon) {
+    html:not(.anon):has(.d-tab-bar) {
       .d-toc-toggle {
         margin-block-end: $height;
       }

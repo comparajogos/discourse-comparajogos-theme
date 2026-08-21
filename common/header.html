@@ -49,14 +49,16 @@
 </svg>
 
 <!--
-  First-paint skeleton. Styles live in scss/_splash.scss; this is only the
-  shape. Labels come from custom properties there, so one locale table serves
-  every string and there is nothing to translate here.
+  First-paint skeleton. This header field is Discourse's earliest supported
+  theme-owned body insertion point: styles have loaded, but Ember and its
+  module entrypoint have not. Styles live in scss/_splash.scss; this is only
+  the shape. Labels come from custom properties there, so one locale table
+  serves every string and there is nothing to translate here.
 
   The inline rule below is the only style that must not wait for the theme
   stylesheet: without it, a page that somehow renders before that stylesheet
   arrives would show this markup as a stack of bare text. _splash.scss turns it
-  back on with `html body:has(#d-splash)`, which outweighs this selector, so the
+  back on while core's #d-splash exists, which outweighs this selector, so the
   skeleton is up exactly while core's own splash is.
 -->
 <style>
@@ -116,6 +118,19 @@
     </aside>
 
     <div class="cj-splash__main">
+      <!-- Non-discovery routes keep the shared product shell but do not pretend
+           that a topic feed, category component, or list controls will mount. -->
+      <div class="cj-splash__generic">
+        <span class="cj-splash__bar cj-splash__bar--page-title"></span>
+        <div class="cj-splash__generic-panel">
+          <span class="cj-splash__bar cj-splash__bar--generic-lead"></span>
+          <span class="cj-splash__bar cj-splash__bar--generic-line"></span>
+          <span
+            class="cj-splash__bar cj-splash__bar--generic-line cj-splash__bar--generic-short"
+          ></span>
+        </div>
+      </div>
+
       <!--
         The category component is the first discovery child. Its pills and
         one-line description reserve real layout space, so the placeholder

@@ -30,6 +30,10 @@ on the site, the theme leaves it alone and admin stays the source of truth.
 
 Comparajogos components are deliberately not bundled into the base; validate
 the base first, then enable the production component set one at a time.
+When installing the Category Carousel or mobile Tab Bar, enable the matching
+theme setting as well. Those switches let the first-paint shell reserve the
+component's space without making the standalone base theme promise UI that is
+not installed.
 
 The theme styles the existing `.cj-header-nav` integration when present. The
 underlying Discourse header and navigation still work without it.

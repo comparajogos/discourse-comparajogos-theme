@@ -19,8 +19,14 @@ topic_list_feed:
 show_mobile_tab_bar:
   default: true
   description:
-    en: "Style the Compara Jogos mobile tab-bar theme when it is installed."
-    pt_BR: "Estiliza a barra móvel do Compara Jogos quando o componente está instalado."
+    en: "Style and reserve first-paint space for the Compara Jogos mobile tab-bar component. Disable when that component is not installed."
+    pt_BR: "Estiliza e reserva espaço inicial para o componente da barra móvel do Compara Jogos. Desative quando o componente não estiver instalado."
+
+show_category_rail_skeleton:
+  default: false
+  description:
+    en: "Reserve first-paint space for the Compara Jogos Category Carousel component. Enable only when that component is installed."
+    pt_BR: "Reserva espaço inicial para o componente Compara Jogos Category Carousel. Ative apenas quando o componente estiver instalado."
 
 mobile_header_search:
   default: true

@@ -13,7 +13,7 @@ import ChatUnreadIndicator from "discourse/plugins/chat/discourse/components/cha
  *
  * Catalog destinations are built from the `product_url` setting; the forum's own
  * destinations go through `getURL` so they keep Discourse's routing and work at
- * any mount point. Icons come from the Phosphor sprite in `body_tag.html`,
+ * any mount point. Icons come from the Phosphor sprite in `header.html`,
  * matching the `react-icons/pi` glyphs the client uses.
  *
  * The Chat item carries chat's unread indicator, the way the client's own nav

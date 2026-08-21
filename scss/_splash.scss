@@ -1,18 +1,20 @@
 @use "lib/viewport";
 
 /* The first-paint skeleton, replacing core's five dots with the product's own
- * shell. Real markup (common/body_tag.html) laid out by the same tokens the
+ * shell. Real markup (common/header.html) laid out by the same tokens the
  * booted page uses, so the geometry follows the theme and every box can be
  * measured with getBoundingClientRect and diffed against the real one.
  *
- * It models the ANONYMOUS discovery page. `_t` is HttpOnly, so nothing can know
- * before boot whether the visitor is signed in. */
+ * The server already marks anonymous documents on <html>, and emits the request
+ * path on its pre-boot <noscript>. Those two declarative signals let the shell
+ * match session and route without creating a second JavaScript bootstrap. */
 
 /* Theme settings reach SCSS as $name (Theme#scss_variables prepends them), so
  * the logo is per-site configuration rather than an asset baked into this
  * repo. The defaults keep working on an install that predates the settings. */
 $splash_logo: "" !default;
 $splash_logo_dark: "" !default;
+$show_category_rail_skeleton: "false" !default;
 
 /* Up exactly as long as core's own splash: core removes #d-splash when the app
  * takes over, so there is no lifecycle of our own to keep in sync.
@@ -20,7 +22,7 @@ $splash_logo_dark: "" !default;
  * A sibling combinator, not `:has()` — the two are siblings at the top and
  * bottom of <body>, and a browser without `:has()` would drop the rule while
  * `#d-splash { display: none }` below still applied, giving a blank page.
- * `html body` outweighs the guard rule in body_tag.html. */
+ * `html body` outweighs the guard rule in header.html. */
 
 html body #d-splash ~ #cj-splash {
   display: flex;
@@ -286,6 +288,28 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
+/* The anonymous class is server-rendered, so a returning member gets an avatar
+ * silhouette in the first frame instead of an anonymous Log In pill. */
+
+html:not(.anon) .cj-splash__log-in {
+  justify-content: center;
+  width: 2.5rem;
+  padding-inline: 0;
+  border-radius: 999px;
+  color: var(--header_primary);
+  background: var(--cj-control);
+
+  &::before {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    opacity: 0.35;
+  }
+
+  &::after {
+    content: none;
+  }
+}
+
 /* ------------------------------------------------------------------ body -- */
 .cj-splash__body {
   display: flex;
@@ -366,6 +390,94 @@ html[lang^="pt"] #cj-splash {
   flex: 1;
   min-width: 0;
   padding-block-start: var(--space-5);
+}
+
+/* Generic is the conservative default. Discovery-only structures are enabled
+ * below from the request path that core renders before this header field. This
+ * avoids showing category or feed UI on chat, topics, profiles, admin, search,
+ * and any future route we do not yet know about. */
+
+.cj-splash__generic {
+  display: block;
+  padding-block-start: var(--space-3);
+}
+
+.cj-splash__generic-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 14rem;
+  margin-block-start: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--primary-low);
+  border-radius: var(--cj-radius-panel);
+  background: var(--cj-panel);
+}
+
+.cj-splash__bar--page-title {
+  display: block;
+  inline-size: min(18rem, 42%);
+  block-size: 1.4rem;
+}
+
+.cj-splash__bar--generic-lead {
+  inline-size: min(30rem, 64%);
+  block-size: 1rem;
+}
+
+.cj-splash__bar--generic-line {
+  inline-size: min(44rem, 82%);
+}
+
+.cj-splash__bar--generic-short {
+  inline-size: min(32rem, 58%);
+}
+
+.cj-splash__rail,
+.cj-splash__list-controls,
+.cj-splash__cards {
+  display: none;
+}
+
+/* Known discovery entry points. Suffix selectors keep the theme correct when
+ * Discourse is mounted below a subfolder; /f is retained for the production
+ * forum homepage, whose root cannot be inferred from CSS alone. */
+
+body:has(
+    > noscript:is(
+        [data-path="/"],
+        [data-path="/f"],
+        [data-path="/f/"],
+        [data-path$="/latest"],
+        [data-path$="/new"],
+        [data-path$="/unread"],
+        [data-path$="/hot"],
+        [data-path$="/top"],
+        [data-path$="/categories"],
+        [data-path*="/c/"],
+        [data-path*="/tag/"],
+        [data-path$="/tags"],
+        [data-path*="/filter/"]
+      )
+  )
+  #cj-splash {
+  .cj-splash__generic {
+    display: none;
+  }
+
+  .cj-splash__list-controls {
+    display: block;
+  }
+
+  .cj-splash__cards {
+    display: flex;
+  }
+
+  @if $show_category_rail_skeleton == "true" {
+    .cj-splash__rail {
+      display: block;
+    }
+  }
 }
 
 /* The category rail is installed above discovery controls. It owns a pill row
@@ -467,7 +579,6 @@ html[lang^="pt"] #cj-splash {
 }
 
 .cj-splash__cards {
-  display: flex;
   flex-direction: column;
   gap: var(--space-3);
   margin-block-start: 0;
@@ -479,6 +590,23 @@ html[lang^="pt"] #cj-splash {
   /* The booted card's cell owns this padding (--space-4 block, see
    * _topic-feed.scss), which is what puts its byline at y+15.4. */
   padding: var(--space-4) var(--space-3);
+}
+
+@if $topic_list_feed != "true" {
+  .cj-splash__cards {
+    gap: 0;
+  }
+
+  .cj-splash__card {
+    border-inline: 0;
+    border-block-start: 1px solid var(--primary-low);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .cj-splash__bar--excerpt {
+    display: none;
+  }
 }
 
 .cj-splash__byline {
@@ -547,7 +675,7 @@ html[lang^="pt"] #cj-splash {
 
 @if $show_mobile_tab_bar == "true" {
   @include viewport.until(md) {
-    .cj-splash__tab-bar {
+    html:not(.anon) .cj-splash__tab-bar {
       position: fixed;
       z-index: 3;
       inset-inline: 0;
@@ -620,6 +748,12 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
+@if $show_header_nav != "true" {
+  .cj-splash__nav {
+    display: none;
+  }
+}
+
 @include viewport.until(md) {
   /* Core docks the sidebar into a drawer here (narrow-desktop.js keys on
    * `min-width: 48rem`). The shell's height and radius follow the tokens, so
@@ -674,9 +808,27 @@ html[lang^="pt"] #cj-splash {
     }
   }
 
-  /* Five nav slots would squeeze a purely flexible search to nothing. */
-  .cj-splash__search {
-    min-width: 6rem;
+  @if $mobile_header_search == "true" {
+    /* Five nav slots would squeeze a purely flexible search to nothing. */
+    .cj-splash__search {
+      min-width: 6rem;
+    }
+  } @else {
+    /* Core's narrow header keeps a search trigger here when the theme's
+     * expanding mobile field is disabled. */
+
+    .cj-splash__search {
+      flex: none;
+      justify-content: center;
+      width: 2.5rem;
+      min-width: 0;
+      margin-inline-start: auto;
+      padding-inline-start: 0;
+
+      &::after {
+        content: none;
+      }
+    }
   }
 
   /* Icons from here down: a labelled auth pair does not fit beside five nav
@@ -740,6 +892,18 @@ html[lang^="pt"] #cj-splash {
     border-block-start: 0;
     border-radius: 0;
     background: none;
+  }
+
+  .cj-splash__generic {
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__generic-panel {
+    min-height: 11rem;
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+    padding-inline: var(--d-wrap-padding-x);
+    border-inline: 0;
+    border-radius: 0;
   }
 }
 
