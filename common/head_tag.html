@@ -1,3 +1,13 @@
 <!-- Declared before any stylesheet so the browser paints its own canvas and
      form controls in the right scheme from the very first frame. -->
 <meta name="color-scheme" content="light dark" />
+
+<!-- Core paints its inline five-dot loader before it emits theme styles or the
+     theme header field. Suppress only those dots at the earliest theme-owned
+     insertion point; the measured skeleton remains the one visual source. -->
+<style>
+  #d-splash .dots,
+  #d-splash .dots-container {
+    display: none !important;
+  }
+</style>

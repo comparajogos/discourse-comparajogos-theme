@@ -21,6 +21,7 @@
   margin-inline-start: var(--space-2);
 
   .cj-nav-item {
+    position: relative;
     display: inline-flex;
     gap: var(--space-2);
     align-items: center;
@@ -63,10 +64,6 @@
 
   /* Chat's unread indicator, as the client's ChatCountIndicator (`right-1
    * top-0`). Anchored on the icon, since the label is hidden below `lg`. */
-
-  .cj-nav-item {
-    position: relative;
-  }
 
   .chat-channel-unread-indicator {
     position: absolute;

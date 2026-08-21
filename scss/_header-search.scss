@@ -11,8 +11,8 @@
 
 @mixin cj-search-field {
   /* The row and positioning context are declared here rather than left to core,
-   * which sets them under its own five-class chain — the theme's own mobile
-   * field would otherwise stack the magnifier above the input. */
+   * which sets them under its own five-class chain — the outlet-mounted compact
+   * placement would otherwise stack the magnifier above the input. */
 
   .search-menu {
     position: relative;
@@ -145,11 +145,8 @@
   }
 }
 
-/* Two roots for one mixin. Core binds through a five-class chain
- * (`.header-search--enabled .floating-search-input .search-banner-inner.wrap
- * .search-menu …`), so the length has to be matched; the theme's own mobile
- * field (cj-header-search.gjs) has none of those ancestors and needs the same
- * measurements from scratch. */
+/* Core binds through its wrapper chain; the outlet-mounted compact field has
+ * none of those ancestors and therefore receives the same mixin at its root. */
 
 .d-header .floating-search-input .search-banner-inner.wrap {
   @include cj-search-field;

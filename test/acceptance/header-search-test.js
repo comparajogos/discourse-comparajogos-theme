@@ -3,10 +3,9 @@ import { test } from "qunit";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
 /*
- * The theme renders its own header search field on the widths core declines
- * (cj-header-search.gjs). The gate matters more than the styling: if it drifts
- * after a core upgrade, either the field disappears from mobile again or two
- * SearchMenus mount over the same input id.
+ * The theme renders a SearchMenu field on widths where core declines its full
+ * HeaderSearch. The gate matters more than the styling: if it drifts after an
+ * upgrade, the field either disappears or mounts twice.
  */
 
 acceptance("Compara Jogos header search - mobile", function (needs) {
@@ -43,7 +42,7 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       );
     assert.false(
       exists(".d-header .floating-search-input"),
-      "core's own field stays absent, so only one SearchMenu mounts"
+      "core's full HeaderSearch remains absent"
     );
     assert.true(
       exists(".d-header .hamburger-dropdown #toggle-hamburger-menu"),
@@ -67,12 +66,12 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
 });
 
 acceptance("Compara Jogos header search - desktop", function () {
-  test("core and theme fields trade places across the breakpoint", async function (assert) {
+  test("core and outlet fields trade places across the breakpoint", async function (assert) {
     await visit("/latest");
 
     assert.false(
       exists(".d-header .cj-header-search"),
-      "the theme field only exists on the widths core declines"
+      "the outlet field only exists on the widths core declines"
     );
     assert.true(
       document.body.classList.contains("has-sidebar-page"),
@@ -84,12 +83,14 @@ acceptance("Compara Jogos header search - desktop", function () {
     );
 
     const site = this.container.lookup("service:site");
+    const appEvents = this.container.lookup("service:app-events");
     site.set("narrowDesktopView", true);
+    appEvents.trigger("site-header:force-refresh");
     await settled();
 
     assert.true(
       exists(".d-header .cj-header-search"),
-      "the theme field mounts when the viewport narrows"
+      "the outlet field mounts when the viewport narrows"
     );
     assert.false(
       exists(".d-header .floating-search-input"),
@@ -97,11 +98,12 @@ acceptance("Compara Jogos header search - desktop", function () {
     );
 
     site.set("narrowDesktopView", false);
+    appEvents.trigger("site-header:force-refresh");
     await settled();
 
     assert.false(
       exists(".d-header .cj-header-search"),
-      "the theme field unmounts when the viewport widens again"
+      "the outlet field unmounts when the viewport widens again"
     );
     assert.true(
       exists(".d-header .floating-search-input"),

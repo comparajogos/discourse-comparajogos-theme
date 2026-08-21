@@ -39,11 +39,8 @@
 }
 
 .cj-feed {
-  /* Explicit gaps, not one flex gap: uniform spacing is what made the row feel
-   * like dead space. */
-  display: flex;
-  gap: 0.1875rem;
-  flex-direction: column;
+  /* Each relationship owns its spacing; a uniform flex gap made the compact
+   * metadata and the larger content transitions feel equally distant. */
   min-width: 0;
 
   &__byline {

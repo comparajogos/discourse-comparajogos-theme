@@ -512,7 +512,7 @@ $hidden_filter_tags: "" !default;
 }
 
 @each $tag in cj-split($hidden_filter_tags) {
-  /* SelectKit's row layout has the same specificity as the old selector and
+  /* SelectKit's row layout has the same specificity as a plain attribute rule and
    * can be emitted after a theme stylesheet. Name the discovery picker and its
    * row type so the setting wins without affecting tag pickers elsewhere or
    * escalating to `!important`. */

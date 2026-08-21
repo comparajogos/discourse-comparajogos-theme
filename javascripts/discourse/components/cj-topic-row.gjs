@@ -69,105 +69,101 @@ export default class CjTopicRow extends Component {
   <template>
     <td class="topic-list-data cj-feed-cell">
       <div class="cj-feed">
-        <div class="cj-feed__main">
-          <div class="cj-feed__byline">
-            {{#if this.originalPoster}}
-              <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
-                {{dAvatar this.originalPoster imageSize="small"}}
-              </DUserLink>
-              <DUserLink @user={{this.originalPoster}}>
-                <span class="cj-feed__author">
-                  {{this.originalPoster.username}}
-                </span>
-              </DUserLink>
-            {{/if}}
-            <span class="cj-feed__age">
-              {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
-            </span>
-
-            <span class="cj-feed__taxonomy">
-              {{~dCategoryLink @topic.category~}}
-              {{~dDiscourseTags @topic mode="list"~}}
-            </span>
-
-            <TopicStatus @topic={{@topic}} @context="topic-list" />
-          </div>
-
-          <div class="cj-feed__title topic-list-main-link">
-            {{dTopicLink @topic}}
-            <TopicPostBadges
-              @unreadPosts={{@topic.unread_posts}}
-              @unseen={{@topic.unseen}}
-              @url={{@topic.lastUnreadUrl}}
-            />
-          </div>
-
-          {{#if @topic.excerpt}}
-            <p class="cj-feed__excerpt">
-              {{dDirSpan @topic.escapedExcerpt htmlSafe="true"}}
-            </p>
-          {{/if}}
-
-          <div class="cj-feed__stats">
-            <span
-              class="cj-feed__stat {{if @topic.liked '--liked'}}"
-              title={{i18n "likes_lowercase" count=@topic.like_count}}
-            >
-              {{dIcon (if @topic.liked "heart" "far-heart")}}
-              {{@topic.like_count}}
-            </span>
-
-            <span class="cj-feed__stat">
-              {{dIcon "far-eye"}}
-              {{dNumber @topic.views numberKey="views_long"}}
-            </span>
-
-            <span class="cj-feed__stat">
-              {{dIcon "far-comment"}}
-              {{@topic.replyCount}}
-            </span>
-
-          </div>
-
-          {{#if this.showLastReply}}
-            <a
-              href={{@topic.lastPostUrl}}
-              title={{@topic.bumpedAtTitle}}
-              class="cj-feed__last-reply"
-            >
-              {{dIcon "reply"}}
-              <span class="cj-feed__last-reply-name">
-                {{this.lastPoster.username}}
+        <div class="cj-feed__byline">
+          {{#if this.originalPoster}}
+            <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
+              {{dAvatar this.originalPoster imageSize="small"}}
+            </DUserLink>
+            <DUserLink @user={{this.originalPoster}}>
+              <span class="cj-feed__author">
+                {{this.originalPoster.username}}
               </span>
-              <span>
-                {{i18n (themePrefix "topic_feed.replied")}}
-                {{! `leaveAgo` only applies to the medium format — core's
+            </DUserLink>
+          {{/if}}
+          <span class="cj-feed__age">
+            {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
+          </span>
+
+          <span class="cj-feed__taxonomy">
+            {{~dCategoryLink @topic.category~}}
+            {{~dDiscourseTags @topic mode="list"~}}
+          </span>
+
+          <TopicStatus @topic={{@topic}} @context="topic-list" />
+        </div>
+
+        <div class="cj-feed__title topic-list-main-link">
+          {{dTopicLink @topic}}
+          <TopicPostBadges
+            @unreadPosts={{@topic.unread_posts}}
+            @unseen={{@topic.unseen}}
+            @url={{@topic.lastUnreadUrl}}
+          />
+        </div>
+
+        {{#if @topic.excerpt}}
+          <p class="cj-feed__excerpt">
+            {{dDirSpan @topic.escapedExcerpt htmlSafe="true"}}
+          </p>
+        {{/if}}
+
+        <div class="cj-feed__stats">
+          <span
+            class="cj-feed__stat {{if @topic.liked '--liked'}}"
+            title={{i18n "likes_lowercase" count=@topic.like_count}}
+          >
+            {{dIcon (if @topic.liked "heart" "far-heart")}}
+            {{@topic.like_count}}
+          </span>
+
+          <span class="cj-feed__stat">
+            {{dIcon "far-eye"}}
+            {{dNumber @topic.views numberKey="views_long"}}
+          </span>
+
+          <span class="cj-feed__stat">
+            {{dIcon "far-comment"}}
+            {{@topic.replyCount}}
+          </span>
+
+        </div>
+
+        {{#if this.showLastReply}}
+          <a
+            href={{@topic.lastPostUrl}}
+            title={{@topic.bumpedAtTitle}}
+            class="cj-feed__last-reply"
+          >
+            {{dIcon "reply"}}
+            <span class="cj-feed__last-reply-name">
+              {{this.lastPoster.username}}
+            </span>
+            <span>
+              {{i18n (themePrefix "topic_feed.replied")}}
+              {{! `leaveAgo` only applies to the medium format — core's
                     formatter ignores it for `tiny`, which is why Horizon's own
                     activity column still reads "5h". Medium is what produces
                     "5 hours ago" / "5 horas atrás" from core's own strings,
                     rather than a preposition glued onto the theme's label,
                     which would read wrong the moment the date turns absolute. }}
-                {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
-              </span>
-            </a>
-          {{/if}}
+              {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
+            </span>
+          </a>
+        {{/if}}
 
-          {{#if this.showUpdated}}
-            <a
-              href={{@topic.lastPostUrl}}
-              title={{@topic.bumpedAtTitle}}
-              class="cj-feed__last-reply cj-feed__last-reply--updated"
-            >
-              {{dIcon "pencil"}}
-              <span>
-                {{i18n (themePrefix "topic_feed.updated")}}
-                {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
-              </span>
-            </a>
-          {{/if}}
-
-        </div>
-
+        {{#if this.showUpdated}}
+          <a
+            href={{@topic.lastPostUrl}}
+            title={{@topic.bumpedAtTitle}}
+            class="cj-feed__last-reply"
+          >
+            {{dIcon "pencil"}}
+            <span>
+              {{i18n (themePrefix "topic_feed.updated")}}
+              {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
+            </span>
+          </a>
+        {{/if}}
       </div>
     </td>
   </template>

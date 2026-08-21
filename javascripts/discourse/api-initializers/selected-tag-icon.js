@@ -1,3 +1,4 @@
+import { scheduleOnce } from "@ember/runloop";
 import { apiInitializer } from "discourse/lib/api";
 import renderTag from "discourse/lib/render-tag";
 
@@ -45,6 +46,6 @@ function syncSelectedTagIcons() {
 
 export default apiInitializer((api) => {
   api.onPageChange(() => {
-    requestAnimationFrame(() => requestAnimationFrame(syncSelectedTagIcons));
+    scheduleOnce("afterRender", null, syncSelectedTagIcons);
   });
 });
