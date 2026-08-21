@@ -36,11 +36,53 @@ export default class CjHeaderSearch extends Component {
   @service siteSettings;
 
   @tracked compactHeader;
+  @tracked hideSearchResults = false;
 
+  keyboardWasVisibleForSearch = false;
+  resultsResetFrame = null;
   transitionFrame = null;
 
   syncCompactHeader = () => {
     this.compactHeader = this.site.mobileView || this.site.narrowDesktopView;
+  };
+
+  onKeyboardVisibilityChange = (visible) => {
+    const input = document.getElementById("cj-header-search-input");
+
+    if (visible) {
+      this.keyboardWasVisibleForSearch =
+        this.site.mobileView && document.activeElement === input;
+      return;
+    }
+
+    if (!this.keyboardWasVisibleForSearch) {
+      return;
+    }
+
+    this.keyboardWasVisibleForSearch = false;
+
+    if (!this.site.mobileView || !input?.isConnected) {
+      return;
+    }
+
+    /* Core owns SearchMenu's open state. `hideResults` is its supported
+     * external close signal; pulse it for one rendered frame, then restore it
+     * so the next focus can open normally. Blurring also collapses our inline
+     * mobile field once the software keyboard is gone. */
+    input.blur();
+    this.hideSearchResults = true;
+    this.cancelResultsReset();
+    this.resultsResetFrame = window.requestAnimationFrame(() => {
+      this.resultsResetFrame = null;
+      this.hideSearchResults = false;
+    });
+  };
+
+  cancelResultsReset = () => {
+    if (this.resultsResetFrame !== null) {
+      window.cancelAnimationFrame(this.resultsResetFrame);
+      this.resultsResetFrame = null;
+    }
   };
 
   constructor() {
@@ -48,8 +90,17 @@ export default class CjHeaderSearch extends Component {
 
     this.syncCompactHeader();
     this.appEvents.on("site-header:force-refresh", this.syncCompactHeader);
+    this.appEvents.on(
+      "keyboard-visibility-change",
+      this.onKeyboardVisibilityChange
+    );
     registerDestructor(this, () => {
       this.appEvents.off("site-header:force-refresh", this.syncCompactHeader);
+      this.appEvents.off(
+        "keyboard-visibility-change",
+        this.onKeyboardVisibilityChange
+      );
+      this.cancelResultsReset();
     });
   }
 
@@ -150,6 +201,7 @@ export default class CjHeaderSearch extends Component {
             <SearchMenu
               @location="header"
               @searchInputId="cj-header-search-input"
+              @hideResults={{this.hideSearchResults}}
             />
           </div>
         </div>

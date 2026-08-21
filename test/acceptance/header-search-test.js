@@ -63,6 +63,29 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       "the header trigger retains core's navigation cloak"
     );
   });
+
+  test("closing the software keyboard dismisses search results", async function (assert) {
+    await visit("/latest");
+    await click("#cj-header-search-input");
+
+    assert
+      .dom(".cj-header-search .search-menu-panel")
+      .exists("focusing the input opens the search panel");
+
+    const appEvents = this.container.lookup("service:app-events");
+    appEvents.trigger("keyboard-visibility-change", true);
+    appEvents.trigger("keyboard-visibility-change", false);
+    await settled();
+
+    assert
+      .dom(".cj-header-search .search-menu-panel")
+      .doesNotExist("dismissing the keyboard closes the search panel");
+    assert.notStrictEqual(
+      document.activeElement?.id,
+      "cj-header-search-input",
+      "the compact field releases focus"
+    );
+  });
 });
 
 acceptance("Compara Jogos header search - desktop", function () {
