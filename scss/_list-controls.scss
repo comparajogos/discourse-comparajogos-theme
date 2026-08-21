@@ -254,8 +254,13 @@ $filter-glyphs: (
  * `.hidden` is 0,2,0, so `body` has to carry the override. */
 
 @include viewport.until(md) {
+  /* `!important` because `.hidden` is core's blunt utility class
+   * (`display: none !important`, foundation/helpers.scss) and the condition
+   * behind it — `site.mobileView && !category` (bread-crumbs.gjs:54) — is about
+   * breadcrumbs. The element is our tag filter, which is wanted at every scope. */
+
   body .category-breadcrumb.hidden {
-    display: flex;
+    display: flex !important;
   }
 
   /* Room for the title first: the tag filter takes its content width and gives
@@ -411,17 +416,40 @@ $hidden_filter_tags: "" !default;
     margin-inline: 0;
   }
 
-  .topic-create-button__combo #create-topic {
-    min-height: 3.5rem;
-    padding-inline: var(--space-5);
+  /* The drafts menu stays attached to the primary action. The group carries the
+   * shared depth, while each exposed edge gets the pill radius; avoiding an
+   * overflow clip lets both halves keep their keyboard focus ring. */
+
+  .topic-create-button__combo {
     border-radius: var(--cj-radius-pill);
     box-shadow: 0 8px 24px -6px rgb(0 0 0 / 45%);
   }
 
-  /* The drafts half of the split button is a secondary path; a floating action
-   * is one target. */
-
+  .topic-create-button__combo #create-topic,
   .topic-create-button__combo .d-combo-button-menu {
-    display: none;
+    min-height: 3.5rem;
+    box-shadow: none;
+  }
+
+  .topic-create-button__combo #create-topic {
+    padding-inline: var(--space-5);
+  }
+
+  .topic-create-button__combo:not(.--has-menu) #create-topic {
+    border-radius: var(--cj-radius-pill);
+  }
+
+  .topic-create-button__combo.--has-menu #create-topic {
+    border-start-start-radius: var(--cj-radius-pill);
+    border-start-end-radius: 0;
+    border-end-start-radius: var(--cj-radius-pill);
+    border-end-end-radius: 0;
+  }
+
+  .topic-create-button__combo.--has-menu .d-combo-button-menu {
+    min-inline-size: 2.75rem;
+    padding-inline: 0;
+    border-start-end-radius: var(--cj-radius-pill);
+    border-end-end-radius: var(--cj-radius-pill);
   }
 }

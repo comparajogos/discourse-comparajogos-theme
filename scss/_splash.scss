@@ -58,6 +58,8 @@ html:has(#d-splash) {
   .cj-splash__bar,
   .cj-splash__avatar,
   .cj-splash__nav-item::before,
+  .cj-splash__rail-pill,
+  .cj-splash__rail-description::after,
   .cj-splash__row::before,
   .cj-splash__search::before,
   .cj-splash__log-in::before {
@@ -359,6 +361,64 @@ html[lang^="pt"] #cj-splash {
   padding-block-start: var(--space-5);
 }
 
+/* The category rail is installed above discovery controls. It owns a pill row
+ * and a fixed one-line description in the booted page, so both rows are
+ * represented here; matching its margins removes the vertical swap when Ember
+ * replaces the skeleton. */
+
+.cj-splash__rail {
+  margin-block: var(--space-2) var(--space-4);
+}
+
+.cj-splash__rail-pills {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.75rem;
+  overflow: hidden;
+}
+
+.cj-splash__rail-pill {
+  flex: none;
+  inline-size: 7rem;
+  block-size: 2.25rem;
+  border-radius: var(--d-nav-pill-border-radius);
+  background: var(--cj-control);
+
+  &:nth-child(2) {
+    inline-size: 8.5rem;
+  }
+
+  &:nth-child(3) {
+    inline-size: 5.75rem;
+  }
+}
+
+.cj-splash__rail-description {
+  display: block;
+  margin-block-start: var(--space-1);
+  font-size: var(--font-down-2-rem);
+  line-height: 1.4;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    inline-size: min(66ch, 72%);
+    block-size: 0.65rem;
+    border-radius: 999px;
+    background: var(--cj-control);
+    vertical-align: middle;
+  }
+}
+
+/* Core's navigation container contributes its own trailing space inside
+ * `.list-controls`; keeping that wrapper distinct is what aligns the first
+ * placeholder card with the first booted topic row. */
+
+.cj-splash__list-controls {
+  padding-block-end: var(--space-3);
+}
+
 .cj-splash__controls {
   display: flex;
   align-items: stretch;
@@ -403,7 +463,7 @@ html[lang^="pt"] #cj-splash {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-block-start: var(--space-3);
+  margin-block-start: 0;
 }
 
 .cj-splash__card {
@@ -571,6 +631,22 @@ html[lang^="pt"] #cj-splash {
     height: 2.5rem;
   }
 
+  .cj-splash__rail {
+    margin-block: var(--space-1) var(--space-3);
+  }
+
+  .cj-splash__rail-pills {
+    height: 2.5rem;
+  }
+
+  .cj-splash__rail-pill {
+    block-size: 2rem;
+  }
+
+  .cj-splash__list-controls {
+    padding-block: var(--space-3) calc(var(--space-3) + var(--space-3));
+  }
+
   /* The booted list drops its cards for hairline-separated rows that bleed past
    * the page gutter and give way to the canvas (see styles.scss). */
 
@@ -617,13 +693,6 @@ html[lang^="pt"] #cj-splash {
     &::after {
       content: none;
     }
-  }
-
-  /* The pinned list controls carry their own block padding here (see
-   * _list-controls.scss), which starts the column that much lower. */
-
-  .cj-splash__main {
-    padding-block-start: calc(var(--space-5) + var(--space-3));
   }
 
   /* Titles wrap at this width, so the card is a line taller. */

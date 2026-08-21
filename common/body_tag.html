@@ -110,14 +110,31 @@
 
     <div class="cj-splash__main">
       <!--
+        The category component is the first discovery child. Its pills and
+        one-line description reserve real layout space, so the placeholder
+        carries the same two rows instead of letting the topic list jump when
+        Ember mounts the component.
+      -->
+      <div class="cj-splash__rail">
+        <div class="cj-splash__rail-pills">
+          <span class="cj-splash__rail-pill"></span>
+          <span class="cj-splash__rail-pill"></span>
+          <span class="cj-splash__rail-pill"></span>
+        </div>
+        <span class="cj-splash__rail-description"></span>
+      </div>
+
+      <!--
         The top menu is a site setting (recentes / novos / em alta on one forum,
         latest / hot / categories on another), so the tabs are bars too. The
         first is the selected one.
       -->
-      <div class="cj-splash__controls">
-        <span class="cj-splash__tab is-active"></span>
-        <span class="cj-splash__tab"></span>
-        <span class="cj-splash__tab"></span>
+      <div class="cj-splash__list-controls">
+        <div class="cj-splash__controls">
+          <span class="cj-splash__tab is-active"></span>
+          <span class="cj-splash__tab"></span>
+          <span class="cj-splash__tab"></span>
+        </div>
       </div>
 
       <!-- Eight cards, enough to reach the fold on a tall desktop window; the
