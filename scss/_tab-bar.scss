@@ -7,6 +7,10 @@
 $height: 3.5rem;
 
 @if $show_mobile_tab_bar == "true" {
+  :root {
+    --cj-mobile-tab-bar-clearance: #{$height};
+  }
+
   .d-tab-bar {
     background: var(--cj-panel);
     border-block-start: 1px solid var(--cj-border);
