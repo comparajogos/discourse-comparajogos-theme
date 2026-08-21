@@ -37,7 +37,7 @@
       "highlight": "ddf2ff",
       "hover": "ebebeb",
       "selected": "ddf2ff",
-      "danger": "dc2626",
+      "danger": "e7000b",
       "success": "15803d",
       "love": "e11d48"
     },
@@ -51,7 +51,7 @@
       "highlight": "292f32",
       "hover": "222222",
       "selected": "292f32",
-      "danger": "f87171",
+      "danger": "ff6467",
       "success": "4ade80",
       "love": "fb7185"
     }

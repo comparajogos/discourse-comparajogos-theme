@@ -97,6 +97,45 @@ body {
   --d-button-success-text-color--hover: var(--cj-on-action);
   --d-button-success-icon-color: var(--cj-on-action);
   --d-button-success-icon-color--hover: var(--cj-on-action);
+
+  /* Every client variant holds its foreground still and moves only the surface
+   * (`components/common/Button.tsx`): primary and danger dim the fill to /90,
+   * secondary keeps its fill and gains a shadow. Core instead labels .btn-default
+   * with --primary-high and swaps to --primary on hover, so the text brightened
+   * at the same moment the fill did — two changes reading as a flicker rather
+   * than a response. Pinned to the text colour at both states. */
+
+  --d-button-default-text-color: var(--cj-text);
+  --d-button-default-text-color--hover: var(--cj-text);
+  --d-button-default-icon-color: var(--cj-text);
+  --d-button-default-icon-color--hover: var(--cj-text);
+
+  /* The fills go through the tokens too, not a `.btn-primary { background }`
+   * rule: core paints #create-topic through a longer selector than a bare
+   * .btn-primary, so a class rule of ours reached the plain buttons and left the
+   * composer's split button on the raw accent. Hover dims to 90% opacity, which
+   * is what `bg-primary/90` compiles to — the page shows through, so the button
+   * darkens over a dark panel and lightens over the light canvas, moving with
+   * the scheme instead of always toward white as --tertiary-hover does. */
+
+  --d-button-primary-bg-color: var(--cj-fill-action);
+  --d-button-primary-bg-color--hover: color-mix(
+    in srgb,
+    var(--cj-fill-action) 90%,
+    transparent
+  );
+  --d-button-danger-bg-color: var(--cj-fill-danger);
+  --d-button-danger-bg-color--hover: color-mix(
+    in srgb,
+    var(--cj-fill-danger) 90%,
+    transparent
+  );
+  --d-button-success-bg-color: var(--cj-fill-success);
+  --d-button-success-bg-color--hover: color-mix(
+    in srgb,
+    var(--cj-fill-success) 90%,
+    transparent
+  );
 }
 
 .btn-primary,
@@ -118,17 +157,6 @@ body {
   }
 }
 
-.btn-primary {
-  background: var(--cj-fill-action);
-}
-
-.btn-danger {
-  background: var(--cj-fill-danger);
-}
-
-.btn-success {
-  background: var(--cj-fill-success);
-}
 
 /* The client has no outlined button. Core's modernize flag gives .btn-default a
  * hard #646464 border — the same harsh outline properties.scss already takes
@@ -140,14 +168,16 @@ body {
   border-color: transparent;
   background: var(--cj-control);
 
-  /* A step from the fill, not a lift on top of it. --cj-hover is a translucent
-   * 6% white wash meant for a transparent surface; over an already-filled
-   * control it compounds to oklch 0.33 — eight times the step the client's own
-   * hover takes (0.200 canvas to 0.210 card). Mixing toward the text colour
-   * instead keeps it a +0.03 nudge, and reverses correctly in the light scheme,
-   * where the control is light and the hover should darken it. */
-
-  /* Core's hover is `.discourse-no-touch .btn:hover`, three classes deep and
+  /* The client's secondary button does not recolour on hover at all — it keeps
+   * `bg-secondary` and adds `shadow` — so the fill is left alone and the shadow
+   * does the work. It cannot do all of it: Tailwind's shadow is black at 10%,
+   * which is invisible over a near-black panel, so dark also takes the smallest
+   * step that registers. Mixing toward the text colour rather than washing with
+   * --cj-hover (a 6% white meant for transparent surfaces, which compounds to
+   * oklch 0.33 over an already-filled control) keeps it a nudge, and reverses
+   * correctly in the light scheme, where hover should darken.
+   *
+   * Core's hover is `.discourse-no-touch .btn:hover`, three classes deep and
    * reading --d-button-default-bg-color--hover, so a plain `.btn-default:hover`
    * loses to it and the light grey came through untouched. Matched at the same
    * weight here, with the plain selector kept for touch devices, where core's
@@ -156,7 +186,10 @@ body {
   &:focus-visible,
   &:hover,
   .discourse-no-touch &:hover {
-    background: color-mix(in oklch, var(--cj-control), var(--cj-text) 4%);
+    background: color-mix(in oklch, var(--cj-control), var(--cj-text) 2%);
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 10%),
+      0 1px 2px -1px rgb(0 0 0 / 10%);
   }
 }
 
@@ -588,40 +621,6 @@ body.has-sidebar-page .wrap {
 /* Keep the core category and tag filters visible with the Canvas component. */
 body .category-breadcrumb {
   display: flex;
-}
-
-/*
- * Canvas highlights #create-topic. Discourse 2026 renders its drafts trigger
- * as a second DComboButton half, so both halves need the same state colors.
- */
-
-.topic-create-button__combo.--has-menu {
-  #create-topic,
-  .d-combo-button-menu {
-    /* Not --secondary: that is the canvas colour, which is near-black in dark
-     * mode, so the label and icon came out dark on a blue button. The
-     * foreground on an action surface is fixed. */
-    color: var(--cj-on-action);
-    background: var(--cj-action);
-    border-color: transparent;
-
-    .d-icon {
-      color: currentcolor;
-    }
-
-    &:hover,
-    &:focus-visible {
-      color: var(--cj-on-action);
-      background: color-mix(in oklch, var(--cj-action) 88%, black);
-
-      /* Core colours .btn:hover .d-icon on its own, so currentcolor alone does
-       * not survive the hover state. */
-
-      .d-icon {
-        color: currentcolor;
-      }
-    }
-  }
 }
 
 /* The floating sidebar handle sits over this region, so the menu starts below

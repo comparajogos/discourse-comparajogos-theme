@@ -12,7 +12,7 @@
         "highlight": "ddf2ff",
         "hover": "ebebeb",
         "selected": "ddf2ff",
-        "danger": "dc2626",
+        "danger": "e7000b",
         "success": "15803d",
         "love": "e11d48"
       },
@@ -37,14 +37,14 @@
         "highlight": "292f32",
         "hover": "222222",
         "selected": "292f32",
-        "danger": "f87171",
+        "danger": "ff6467",
         "success": "4ade80",
         "love": "fb7185"
       },
       "product": {
         "background": "oklch(20.02% 0 0deg)",
         "card": "oklch(21% 0.006 285.885deg)",
-        "control": "oklch(25% 0 0deg)",
+        "control": "oklch(26% 0 0deg)",
         "border": "oklch(100% 0 0deg / 10%)",
         "textMuted": "#9f9fa9",
         "headerSoft": "oklch(21% 0.006 285.885deg)"
@@ -56,7 +56,7 @@
     "focusRing": "0 0 0 2px rgb(66 153 225 / 70%)",
     "fill": {
       "action": "#006aaf",
-      "danger": "#dc2626",
+      "danger": "#e7000b",
       "success": "#15803d"
     }
   }
