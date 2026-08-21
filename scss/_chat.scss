@@ -80,7 +80,7 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
         block-size: var(--cj-mobile-nav-height, 3.5rem);
         min-block-size: var(--cj-mobile-nav-height, 3.5rem);
         padding-block: 0;
-        color: var(--cj-text-muted);
+        color: var(--cj-text);
         justify-content: center;
 
         .d-icon {
@@ -101,7 +101,7 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
 
         &:hover,
         &:focus {
-          color: var(--cj-text-muted);
+          color: var(--cj-text);
           background: transparent;
 
           .d-icon,
@@ -115,7 +115,7 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
          * keeping the same foreground as the inactive tab. */
 
         &.--active {
-          color: var(--cj-text-muted);
+          color: var(--cj-text);
           background: transparent;
 
           .d-button-label {
