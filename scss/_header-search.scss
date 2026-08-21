@@ -227,9 +227,19 @@
 
         .before-header-panel-outlet {
           flex: 0 0 2.5rem;
-          margin-inline: var(--space-3) var(--space-2);
+          margin-inline: var(--space-2);
           interpolate-size: allow-keywords;
           transition: var(--cj-transition-input);
+        }
+
+        /* Core gives the signed-in icon list its own 0.5em leading margin.
+         * The search outlet already owns that separation, so keeping both made
+         * the collapsed control drift away from the avatar and left the open
+         * field with more space on its trailing side. Logged-out headers use
+         * `.header-buttons`, so their existing Login spacing stays unchanged. */
+
+        .panel .d-header-icons {
+          margin-inline-start: 0;
         }
       }
 
