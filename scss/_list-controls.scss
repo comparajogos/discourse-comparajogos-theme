@@ -24,6 +24,19 @@
  * tab and the compose button reachable. The canvas fill is what stops rows
  * showing through it. */
 
+/* One row of controls, one height. The sort trigger is the client's Select at
+ * `h-10`, while core's buttons beside it are content-sized and come out 38px —
+ * two pixels is enough to read as misalignment when they sit in a wrapped row
+ * under each other. The radii stay as they are: 10px is the client's input, 8px
+ * its button, and that distinction is deliberate. */
+
+@include viewport.until(md) {
+  .navigation-controls .btn,
+  .navigation-controls .d-combo-button > .btn {
+    min-height: 2.5rem;
+  }
+}
+
 @include viewport.until(sm) {
   .list-controls {
     position: sticky;
