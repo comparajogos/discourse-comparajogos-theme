@@ -274,7 +274,11 @@
 
       .cj-header-search {
         order: 1;
-        flex: 0 0 2.5rem;
+
+        /* The outlet owns the open/closed width transition. Search remains its
+         * flexible child in both states, so it absorbs every intermediate
+         * width while the market control stays pinned to the trailing edge. */
+        flex: 1 1 2.5rem;
         width: auto;
         min-width: 2.5rem;
 
@@ -337,11 +341,10 @@
       .contents:has(.cj-header-search .search-menu-panel) {
         .before-header-panel-outlet {
           flex-grow: 1;
-          margin-inline: var(--space-1);
-        }
 
-        .cj-header-search {
-          flex-grow: 1;
+          /* Keep the market-to-account gap stable while giving the expanded
+           * field one step less space beside the compact logo. */
+          margin-inline: var(--space-1) var(--space-2);
         }
 
         /* Use Discourse's configured small logo rather than cropping the full
