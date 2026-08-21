@@ -7,6 +7,13 @@
   padding-block: 0.9em;
 }
 
+/* Horizon keeps core's new-topic notice geometry and motion, then lowers its
+ * visual weight with the quietest accent surface. */
+
+#list-area .show-more .alert.alert-info {
+  background: var(--tertiary-very-low);
+}
+
 /* Discovery is a column of topic cards, not one boxed table — Horizon's
  * `--d-topic-cards` pattern in the theme's own tokens. One 1.5rem panel put
  * every row inside a 1100px surface whose right half was empty air. Core renders

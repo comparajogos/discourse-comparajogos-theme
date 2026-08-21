@@ -278,24 +278,16 @@ $filter-glyphs: (
   align-items: center;
 }
 
-/* The Tag Icons component replaces Discourse's tag renderer, but core's
- * selected TagDrop value is plain text and never passes through that renderer.
- * The theme mirrors the configured renderer's icon into this one missing
- * surface without changing the component itself. */
+/* The Tag Icons renderer supplies the selected item with its registered symbol;
+ * core renders that symbol declaratively as a direct child. */
 
-.tag-drop .select-kit-selected-name .cj-selected-tag-icon {
-  display: inline-flex;
+.tag-drop .select-kit-selected-name > .d-icon {
   flex: none;
   margin-inline-end: var(--space-2);
-
-  > .d-icon {
-    margin: 0;
-  }
 }
 
-/* A selected tag that has an icon of its own brings it through the shared tag
- * renderer above, so the generic glyph stands down rather than sitting beside
- * it. The trailing caret is a sibling, not a child, so it does not trip this. */
+/* A selected tag with its own symbol replaces the generic glyph. The trailing
+ * caret is a sibling, not a child, so it does not trip this. */
 
 .tag-drop
   .select-kit-header-wrapper
