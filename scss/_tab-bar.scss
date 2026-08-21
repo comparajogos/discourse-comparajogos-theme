@@ -36,9 +36,9 @@ $height: 3.5rem;
 
       .title {
         margin-block-start: var(--space-1);
-        font-size: 0.75rem;
+        font-size: var(--cj-text-xs-size);
         font-weight: 400;
-        line-height: 1rem;
+        line-height: var(--cj-text-xs-line-height);
         letter-spacing: 0.4px;
       }
     }

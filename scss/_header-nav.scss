@@ -30,7 +30,9 @@
     min-height: 2.5rem;
     padding-inline: var(--space-4);
     color: var(--header_primary);
-    font-size: var(--font-down-1-rem);
+    font-size: var(--cj-text-sm-size);
+    font-weight: 400;
+    line-height: var(--cj-text-sm-line-height);
     white-space: nowrap;
     border-radius: var(--cj-radius-pill);
 

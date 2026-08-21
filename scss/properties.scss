@@ -54,7 +54,7 @@ body {
    * em-based height shrinks the row below its own padding. */
   --d-sidebar-row-height: 2.25rem;
   --d-sidebar-row-horizontal-padding: var(--space-4);
-  --d-sidebar-vertical-gap: var(--space-3);
+  --d-sidebar-vertical-gap: var(--space-2);
   --d-sidebar-section-link-icon-size: 1.25rem;
   --d-sidebar-link-color: var(--primary);
   --d-sidebar-link-icon-color: var(--cj-text-muted);
@@ -101,6 +101,13 @@ body {
   --cj-duration-fast: 150ms;
   --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --cj-transition-input: all 200ms ease-in-out;
+
+  /* Shared application-shell roles use the client's Tailwind metrics instead
+   * of Discourse's fluid type steps, which resolve a fraction smaller. */
+  --cj-text-sm-size: 0.875rem;
+  --cj-text-sm-line-height: 1.25rem;
+  --cj-text-xs-size: 0.75rem;
+  --cj-text-xs-line-height: 1rem;
 
   /* Core's universal hairline: 200+ rules borrow --content-border-color, which
    * defaults to --primary-low — the hard #373737. One mapping retires them all;
