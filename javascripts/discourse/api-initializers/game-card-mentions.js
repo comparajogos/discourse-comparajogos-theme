@@ -2,6 +2,7 @@ import { apiInitializer } from "discourse/lib/api";
 import { wantsNewWindow } from "discourse/lib/intercept-click";
 import CjGameCardPopup from "../components/cj-game-card-popup";
 
+const MENU_IDENTIFIER = "cj-game-card";
 const TAG_MENTION = 'a.hashtag-cooked[data-type="tag"]';
 const GAME_ATTRIBUTE = "cjGame";
 const GAME_SELECTOR = "[data-cj-game]";
@@ -36,7 +37,7 @@ export default apiInitializer((api) => {
     event.preventDefault();
 
     await menu.show(mention, {
-      identifier: "cj-game-card",
+      identifier: MENU_IDENTIFIER,
       component: CjGameCardPopup,
       placement: "bottom-start",
       fallbackPlacements: ["top-start"],
@@ -74,6 +75,13 @@ export default apiInitializer((api) => {
       }
     });
   }
+
+  /* The card's own links go to the catalog, which unloads the page, but "ver
+   * tópicos" is an in-app transition and the menu would otherwise still be
+   * hanging over the tag page the reader just landed on. Closing on any page
+   * change covers that link and every future one, rather than each link having
+   * to remember to close its own card. */
+  api.onPageChange(() => menu.close(MENU_IDENTIFIER));
 
   api.decorateCookedElement(markGameMentions);
 

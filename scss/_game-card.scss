@@ -6,8 +6,8 @@
  *
  * The client's ProductCard (components/product/ProductCard.tsx) laid on its
  * side: box art flush to the card's own edge with a rank-or-kind badge dropped
- * over it, a two-line title, four unlabelled glyph-and-number figures under a
- * hairline, and the price with its cents set as a superscript. Vertical there
+ * over it, a two-line title, four unlabelled glyph-and-number figures, and the
+ * price with its cents set as a superscript. Vertical there
  * because a carousel cell is narrow; horizontal here because a forum gives the
  * card a full content column and a stack would waste it. */
 
@@ -25,15 +25,16 @@
   overflow: hidden;
   background: var(--cj-surface-muted);
 
-  /* `cover`, not `contain`: flush against the card edge the art has to fill its
-   * box or the seam shows as a band of empty surface. The client's card clips
-   * the same way (`[clip-path:inset(0_round_…)]`), and box art crops safely from
-   * the bottom — the title is at the top. */
+  /* `contain`, and a square box. The client's card can crop to fill because its
+   * art box is full-width and short; rotate that layout and the box becomes
+   * narrow and tall, where `cover` scales a 200x135 cover to 394px wide and
+   * shows you the middle 104px of it. The client's own horizontal layout — the
+   * item header — contains the art in a square for exactly this reason. */
 
   img {
     inline-size: 100%;
     block-size: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: top;
   }
 }
@@ -74,13 +75,12 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: stretch;
 
-  /* The art runs the full height of the card and takes the card's own radius on
-   * the leading edge — the horizontal counterpart of the client's full-bleed
-   * top image. The host supplies the radius, since only it knows its corner. */
-
   &__cover {
     @include cj-game-cover;
     inline-size: 8.5rem;
+    block-size: 8.5rem;
+    margin: var(--space-4) 0 var(--space-4) var(--space-4);
+    border-radius: var(--d-border-radius-large);
   }
 
   &__badge {
@@ -170,7 +170,6 @@
     padding-block-start: var(--space-2);
     color: var(--cj-text-muted);
     font-size: var(--font-down-1-rem);
-    border-block-start: 1px solid var(--cj-border);
   }
 
   &__stat {
@@ -238,7 +237,6 @@
     justify-content: space-between;
     margin-block-start: auto;
     padding-block-start: var(--space-2);
-    border-block-start: 1px solid var(--cj-border);
   }
 
   &__price {
@@ -336,7 +334,6 @@
 
 .cj-game-card-panel {
   @include cj-panel-surface;
-  overflow: hidden;
   margin-block-end: var(--space-4);
 
   /* The card arrives after the catalog answers, which is necessarily after the
@@ -356,30 +353,6 @@
 
   to {
     opacity: 1;
-  }
-}
-
-/* --------------------------------------------------------------------------
- * Tag route: the forum's item header
- * -------------------------------------------------------------------------- */
-
-.cj-game-card--panel {
-  /* Inset and rounded rather than flush: the item header treats the cover as an
-   * object on the surface, and the tag page has the width to afford the margin.
-   * The popup, which is a card, keeps its art full-bleed. */
-
-  .cj-game-card__cover {
-    inline-size: 8.5rem;
-    block-size: 8.5rem;
-    margin: var(--space-4) 0 var(--space-4) var(--space-4);
-    border-radius: var(--d-border-radius-large);
-
-    /* Contained, not cropped: with a margin around it there is no seam to fill,
-     * and box art keeps its whole composition. */
-
-    img {
-      object-fit: contain;
-    }
   }
 }
 
@@ -427,22 +400,22 @@
   width: auto;
   max-width: calc(100vw - var(--space-6));
 
-  /* The card runs to the menu's own edges, so the padding belongs to the card's
-   * body and the radius has to clip the art. Without this the cover is an inset
-   * square and the flush look the card is built around is lost. */
-
   .fk-d-menu__inner-content {
     min-width: 0;
-    overflow: hidden;
     padding: 0;
-    border-radius: var(--d-border-radius-large);
   }
 
   .cj-game-card--popup {
     inline-size: min(26rem, calc(100vw - var(--space-8)));
 
     .cj-game-card__cover {
-      inline-size: 6.5rem;
+      inline-size: 6rem;
+      block-size: 6rem;
+      margin: var(--space-3) 0 var(--space-3) var(--space-3);
+    }
+
+    .cj-game-card__body {
+      padding: var(--space-3);
     }
 
     .cj-game-card__stats {
@@ -489,8 +462,7 @@
   @include cj-panel-surface;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  overflow: hidden;
-  align-items: stretch;
+  align-items: center;
   inline-size: 100%;
   color: var(--cj-text);
   transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
@@ -500,12 +472,13 @@
     background: var(--cj-hover);
   }
 
-  /* The card's own anatomy at chip scale: art flush to the leading edge, badge
-   * over it, everything else in a padded column. */
-
+  /* The card's anatomy at chip scale. */
   &__cover {
     @include cj-game-cover;
-    inline-size: 4.25rem;
+    inline-size: 3.5rem;
+    block-size: 3.5rem;
+    margin: var(--space-2) 0 var(--space-2) var(--space-2);
+    border-radius: var(--d-border-radius);
   }
 
   &__badge {
