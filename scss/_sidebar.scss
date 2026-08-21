@@ -164,11 +164,11 @@
 
 @include viewport.until(md) {
   /* Core's working mobile trigger stays structurally attached to the header.
-   * The reserved 24px row is exactly its visible footprint; a transparent
-   * pseudo-element grows the touch target without moving the content again. */
+   * Give it a real place before the logo instead of charging the page a whole
+   * empty row for a tiny tab below the shell. */
 
-  .d-header-wrap {
-    margin-block-end: 1.5rem;
+  .d-header .home-logo-wrapper-outlet {
+    margin-inline-start: calc(2rem + var(--space-2));
   }
 
   /* Core makes `.panel` the containing block for its icons. Release only the
@@ -179,17 +179,19 @@
     position: static;
   }
 
-  /* A small visual tab straddles the header seam. Its transparent pseudo grows
-   * the hit area to 44px without asking the page to reserve a 44px empty row. */
+  /* The visible control is 32px, with a 44px hit target that grows inside the
+   * header. The logo offset above keeps both visual and interactive bounds from
+   * colliding. */
 
   .d-header .header-dropdown-toggle.hamburger-dropdown {
     position: absolute;
     z-index: z("dropdown");
-    inset-block-start: 100%;
-    inset-inline-start: calc(-1 * var(--space-3));
+    inset-block-start: 50%;
+    inset-inline-start: 0;
     display: block;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
+    transform: translateY(-50%);
 
     #toggle-hamburger-menu {
       position: relative;
@@ -200,21 +202,25 @@
       block-size: 100%;
       padding: 0;
       color: var(--header_primary);
-      background: var(--cj-header);
-      border-radius: 0 0 var(--d-button-border-radius)
-        var(--d-button-border-radius);
-      box-shadow: 0 6px 14px -10px rgb(0 0 0 / 45%);
+      background: transparent;
+      border-radius: var(--d-button-border-radius);
+      box-shadow: none;
+
+      &:hover,
+      &:focus-visible {
+        background: color-mix(in oklch, var(--header_primary) 12%, transparent);
+      }
 
       &::after {
         position: absolute;
         content: "";
-        inset: -0.625rem;
+        inset: -0.375rem;
       }
     }
 
     .d-icon {
-      width: 0.8125rem;
-      height: 0.8125rem;
+      width: 1rem;
+      height: 1rem;
       color: currentcolor;
     }
   }
