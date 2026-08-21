@@ -111,6 +111,13 @@
     height: 2.5rem;
     object-fit: contain;
     object-position: left center;
+
+    /* Keep core's compact topic logo compact; only the full site wordmarks
+     * reserve their final geometry before the image itself is available. */
+
+    &:is(.logo-big, .logo-mobile) {
+      aspect-ratio: var(--cj-wordmark-aspect-ratio);
+    }
   }
 
   .header-dropdown-toggle .btn {

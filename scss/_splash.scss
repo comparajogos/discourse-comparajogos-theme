@@ -141,15 +141,17 @@ html[lang^="pt"] #cj-splash {
   fill: currentcolor;
 }
 
-/* `content` makes the span a replaced element, so it takes the logo's own
- * aspect ratio exactly as #site-logo does — no hardcoded width to go stale when
- * the logo is swapped. Both variants come from theme settings; see settings.yml. */
+/* `content` makes the span a replaced element. Reserve the configured
+ * wordmark's ratio before its response arrives so the earliest shell and the
+ * booted header occupy the same inline space on a cold load. Both variants
+ * come from theme settings; see settings.yml. */
 
 .cj-splash__logo {
   flex: none;
   width: auto;
   max-width: 10rem;
   height: 2.5rem;
+  aspect-ratio: var(--cj-wordmark-aspect-ratio);
   object-fit: contain;
   object-position: left center;
 
