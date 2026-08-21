@@ -48,6 +48,7 @@ html:has(#d-splash) {
 @media (forced-colors: active) {
   .cj-splash__shell,
   .cj-splash__card,
+  .cj-splash__tab-bar,
   .cj-splash__search,
   .cj-splash__row.is-active,
   .cj-splash__row.is-muted,
@@ -58,6 +59,7 @@ html:has(#d-splash) {
   .cj-splash__bar,
   .cj-splash__avatar,
   .cj-splash__nav-item::before,
+  .cj-splash__tab-bar-item::before,
   .cj-splash__rail-pill,
   .cj-splash__rail-description::after,
   .cj-splash__row::before,
@@ -69,6 +71,7 @@ html:has(#d-splash) {
 }
 
 #cj-splash {
+  --cj-splash-home: "Home";
   --cj-splash-forum: "Forum";
   --cj-splash-lists: "Lists";
   --cj-splash-plays: "Plays";
@@ -88,6 +91,7 @@ html:has(#d-splash) {
 }
 
 html[lang^="pt"] #cj-splash {
+  --cj-splash-home: "Início";
   --cj-splash-forum: "Fórum";
   --cj-splash-lists: "Listas";
   --cj-splash-plays: "Partidas";
@@ -535,6 +539,63 @@ html[lang^="pt"] #cj-splash {
   block-size: 0.55rem;
   inline-size: 9rem;
   margin-block-start: 0.75rem;
+}
+
+/* ------------------------------------------------------ mobile tab bar -- */
+.cj-splash__tab-bar {
+  display: none;
+}
+
+@if $show_mobile_tab_bar == "true" {
+  @include viewport.until(md) {
+    .cj-splash__tab-bar {
+      position: fixed;
+      z-index: 3;
+      inset-inline: 0;
+      inset-block-end: 0;
+      display: flex;
+      box-sizing: content-box;
+      height: var(--cj-mobile-nav-height, 3.5rem);
+      padding-block-end: env(safe-area-inset-bottom);
+      color: var(--cj-text);
+      background: var(--cj-panel);
+    }
+
+    .cj-splash__tab-bar-item {
+      display: flex;
+      flex: 1 1 20%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1rem;
+      letter-spacing: 0.4px;
+
+      &::before {
+        content: "";
+        width: 1.25rem;
+        height: 1.25rem;
+        background: currentcolor;
+        opacity: 0.35;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H216V200H40Z'/%3E%3C/svg%3E")
+          center / contain no-repeat;
+      }
+
+      &::after {
+        margin-block-start: var(--space-1);
+      }
+
+      &.is-active::before {
+        opacity: 0.7;
+      }
+    }
+
+    .cj-splash__home::after {
+      content: var(--cj-splash-home);
+    }
+  }
 }
 
 /* ------------------------------------------------------------- narrow -- */
