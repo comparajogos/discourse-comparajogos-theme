@@ -77,10 +77,45 @@ body {
  * light in both: white measures 4.6-5.5:1 on those, against 1.7-3.7:1 on the
  * dark scheme's own bright accents. */
 
+/* Set through core's own token family rather than `color`, because that is what
+ * governs the icon and the hover as well: core points all four at --secondary,
+ * which is white on the accent in a light scheme and near-black on it in ours.
+ * That is why a blue button had a black glyph beside a white label, and why the
+ * label went black the moment you hovered it. */
+
+:root,
+body {
+  --d-button-primary-text-color: var(--cj-on-action);
+  --d-button-primary-text-color--hover: var(--cj-on-action);
+  --d-button-primary-icon-color: var(--cj-on-action);
+  --d-button-primary-icon-color--hover: var(--cj-on-action);
+  --d-button-danger-text-color: var(--cj-on-action);
+  --d-button-danger-text-color--hover: var(--cj-on-action);
+  --d-button-danger-icon-color: var(--cj-on-action);
+  --d-button-danger-icon-color--hover: var(--cj-on-action);
+  --d-button-success-text-color: var(--cj-on-action);
+  --d-button-success-text-color--hover: var(--cj-on-action);
+  --d-button-success-icon-color: var(--cj-on-action);
+  --d-button-success-icon-color--hover: var(--cj-on-action);
+}
+
 .btn-primary,
 .btn-danger,
 .btn-success {
   color: var(--cj-on-action);
+
+  .d-icon {
+    color: var(--cj-on-action);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--cj-on-action);
+
+    .d-icon {
+      color: var(--cj-on-action);
+    }
+  }
 }
 
 .btn-primary {
@@ -105,9 +140,16 @@ body {
   border-color: transparent;
   background: var(--cj-control);
 
+  /* A step from the fill, not a lift on top of it. --cj-hover is a translucent
+   * 6% white wash meant for a transparent surface; over an already-filled
+   * control it compounds to oklch 0.33 — eight times the step the client's own
+   * hover takes (0.200 canvas to 0.210 card). Mixing toward the text colour
+   * instead keeps it a +0.03 nudge, and reverses correctly in the light scheme,
+   * where the control is light and the hover should darken it. */
+
   &:hover,
   &:focus-visible {
-    background: var(--cj-hover);
+    background: color-mix(in oklch, var(--cj-control), var(--cj-text) 4%);
   }
 }
 
