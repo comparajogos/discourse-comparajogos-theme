@@ -23,6 +23,10 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .floating-search-input"),
       "core's own field stays absent, so only one SearchMenu mounts"
     );
+    assert.true(
+      exists(".cj-sidebar-toggle"),
+      "the left-hand navigation trigger replaces the header hamburger"
+    );
   });
 });
 

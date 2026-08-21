@@ -30,3 +30,17 @@
     color: var(--cj-text);
   }
 }
+
+/* Core floats auth labels across the input border, but cuts that notch with
+ * `--secondary` — pure black in the dark scheme — instead of the page surface
+ * surrounding the field. Match the canvas and give the text a slightly wider,
+ * softly rounded notch so it no longer reads as a rectangular sticker. */
+
+:is(.login-fullpage, .signup-fullpage, .invites-show, .password-reset-page)
+  .input-group
+  :is(input:focus, input.value-entered)
+  + label.alt-placeholder {
+  padding-inline: 0.375em;
+  background: var(--cj-background);
+  border-radius: var(--d-border-radius);
+}

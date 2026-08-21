@@ -118,10 +118,9 @@
  * core's utility icons. It is our own button in `before-main-outlet`
  * (cj-sidebar-toggle.gjs) rather than core's moved with CSS: the header pill
  * animates `transform` to dock on scroll, which makes it a containing block, so
- * `fixed` on anything inside the header resolves against the pill.
- *
- * Core's button stays for the drawer below `md`, where a fixed corner control
- * would float over the content and the tab bar. */
+ * `fixed` on anything inside the header resolves against the pill. Below `md`
+ * the same control becomes the left-hand counterpart to the New Topic cluster,
+ * keeping navigation out of the crowded header. */
 
 .cj-sidebar-toggle {
   position: fixed;
@@ -162,11 +161,26 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
 
 @include viewport.until(md) {
   .cj-sidebar-toggle {
-    display: none;
+    z-index: z("dropdown");
+    inset-block-end: calc(var(--space-5) + env(safe-area-inset-bottom));
+    inset-inline-start: var(--d-wrap-padding-x);
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--cj-text);
+    font-size: 2rem;
+    box-shadow: 0 8px 24px -6px rgb(0 0 0 / 35%);
   }
 
-  /* Core's own glyph is the drawer's handle here. */
-  .d-header .header-sidebar-toggle {
-    order: 0;
+  body:not(.has-sidebar-page) .cj-sidebar-toggle {
+    inset-inline-start: var(--d-wrap-padding-x);
+  }
+
+  /* Core renders its navigation drawer through the hamburger dropdown on
+   * mobile, not through `.header-sidebar-toggle`. Our fixed control invokes the
+   * same application-level sidebar state, so only one handle should remain. */
+
+  .d-header .header-sidebar-toggle,
+  .d-header .header-dropdown-toggle.hamburger-dropdown {
+    display: none;
   }
 }
