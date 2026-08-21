@@ -22,6 +22,17 @@ $mobile-category-rail-height: 4.5rem;
 }
 
 @include viewport.until(sm) {
+  /* Topic rows deliberately bleed to the mobile frame edge. The sticky
+   * context header must paint that same full width or scrolled titles remain
+   * visible through the page gutters. Negative margins extend only the paint
+   * box; matching padding keeps every control on the normal content grid. */
+
+  .list-controls,
+  #main-outlet > .cj-category-carousel {
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+    padding-inline: var(--d-wrap-padding-x);
+  }
+
   .list-controls {
     position: sticky;
     z-index: z("base") + 1;
