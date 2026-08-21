@@ -20,7 +20,9 @@ $height: 3.5rem;
       color: var(--cj-text-muted);
 
       &.active {
-        color: var(--cj-brand);
+        /* Match the client and header navigation: the configured filled glyph
+         * identifies the current app without introducing an accent color. */
+        color: var(--cj-text-muted);
       }
 
       .title {
