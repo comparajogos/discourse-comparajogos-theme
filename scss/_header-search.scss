@@ -232,7 +232,11 @@
         }
 
         .before-header-panel-outlet {
-          flex: 0 1 auto;
+          /* Search and market are two fixed 40px controls while search is
+           * closed. Leaving the basis at `auto` lets the search field's
+           * intrinsic width size the whole outlet on Safari, shrinking the
+           * wordmark to its 40px minimum and clipping it underneath the pill. */
+          flex: 0 0 calc(5rem + var(--space-1));
           gap: var(--space-1);
           min-width: calc(5rem + var(--space-1));
           margin-inline: var(--space-2);
@@ -270,7 +274,7 @@
 
       .cj-header-search {
         order: 1;
-        flex: 1 1 2.5rem;
+        flex: 0 0 2.5rem;
         width: auto;
         min-width: 2.5rem;
 
@@ -334,6 +338,10 @@
         .before-header-panel-outlet {
           flex-grow: 1;
           margin-inline: var(--space-1);
+        }
+
+        .cj-header-search {
+          flex-grow: 1;
         }
 
         /* Use Discourse's configured small logo rather than cropping the full

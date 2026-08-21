@@ -1,5 +1,6 @@
 import { settled, visit } from "@ember/test-helpers";
 import { test } from "qunit";
+import { SCROLLED_UP } from "discourse/services/scroll-direction";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
 const TOPIC_URL = "/t/internationalization-localization/280";
@@ -22,6 +23,22 @@ acceptance("Compara Jogos header logo - desktop", function (needs) {
 
     assert.dom(".extra-info-wrapper").exists("topic info is visible");
     assert.dom("#site-logo").hasClass("logo-big");
+  });
+
+  test("scrolling up restores the normal desktop header", async function (assert) {
+    await showTopicInfo(this);
+
+    assert.dom(".extra-info-wrapper").exists("topic info starts docked");
+
+    this.container.lookup("service:scroll-direction").lastScrollDirection =
+      SCROLLED_UP;
+    await settled();
+
+    assert
+      .dom(".extra-info-wrapper")
+      .doesNotExist("the docked title yields after an upward scroll");
+    assert.dom(".cj-header-nav").isVisible("product navigation returns");
+    assert.dom(".floating-search-input").isVisible("header search returns");
   });
 });
 
