@@ -585,30 +585,30 @@ html[lang^="pt"] #cj-splash {
     padding-inline: var(--space-3);
   }
 
-  .cj-splash__logo {
-    margin-inline-start: calc(2rem + var(--space-2));
-  }
-
-  /* Match the booted control inside the header row: 32px control, 16px glyph,
-   * and horizontal space reserved beside it rather than below the shell. */
+  /* Match the booted Discord-like edge handle without reserving space in the
+   * header or body. */
 
   .cj-splash__sidebar-toggle {
     position: fixed;
     z-index: 2;
-    inset-block-start: calc((var(--cj-header-height) - 2rem) / 2);
-    inset-inline-start: var(--space-3);
+    inset-block-start: 50%;
+    inset-inline-start: 0;
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 3rem;
     color: var(--header_primary);
-    background: transparent;
-    border-radius: var(--d-button-border-radius);
+    background: var(--cj-control);
+    border: 1px solid var(--primary-low);
+    border-inline-start: 0;
+    border-radius: 0 var(--space-3) var(--space-3) 0;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+    transform: translateY(-50%);
 
     &::before {
       content: "";
-      width: 1rem;
-      height: 1rem;
+      width: 1.125rem;
+      height: 1.125rem;
       background: currentcolor;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,36H40A20,20,0,0,0,20,56V200a20,20,0,0,0,20,20H216a20,20,0,0,0,20-20V56A20,20,0,0,0,216,36ZM44,104H72v20H44ZM72,60V80H44V60ZM44,148H72v48H44Zm168,48H96V60H212Z'/%3E%3C/svg%3E")
         center / contain no-repeat;

@@ -163,34 +163,19 @@
 }
 
 @include viewport.until(md) {
-  /* Core's working mobile trigger stays structurally attached to the header.
-   * Give it a real place before the logo instead of charging the page a whole
-   * empty row for a tiny tab below the shell. */
-
-  .d-header .home-logo-wrapper-outlet {
-    margin-inline-start: calc(2rem + var(--space-2));
-  }
-
-  /* Core makes `.panel` the containing block for its icons. Release only the
-   * mobile header panel so the repositioned hamburger anchors to `.contents`
-   * (the full header row) instead of the narrow avatar column. */
-
-  .d-header .panel:has(.hamburger-dropdown) {
-    position: static;
-  }
-
-  /* The visible control is 32px, with a 44px hit target that grows inside the
-   * header. The logo offset above keeps both visual and interactive bounds from
-   * colliding. */
+  /* Keep core's working drawer trigger, but present it as a Discord-like edge
+   * handle. Fixed positioning removes it from both the header and document
+   * flow; its broad vertical shape keeps the control legible without covering
+   * a useful strip of the topic list. */
 
   .d-header .header-dropdown-toggle.hamburger-dropdown {
-    position: absolute;
+    position: fixed;
     z-index: z("dropdown");
     inset-block-start: 50%;
     inset-inline-start: 0;
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 3rem;
     transform: translateY(-50%);
 
     #toggle-hamburger-menu {
@@ -202,25 +187,28 @@
       block-size: 100%;
       padding: 0;
       color: var(--header_primary);
-      background: transparent;
-      border-radius: var(--d-button-border-radius);
-      box-shadow: none;
+      background: var(--cj-control);
+      border: 1px solid var(--primary-low);
+      border-inline-start: 0;
+      border-radius: 0 var(--space-3) var(--space-3) 0;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
 
       &:hover,
       &:focus-visible {
-        background: color-mix(in oklch, var(--header_primary) 12%, transparent);
+        color: var(--cj-action);
+        background: var(--cj-control);
       }
 
       &::after {
         position: absolute;
         content: "";
-        inset: -0.375rem;
+        inset: -0.125rem;
       }
     }
 
     .d-icon {
-      width: 1rem;
-      height: 1rem;
+      width: 1.125rem;
+      height: 1.125rem;
       color: currentcolor;
     }
   }
