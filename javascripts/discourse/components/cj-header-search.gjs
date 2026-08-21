@@ -1,4 +1,7 @@
 import Component from "@glimmer/component";
+import { action } from "@ember/object";
+import didInsert from "@ember/render-modifiers/modifiers/did-insert";
+import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
 import { service } from "@ember/service";
 import SearchMenu from "discourse/components/search-menu";
 import getURL from "discourse/lib/get-url";
@@ -34,6 +37,34 @@ export default class CjHeaderSearch extends Component {
   @service search;
   @service site;
   @service siteSettings;
+
+  transitionFrame = null;
+
+  @action
+  armTransitions(element) {
+    this.cancelTransitionSetup();
+
+    /* Two frames establish the collapsed flex geometry before transitions are
+     * allowed. When this component remounts after the mobile topic title, that
+     * geometry therefore lands immediately; later focus changes can animate. */
+    this.transitionFrame = window.requestAnimationFrame(() => {
+      this.transitionFrame = window.requestAnimationFrame(() => {
+        this.transitionFrame = null;
+
+        if (element.isConnected) {
+          element.classList.add("is-transition-ready");
+        }
+      });
+    });
+  }
+
+  @action
+  cancelTransitionSetup() {
+    if (this.transitionFrame !== null) {
+      window.cancelAnimationFrame(this.transitionFrame);
+      this.transitionFrame = null;
+    }
+  }
 
   get shouldRender() {
     return (
@@ -74,7 +105,11 @@ export default class CjHeaderSearch extends Component {
   <template>
     {{#if this.shouldRender}}
       {{#unless this.isChatRoute}}
-        <div class="cj-header-search">
+        <div
+          class="cj-header-search"
+          {{didInsert this.armTransitions}}
+          {{willDestroy this.cancelTransitionSetup}}
+        >
           {{#if this.smallLogoUrl}}
             <span class="cj-header-search__small-logo" aria-hidden="true">
               {{#if this.hasDistinctDarkLogo}}

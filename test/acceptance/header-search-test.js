@@ -1,4 +1,4 @@
-import { click, settled, visit } from "@ember/test-helpers";
+import { click, settled, visit, waitUntil } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -23,6 +23,17 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .cj-header-search .search-menu"),
       "the collapsed field is in the header"
     );
+    await waitUntil(() =>
+      document
+        .querySelector(".d-header .cj-header-search")
+        ?.classList.contains("is-transition-ready")
+    );
+    assert
+      .dom(".d-header .cj-header-search")
+      .hasClass(
+        "is-transition-ready",
+        "interaction transitions arm after the mount geometry settles"
+      );
     assert
       .dom(".d-header .cj-header-search__small-logo img")
       .hasAttribute(

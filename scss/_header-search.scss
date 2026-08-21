@@ -221,10 +221,9 @@
        * so their combined width is constant on every frame. Animating between
        * `auto` and 2.5rem briefly over-allocated that pair in some mobile
        * browsers and pushed the Login action outside the header before it
-       * settled. Keep this swap immediate: the same selectors begin matching
-       * when the topic title unmounts and this search remounts, so transitioning
-       * flex-grow would drag the magnifier and avatar across the header during
-       * an unrelated scroll-state handoff.
+       * settled. The component arms transitions only after its collapsed
+       * geometry has painted; this keeps the topic-title handoff immediate while
+       * preserving motion for an intentional search interaction.
        *
        * Scoped to :has(.cj-header-search) because the field does not render on
        * mobile topic pages, where the docked title needs the row. */
@@ -259,6 +258,15 @@
 
         .panel .current-user .btn {
           padding-inline-start: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .contents:has(.cj-header-search.is-transition-ready) {
+          .home-logo-wrapper-outlet,
+          .before-header-panel-outlet {
+            transition: flex-grow 200ms var(--cj-ease-out);
+          }
         }
       }
 
