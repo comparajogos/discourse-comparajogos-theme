@@ -365,123 +365,6 @@ body.has-sidebar-page .wrap {
   }
 }
 
-/*
- * Community presence
- *
- * The client's `components/forum/OnlineUsers` in a `components/common/Carousel`:
- * a `gap-4` row of a muted `text-sm`/`font-medium` label — a pulsing 8px
- * `bg-green-700` dot, then "{n} online" — beside a horizontally scrolling strip
- * of 24px avatars, each with a 2px ring in the canvas colour.
- *
- * The strip was `overflow: hidden`, so a busy forum simply lost everyone past
- * the fold. Snap scrolling and the trailing fade are the Carousel's; its 24px
- * prev/next buttons are not, because they need scroll position in JS. Dragging
- * and the trackpad reach the same avatars.
- */
-
-#whos-online {
-  /* The plugin renders the label and every avatar as flat siblings, so this
-   * element has to be both the Carousel's row and its scroll container. The
-   * label pins rather than scrolling away with the avatars. */
-  display: flex;
-
-  /* Gap 0, not gap-4: the plugin renders the label and every avatar as siblings
-   * of one flex box, so a row gap would space the avatars apart too. The client's
-   * `gap-4` is between the label and the carousel only, so the label carries it. */
-  gap: 0;
-  align-items: center;
-  min-width: 0;
-
-  /* The plugin's own `padding-left: 5px; padding-bottom: 5px`. */
-  padding: 0;
-  margin-block: 0 var(--space-5);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: none;
-  scrollbar-width: none;
-
-  /* The Carousel's trailing gradient, as a mask so it works on any surface. The
-   * leading edge is left alone: the label is pinned over it. */
-  mask-image: linear-gradient(
-    to right,
-    black calc(100% - 3rem),
-    transparent 100%
-  );
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  > span {
-    position: sticky;
-    inset-inline-start: 0;
-    z-index: 1;
-    display: inline-flex;
-    gap: var(--space-2);
-    align-items: center;
-
-    /* Stretch, or the label's opaque box is only as tall as its own text and
-     * the 24px avatars peek out above and below it as they scroll past. */
-    align-self: stretch;
-    flex: 0 0 auto;
-    color: var(--cj-text-muted);
-    font-size: var(--font-down-1-rem);
-    font-weight: 500;
-    white-space: nowrap;
-
-    /* Opaque, so avatars pass behind it rather than through it. */
-    background: var(--cj-background);
-
-    /* The client's `gap-4` between the label and the strip, half carried as
-     * padding inside the opaque box so a passing avatar disappears under it
-     * before it can touch the text. */
-    padding-inline-end: var(--space-2);
-    margin-inline-end: var(--space-2);
-
-    &::before {
-      width: 0.5rem;
-      height: 0.5rem;
-      background: var(--cj-online);
-      border-radius: 50%;
-      content: "";
-
-      @media (prefers-reduced-motion: no-preference) {
-        animation: cj-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-    }
-  }
-
-  /* Above `#whos-online.collapsed a`, which is the plugin's own overlap-and-fan
-   * interaction: -15px margins that spring to 0 on hover over a full second.
-   * That is a different idea from the client's scroller, and it fought it — the
-   * avatars ended up 1px apart only because the plugin's -15px happened to
-   * cancel most of a 16px row gap. Same specificity, and the theme's stylesheet
-   * loads after the plugin's. */
-
-  &.collapsed > a,
-  > a {
-    flex: 0 0 auto;
-    margin: 0;
-    scroll-snap-align: start;
-
-    /* The plugin animates the margins it no longer sets; the opacity transition
-     * is its own fade for members who have just gone offline, so it stays. */
-    transition: opacity 0.5s;
-
-    /* A ring, not a border: a border eats into the 24px box, so the client's
-     * avatars come out visibly larger at the same nominal size. Rings overlap
-     * their neighbour, which is what stacks the strip. */
-
-    .avatar {
-      width: 1.5rem;
-      height: 1.5rem;
-      border: 0;
-      border-radius: 50%;
-      box-shadow: 0 0 0 2px var(--cj-background);
-    }
-  }
-}
-
 @keyframes cj-pulse {
   50% {
     opacity: 0.5;
@@ -673,6 +556,22 @@ body .category-breadcrumb {
   line-height: 1.2;
   letter-spacing: -0.02em;
   white-space: normal;
+
+  /* Below `md` it goes back to being read, not seen. Two lines of a 21px
+   * heading is a sixth of a phone screen spent restating what the sort control
+   * and the category rail already show, and it is the bulk of what the pinned
+   * controls carry (see _list-controls.scss). The element and its semantics
+   * stay exactly as core made them. */
+
+  @include viewport.until(md) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 @media (width < 768px) {

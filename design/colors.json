@@ -53,7 +53,6 @@
   },
   "shared": {
     "onAction": "oklch(98.5% 0 0deg)",
-    "online": "#15803d",
     "focusRing": "0 0 0 2px rgb(66 153 225 / 70%)"
   }
 }

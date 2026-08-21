@@ -92,8 +92,6 @@ generated.set(
   propertiesPath,
   replaceBlock(properties, "shared", [
     "",
-    `/* Live presence is fixed across schemes, matching the React client. */`,
-    `--cj-online: ${colors.shared.online};`,
     `--cj-on-action: ${colors.shared.onAction};`,
     `--cj-focus-ring: ${colors.shared.focusRing};`,
     "",
