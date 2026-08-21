@@ -42,6 +42,40 @@ Cross-product navigation lives in the header, not in a sidebar card, so there
 is exactly one door between the forum and the catalog. Discourse 3.6.0.beta1 or
 newer is required for the ui-kit imports the topic feed row uses.
 
+**Uninstall `discourse-tag-game-card`.** Its mention card now ships here; with
+both installed a `#tag` mention opens two cards.
+
+## Game cards
+
+On this forum a board game _is_ a tag: the tag name is the catalog's product
+slug and the tag description is the game's proper name. The theme reads the
+catalog's public GraphQL API and shows that game in three places:
+
+- **the tag's topic list** — a card above the list (`game_card_tag_page`);
+- **a topic** — a scrollable strip of the games it is filed under, above the
+  posts (`game_card_topic_rail`);
+- **a `#tag` mention** in a post or chat message — the same card, on tap
+  (`game_card_mentions`).
+
+Nothing renders until the catalog answers, and nothing renders for a tag the
+catalog does not know as a game. Tags listed in `game_card_ignored_tags` are
+never looked up at all; every other tag is looked up once per session and the
+answer — game or not — is remembered, so a marker tag costs one request per
+visitor. A mention keeps its `href` throughout: unrecognised tags navigate to
+the tag page exactly as core renders them, and ctrl/cmd-click still opens a new
+tab on a recognised one.
+
+A game renamed in the catalog keeps working. When a tag's slug no longer matches
+a product, the theme follows the catalog's own `permalink` table — the same
+redirect the client's `/item/<slug>` page uses — and links to the slug it
+resolves to.
+
+The API is queried anonymously with `fetch`, never `discourse/lib/ajax`: `ajax`
+would fetch a CSRF token and add `X-CSRF-Token` and `Discourse-Script` to a
+cross-origin POST, buying a preflight and a wasted round trip for headers the
+catalog neither needs nor accepts. Because Pretender patches XMLHttpRequest and
+never sees `fetch`, the theme's tests stub `window.fetch` instead.
+
 ## Development
 
 ```sh

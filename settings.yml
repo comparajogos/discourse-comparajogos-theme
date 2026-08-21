@@ -68,3 +68,35 @@ category_rail_blurb:
   description:
     en: "One line shown under the category rail while no category is selected, in place of the selected category's description. Keep it to one line: both states are clamped to the same height so the list never shifts. Empty to show nothing (the rail then changes height between states)."
     pt_BR: "Uma linha exibida sob a trilha de categorias enquanto nenhuma está selecionada, no lugar da descrição da categoria. Mantenha em uma linha: os dois estados têm a mesma altura para a lista não pular. Vazio para não exibir nada."
+
+game_card_tag_page:
+  default: true
+  description:
+    en: "Show the game's card above a tag's topic list. A tag that the catalog does not know as a game shows nothing."
+    pt_BR: "Mostra o card do jogo acima da lista de tópicos da etiqueta. Etiquetas que o catálogo não conhece como jogo não exibem nada."
+
+game_card_topic_rail:
+  default: true
+  description:
+    en: "Show the games a topic is filed under as a scrollable strip above the posts."
+    pt_BR: "Mostra os jogos aos quais o tópico está vinculado em uma faixa rolável acima das mensagens."
+
+game_card_mentions:
+  default: true
+  description:
+    en: "Open the game's card when a `#tag` mention in a post or chat message is tapped. Mentions of tags that are not games keep their normal link."
+    pt_BR: "Abre o card do jogo ao tocar em uma menção `#etiqueta` em uma mensagem ou no chat. Menções de etiquetas que não são jogos mantêm o link normal."
+
+game_card_graphql_url:
+  default: "https://api.comparajogos.com.br/v1/graphql"
+  type: string
+  description:
+    en: "Compara Jogos GraphQL endpoint the cards read. Queried anonymously; no credentials are sent."
+    pt_BR: "Endereço GraphQL do Compara Jogos usado pelos cards. Consultado anonimamente, sem credenciais."
+
+game_card_ignored_tags:
+  default: "ficha|imagem|video|arquivo"
+  type: string
+  description:
+    en: "Tags that are markers rather than games, separated by `|`. They are never looked up in the catalog, so they never show a card and never lose their link. Any other tag is looked up once per session and remembered either way."
+    pt_BR: "Etiquetas que são marcadores, não jogos, separadas por `|`. Nunca são consultadas no catálogo, então nunca exibem card nem perdem o link. Qualquer outra etiqueta é consultada uma vez por sessão e memorizada."

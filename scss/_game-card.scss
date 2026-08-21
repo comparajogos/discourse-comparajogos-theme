@@ -1,0 +1,503 @@
+@use "lib/viewport";
+
+/* The game behind a tag, in three places: above a tag's topic list
+ * (cj-game-card-panel), inside the card a `#tag` mention opens
+ * (cj-game-card-popup), and as a chip in a topic's rail (cj-game-mini).
+ *
+ * Proportions from the client's components/product/ProductHeaderInfo.tsx and
+ * ProductCard.tsx: square box art contained and top-aligned, a two-line title,
+ * a hairline above the four-figure stat row, player-count chips, and the price
+ * with its cents set as a superscript. */
+
+/* Box art, at whatever size the surface has room for. Square-ish but never
+ * exactly square, and the interesting half is the top — so contain and
+ * top-align rather than crop to fill. The caller sets size and radius; this is
+ * everything the panel, the popup and the rail chip agree on. */
+
+@mixin cj-game-cover {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--cj-surface-muted);
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+    object-position: top;
+  }
+}
+
+/* The glyph shown when the catalog has no art for a game. */
+
+@mixin cj-game-cover-fallback($size) {
+  inline-size: $size;
+  block-size: $size;
+  margin: auto;
+  color: var(--cj-text-muted);
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+ * The card, shared by the panel and the popup
+ * -------------------------------------------------------------------------- */
+
+.cj-game-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+
+  &__cover {
+    @include cj-game-cover;
+    inline-size: 8rem;
+    block-size: 8rem;
+    border-radius: var(--d-border-radius-large);
+  }
+
+  &__cover-fallback {
+    @include cj-game-cover-fallback(2rem);
+  }
+
+  &__body {
+    display: flex;
+    gap: var(--space-2);
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__heading {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  &__name {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--cj-text);
+    font-size: var(--font-up-1-rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    transition: opacity var(--cj-duration-fast) var(--cj-ease-out);
+
+    &:hover {
+      color: var(--cj-text);
+      opacity: 0.75;
+    }
+  }
+
+  /* The ranking is the one figure that is a rank rather than a measurement, so
+   * it sits apart from the stat row and keeps its own chip. */
+
+  &__ranking {
+    display: inline-flex;
+    gap: var(--space-1);
+    flex: none;
+    align-items: center;
+    padding: 0.125rem var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    background: var(--cj-surface-muted);
+    border-radius: var(--cj-radius-pill);
+
+    .d-icon {
+      inline-size: 0.85em;
+      block-size: 0.85em;
+    }
+  }
+
+  &__provenance {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin: 0;
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+  }
+
+  /* A separator drawn rather than typed, so it never lands at the start of a
+   * wrapped line and never needs a locale's own punctuation. */
+
+  &__fact + &__fact::before {
+    content: "";
+    display: inline-block;
+    inline-size: 3px;
+    block-size: 3px;
+    margin-inline-end: var(--space-2);
+    vertical-align: 0.25em;
+    background: currentcolor;
+    border-radius: var(--cj-radius-pill);
+  }
+
+  &__stats {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-block-start: var(--space-1);
+    padding-block-start: var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    border-block-start: 1px solid var(--cj-border);
+  }
+
+  &__stat {
+    min-width: 0;
+  }
+
+  &__stat-value {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    color: var(--cj-text);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &__stat-icon {
+    inline-size: 1em;
+    block-size: 1em;
+    color: var(--cj-text-muted);
+  }
+
+  &__stat-label {
+    display: block;
+    font-size: var(--font-down-2-rem);
+  }
+
+  &__players {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: var(--font-down-2-rem);
+  }
+
+  &__players-label {
+    color: var(--cj-text-muted);
+  }
+
+  /* Two levels of recommendation on one hue: the community's favourite counts
+   * are filled, the merely recommended ones outlined. Filled-versus-outlined
+   * rather than two greens, because a lighter fill of the same green cannot
+   * carry light text in the light scheme and a darker one cannot in the dark. */
+
+  &__player-group {
+    padding-inline: var(--space-2);
+    font-variant-numeric: tabular-nums;
+    border-radius: var(--d-border-radius);
+
+    &.--best {
+      color: var(--cj-on-action);
+      background: var(--cj-fill-success);
+    }
+
+    /* An inset shadow, not a border: an outlined chip has to occupy exactly the
+     * same box as a filled one or the row jitters between them. */
+
+    &.--recommended {
+      color: var(--success);
+      box-shadow: inset 0 0 0 1px
+        color-mix(in oklab, var(--success) 45%, transparent);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    margin-block-start: auto;
+    padding-block-start: var(--space-2);
+  }
+
+  &__price {
+    display: flex;
+    gap: var(--space-4);
+    align-items: end;
+  }
+
+  &__price-offer {
+    display: flex;
+    gap: 0.125rem;
+    flex-direction: column;
+  }
+
+  /* The used price is context for the new one, so it is set a step down. The
+   * accent belongs to the number a reader is most likely to act on. */
+
+  &__price-offer.--used .cj-game-money {
+    color: var(--cj-text);
+    font-size: var(--font-0-rem);
+  }
+
+  &__price-offer.--new .cj-game-money {
+    color: var(--cj-action);
+    font-size: var(--font-up-2-rem);
+  }
+
+  &__price-count {
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-2-rem);
+  }
+
+  &__unavailable {
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__action {
+    font-size: var(--font-down-1-rem);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * A price, cents set as a superscript beside the integer
+ * -------------------------------------------------------------------------- */
+
+.cj-game-money {
+  display: inline-flex;
+  align-items: flex-start;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+
+  &__currency,
+  &__fraction {
+    font-size: 0.6em;
+    font-weight: 500;
+    top: 0;
+  }
+
+  &__currency {
+    margin-inline-end: 0.15em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Tag route: the card above the topic list
+ * -------------------------------------------------------------------------- */
+
+.cj-game-card-panel {
+  @include cj-panel-surface;
+  margin-block-end: var(--space-4);
+  padding: var(--space-5);
+
+  /* The card arrives after the catalog answers, which is necessarily after the
+   * list is painted. Fading in reads as the page filling out rather than as
+   * something jumping into place. Gated the way core gates its own animations:
+   * the card still appears under reduced motion, it just does not move. */
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: cj-game-card-in var(--cj-duration-fast) var(--cj-ease-out);
+  }
+}
+
+@keyframes cj-game-card-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@include viewport.until(sm) {
+  .cj-game-card-panel {
+    padding: var(--space-4);
+  }
+
+  .cj-game-card--panel {
+    gap: var(--space-3);
+
+    .cj-game-card__cover {
+      inline-size: 5.5rem;
+      block-size: 5.5rem;
+    }
+
+    .cj-game-card__stats {
+      gap: var(--space-3);
+    }
+
+    /* The labels are what push the fourth figure onto a second row here, and a
+     * lone "rating" under three others reads as a mistake. The client hides
+     * them at this width too (CardIcon's `inline` variant). */
+
+    .cj-game-card__stat-label {
+      display: none;
+    }
+
+    /* Below `sm` the price and the links cannot share a line without one of
+     * them wrapping mid-word. */
+
+    .cj-game-card__footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Mention popup
+ * -------------------------------------------------------------------------- */
+
+.fk-d-menu[data-identifier="cj-game-card"] {
+  width: auto;
+  max-width: calc(100vw - var(--space-6));
+
+  .fk-d-menu__inner-content {
+    min-width: 0;
+    padding: var(--space-4);
+  }
+
+  .cj-game-card--popup {
+    inline-size: min(24rem, calc(100vw - var(--space-8)));
+
+    .cj-game-card__cover {
+      inline-size: 5.5rem;
+      block-size: 5.5rem;
+    }
+
+    .cj-game-card__stats {
+      gap: var(--space-3);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Topic rail: the games a thread is filed under
+ * -------------------------------------------------------------------------- */
+
+.cj-game-rail {
+  margin-block-end: var(--space-4);
+
+  &__label {
+    margin: 0 0 var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-1-rem);
+    font-weight: 500;
+  }
+
+  /* A plain scroll container: at one or two chips there is nothing for overflow
+   * controls to do, and native inline scrolling is what a thumb reaches for. */
+
+  &__track {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    margin: 0;
+    padding: 0 0 var(--space-1);
+    list-style: none;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  &__item {
+    display: flex;
+    flex: 0 0 auto;
+    inline-size: min(20rem, 80%);
+    scroll-snap-align: start;
+
+    /* One game is the common case, and a chip stranded at a fixed width in a
+     * wide topic reads as a fragment of a row that never arrived. */
+
+    &:only-child {
+      flex: 1 1 auto;
+      inline-size: auto;
+      max-inline-size: 28rem;
+    }
+  }
+}
+
+.cj-game-mini {
+  @include cj-panel-surface;
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-3);
+  color: var(--cj-text);
+  transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+  &:hover {
+    color: var(--cj-text);
+    background: var(--cj-hover);
+  }
+
+  &__cover {
+    @include cj-game-cover;
+    inline-size: 3.25rem;
+    block-size: 3.25rem;
+    border-radius: var(--d-border-radius);
+  }
+
+  &__cover-fallback {
+    @include cj-game-cover-fallback(1.25rem);
+  }
+
+  &__body {
+    display: flex;
+    gap: 0.125rem;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: var(--font-down-1-rem);
+    font-weight: 600;
+    line-height: 1.25;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  /* The four figures without their labels: a chip is scanned, and the glyphs
+   * are the same four the full card teaches. */
+
+  &__stats .cj-game-card__stats {
+    gap: var(--space-2);
+    margin-block-start: 0;
+    padding-block-start: 0;
+    font-size: var(--font-down-2-rem);
+    border: 0;
+  }
+
+  &__price {
+    display: flex;
+    gap: var(--space-1);
+    align-items: baseline;
+    color: var(--cj-action);
+    font-size: var(--font-down-1-rem);
+  }
+
+  &__condition,
+  &__unavailable {
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-2-rem);
+    font-weight: 400;
+  }
+}

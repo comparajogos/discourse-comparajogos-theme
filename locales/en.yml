@@ -9,3 +9,28 @@ en:
   topic_feed:
     replied: "replied"
     updated: "updated"
+  game_card:
+    players: "players"
+    minutes: "minutes"
+    complexity: "complexity"
+    rating: "rating"
+    player_count: "Player count"
+    player_count_best: "Best"
+    player_count_recommended: "Recommended"
+    new_count:
+      one: "%{count} new"
+      other: "%{count} new"
+    used_count:
+      one: "%{count} used"
+      other: "%{count} used"
+    used: "used"
+    unavailable: "Unavailable"
+    ranking: "#%{count}"
+    ranking_title: "BoardGameGeek ranking"
+    visit_item: "View in the catalog"
+    visit_tag: "View topics"
+    rail_label: "Games in this topic"
+    type:
+      expansion: "Expansion"
+      accessory: "Accessory"
+      rpg: "RPG"
