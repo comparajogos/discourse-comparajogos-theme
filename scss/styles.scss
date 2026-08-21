@@ -296,18 +296,26 @@ body.has-sidebar-page .wrap {
   }
 
   .sign-up-button {
-    color: var(--header_primary);
-    background: transparent;
-    border-color: transparent;
+    display: none;
   }
 
   .login-button {
     min-height: 2.5rem;
-    padding-inline: var(--space-5);
+    padding: var(--space-3) var(--space-5);
     color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1rem;
     background: var(--cj-brand);
     border-color: transparent;
     border-radius: 999px;
+
+    /* Match the React header's text-only action. Discourse adds a user glyph
+     * here, but the shared product header deliberately keeps login simpler. */
+
+    .d-icon {
+      display: none;
+    }
 
     &:hover,
     &:focus-visible {

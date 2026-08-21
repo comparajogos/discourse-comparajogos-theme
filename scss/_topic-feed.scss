@@ -26,6 +26,24 @@
   width: 100%;
 }
 
+/* The category mark sits at 0.74em by default, which lands it at 9px — smaller
+ * than the 12.5px stat icons beside it and half the size of the same mark in
+ * the sidebar. It reads as primary metadata, so it takes a size of its own
+ * rather than inheriting the badge's text size. */
+
+.cj-feed .badge-category__wrapper .badge-category {
+  /* Core sizes the mark at 0.74em from a four-class selector, so this has to
+   * match its weight to land. */
+
+  .emoji,
+  .d-icon,
+  .badge-category__icon {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+
 .cj-feed {
   /* Explicit gaps rather than one flex gap: tight between byline and title,
    * a step before the excerpt, more before the metadata. Uniform spacing is
