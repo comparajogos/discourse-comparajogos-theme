@@ -72,8 +72,12 @@
       display: block;
       transition: background-color 140ms ease-out;
 
-      &:hover,
-      &:focus-within {
+      /* Touch browsers synthesize and sometimes retain :hover while a finger
+       * drags the list, which painted the row black in the dark scheme. Keep
+       * the surface response for real hover and keyboard-visible focus only. */
+
+      &:has(:focus-visible),
+      .discourse-no-touch &:hover {
         background: color-mix(in oklch, var(--primary) 4%, var(--cj-header));
       }
 
