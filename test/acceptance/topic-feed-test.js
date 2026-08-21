@@ -49,5 +49,19 @@ acceptance("Compara Jogos topic feed - mobile", function (needs) {
       exists(".topic-list.--cj-feed .cj-feed"),
       "the mobile-layout transformer keeps the custom row"
     );
+
+    const taxonomy = document.querySelector(".cj-feed__taxonomy");
+    const taxonomyStyle = getComputedStyle(taxonomy);
+
+    assert.strictEqual(
+      taxonomyStyle.flexBasis,
+      "100%",
+      "category and tags have their own metadata row"
+    );
+    assert.strictEqual(
+      taxonomyStyle.overflowX,
+      "auto",
+      "many tags stay on one horizontally scrollable row"
+    );
   });
 });

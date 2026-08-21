@@ -34,6 +34,11 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".hamburger-panel"),
       "the custom trigger opens the mobile navigation drawer"
     );
+    assert.true(
+      document.querySelector(".header-cloak").getBoundingClientRect().height >=
+        window.innerHeight - 1,
+      "core's navigation cloak covers the viewport"
+    );
   });
 });
 

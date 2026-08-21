@@ -58,7 +58,7 @@ export default class CjSidebarToggle extends Component {
           (if this.header.hamburgerVisible "true" "false")
         }}
         {{on "click" this.toggle}}
-      >{{dIcon "table-columns"}}</button>
+      >{{dIcon "discourse-sidebar"}}</button>
     {{/if}}
   </template>
 }

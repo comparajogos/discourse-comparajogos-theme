@@ -51,6 +51,15 @@
     flex: 0 0 auto;
   }
 
+  /* Core fades `.title` in whenever the booted header mounts. After our splash
+   * has already shown the same cached logo, that animation reads as a second
+   * load flash rather than a useful entrance. Keep the asset continuously
+   * visible across the skeleton handoff. */
+
+  .title {
+    animation: none;
+  }
+
   /* Core injects the docked topic title with no order, so it sorted ahead of
    * every ordered sibling and threw the logo to the far right. */
 
@@ -155,13 +164,15 @@
  * (`top: max(0, 24 - scrollY)`), squaring its top corners when it lands. No
  * scroll listener; degrades to a permanently floating shell. */
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .d-header > .wrap {
-      animation: cj-header-dock linear both;
-      animation-range: 0 1.5rem;
-      animation-timeline: scroll();
-      will-change: transform;
+@include viewport.from(md) {
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .d-header > .wrap {
+        animation: cj-header-dock linear both;
+        animation-range: 0 1.5rem;
+        animation-timeline: scroll();
+        will-change: transform;
+      }
     }
   }
 }

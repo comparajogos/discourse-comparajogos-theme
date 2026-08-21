@@ -206,6 +206,10 @@
   }
 
   .cj-feed {
+    &__byline {
+      flex-wrap: wrap;
+    }
+
     &__byline .avatar {
       width: 1.25rem;
       height: 1.25rem;
@@ -216,11 +220,36 @@
       flex-wrap: wrap;
     }
 
-    /* At this width the category cannot sit on the far right without crowding
-     * the counts, so it wraps to its own place in the row. */
+    /* Taxonomy is unbounded input: a topic can carry many long tags. Keeping it
+     * in the author row squeezes it into a narrow column and lets every tag
+     * become another line. Give it one stable metadata row and let that row
+     * scroll horizontally, preserving every real link without allowing the
+     * title or card height to jump. */
 
     &__taxonomy {
+      order: 1;
+      flex: 0 0 100%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
       margin-inline-start: 0;
+      padding-block: var(--space-1);
+      white-space: nowrap;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .badge-category__wrapper,
+      .discourse-tags,
+      .discourse-tag {
+        flex: 0 0 auto;
+      }
+
+      .discourse-tags {
+        display: inline-flex;
+        white-space: nowrap;
+      }
     }
   }
 }

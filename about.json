@@ -18,7 +18,7 @@
       "pencil",
       "reply",
       "share-nodes",
-      "table-columns"
+      "discourse-sidebar"
     ],
     "only_theme_color_schemes": true,
     "serialize_topic_excerpts": true
