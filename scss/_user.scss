@@ -4,11 +4,30 @@
  * share a single surface, so nothing inside should paint a second one.
  */
 
-/* Core fills the content region with --secondary — the canvas colour. Against a
- * page that colour reads as "the surface", but inside our panel it is a slab of
- * canvas laid on top of it, which is the same inversion the chat navbar had. */
+/* Inside the panel, the surface behind you *is* the panel — so core's canvas
+ * token has to mean that here. Without this, every region core fills with
+ * --secondary (the profile's stream items, and whatever core adds next) lands
+ * as a slab of canvas on top of the surface it is sitting on. Redefining the
+ * token rather than chasing each region is what keeps this from being a list.
+ *
+ * The light scheme needs it just as much: there the panel is #fff and the
+ * canvas #f5f5f5, so the same rules paint a grey well inside a white card. */
+
+.user-main {
+  --secondary: var(--cj-panel);
+}
 
 .user-content {
+  background: none;
+}
+
+/* The profile card composes the canvas with an alpha —
+ * `rgb(var(--secondary-rgb), 0.8)` (user.scss:232) — and the rgb triple is a
+ * separate token the override above cannot reach. Both of core's selectors are
+ * matched so this wins in the collapsed state too. */
+
+.user-main .about .details,
+.user-main .about.collapsed-info .details {
   background: none;
 }
 
