@@ -11,7 +11,9 @@
 
 .sidebar-wrapper {
   /* Rows in an unheaded section are the product menu. */
-  .sidebar-section-wrapper:not(:has(.sidebar-section-header-wrapper))
+  .sidebar-section-wrapper:not(
+      :has(.sidebar-section-header-wrapper, .admin-sidebar-nav-link)
+    )
     .sidebar-section-link {
     background: var(--cj-control);
 
@@ -122,6 +124,30 @@
 
   > [data-section-name="chat-dms"] {
     order: 2;
+  }
+}
+
+/* Admin is a dense working surface, not the public destination menu above.
+ * Core already gives its search field a container and its active row a clear
+ * state; reapplying the theme's filled rows and input background creates nested
+ * slabs. Keep one control surface and restore the tighter admin rhythm. */
+
+.admin-interface .sidebar-sections.admin-panel {
+  --d-sidebar-row-horizontal-padding: var(--space-3);
+  --d-sidebar-vertical-gap: var(--space-1);
+  padding-block-start: var(--space-3);
+
+  .sidebar-search__input-container {
+    margin-block: var(--space-1);
+    padding-inline: var(--space-3);
+    background: var(--d-input-bg-color);
+    border: var(--d-input-border);
+    border-radius: var(--d-input-border-radius);
+  }
+
+  .sidebar-search__input {
+    background: transparent;
+    border-radius: 0;
   }
 }
 
