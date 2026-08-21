@@ -96,17 +96,6 @@ html:has(#d-splash) {
   --cj-splash-market: "My Market";
   --cj-splash-search: "Search";
   --cj-splash-log-in: "Log In";
-  --cj-splash-topics: "Topics";
-  --cj-splash-more: "More";
-  --cj-splash-section-categories: "Categories";
-  --cj-splash-general: "General";
-  --cj-splash-feedback: "Site Feedback";
-  --cj-splash-all-categories: "All categories";
-  --cj-splash-categories: "categories";
-  --cj-splash-tags: "tags";
-  --cj-splash-latest: "Latest";
-  --cj-splash-hot: "Hot";
-  --cj-splash-categories-tab: "Categories";
   position: fixed;
   z-index: 1;
   inset: 0;
@@ -126,17 +115,6 @@ html[lang^="pt"] #cj-splash {
   --cj-splash-market: "Meu Comércio";
   --cj-splash-search: "Pesquisar";
   --cj-splash-log-in: "Entrar";
-  --cj-splash-topics: "Tópicos";
-  --cj-splash-more: "Mais";
-  --cj-splash-section-categories: "Categorias";
-  --cj-splash-general: "Geral";
-  --cj-splash-feedback: "Feedback do site";
-  --cj-splash-all-categories: "Todas as categorias";
-  --cj-splash-categories: "categorias";
-  --cj-splash-tags: "etiquetas";
-  --cj-splash-latest: "Recentes";
-  --cj-splash-hot: "Em alta";
-  --cj-splash-categories-tab: "Categorias";
 }
 
 /* The one frame the whole product sits in: the client's `max-w-8xl` with
@@ -367,28 +345,11 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
-.cj-splash__row--topics::after {
-  content: var(--cj-splash-topics);
-}
-
-.cj-splash__row--more::after {
-  content: var(--cj-splash-more);
-}
-
-.cj-splash__row--general::after {
-  content: var(--cj-splash-general);
-}
-
-.cj-splash__row--feedback::after {
-  content: var(--cj-splash-feedback);
-}
-
-.cj-splash__row--all-categories::after {
-  content: var(--cj-splash-all-categories);
-}
-
 /* Aligned on the row labels, not on the row box: core indents a section header
  * to where the labels start, past the icon column. */
+
+/* A section header is a short bar on the label column: whether a sidebar has
+ * sections at all, and what they are called, is the forum's configuration. */
 
 .cj-splash__section {
   display: block;
@@ -396,15 +357,15 @@ html[lang^="pt"] #cj-splash {
   padding-inline-start: calc(
     var(--d-sidebar-row-horizontal-padding) + 1.5rem + var(--space-2)
   );
-  color: var(--d-sidebar-header-color);
-  font-size: var(--font-down-2);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  line-height: 1.24;
-  text-transform: uppercase;
 
   &::after {
-    content: var(--cj-splash-section-categories);
+    content: "";
+    display: block;
+    inline-size: 4.5rem;
+    block-size: 0.65rem;
+    border-radius: 999px;
+    background: var(--cj-control);
+    opacity: 0.7;
   }
 }
 
@@ -430,56 +391,29 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
-/* The two dropdowns carry a trailing chevron. The skeleton reserves its width
- * rather than drawing it — a glyph the visitor is about to see for 200ms is not
- * worth a second copy of core's caret. */
+/* Tabs are bars of a label's height. The top menu is a site setting — recentes
+ * / novos / em alta on one forum, latest / hot / categories on another — so the
+ * skeleton shows how many and which is selected, not what they say. */
 
-.cj-splash__categories,
-.cj-splash__tags {
-  padding-inline-end: 2rem;
-}
-
-.cj-splash__controls-pills {
-  display: flex;
-  align-items: stretch;
-  gap: var(--space-2);
-  margin-inline-start: var(--space-3);
-  padding-inline: 0;
-
-  & > * {
-    display: flex;
-    align-items: center;
-    padding-inline: 0.65rem;
-  }
-}
-
-.cj-splash__categories::after {
-  content: var(--cj-splash-categories);
-}
-
-.cj-splash__tags::after {
-  content: var(--cj-splash-tags);
-}
-
-/* Discovery lands on Latest, so the skeleton carries the same selected pill the
- * booted list-controls row will show. */
-
-.cj-splash__latest {
-  border-radius: var(--d-nav-pill-border-radius);
-  color: var(--cj-action);
-  background: color-mix(in oklch, var(--cj-action) 5%, transparent);
+.cj-splash__tab {
+  padding-inline: 0.65rem;
 
   &::after {
-    content: var(--cj-splash-latest);
+    content: "";
+    inline-size: 3.25rem;
+    block-size: 0.7rem;
+    border-radius: 999px;
+    background: var(--cj-control);
   }
-}
 
-.cj-splash__hot::after {
-  content: var(--cj-splash-hot);
-}
+  &.is-active {
+    border-radius: var(--d-nav-pill-border-radius);
+    background: color-mix(in oklch, var(--cj-action) 5%, transparent);
 
-.cj-splash__categories-tab::after {
-  content: var(--cj-splash-categories-tab);
+    &::after {
+      background: color-mix(in oklch, var(--cj-action) 55%, transparent);
+    }
+  }
 }
 
 .cj-splash__cards {
@@ -516,6 +450,15 @@ html[lang^="pt"] #cj-splash {
   block-size: 0.65rem;
   border-radius: 999px;
   background: var(--cj-control);
+}
+
+/* currentcolor so the bar reads on whichever fill its row carries: the label
+ * colour on a plain or muted row, the on-action colour on the selected one. */
+
+.cj-splash__bar--row {
+  inline-size: 4.75rem;
+  background: currentcolor;
+  opacity: 0.3;
 }
 
 .cj-splash__bar--author {
@@ -717,29 +660,24 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
-/* Below `md` the booted controls collapse to one trigger that carries the
- * page's title (see _list-controls.scss), so the skeleton shows that and drops
- * the rest of the row rather than promising five tabs. */
+/* Below `md` the booted controls collapse to one trigger carrying the page's
+ * title (see _list-controls.scss), so the skeleton keeps the selected tab alone
+ * and gives it a title's weight rather than promising a row of them. */
 
 @include viewport.until(md) {
-  .cj-splash__categories,
-  .cj-splash__tags,
-  .cj-splash__hot,
-  .cj-splash__categories-tab {
+  .cj-splash__tab:not(.is-active) {
     display: none;
   }
 
-  .cj-splash__controls-pills {
-    margin-inline-start: 0;
-  }
-
-  .cj-splash__latest {
+  .cj-splash__tab.is-active {
     padding-inline: 0;
     border-radius: 0;
     background: none;
-    color: var(--cj-text);
-    font-size: var(--font-up-2-rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+
+    &::after {
+      inline-size: 5.5rem;
+      block-size: 1.1rem;
+      background: var(--cj-control);
+    }
   }
 }

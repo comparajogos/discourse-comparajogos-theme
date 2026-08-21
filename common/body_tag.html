@@ -82,24 +82,42 @@
   </div>
 
   <div class="cj-splash__body cj-splash__frame">
+    <!--
+      Neutral rows, not named ones. Which links a sidebar holds, how many, and
+      whether a Categories section exists at all is the forum's own
+      configuration — a component can hide the section, an admin can reorder it,
+      and a signed-in visitor sees more rows than an anonymous one. The geometry
+      is the theme's and stays exact; the content is a placeholder.
+    -->
     <aside class="cj-splash__sidebar">
-      <span class="cj-splash__row cj-splash__row--topics is-active"></span>
-      <span class="cj-splash__row cj-splash__row--more is-muted"></span>
+      <span class="cj-splash__row is-active"
+        ><span class="cj-splash__bar cj-splash__bar--row"></span
+      ></span>
+      <span class="cj-splash__row is-muted"
+        ><span class="cj-splash__bar cj-splash__bar--row"></span
+      ></span>
       <span class="cj-splash__section"></span>
-      <span class="cj-splash__row cj-splash__row--general"></span>
-      <span class="cj-splash__row cj-splash__row--feedback"></span>
-      <span class="cj-splash__row cj-splash__row--all-categories"></span>
+      <span class="cj-splash__row"
+        ><span class="cj-splash__bar cj-splash__bar--row"></span
+      ></span>
+      <span class="cj-splash__row"
+        ><span class="cj-splash__bar cj-splash__bar--row"></span
+      ></span>
+      <span class="cj-splash__row"
+        ><span class="cj-splash__bar cj-splash__bar--row"></span
+      ></span>
     </aside>
 
     <div class="cj-splash__main">
+      <!--
+        The top menu is a site setting (recentes / novos / em alta on one forum,
+        latest / hot / categories on another), so the tabs are bars too. The
+        first is the selected one.
+      -->
       <div class="cj-splash__controls">
-        <span class="cj-splash__categories"></span>
-        <span class="cj-splash__tags"></span>
-        <span class="cj-splash__controls-pills">
-          <span class="cj-splash__latest"></span>
-          <span class="cj-splash__hot"></span>
-          <span class="cj-splash__categories-tab"></span>
-        </span>
+        <span class="cj-splash__tab is-active"></span>
+        <span class="cj-splash__tab"></span>
+        <span class="cj-splash__tab"></span>
       </div>
 
       <!-- Eight cards, enough to reach the fold on a tall desktop window; the
