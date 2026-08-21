@@ -423,10 +423,6 @@ html[lang^="pt"] #cj-splash {
   padding-block-end: var(--space-3);
 }
 
-.cj-splash__list-controls-toggle {
-  display: none;
-}
-
 .cj-splash__controls {
   display: flex;
   align-items: stretch;
@@ -725,33 +721,11 @@ html[lang^="pt"] #cj-splash {
     }
   }
 
-  /* Match the booted filter row's compact rhythm and attached collapse handle,
-   * so hydration replaces like-for-like instead of adding another vertical
-   * jump below the category rail. */
+  /* Match the booted filter row's compact rhythm so hydration replaces
+   * like-for-like instead of adding a vertical jump below the category rail. */
 
   .cj-splash__list-controls {
-    position: relative;
     padding-block: var(--space-1) var(--space-2);
-  }
-
-  .cj-splash__list-controls-toggle {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline: 0;
-    display: block;
-    box-sizing: border-box;
-    inline-size: 2.75rem;
-    block-size: 1.25rem;
-    margin-inline: auto;
-    background: var(--cj-control);
-    border: 1px solid var(--cj-border);
-    border-block-start: 0;
-    border-start-start-radius: 0;
-    border-start-end-radius: 0;
-    border-end-start-radius: var(--d-button-border-radius);
-    border-end-end-radius: var(--d-button-border-radius);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
-    transform: translateY(50%);
   }
 
   /* Titles wrap at this width, so the card is a line taller. */

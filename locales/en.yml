@@ -9,6 +9,3 @@ en:
   topic_feed:
     replied: "replied"
     updated: "updated"
-  list_controls:
-    collapse: "Collapse list filters"
-    expand: "Expand list filters"

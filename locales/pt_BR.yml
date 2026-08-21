@@ -9,6 +9,3 @@ pt_BR:
   topic_feed:
     replied: "respondeu"
     updated: "atualizado"
-  list_controls:
-    collapse: "Recolher filtros da lista"
-    expand: "Expandir filtros da lista"

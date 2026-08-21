@@ -21,10 +21,6 @@ $mobile-category-rail-height: 4.5rem;
   }
 }
 
-.cj-list-controls-toggle {
-  display: none;
-}
-
 @include viewport.until(sm) {
   /* Topic rows deliberately bleed to the mobile frame edge. The sticky
    * context header must paint that same full width or scrolled titles remain
@@ -50,68 +46,6 @@ $mobile-category-rail-height: 4.5rem;
 
     .navigation-container {
       margin-block-end: 0;
-    }
-
-    &.is-collapsed {
-      padding-block: 0;
-
-      /* The fixed New Topic/utilities cluster is deliberately not one of the
-       * hidden children, so collapsing browsing context never removes actions. */
-
-      .navigation-container {
-        min-block-size: 0;
-        block-size: 0;
-      }
-
-      .category-breadcrumb,
-      #navigation-bar {
-        visibility: hidden;
-      }
-    }
-  }
-
-  /* A bottom edge handle, the vertical counterpart to the mobile sidebar tab.
-   * Half of its surface sits in the wrapper's reserved bottom space and half
-   * hangs below, so it reads as attached without making the row tall again. */
-
-  .cj-list-controls-toggle {
-    position: absolute;
-    z-index: 1;
-    inset-block-end: 0;
-    inset-inline: 0;
-    display: grid;
-    place-items: center;
-    box-sizing: border-box;
-    inline-size: 2.75rem;
-    block-size: 1.25rem;
-    min-inline-size: 0;
-    min-block-size: 0;
-    margin-inline: auto;
-    padding: 0;
-    color: var(--cj-text-muted);
-    background: var(--cj-control);
-    border: 1px solid var(--cj-border);
-    border-block-start: 0;
-    border-start-start-radius: 0;
-    border-start-end-radius: 0;
-    border-end-start-radius: var(--d-button-border-radius);
-    border-end-end-radius: var(--d-button-border-radius);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
-    transform: translateY(50%);
-    transition:
-      color var(--cj-duration-fast) var(--cj-ease-out),
-      background-color var(--cj-duration-fast) var(--cj-ease-out);
-
-    &:hover,
-    &:focus-visible {
-      color: var(--cj-action);
-      background: var(--cj-control);
-    }
-
-    .cj-list-controls-toggle__icon {
-      inline-size: 0.75rem;
-      block-size: 0.75rem;
-      color: currentcolor;
     }
   }
 
