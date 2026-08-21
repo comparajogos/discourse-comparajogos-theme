@@ -78,8 +78,10 @@
       }
 
       > .cj-feed-cell {
+        box-sizing: border-box;
         display: block;
-        width: auto;
+        width: 100%;
+        max-width: none;
       }
     }
 
