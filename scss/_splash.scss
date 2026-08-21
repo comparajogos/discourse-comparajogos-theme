@@ -1,26 +1,12 @@
 @use "lib/viewport";
 
-/*
- * The first-paint skeleton.
- *
- * Core's #d-splash is five dots in the middle of an empty page. This replaces
- * it with the product's own shell, so the first thing painted already has the
- * shape the booted page will have.
- *
- * It is REAL MARKUP (common/body_tag.html) laid out by the same tokens the
- * booted page uses — --d-max-width, --d-sidebar-width, --cj-header-height,
- * --space-*, the --cj-* palette. The previous version painted the whole shell
- * on #d-splash's pseudo-elements with stacked gradients and masks, which capped
- * it at fourteen paintable boxes, made every position a hand-measured constant
- * valid for one locale at one viewport, and silently dropped text that fell
- * outside a `background-clip: text` layer. Here the browser does the layout, so
- * the geometry follows the theme when the theme changes, and every box can be
+/* The first-paint skeleton, replacing core's five dots with the product's own
+ * shell. Real markup (common/body_tag.html) laid out by the same tokens the
+ * booted page uses, so the geometry follows the theme and every box can be
  * measured with getBoundingClientRect and diffed against the real one.
  *
- * It models the ANONYMOUS discovery page — two sidebar rows, Sign Up / Log In.
- * `_t` is HttpOnly, so nothing can know before boot whether the visitor is
- * signed in.
- */
+ * It models the ANONYMOUS discovery page. `_t` is HttpOnly, so nothing can know
+ * before boot whether the visitor is signed in. */
 
 /* Theme settings reach SCSS as $name (Theme#scss_variables prepends them), so
  * the logo is per-site configuration rather than an asset baked into this
@@ -28,18 +14,13 @@
 $splash_logo: "" !default;
 $splash_logo_dark: "" !default;
 
-/* Up exactly as long as core's own splash is: core removes #d-splash when the
- * app takes over, which is the moment this should go too. No lifecycle of its
- * own, no initializer, nothing to keep in sync.
+/* Up exactly as long as core's own splash: core removes #d-splash when the app
+ * takes over, so there is no lifecycle of our own to keep in sync.
  *
- * A sibling combinator rather than `:has()` — the two are siblings at the top
- * and bottom of <body>, so this is an exact equivalent that also works in a
- * browser without `:has()`. With `:has()` such a browser dropped the rule and,
- * because `#d-splash { display: none }` below is a plain selector that still
- * applied, got a blank page instead of core's dots.
- *
- * `html body` outweighs the guard rule in body_tag.html that keeps the raw
- * markup from ever showing unstyled. */
+ * A sibling combinator, not `:has()` — the two are siblings at the top and
+ * bottom of <body>, and a browser without `:has()` would drop the rule while
+ * `#d-splash { display: none }` below still applied, giving a blank page.
+ * `html body` outweighs the guard rule in body_tag.html. */
 
 html body #d-splash ~ #cj-splash {
   display: flex;
@@ -53,12 +34,9 @@ html body #d-splash ~ #cj-splash {
   display: none !important;
 }
 
-/* Core hides the scrollbar while its splash is up. `scrollbar-gutter: stable`
- * (see styles.scss) only reserves the gutter on a scrollable box, so hiding
- * overflow made the layout viewport 7.5px wider during the splash than after
- * it — every column jumped left the moment the app booted. Keeping the box
- * scrollable keeps both states the same width. There is nothing to scroll
- * while this is up, so the track is inert. */
+/* Core hides the scrollbar while its splash is up, and `scrollbar-gutter:
+ * stable` only reserves the gutter on a scrollable box — so the layout viewport
+ * was 7.5px wider during the splash than after it. The track is inert here. */
 
 html:has(#d-splash) {
   overflow-y: scroll !important;
@@ -163,17 +141,10 @@ html[lang^="pt"] #cj-splash {
   }
 }
 
-/* KNOWN LIMITATION: this follows the OS, not the scheme Discourse served.
- * Discourse can force a scheme with a cookie — which reaches anonymous
- * visitors, the ones this skeleton models — so an OS-light visitor given the
- * dark theme gets the light logo on black until boot.
- *
- * The fix wants a per-scheme *image*, and the only file compiled once per
- * scheme is the generated color_definitions. Both
- * `dark-light-choose($splash_logo, $splash_logo_dark)` and a numeric probe of
- * it evaluate to null there, which makes Sass drop the declaration entirely and
- * leaves the skeleton with no logo at all — worse than the wrong one. Core
- * branches on `forced_light_mode?` server-side; a theme has no equivalent. */
+/* KNOWN LIMITATION: follows the OS, not the scheme Discourse served, so a
+ * cookie-forced scheme gets the wrong logo until boot. A per-scheme *image*
+ * needs color_definitions, where `dark-light-choose()` on a string evaluates to
+ * null and Sass drops the declaration — no logo at all, which is worse. */
 
 @if $splash_logo_dark != "" {
   @media (prefers-color-scheme: dark) {
@@ -504,17 +475,12 @@ html[lang^="pt"] #cj-splash {
 
 /* ------------------------------------------------------------- narrow -- */
 
-/* The bands below are the booted page's, measured — not guesses. The previous
- * pair (960px / 640px) matched nothing in the theme or in core, so between
- * 768px and 960px the skeleton hid a sidebar the page shows, and between 640px
- * and 768px it kept a desktop header inside a box styles.scss had already
- * collapsed to 3.5rem. Core's scale is sm 40rem / md 48rem / lg 64rem.
+/* Core's scale, measured against the booted page:
  *
  *   >= lg    sidebar, nav with labels, floating 4.5rem shell
  *   md..lg   sidebar, nav icons only
  *   sm..md   no sidebar, nav icons only, full-bleed 3.5rem shell, rows bleed
- *   < sm     no nav, search collapsed to a button, auth as icons
- */
+ *   < sm     no nav, search collapsed to a button, auth as icons */
 
 /* The client hides nav labels until `lg` (`hidden lg:inline`), which leaves a
  * 48px icon-only item — 12px of padding either side of a 24px glyph. */
@@ -539,9 +505,8 @@ html[lang^="pt"] #cj-splash {
 
 @include viewport.until(md) {
   /* Core docks the sidebar into a drawer here (narrow-desktop.js keys on
-   * `min-width: 48rem`), and styles.scss collapses the header at the same
-   * width — the shell's own height and radius follow the tokens, so only the
-   * frame's gutter has to be dropped by hand. */
+   * `min-width: 48rem`). The shell's height and radius follow the tokens, so
+   * only the frame's gutter has to be dropped by hand. */
 
   .cj-splash__sidebar {
     display: none;
@@ -570,16 +535,13 @@ html[lang^="pt"] #cj-splash {
     }
   }
 
-  /* The nav still occupies five slots here, so a purely flexible search is
-   * squeezed to nothing. Core's own field keeps a usable width and overlays the
-   * row when it takes focus; the skeleton just refuses to collapse. */
-
+  /* Five nav slots would squeeze a purely flexible search to nothing. */
   .cj-splash__search {
     min-width: 6rem;
   }
 
-  /* The account controls are icons from here down — a labelled Sign Up and
-   * Log In pair does not fit beside five nav slots and a usable search. */
+  /* Icons from here down: a labelled auth pair does not fit beside five nav
+   * slots and a usable search. */
 
   .cj-splash__auth {
     padding-inline-end: 0;
@@ -604,9 +566,7 @@ html[lang^="pt"] #cj-splash {
     }
   }
 
-  /* Still one row: the second row the signed-in list grows (bulk select,
-   * dismiss) is not part of the anonymous page this models. */
-
+  /* Still one row: the signed-in list's second row is not modelled here. */
   .cj-splash__controls {
     height: 2.5rem;
   }

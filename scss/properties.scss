@@ -1,132 +1,84 @@
-/*
- * Product tokens, mapped to the React client's design contract.
- * Keep product styling here so Discourse core can own component internals.
+@use "lib/viewport";
+
+/* Product tokens, mapped to the React client's design contract, so core can own
+ * component internals.
  *
- * Declared on :root *and* body. Discourse's upcoming-changes flags
- * (uc-modernize-foundation-theme and friends, visible as uc-* classes on <body>)
- * redefine --d-* properties inside `:where(.uc-…)`. Custom properties inherit
- * from the nearest ancestor that declares them, so a value on body beats any
- * value on :root no matter how specific the selector — it was silently
- * reinstating core's input border, nav underline and radii.
- */
+ * On :root *and* body: Discourse's upcoming-changes flags (the uc-* classes on
+ * <body>) redefine --d-* inside `:where(.uc-…)`, and a custom property inherits
+ * from the nearest ancestor that declares it — so a value on body beats any
+ * value on :root regardless of specificity. */
 
 :root,
 body {
-  /* The scheme-dependent colours live in common/color_definitions.scss, which is
-   * the only file compiled per scheme. Everything below is scheme-agnostic. */
+  /* Scheme-dependent colours live in common/color_definitions.scss, the only
+   * file compiled per scheme. Everything here is scheme-agnostic. */
   --cj-brand: var(--quaternary);
-
-  /* The action colour follows the palette rather than being fixed, so a site
-   * owner editing the scheme still gets a coherent theme. */
   --cj-action: var(--tertiary);
 
-  /* Layout. The client's frame is `max-w-8xl` (90rem) with `sm:px-10` gutters,
-   * so the *outer* wrap is 90rem and the content column inside it is 85rem —
-   * the same 85rem the header pill resolves to (`w-[calc(100%-5rem)]`,
-   * `max-w-340`). Setting --d-max-width to 85rem made the wrap itself 85rem and
-   * then took the gutter out of that, so the content column came out 75px
-   * narrower than the header above it and started 38px to its right.
-   *
-   * The gutter is a fixed 2.5rem rather than a vw clamp: `2.5vw` only reaches
-   * 40px at a 1600px viewport, so on every normal laptop it silently undershot
-   * the client. Below `sm` the media query at the end of styles.scss drops it to
-   * the client's `px-4`. */
+  /* The client's frame is `max-w-8xl` (90rem) with `sm:px-10`, so the *outer*
+   * wrap is 90rem and the column inside it resolves to the same 85rem as the
+   * header pill. A 2.5rem fixed gutter, not a vw clamp — `2.5vw` only reaches
+   * 40px at 1600px. */
   --d-max-width: 90rem;
   --d-wrap-padding-x: 2.5rem;
-
-  /* The client separates columns by `gap-6` / `mr-6`. */
   --d-main-content-gap: var(--space-6);
 
-  /* Geometry, from the client's radius scale (`--radius: 0.625rem`):
-   * buttons are `rounded-md` (--radius minus 2px = 8px) and inputs are
-   * `rounded-lg` (--radius = 10px). Both were 6px here, which read as a
-   * slightly-different product rather than the same one. */
+  /* From the client's radius scale (`--radius: 0.625rem`): `rounded-md` buttons
+   * (8px), `rounded-lg` inputs (10px). */
   --d-border-radius: 0.25rem;
   --d-border-radius-large: 0.5rem;
   --d-button-border-radius: 0.5rem;
   --d-input-border-radius: 0.625rem;
+  --d-nav-pill-border-radius: 0.5rem;
 
-  /* The client's Input is a filled field with no border (`bg-input`, `border=""`).
-   * Left unset, the uc-modernize flag supplies a hard #646464 rule on every
-   * input, which is the harsh-border read. */
+  /* The client's Input is filled with no border. Left unset, uc-modernize
+   * supplies a hard #646464 rule on every input. */
   --d-input-bg-color: var(--cj-control);
   --d-input-border: 1px solid transparent;
   --input-border-color: transparent;
-  --d-nav-pill-border-radius: 0.5rem;
 
-  /* Floating product header: the 1.5rem inset plus the shell itself. Core caps
-   * .d-header's height, so this is what stops the pill overhanging its own box.
-   *
-   * The shell is 4.5rem, from the client's `sm:p-4` around an `h-10` logo:
-   * 16 + 40 + 16 = 72px. It was 74px, which read as a slightly chunkier header
-   * than the catalog's. */
+  /* The 1.5rem inset plus the shell. Core caps .d-header's height, so this is
+   * what stops the pill overhanging its own box. */
   --cj-header-shell-height: 4.5rem;
   --cj-header-height: 6rem;
-
-  /* The shell's own radius, from the client's `sm:rounded-3xl`. Named because
-   * the loading skeleton draws the same pill before the header exists. */
   --cj-radius-shell: 1.5rem;
 
-  /* Sidebar sits inside the same 85rem frame as the content, at the client's
-   * own menu width (`min-w-[200px]` in MarketLayout) plus 10px: Discourse rows
-   * carry count badges and unread dots the client's menu does not, and at the
-   * client-exact width the pt-BR labels ellipsized against them. */
+  /* The client's menu width (`min-w-[200px]`) plus 10px: Discourse rows carry
+   * count badges the client's menu does not, and pt-BR labels ellipsized. */
   --d-sidebar-width: 13.125rem;
   --d-sidebar-background: transparent;
-
-  /* Core draws a hard #373737 rule down the sidebar and under every section.
-   * The menu is separated by the gap between it and the content, not by lines —
-   * these are core's own hooks, so no selector override is needed. */
   --d-sidebar-border-color: transparent;
   --d-sidebar-section-border-color: transparent;
 
-  /*
-   * Sidebar rows, from the client's Button: `px-4 py-2` on `text-sm`/`leading-5`
-   * with a `gap-2`, stacked `gap-3`. Core exposes the whole row as properties, so
-   * this is the geometry and the colour ramp; _sidebar.scss only covers the fill
-   * and the shadow, which have no token.
-   *
-   * Row height is rem, not core's `2.2em`: at 14px an em-based height shrinks the
-   * row below its own padding.
-   */
+  /* Row geometry from the client's Button. rem, not core's `2.2em`: at 14px an
+   * em-based height shrinks the row below its own padding. */
   --d-sidebar-row-height: 2.25rem;
   --d-sidebar-row-horizontal-padding: var(--space-4);
   --d-sidebar-vertical-gap: var(--space-3);
   --d-sidebar-section-link-icon-size: 1.25rem;
   --d-sidebar-link-color: var(--primary);
   --d-sidebar-link-icon-color: var(--cj-text-muted);
-
-  /* Selection is the accent, and the label keeps `font-medium` rather than
-   * bolding — the fill is already the marker. */
   --d-sidebar-active-background: var(--cj-action);
   --d-sidebar-active-color: var(--cj-on-action);
   --d-sidebar-active-icon-color: var(--cj-on-action);
   --d-sidebar-active-suffix-color: var(--cj-on-action);
   --d-sidebar-active-font-weight: 500;
-
-  /* Keyboard/hover highlight is the neutral lift, not a second accent. */
   --d-sidebar-highlight-background: var(--cj-hover);
   --d-sidebar-highlight-color: var(--primary);
   --d-sidebar-highlight-hover-background: var(--cj-hover);
   --d-sidebar-header-color: var(--cj-text-muted);
   --d-sidebar-header-font-weight: 500;
 
-  /* The rows carry their own inline padding now, so the section's inset would
-   * double it. */
+  /* Rows carry their own inline padding, so the section's inset would double it. */
   --sidebar-section-wrapper-padding: var(--space-5) var(--space-1)
     var(--space-3);
-
-  /* Semantics the ported components need, derived from the tokens above so one
-   * vocabulary stays the single source. */
   --cj-text: var(--primary);
   --cj-panel: var(--cj-header);
   --cj-surface-muted: var(--cj-control);
 
   /* Hover is not information, so it is a neutral translucent lift rather than a
-   * colour — tinting every hover with the action blue made blue the ambient
-   * temperature of the interface. Selection *is* information, and it carries the
-   * accent at full strength (--cj-action). Translucent, so one hover value works
-   * on the canvas and on a panel. */
+   * colour; selection is, and carries --cj-action at full strength. Translucent,
+   * so one value works on the canvas and on a panel. */
   --cj-hover: color-mix(in oklab, var(--primary) 6%, transparent);
 
   /* color-contract:shared:start */
@@ -148,36 +100,35 @@ body {
   --cj-radius-pill: 999px;
   --cj-duration-fast: 150ms;
   --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* The client's Input container transitions everything at once:
-   * `transition-all duration-200 ease-in-out`. One token, so the header search
-   * pill and its mobile collapse can never drift from it — or from each other. */
   --cj-transition-input: all 200ms ease-in-out;
 
-  /*
-   * Core's universal hairline: 200+ rules borrow --content-border-color for the
-   * rule under the topic map, between posts, around menus and across admin. It
-   * defaults to --primary-low — the hard #373737 the theme has been chasing out
-   * surface by surface. One mapping retires the class; --table-border-color
-   * follows it in core.
-   */
+  /* Core's universal hairline: 200+ rules borrow --content-border-color, which
+   * defaults to --primary-low — the hard #373737. One mapping retires them all;
+   * --table-border-color follows it in core. */
   --content-border-color: var(--cj-border);
-
-  /* Core's metadata tier defaults to --primary-medium, which is derived from the
-   * palette and comes out blue-tinted — the same reason --cj-text-muted exists. */
   --metadata-color: var(--cj-text-muted);
 
-  /* Core's own hooks for the topic title, rather than out-specificity-ing its
-   * `.visited a.title` rule. A read topic is dimmed, never un-bolded, so the
-   * column of titles stays scannable. */
+  /* Core's own title hooks, rather than out-specificity-ing `.visited a.title`.
+   * A read topic dims, never un-bolds, so the column stays scannable. */
   --topic-title-font-weight: 700;
   --topic-title-font-weight--visited: 700;
   --title-color: var(--cj-text);
   --title-color--read: var(--cj-text-muted);
 
-  /* Core marks the selected nav pill with a ::after bar sized by this. The tint
-   * in _list-controls.scss is the marker instead, matching how the mobile sheet
-   * and the sidebar mark selection — an underline as well would be two markers
-   * for one state. */
+  /* The tint in _list-controls.scss marks the selected pill; core's ::after bar
+   * as well would be two markers for one state. */
   --d-nav-underline-height: 0;
+}
+
+/* Below `md` the client's header is `px-3 py-2` around the same `h-10` logo and
+ * flush to the top, so shell and header box are the same 3.5rem. */
+
+@include viewport.until(md) {
+  :root,
+  body {
+    --cj-header-shell-height: 3.5rem;
+    --cj-header-height: 3.5rem;
+    --cj-radius-shell: 0;
+    --d-wrap-padding-x: var(--space-4);
+  }
 }

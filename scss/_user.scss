@@ -1,21 +1,6 @@
-/* User profile
- *
- * The profile is one panel: the card, its navigation and the content below it
- * share a single surface, so nothing inside should paint a second one.
- */
-
-/* Inside the panel, the surface behind you *is* the panel — so core's canvas
- * token has to mean that here. Without this, every region core fills with
- * --secondary (the profile's stream items, and whatever core adds next) lands
- * as a slab of canvas on top of the surface it is sitting on. Redefining the
- * token rather than chasing each region is what keeps this from being a list.
- *
- * The light scheme needs it just as much: there the panel is #fff and the
- * canvas #f5f5f5, so the same rules paint a grey well inside a white card. */
-
-.user-main {
-  --secondary: var(--cj-panel);
-}
+/* The profile is one panel: the card, its navigation and the content below it
+ * share a single surface, so nothing inside paints a second one. The canvas
+ * inversion comes from cj-panel-surface. */
 
 .user-content {
   background: none;

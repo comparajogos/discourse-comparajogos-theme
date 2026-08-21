@@ -1,25 +1,13 @@
-/* Sidebar rows
+@use "lib/viewport";
+
+/* Client reference: components/layout/MarketLayout.tsx. Every row is the shared
+ * Button at its `secondary` variant and the current row is that button `primary`
+ * — a filled surface at rest, the accent when selected, which is the inverse of
+ * Discourse's bare-text default.
  *
- * The client's account menu (`components/layout/MarketLayout.tsx`) is the prior
- * art: every row is the shared `Button` at its default `secondary` variant, and
- * the current row is the same button `primary`. So a row is a *filled* surface
- * at rest and the accent one when selected — the inverse of Discourse's default,
- * where rows are bare text and only the selected one takes a fill.
- *
- * Geometry is `Button`'s: `px-4 py-2` on `text-sm`/`leading-5`, `gap-2`,
- * `rounded-md` (8px), `shadow-sm`, with `gap-3` between rows. Most of that lands
- * through core's own --d-sidebar-* properties (see properties.scss), so the
- * selectors below only cover what has no token.
- *
- * Where this departs from the client: the client's menu is six destinations, and
- * the forum sidebar is that plus every category and chat channel. Twenty filled
- * slabs is a wall, and it competes with the content panel beside it — which is
- * the same mistake as making the whole sidebar a card. So the fill marks the
- * *destination menu* (the sections with no heading: the client's actual
- * analogue), and the headed sections below it — Categories, Channels, DMs — stay
- * flat text, because they are a list of things rather than a menu of places.
- * Selection is the accent in both, and it is the only accent in the menu.
- */
+ * Only the unheaded destination sections take the fill. Twenty filled slabs
+ * would be a wall competing with the content panel, so Categories / Channels /
+ * DMs stay flat text: a list of things, not a menu of places. */
 
 .sidebar-wrapper {
   /* Rows in an unheaded section are the product menu. */
@@ -41,9 +29,8 @@
         0 1px 2px -1px rgb(0 0 0 / 10%);
     }
 
-    /* The resting fill above is more specific than core's own active rule (a
-     * :not()/:has() pair carries the specificity of its argument), so the accent
-     * has to be restated here rather than inherited. */
+    /* The resting fill above outweighs core's active rule — a :not()/:has()
+     * pair carries the specificity of its argument — so restate the accent. */
 
     &.active,
     &--active,
@@ -80,12 +67,8 @@
     }
   }
 
-  /* Core sizes the row's count badge with `var(--font-down-2)`, which is em — so
-   * inside a 14px row it resolved to 10.6px rather than 12px. The -rem variant is
-   * the same step off the root instead of off the row. */
-
-  /* On the accent row the badge and the suffix are on a blue fill, so they take
-   * the row's own foreground rather than the muted tier. */
+  /* On the accent row the badge and suffix are on a blue fill, so they take the
+   * row's own foreground rather than the muted tier. */
 
   .sidebar-section-link.active,
   .sidebar-section-link--active,
@@ -124,5 +107,66 @@
       background: var(--cj-hover);
       box-shadow: none;
     }
+  }
+}
+
+.sidebar-wrapper .sidebar-sections {
+  scrollbar-width: thin;
+}
+
+/* The collapse control sits at the foot of the sidebar column, in line with
+ * core's utility icons. It is our own button in `before-main-outlet`
+ * (cj-sidebar-toggle.gjs) rather than core's moved with CSS: the header pill
+ * animates `transform` to dock on scroll, which makes it a containing block, so
+ * `fixed` on anything inside the header resolves against the pill.
+ *
+ * Core's button stays for the drawer below `md`, where a fixed corner control
+ * would float over the content and the tab bar. */
+
+.cj-sidebar-toggle {
+  position: fixed;
+  z-index: 2;
+  inset-block-end: var(--space-2);
+  inset-inline-start: calc(var(--d-wrap-padding-x) + var(--space-2));
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--cj-text-muted);
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1;
+  background: var(--cj-panel);
+  border: 1px solid var(--cj-border);
+  border-radius: var(--cj-radius-pill);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--cj-text);
+    background: var(--cj-control);
+  }
+}
+
+/* Collapsed, the content column takes the sidebar's place, so the button moves
+ * out of it and into the page gutter. */
+
+body:not(.has-sidebar-page) .cj-sidebar-toggle {
+  inset-inline-start: var(--space-1);
+  transform: rotate(180deg);
+}
+
+@include viewport.from(md) {
+  .d-header .header-sidebar-toggle {
+    display: none;
+  }
+}
+
+@include viewport.until(md) {
+  .cj-sidebar-toggle {
+    display: none;
+  }
+
+  /* Core's own glyph is the drawer's handle here. */
+  .d-header .header-sidebar-toggle {
+    order: 0;
   }
 }

@@ -1,10 +1,7 @@
 @use "lib/viewport";
 
-/* Plugin adjustments
- *
- * Small corrections to plugins Compara Jogos runs, kept apart from the theme's
- * own surfaces so an upstream fix is easy to drop.
- */
+/* Corrections to plugins Compara Jogos runs, kept apart from the theme's own
+ * surfaces so an upstream fix is easy to drop. */
 
 /* discourse-ratings: give the star control room to breathe in the composer. */
 #reply-control .composer-controls-rating {

@@ -1,22 +1,12 @@
 @use "lib/viewport";
 
-/*
- * Chat.
- *
- * The reference is Discord, not a document: dense enough that a scrollback
- * reads as a conversation, with the separation spent between authors rather
- * than between every line.
- */
+/* The reference is Discord, not a document: dense enough that a scrollback reads
+ * as a conversation, with the separation spent between authors. */
 
-/* Full-page chat is a panel, but not a padded one. Its navbar and composer are
- * full-width strips — the Discord shape — so the panel contributes the surface
- * and clips them to its radius instead of insetting them. It was taking the
- * generic page panel, whose --space-5 padding stole a gutter from a surface
- * that already has its own.
- *
- * The panel also sits the same --space-5 below the header as every other
- * page's content; flush against it, the channel navbar read as a second header
- * stuck to the first. */
+/* A panel, but not a padded one: the navbar and composer are full-width strips,
+ * so the panel contributes the surface and clips them to its radius. It sits the
+ * same --space-5 below the header as every other page — flush, the channel
+ * navbar read as a second header stuck to the first. */
 
 .has-full-page-chat {
   .full-page-chat {
@@ -32,10 +22,8 @@
     background: transparent;
   }
 
-  /* Core sizes the channel to the viewport less the header. The theme has to
-   * take off the panel's own margins as well — this was `* 92`, i.e. "and also
-   * 8% of the viewport", which is where the short column and the dead band
-   * under the composer came from. */
+  /* Core sizes the channel to the viewport less the header; the panel's own
+   * margins have to come off too. */
 
   .chat-channel {
     height: calc(
@@ -74,17 +62,11 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
   }
 }
 
-/* Message density.
- *
- * Core spends 2.4px above and below every message, so a run of one-line
- * messages from the same author pays 5px of gap for 22px of type — the reading
- * cost the spacing was meant to buy. Discord's rhythm is the opposite: rows
- * inside a group sit flush and the air goes before a new author, which is what
- * the first-of-group padding below is for.
- */
-
-/* Scoped through the container to outweigh core's own
- * `.chat-message-container .chat-message` padding. */
+/* Core spends 2.4px above and below every message, so a run of one-liners from
+ * one author pays 5px of gap for 22px of type. Discord's rhythm is the opposite:
+ * rows inside a group sit flush and the air goes before a new author, which is
+ * what the first-of-group padding is for. Scoped through the container to
+ * outweigh core's own `.chat-message-container .chat-message`. */
 
 .chat-message-container .chat-message {
   padding-block: 1px;

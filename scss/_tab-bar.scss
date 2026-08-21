@@ -1,11 +1,7 @@
 @use "lib/viewport";
 
-/* Mobile tab bar
- *
- * Styling for the separate discourse-tab-bar-theme component, which gives the
- * forum the same bottom navigation the client has. Only active when the
- * component is installed, so every rule here is additive.
- */
+/* The separate discourse-tab-bar-theme component, which gives the forum the
+ * client's bottom navigation. Additive — inert when the component is absent. */
 
 /* The bar's own height, used by anything that has to clear it. */
 $height: 3.5rem;

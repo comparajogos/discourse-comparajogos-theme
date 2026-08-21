@@ -2,37 +2,15 @@
 @use "sass:string";
 @use "lib/viewport";
 
-/* Discovery list controls
+/* The row above the topic list, and the sheet its collapsed form opens.
  *
- * The row above the topic list, and the sheet its collapsed form opens.
- *
- * Below `md` core collapses the nav pills into one trigger
- * (`.list-control-toggle-link-trigger`) that opens a float-kit bottom sheet.
- * The trigger ships with no padding, no surface and an 18px/700 label. That
- * read as a second heading while the discovery h1 was visible; now that the
- * heading is back to being screen-reader-only (styles.scss), the trigger *is*
- * the page title, and below `md` it goes back to looking like one.
- *
- * The client's analogue is `components/common/Select` — the right one, rather
- * than `MarketLayout`'s mobile Button: that Button is full-width because it *is*
- * the page's whole navigation, whereas this trigger shares a row with a
- * list-style toggle and the New Topic button. Three full-width slabs in a 343px
- * row is the heavy version; a content-width Select is the honest one.
- *
- * Select's trigger: `bg-input`, `rounded-lg`, `h-10`, `px-3`, `text-sm`, with
- * `focus-visible:shadow-outline` and `data-[popup-open]:shadow-outline`.
- */
+ * Below `md` core collapses the nav pills into one trigger that opens a float-kit
+ * bottom sheet. The client's analogue is components/common/Select — `bg-input`,
+ * `rounded-lg`, `h-10`, `px-3`, `text-sm` — not MarketLayout's full-width mobile
+ * Button, which is a whole navigation rather than one control in a row. */
 
-/* Below `sm` the controls pin under the header as a subheader, as Horizon's
- * `.list-controls` does — the list scrolls under a row that keeps the current
- * tab and the compose button reachable. The canvas fill is what stops rows
- * showing through it. */
-
-/* One row of controls, one height. The sort trigger is the client's Select at
- * `h-10`, while core's buttons beside it are content-sized and come out 38px —
- * two pixels is enough to read as misalignment when they sit in a wrapped row
- * under each other. The radii stay as they are: 10px is the client's input, 8px
- * its button, and that distinction is deliberate. */
+/* One row, one height: the Select is `h-10` while core's buttons beside it come
+ * out content-sized at 38px. Radii stay as they are — 10px input, 8px button. */
 
 @include viewport.until(md) {
   .navigation-controls .btn,
@@ -89,18 +67,9 @@
   }
 }
 
-/*
- * The sheet.
- *
- * Core gives the container `--d-border-radius` (4px) and the canvas colour, then
- * lays square-cornered, 700-weight rows 4px from its edges — a hard-edged bar
- * inside a rounded box, on a surface the same colour as the page behind it.
- * Select's popup is `bg-popover border border-border rounded-lg shadow-lg p-1`
- * with `rounded-lg` rows, so the rows sit inside the container's radius instead
- * of fighting it.
- *
- * Scoped to .fk-d-menu-modal: .d-modal__container is every modal in Discourse.
- */
+/* The sheet, as Select's popup (`bg-popover border rounded-lg shadow-lg p-1`
+ * with rounded rows). Scoped to .fk-d-menu-modal — .d-modal__container is every
+ * modal in Discourse. */
 
 .fk-d-menu-modal {
   .d-modal__container {
@@ -119,15 +88,10 @@
   }
 
   .dropdown-menu {
-    /* Core paints the selected row from these, through a five-class selector.
-     * Scoping the tokens beats out-specificity-ing it — and it has to be scoped:
-     * --d-selected also drives select-kit, the editor, nav pills, post lists and
-     * --token-color-surface-selected, none of which should change here.
-     *
-     * The values are the client's mobile sheet row (`MarketMenuItems`):
-     * `text-primary font-medium bg-primary/5` — accent text on a 5% accent tint,
-     * not a filled slab. A solid accent row is the sidebar's language, where the
-     * menu is the page's primary navigation; in a four-item sheet it shouts. */
+    /* Scoping the tokens beats out-specificity-ing core's five-class rule, and
+     * it *has* to be scoped: --d-selected also drives select-kit, the editor,
+     * nav pills and post lists. Values are the client's sheet row
+     * (MarketMenuItems): `text-primary font-medium bg-primary/5`. */
     --d-selected: color-mix(in oklch, var(--cj-action) 5%, transparent);
     --d-selected-text-color: var(--cj-action);
 
@@ -136,20 +100,9 @@
   }
 }
 
-/*
- * The rows.
- *
- * Core styles them through
- * `.mobile-view .fk-d-menu-modal.list-control-toggle-link-content .dropdown-menu a`
- * — four classes, and it sets `display: block` and the link colour there — so a
- * shorter selector loses silently and the row stays a bold white block. Matched
- * rather than escalated: the theme's stylesheet loads after core's.
- *
- * The client's row is `flex items-center gap-3 px-4 py-3 text-sm`, muted by
- * default, `hover:text-foreground hover:bg-secondary`, and `text-primary
- * font-medium` when selected. Core's block padding is already the client's; the
- * 16px/700 label was the mismatch.
- */
+/* The rows: `flex items-center gap-3 px-4 py-3 text-sm`, muted, `text-primary
+ * font-medium` when selected. Core's four-class selector is matched rather than
+ * escalated — the theme's stylesheet loads after core's. */
 
 .mobile-view .fk-d-menu-modal.list-control-toggle-link-content .dropdown-menu {
   a,
@@ -180,20 +133,15 @@
   }
 }
 
-/*
- * The desktop nav pills mark selection the same way the mobile sheet does. With
- * --d-nav-underline-height at 0 and no fill, the selected pill was carried by
- * its colour alone — the weakest marker in the theme, on the control that says
- * which list you are looking at.
- */
+/* Desktop pills mark selection the way the sheet does. With
+ * --d-nav-underline-height at 0 and no fill, colour alone was carrying it. */
 
 .nav-pills > li > a.active {
   background: color-mix(in oklch, var(--cj-action) 5%, transparent);
 }
 
-/* Appended after the Select styling above so it wins on order: below `md` the
- * trigger is the page's title, not a control sitting where one should be. It
- * names the list the way a heading would, and its caret says it can be changed. */
+/* After the Select styling so it wins on order: below `md` the trigger is the
+ * page's title, and its caret says the title can be changed. */
 
 @include viewport.until(md) {
   .nav-pills .list-control-toggle-link-trigger {
@@ -207,8 +155,8 @@
 }
 
 /* Phosphor glyphs on the filter controls, from the same set the header nav uses
- * (react-icons/pi): a clock for latest, a sparkle for new, a flame for hot,
- * squares for categories, a trend for top.
+ * (react-icons/pi): PiBroadcast for latest, PiNotification for new, PiFire for
+ * hot, PiSquaresFour for categories, PiTrendUp for top.
  *
  * The labels come from the site's top menu setting, so nothing is matched on
  * what an item says — the tabs and the sheet's rows carry core's nav-item_*
@@ -243,13 +191,13 @@ body[data-cj-filter] .list-control-toggle-link-trigger::before {
 .nav-pills > li.nav-item_latest > a::before,
 .dropdown-menu > li.nav-item_latest > a::before,
 body[data-cj-filter="latest"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,88a40,40,0,1,0,40,40A40,40,0,0,0,128,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,152Zm73.71,7.14a80,80,0,0,1-14.08,22.2,8,8,0,0,1-11.92-10.67,63.95,63.95,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67,80.08,80.08,0,0,1,14.08,84.47ZM69,103.09a64,64,0,0,0,11.26,67.58,8,8,0,0,1-11.92,10.67,79.93,79.93,0,0,1,0-106.67A8,8,0,1,1,80.29,85.34,63.77,63.77,0,0,0,69,103.09ZM248,128a119.58,119.58,0,0,1-34.29,84,8,8,0,1,1-11.42-11.2,103.9,103.9,0,0,0,0-145.56A8,8,0,1,1,213.71,44,119.58,119.58,0,0,1,248,128ZM53.71,200.78A8,8,0,1,1,42.29,212a119.87,119.87,0,0,1,0-168,8,8,0,1,1,11.42,11.2,103.9,103.9,0,0,0,0,145.56Z'/%3E%3C/svg%3E");
 }
 
 .nav-pills > li.nav-item_new > a::before,
 .dropdown-menu > li.nav-item_new > a::before,
 body[data-cj-filter="new"] .list-control-toggle-link-trigger::before {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V56A16,16,0,0,1,48,40h80a8,8,0,0,1,0,16H48V208H200V128a8,8,0,0,1,16,0Zm16-68a36,36,0,1,1-36-36A36,36,0,0,1,232,60Zm-16,0a20,20,0,1,0-20,20A20,20,0,0,0,216,60Z'/%3E%3C/svg%3E");
 }
 
 .nav-pills > li.nav-item_hot > a::before,
@@ -270,22 +218,13 @@ body[data-cj-filter="top"] .list-control-toggle-link-trigger::before {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z'/%3E%3C/svg%3E");
 }
 
-/* The rail goes above the controls, because the controls are what stays put.
- *
- * Below `md` .list-controls is pinned under the header (see above), so anything
- * between it and the list slides underneath it as you scroll — which is exactly
- * where the rail was. Above it, the rail scrolls away like page content and the
- * pinned row sits directly on the list it orders. A horizontally scrolling strip
- * also reads as navigation up there, rather than as a third scroll axis wedged
- * between the controls and a vertically scrolling list.
+/* The rail goes above the controls, because the controls are what stays put:
+ * .list-controls is pinned below `sm`, so anything between it and the list slides
+ * underneath it as you scroll.
  *
  * The two are siblings in an unclassed div, so the parent has to become a flex
- * column for `order` to mean anything. Scoped with `:has()` so it only applies
- * where the rail exists — the carousel is a separate component and may not be
- * installed. A browser without `:has()` simply keeps core's order.
- *
- * This would sit better in the component itself; it is here because the flex
- * column it needs belongs to the page, not the rail. */
+ * column for `order` to mean anything. `:has()` scopes it to where the rail
+ * exists — the carousel is a separate component and may not be installed. */
 
 div:has(> .cj-category-carousel) {
   display: flex;
@@ -296,48 +235,32 @@ div:has(> .cj-category-carousel) {
   order: -1;
 }
 
-/* The filter leads, and the two scope controls end up next to each other.
- *
- * Core renders one .category-breadcrumb holding both the category and the tag
- * chooser, at the head of the row. The carousel component hides the category
- * half and shows those as its own rail below, which left `tags ›` alone in the
- * first slot — the orphaned half of a control whose other half moved. Nobody
- * chose that order; it is residue.
- *
- * So the pills come first, since below `md` they collapse into the trigger that
- * carries the page's title (see below) and a title leads. `tags ›` follows
- * them, directly above the rail, so "what am I looking at" reads as one group
- * under "how is it ordered". */
+/* The pills lead, since below `md` they collapse into the trigger that carries
+ * the page's title, and a title leads. `tags ›` follows them, directly above the
+ * rail, so "what am I looking at" reads as one group under "how is it ordered" —
+ * core leaves it orphaned in the first slot once the carousel takes over the
+ * category half of .category-breadcrumb. */
 
 .navigation-container {
-  .nav-pills {
-    order: -1;
-
-    /* Core gives the tabs a trailing `auto` margin, which claimed the row's
-     * free space and pushed everything after them to the right; only the button
-     * cluster should do that. !important because the declaration is not
-     * reachable through the CSSOM — no rule matching this element sets a margin,
-     * yet the used value is the distributed free space — so there is no selector
-     * to outweigh. */
-    margin-inline-end: 0 !important;
-  }
-
-  /* Core spaces the row's three groups apart, which left `tags ›` adrift
-   * between the tabs and the buttons — reading as one of the buttons. Packed
-   * from the start instead, with only the button cluster pushed right, so the
-   * tabs and the tag filter stay together. */
   justify-content: flex-start;
+
+  /* Only the button cluster claims the row's free space. Core hands it to the
+   * tabs with `#navigation-bar { margin-right: auto }` (list-controls.scss:48),
+   * an ID selector, so the override has to name the id too. */
+
+  #navigation-bar.nav-pills {
+    order: -1;
+    margin-inline-end: 0;
+  }
 
   .navigation-controls {
     margin-inline-start: auto;
   }
 }
 
-/* Tags the discovery filter leaves out (see settings.yml). The names are
- * configuration, not code — baking a site's own tags into the stylesheet is the
- * mistake the skeleton spent today unlearning. Scoped to .tag-drop so the tags
- * stay selectable everywhere they are actually applied: on a topic, in the
- * composer, in search. */
+/* Tags the discovery filter leaves out. The names are configuration, not code
+ * (see settings.yml). Scoped to .tag-drop so they stay selectable where they are
+ * actually applied: on a topic, in the composer, in search. */
 
 $hidden_filter_tags: "" !default;
 

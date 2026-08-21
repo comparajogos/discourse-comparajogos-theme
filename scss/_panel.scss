@@ -1,20 +1,11 @@
-/*
- * The panel.
+/* The panel — the client's only content-grouping primitive
+ * (components/featured/FeaturedSection.tsx): a filled box separated from the
+ * canvas by a hairline and a radius. The contrast is inverted (white on light
+ * grey, black on dark grey), so grouping and radius carry the shape rather than
+ * the fill, which is why the hairline is not optional.
  *
- * The client's only content-grouping primitive (`components/featured/
- * FeaturedSection.tsx`): a panel-filled box separated from the canvas by a
- * hairline and a radius. Note the inverted contrast — white on light grey,
- * black on dark grey — so grouping and radius carry the shape, not the fill,
- * which is why the hairline is not optional.
- *
- * Wide forum surfaces take 1rem rather than the client's `rounded-4xl`: 2rem is
- * right for a ~320px carousel card, but on a 1126px topic card the corners land
- * nowhere near the content.
- *
- * Defined here rather than beside its first caller so that every surface —
- * page containers, topic cards, the loading skeleton — takes its fill, hairline
- * and radius from one place.
- */
+ * 1rem, not the client's `rounded-4xl`: 2rem suits a 320px carousel card, but on
+ * a 1126px topic card the corners land nowhere near the content. */
 
 @mixin cj-panel-surface {
   box-sizing: border-box;
@@ -22,11 +13,18 @@
   border-radius: 1rem;
   background: var(--cj-panel);
   box-shadow: none;
+
+  /* Inside a panel the surface behind you *is* the panel, so core's canvas token
+   * has to mean that here — otherwise every region core fills with --secondary
+   * (profile stream items, suggested topics, whatever core adds next) lands as a
+   * slab of canvas on top of the surface it sits on. Redefining the token beats
+   * chasing each region, and it matters in both schemes: light paints a grey
+   * well inside a white card, dark a lighter slab on a black one. */
+  --secondary: var(--cj-panel);
 }
 
 /* The surface plus the padding a page container wants. Surfaces that own their
- * own padding — a topic card whose cell pads itself, the skeleton's cards —
- * take the surface alone. */
+ * own padding take cj-panel-surface alone. */
 
 @mixin cj-panel {
   @include cj-panel-surface;

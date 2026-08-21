@@ -70,9 +70,35 @@ rejects changes when any generated color surface is stale.
 ## Design contract
 
 - Keep native Discourse semantics and behavior.
-- Prefer Discourse's own custom properties over component selectors.
 - Extend `--cj-*` tokens before adding isolated values.
 - Use logical properties for direction-safe spacing.
 - Preserve visible focus and reduced-motion handling.
 - Never restyle `#reply-control`; composer compatibility belongs to core.
 - Test production theme components one at a time after the base passes.
+
+### Token over selector
+
+**Where core exposes a `--d-*` property for something, set the property — never
+a rule on the component's class.** Core reaches the same element from several
+selectors of different lengths, and a class rule of ours only ever outweighs the
+shortest of them. `.btn-primary { background: … }` styled every plain button and
+left `#create-topic` painting itself from `--d-button-primary-bg-color`, so the
+composer's split button kept the raw accent while everything else moved. Setting
+the token instead reaches every path core paints through, inherits into nested
+components, and needs no specificity arithmetic.
+
+When there is no token, match core's selector length rather than escalating past
+it — the theme's stylesheet loads after core's, so equal specificity wins. Check
+which rule actually applies before assuming the value took effect: a token that
+resolves correctly on the element proves nothing about which declaration painted
+it. `!important` is a last resort for the two cases where core's CSS ships later
+in document order than the theme's (see `_splash.scss`).
+
+### One concern per file
+
+`common/common.scss` is the manifest. A file is named for the surface it styles,
+so an override can be retired without reading the whole stylesheet, and dead
+rules stay visible — a stale block whose component was removed months earlier sat
+unnoticed in a 790-line `styles.scss` while silently breaking two other rules.
+`styles.scss` is page-level base only; anything with a home goes in its partial,
+including that surface's own media queries.

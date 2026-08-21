@@ -1,12 +1,6 @@
-/* Deliberate suppressions
- *
- * Fields and links Compara Jogos does not use. Each one is a product decision,
- * not a style choice, so they live together where they can be reviewed as a
- * set rather than rediscovered one at a time.
- *
- * Hiding a control does not disable it. Where a suppression exists only because
- * the real fix is server-side, the comment says so.
- */
+/* Deliberate suppressions — fields and links Compara Jogos does not use. Product
+ * decisions, kept together so they can be reviewed as a set. Hiding a control
+ * does not disable it; where the real fix is server-side, the comment says so. */
 
 /* Signup asks only for what the catalog account already knows. */
 #login-form .user-fields,
@@ -14,8 +8,8 @@
   display: none;
 }
 
-/* Location comes from the catalog profile (user_legal / seller_location), so the
- * forum's own location and timezone preferences would fork the source of truth. */
+/* Location and timezone come from the catalog profile (user_legal /
+ * seller_location); the forum's own would fork the source of truth. */
 
 .control-group.pref-location,
 .control-group.pref-timezone,
@@ -39,8 +33,8 @@
   display: none;
 }
 
-/* Community events are public; a private event has no audience here.
- * TODO: positional — discourse-calendar exposes no class for this control. */
+/* The event's private toggle. TODO: positional — discourse-calendar exposes no
+ * class for this control. */
 
 .post-event-builder-modal form > div:nth-child(5) {
   display: none;
@@ -56,17 +50,16 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
-/* Chat has one door: the header nav item, which carries chat's own unread
- * indicator (see cj-header-nav.gjs). The core header icon is the same
- * destination one control to its right, and on mobile the tab bar is a third.
- * Hiding it does not disable chat or its tracking. */
+/* Chat has one door: the header nav item, which carries its own unread
+ * indicator (cj-header-nav.gjs). Core's icon is the same destination one
+ * control to its right. */
 
 .header-dropdown-toggle.chat-header-icon {
   display: none;
 }
 
-/* Navigation the product does not use: tags are browsed from the catalog, the
- * member map lives in the client, and chat threads are not enabled. */
+/* Tags are browsed from the catalog, the member map lives in the client, and
+ * chat threads are not enabled. */
 
 [data-section-name="tags"],
 .sidebar-section-link-wrapper[data-list-item-name="all-tags"],
@@ -77,20 +70,17 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
-/* Bulk select is a moderator tool sitting in the reader's way: on mobile it is
- * a third button crowding the list controls, and the actions behind it are
- * available from the topic itself. Parked rather than removed — it comes back
- * the moment there is a moderation flow that wants it. */
+/* A moderator tool in the reader's way; the actions behind it are available
+ * from the topic itself. Parked, not removed. */
 
 .list-controls .bulk-select {
   display: none;
 }
 
-/* Registration happens in the catalog, not here — the forum's own Sign Up
- * button would start a second account flow. There is no site setting that
- * removes just the button: `canSignUp` (application.js:99) is
- * `!invite_only && allow_new_registrations && !enable_discourse_connect`, and
- * each of those changes who can register at all. */
+/* Registration happens in the catalog. No site setting removes just the button:
+ * `canSignUp` (application.js:99) is `!invite_only &&
+ * allow_new_registrations && !enable_discourse_connect`, and each of those
+ * changes who can register at all. */
 
 .sign-up-button {
   display: none;
@@ -101,8 +91,8 @@ body:not(.staff) #show-tag-info {
   display: none;
 }
 
-/* The composer's rating control belongs on replies, not on the first post.
- * TODO: this is a server-side concern — the control should not be rendered. */
+/* Ratings belong on replies, not the first post. TODO: server-side concern —
+ * the control should not be rendered. */
 
 .reply-area.with-tags .composer-controls-rating {
   display: none;

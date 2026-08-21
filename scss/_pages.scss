@@ -1,42 +1,23 @@
 @use "lib/viewport";
 
-/* Page panels
+/* Discourse has no single container for "the page's content" — each route ships
+ * its own, so a consistent page surface means naming them. The list came from the
+ * Canvas component; every selector was rechecked against current core (or a
+ * plugin Compara Jogos runs) before being carried over.
  *
- * Discourse has no single container for "the page's content". Each route ships
- * its own, so giving a product a consistent page surface means naming them.
- * This list came from the Canvas component, which the theme used to depend on
- * for it; every selector below was checked against current core (or against a
- * plugin Compara Jogos actually runs) before being carried over.
- *
- * The radius is the theme's own 1rem, not Canvas's 0.75rem: under Canvas the
- * profile, badges, groups and search pages had 12px corners while discovery and
- * the header had 24px, and nothing recorded that as a decision. Wide panels get
- * 1rem plus a hairline — see the design-system notes on why the client's
- * `rounded-4xl` does not transfer to a 1000px surface.
- *
- * Discovery is deliberately absent: styles.scss panels `.topic-list` itself so
- * the rows can reach the panel's edge, and a panel on `#list-area` as well would
- * be a box inside a box.
- */
+ * Discovery is deliberately absent: _topic-list.scss panels the rows themselves
+ * so they can reach the surface's edge, and a panel on #list-area as well would
+ * be a box inside a box. */
 
-.users-directory,
-.contents.body-page,
-.container .user-main,
-.container.tags-index,
-.container.badges,
-.container.groups-index,
-.group-index .container.group,
-.categories-list #list-area,
-.archetype-regular #main-outlet > .regular,
-.reviewable-container,
-div.edit-category,
-.boxed.white.admin-content,
-.search-container {
-  @include cj-panel;
-}
+$panels:
+  ".users-directory", ".contents.body-page", ".container .user-main",
+  ".container.tags-index", ".container.badges", ".container.groups-index",
+  ".group-index .container.group", ".categories-list #list-area",
+  ".archetype-regular #main-outlet > .regular", ".reviewable-container",
+  "div.edit-category", ".boxed.white.admin-content", ".search-container",
+  "#upcoming-events-calendar";
 
-/* Discourse-calendar's month view. */
-#upcoming-events-calendar {
+#{$panels} {
   @include cj-panel;
 }
 
@@ -94,17 +75,11 @@ div.edit-category,
   margin-inline: var(--space-2) 0;
 }
 
-/* Same inversion the profile had (see _user.scss): inside the topic panel core
- * fills the suggested and related rows with --secondary, so they stack as
- * lighter boxes on a black block — which is what reads as nesting. The token
- * means "the page behind you", and here that is the panel. */
+/* Suggested and related rows read their own token, which core declares on :root
+ * as `var(--secondary)` — indirection resolves where it is *declared*, so the
+ * panel's canvas override never reaches it. It has to be named directly. */
 
 .archetype-regular #main-outlet > .regular {
-  --secondary: var(--cj-panel);
-
-  /* The rows read their own token, and core declares it on :root as
-   * `var(--secondary)` — indirection resolves where it is *declared*, so the
-   * override above never reaches it. It has to be named directly. */
   --topic-list-item-background-color: transparent;
   --topic-list-item-background-color--visited: transparent;
 }
@@ -115,20 +90,7 @@ div.edit-category,
  * column that had 316px left for text. */
 
 @include viewport.until(sm) {
-  .users-directory,
-  .contents.body-page,
-  .container .user-main,
-  .container.tags-index,
-  .container.badges,
-  .container.groups-index,
-  .group-index .container.group,
-  .categories-list #list-area,
-  .archetype-regular #main-outlet > .regular,
-  .reviewable-container,
-  div.edit-category,
-  .boxed.white.admin-content,
-  .search-container,
-  #upcoming-events-calendar {
+  #{$panels} {
     padding-inline: 0;
     border: 0;
     border-radius: 0;

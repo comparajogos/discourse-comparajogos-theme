@@ -1,0 +1,130 @@
+@use "lib/viewport";
+
+/* Feed rows own their padding (_topic-feed.scss); this is for the column lists
+ * that keep core's table layout. */
+
+.topic-list .topic-list-body .topic-list-item td.topic-list-data {
+  padding-block: 0.9em;
+}
+
+/* Discovery is a column of topic cards, not one boxed table — Horizon's
+ * `--d-topic-cards` pattern in the theme's own tokens. One 1.5rem panel put
+ * every row inside a 1100px surface whose right half was empty air. Core renders
+ * a <table>, so the elements are re-displayed: flex column body, block rows. */
+
+.navigation-topics,
+.navigation-category,
+.tags-page {
+  #list-area {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .topic-list {
+    background: transparent;
+    border: 0;
+
+    .topic-list-body {
+      display: flex;
+      gap: var(--space-3);
+      flex-direction: column;
+      border: 0;
+    }
+
+    /* Core's "last visit" marker is a table row squeezed to 2px once the body
+     * goes flex. Rebuilt as a quiet line: text centred between two hairlines. */
+
+    .topic-list-item-separator {
+      display: block;
+
+      > td {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+        padding-block: var(--space-1);
+        color: var(--cj-text-muted);
+        font-size: var(--font-down-2-rem);
+        border: 0;
+
+        &::before,
+        &::after {
+          flex: 1 1 auto;
+          height: 1px;
+          background: var(--cj-border);
+          content: "";
+        }
+
+        span {
+          color: inherit;
+        }
+      }
+    }
+
+    .topic-list-item {
+      @include cj-panel-surface;
+      display: block;
+      transition: background-color 140ms ease-out;
+
+      &:hover {
+        background: color-mix(in oklch, var(--primary) 4%, var(--cj-header));
+      }
+
+      > .cj-feed-cell {
+        display: block;
+        width: auto;
+      }
+    }
+
+    .main-link .title {
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: -0.012em;
+    }
+
+    .topic-excerpt,
+    .topic-list-data,
+    .topic-list-header {
+      color: var(--primary-medium);
+    }
+  }
+
+  /* Full-bleed below `md`, as Horizon's card column does: inside the gutter the
+   * row's fill stopped short of the screen and the list read as one black slab
+   * with grey margins. The cell takes the gutter back so text still lines up
+   * with the heading above it. */
+
+  @include viewport.until(md) {
+    .topic-list {
+      width: calc(100% + var(--d-wrap-padding-x) * 2);
+      margin-inline: calc(var(--d-wrap-padding-x) * -1);
+
+      .cj-feed-cell {
+        padding-inline: var(--d-wrap-padding-x);
+      }
+
+      .topic-list-body {
+        gap: 0;
+      }
+
+      /* The fill goes with the radius. Keeping the panel colour without its
+       * shape is what banded the screen black / canvas / black. */
+
+      .topic-list-item {
+        border-inline: 0;
+        border-block-start: 0;
+        border-radius: 0;
+        background: none;
+      }
+
+      /* Core strips .last-visit's bottom border, expecting the separator row to
+       * follow; as full-bleed rows every card keeps its rule. */
+
+      > .topic-list-body > .topic-list-item.last-visit {
+        border-block-end: 1px solid var(--cj-border);
+      }
+    }
+  }
+}

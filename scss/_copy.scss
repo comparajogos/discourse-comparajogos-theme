@@ -1,13 +1,7 @@
-/* Injected copy
- *
- * Portuguese labels the forum needs but that core does not expose as
- * translations — mostly cases where a generic Discourse action carries a
- * specific meaning inside a Compara Jogos category or tag.
- *
- * These are hardcoded pt-BR because the forum's interface language is pt-BR
- * (PRODUCT.md). Anything that core *does* translate belongs in locales/, not
- * here.
- */
+/* pt-BR labels core does not expose as translations — generic Discourse actions
+ * that carry a specific meaning inside a Compara Jogos category or tag.
+ * Hardcoded because the forum's interface language is pt-BR (PRODUCT.md);
+ * anything core *does* translate belongs in locales/. */
 
 /* On the game-sheet and image tags, replying is really submitting a review or
  * uploading photos, so the button says so. */

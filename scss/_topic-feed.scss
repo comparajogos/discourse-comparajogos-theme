@@ -1,12 +1,8 @@
 @use "lib/viewport";
 
-/* Topic feed row
- *
- * Styling for javascripts/discourse/components/cj-topic-row.gjs, which replaces
- * the topic-list columns with one cell. Proportions come from the client's
- * `components/forum/TopicItem.tsx`: an 11px byline, a 16px/1.15 two-line title,
- * a 14px stats row with the category pushed right, and the last-reply pill.
- */
+/* cj-topic-row.gjs, which replaces the topic-list columns with one cell.
+ * Proportions from the client's components/forum/TopicItem.tsx: 11px byline,
+ * 16px/1.15 two-line title, 14px stats row, last-reply pill. */
 
 /* A feed has no column labels, and nothing to sort by. */
 .topic-list.--cj-feed {
@@ -26,10 +22,8 @@
   width: 100%;
 }
 
-/* The category mark sits at 0.74em by default, which lands it at 9px — smaller
- * than the 12.5px stat icons beside it and half the size of the same mark in
- * the sidebar. It reads as primary metadata, so it takes a size of its own
- * rather than inheriting the badge's text size. */
+/* Core's 0.74em lands the category mark at 9px — smaller than the stat icons
+ * beside it. It reads as primary metadata, so it gets its own size. */
 
 .cj-feed .badge-category__wrapper .badge-category {
   /* Core sizes the mark at 0.74em from a four-class selector, so this has to
@@ -45,9 +39,8 @@
 }
 
 .cj-feed {
-  /* Explicit gaps rather than one flex gap: tight between byline and title,
-   * a step before the excerpt, more before the metadata. Uniform spacing is
-   * what made the row feel like dead space. */
+  /* Explicit gaps, not one flex gap: uniform spacing is what made the row feel
+   * like dead space. */
   display: flex;
   gap: 0.1875rem;
   flex-direction: column;
@@ -112,9 +105,7 @@
     }
   }
 
-  /* Two lines of body text. Without it the row is three short lines adrift in a
-   * very wide box — the reference's rows all carry an excerpt. */
-
+  /* Without an excerpt the row is three short lines adrift in a wide box. */
   &__excerpt {
     display: -webkit-box;
     overflow: hidden;
@@ -172,8 +163,8 @@
     }
   }
 
-  /* Who spoke last is the strongest signal that a thread is alive, so it gets
-   * its own line as a quiet pill rather than another number in the row. */
+  /* The strongest signal a thread is alive, so it gets its own line rather than
+   * becoming another number in the row. */
 
   &__last-reply {
     display: inline-flex;

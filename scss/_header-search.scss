@@ -1,36 +1,18 @@
-/* Header search field
+/* Discourse's `search_experience: search_field`, measured against the client's
+ * SearchInput (GlobalHeader → UrlSearchInput → SearchInput → Input): a
+ * `rounded-full` 40px pill on `bg-muted dark:bg-card`, a 16px glyph at `left-3`
+ * with text from `pl-10`, and a 28px submit circle at `mr-1.5 ml-2`.
  *
- * Discourse's `search_experience: search_field`, tuned to the client's
- * `SearchInput` — the same field the catalog header uses. Results still come
- * from Discourse; only the composition is shared.
- *
- * Core's own structure is already the client's approach: `.search-menu` is a
- * `position: relative` box, `.search-icon` is absolutely positioned inside it
- * with `pointer-events: none`, and the trailing controls sit in `.searching`.
- * That is exactly how `components/common/{Input,SearchInput}.tsx` composes it.
- * So this file only supplies the measurements and the surface, and leaves core's
- * structure alone.
- *
- * The client's numbers (GlobalHeader's UrlSearchInput → SearchInput → Input):
- *   pill      `rounded-full`, `bg-muted dark:bg-card`, `sm:max-w-lg` (32rem),
- *             `focus-within:shadow-outline`, 40px tall
- *   magnifier 16px glyph at `left-3`, text starts at `pl-10`
- *   submit    28px circle (`h-7 w-7`), `mr-1.5 ml-2`, 16px glyph
- *
- * Scoped to `.d-header`: the same classes appear on the full search page and in
- * the welcome banner, which are their own compositions.
- */
+ * Core's structure already matches, so this file supplies only measurements and
+ * surface. Scoped to `.d-header` — the same classes appear on the search page
+ * and in the welcome banner, which are their own compositions. */
 
 @use "lib/viewport";
 
 @mixin cj-search-field {
-  /* The pill. Core centres it in the slot and narrows it on small viewports;
-   * the client keeps it full-width to its cap and lets the flex-1 nav push it
-   * against the account menu.
-   *
-   * The row and the positioning context are declared here rather than left to
-   * core: core sets them under its own five-class chain, so the theme's field
-   * would stack the magnifier above the input instead of overlaying it. */
+  /* The row and positioning context are declared here rather than left to core,
+   * which sets them under its own five-class chain — the theme's own mobile
+   * field would otherwise stack the magnifier above the input. */
 
   .search-menu {
     position: relative;
@@ -38,36 +20,25 @@
     align-items: center;
     width: 100%;
 
-    /* The client's is `sm:max-w-lg` (32rem). Pulled in a step: the forum's
-     * placeholder is much longer than the catalog's, so at 32rem the field
-     * dominated the shell. */
+    /* A step in from the client's `sm:max-w-lg`: the forum's placeholder is much
+     * longer, so at 32rem the field dominated the shell. */
     max-width: 28rem;
     min-height: 2.5rem;
     margin-inline: auto 0;
     background: var(--cj-header-soft);
     border-radius: var(--cj-radius-pill);
-
-    /* The client's Input transition, shared via token. `all` is what the client
-     * ships (`transition-all`), so the pill's shadow, colour and — on mobile —
-     * its width all move on the same clock. */
     transition: var(--cj-transition-input);
-
-    /* `focus-within:shadow-outline` — on the pill, because the input is only
-     * one of the three things inside it. */
 
     &:focus-within {
       box-shadow: var(--cj-focus-ring);
     }
   }
 
-  /* Core insets the glyph by `calc(1rem - 0.65em)` and leaves the anchor's
-   * button padding on top of it, which put the glyph ~18px in. The client's is
-   * a flat `left-3` on a bare 16px glyph. */
+  /* Decoration, not a control: it overlays the field's leading padding and lets
+   * taps through. Core insets it by `calc(1rem - 0.65em)` and leaves the
+   * anchor's button padding on top, putting the glyph ~18px in. */
 
   .search-menu .search-icon {
-    /* Decoration, not a control: it overlays the field's leading padding and
-     * lets taps through to the input behind it. The anchor is still a .btn, so
-     * its border sat between `left-3` and the glyph and pushed it to 13px. */
     position: absolute;
     z-index: 2;
     min-height: 0;
@@ -84,14 +55,9 @@
     }
   }
 
-  /* The field's surface belongs to the pill. Its leading padding is what
-   * clears the absolutely positioned glyph: 2rem here plus the input's own
-   * 0.5rem puts the first character at the client's 40px. */
-
-  /* min-width: 0 the whole way down. An <input> has an intrinsic width from its
-   * `size`, and a flex item defaults to min-width: auto, so nothing between the
-   * pill and the field could shrink — the input kept its 227px and pushed the
-   * document 21px past a 375px viewport once the pill collapsed to 40px. */
+  /* min-width: 0 the whole way down: an <input> has an intrinsic width from its
+   * `size` and a flex item defaults to min-width: auto, so nothing between the
+   * pill and the field could shrink. */
 
   .search-menu-container,
   .search-input-wrapper {
@@ -113,9 +79,8 @@
     border: 0;
     box-shadow: none;
 
-    /* Core rings the *field* on focus, at --d-input-border-radius — a 10px
-     * rectangle inside a 999px pill. The pill's own :focus-within ring above is
-     * the indicator, so this is one marker too many, not a lost one. */
+    /* Core rings the *field* at --d-input-border-radius — a 10px rectangle
+     * inside a 999px pill. The pill's own ring above is the indicator. */
 
     &:focus-within {
       outline: none;
@@ -131,18 +96,16 @@
     background: transparent;
     border: 0;
 
+    /* `placeholder:font-thin`. */
     &::placeholder {
-      /* `placeholder:font-thin` — the client's placeholder is deliberately
-       * lighter than the value the member types. */
       color: var(--header_primary);
       font-weight: 100;
       opacity: 0.7;
     }
   }
 
-  /* Core's trailing slot: the advanced-search toggle, the clear button, or the
-   * spinner while a query is in flight. It reserves a fixed `3em`, which left
-   * the control floating well inside the pill's edge. */
+  /* Core reserves a fixed `3em` for this slot, which left the control floating
+   * well inside the pill's edge. */
 
   .search-input .searching {
     width: auto;
@@ -175,17 +138,11 @@
   }
 }
 
-/*
- * Core's header-search block binds through a five-class chain
+/* Two roots for one mixin. Core binds through a five-class chain
  * (`.header-search--enabled .floating-search-input .search-banner-inner.wrap
- * .search-menu …`), so a two-class rule loses to it no matter the source order.
- * Matching the chain's length puts the theme back in front — its stylesheet
- * loads after core's, so an equal-specificity rule wins.
- *
- * The theme's own mobile field (cj-header-search.gjs) has none of those
- * ancestors, so core's rules never reach it and it needs the same measurements
- * from scratch. One mixin, two roots.
- */
+ * .search-menu …`), so the length has to be matched; the theme's own mobile
+ * field (cj-header-search.gjs) has none of those ancestors and needs the same
+ * measurements from scratch. */
 
 .d-header .floating-search-input .search-banner-inner.wrap {
   @include cj-search-field;
@@ -217,70 +174,41 @@
   background: transparent;
 }
 
-/*
- * Below `sm` the client's field is a 40px round button that expands to take the
- * row when it gets focus, clipping the logo to its mark
- * (`width={isSearchOpen ? undefined : "w-10 sm:w-full"}` plus `w-10
- * overflow-hidden` on the logo link).
- *
- * :focus-within drives it here, so there is no state to hold and no listener.
- * Without :has() support the field simply stays expanded, which is the old
- * behaviour rather than a broken one.
- */
+/* Below `sm` the client's field is a 40px round button that expands to take the
+ * row on focus, clipping the logo to its mark. Driven by :focus-within, so there
+ * is no state to hold; without :has() the field simply stays expanded. */
 
 @if $mobile_header_search == "true" {
   @include viewport.until(sm) {
-    /* Our field replaces core's mobile search icon, which opens a floating
-     * panel to the same place. Two doors, one room. */
+    /* Two doors, one room: core's mobile search icon opens a floating panel to
+     * the same place. */
 
     .d-header .header-dropdown-toggle.search-dropdown {
       display: none;
     }
 
     .d-header {
-      /* The client's row has no gap below `sm` (`sm:gap-6`) and a `flex-1`
-       * spacer right after the logo, so the collapsed button lands beside the
-       * account controls rather than beside the logo. `margin-inline-start: auto`
-       * is that spacer; the trailing 12px is the field's own `mx-3`. */
-
+      /* The client's row has no gap below `sm` (`sm:gap-6`). */
       .contents {
         gap: 0;
       }
 
-      /* The outlet's auto margin is the spacer, and .panel carries one too — two
-       * auto margins split the free space between them, so the button floated
-       * 28px short of the controls instead of sitting 12px from them. */
+      /* .panel carries an auto margin too, and two of them split the free space,
+       * floating the button 28px short of the controls. */
 
       .panel {
         margin-inline-start: 0;
       }
 
-      /*
-       * The grow-swap.
+      /* The grow-swap: collapsed, the logo wrapper is the row's spacer and the
+       * field is a 40px basis; expanded, they trade `flex-grow`. Everything that
+       * changes is interpolable (grow is a number, and `interpolate-size` covers
+       * 2.5rem ↔ auto), so the field's edge travels smoothly and nothing after it
+       * moves. An `auto` margin as the spacer does *not* interpolate — that
+       * version made the whole row lurch at frame one.
        *
-       * Collapsed, the *logo wrapper* is the row's spacer (the client's `flex-1`
-       * div, absorbed into the element before the field) and the field is a
-       * 40px flex-basis; expanded, they trade `flex-grow`. Every property that
-       * changes between the states is interpolable — grow is a number, and
-       * `interpolate-size: allow-keywords` covers basis 2.5rem ↔ auto — and the
-       * margins are constant, so the field's left edge travels smoothly
-       * right-to-left and nothing after it ever moves.
-       *
-       * The first cut used `margin-inline-start: auto` as the spacer instead,
-       * and auto ↔ length does not interpolate: at frame one the margin
-       * collapsed to 12px, the still-small field jumped left, and the hamburger
-       * and avatar lurched left into the freed space before the growing field
-       * pushed them back.
-       *
-       * Scoped to :has(.cj-header-search): on mobile topic pages the field does
-       * not render (the docked title needs the row), and unscoped these rules
-       * left a phantom 40px flex-basis in the empty outlet and gave the logo
-       * wrapper a grow it would fight the title for.
-       *
-       * Trailing margin is 0, not the client's `mx-3`: core's icon buttons
-       * carry ~12px of internal air before their glyphs, so 0 is what puts the
-       * *glyph* 12px away.
-       */
+       * Scoped to :has(.cj-header-search) because the field does not render on
+       * mobile topic pages, where the docked title needs the row. */
 
       .contents:has(.cj-header-search) {
         .home-logo-wrapper-outlet {
@@ -305,19 +233,16 @@
           max-width: none;
         }
 
-        /* Collapsed, the glyph is the whole button, so it centres rather than
-         * sitting at `left-3`. Centred by `inset-inline: 0` + auto margins so it
-         * holds whatever the button's width turns out to be, instead of relying
-         * on 12px happening to be half of (40 - 16). */
+        /* Collapsed, the glyph is the whole button, so it centres — by
+         * `inset-inline: 0` plus auto margins, which holds at any width. */
 
         .search-menu .search-icon {
           inset-inline: 0;
           margin-inline: auto;
         }
 
-        /* The results are a sheet under the header, not a dropdown hanging off a
-         * 40px button: fixed, so it escapes the field's box entirely. Core
-         * maintains --header-offset as the shell's height. */
+        /* A sheet under the header, not a dropdown hanging off a 40px button.
+         * Core maintains --header-offset as the shell's height. */
 
         .search-menu-panel {
           position: fixed;
@@ -332,9 +257,7 @@
         }
 
         /* Collapsed, the input has to be the whole button: the glyph is
-         * pointer-events: none and .search-input is a plain div, so with the
-         * leading padding on the wrapper only the last few px would focus
-         * anything. */
+         * pointer-events: none and .search-input is a plain div. */
 
         .search-input {
           padding-inline-start: 0;
@@ -360,9 +283,8 @@
           flex: 1 1 auto;
         }
 
-        /* `w-10 overflow-hidden`: the wordmark clips away and the mark stays.
-         * The clip is flex-basis, not width, so it rides the same
-         * interpolation as the grow-swap. */
+        /* `w-10 overflow-hidden`: the wordmark clips away, the mark stays. The
+         * clip is flex-basis so it rides the grow-swap's interpolation. */
 
         .home-logo-wrapper-outlet {
           flex: 0 0 2.5rem;

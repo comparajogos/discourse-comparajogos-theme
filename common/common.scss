@@ -3,19 +3,22 @@
 @import "panel";
 @import "styles";
 
-/* Compara Jogos components and overrides, one concern per file so an override
- * can be retired without reading the whole stylesheet. */
+/* One concern per file, so an override can be retired without reading the whole
+ * stylesheet. */
+@import "buttons";
+@import "header";
 @import "header-nav";
 @import "header-search";
 @import "sidebar";
 @import "list-controls";
+@import "topic-list";
+@import "topic-feed";
 @import "pages";
 @import "user";
-@import "topic-feed";
 @import "composer";
-@import "copy";
-@import "suppressed";
 @import "chat";
+@import "copy";
 @import "plugins";
 @import "tab-bar";
+@import "suppressed";
 @import "splash";
