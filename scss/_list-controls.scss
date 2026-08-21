@@ -1,3 +1,5 @@
+@use "sass:list";
+@use "sass:string";
 @use "lib/viewport";
 
 /* Discovery list controls
@@ -328,5 +330,36 @@ div:has(> .cj-category-carousel) {
 
   .navigation-controls {
     margin-inline-start: auto;
+  }
+}
+
+/* Tags the discovery filter leaves out (see settings.yml). The names are
+ * configuration, not code — baking a site's own tags into the stylesheet is the
+ * mistake the skeleton spent today unlearning. Scoped to .tag-drop so the tags
+ * stay selectable everywhere they are actually applied: on a topic, in the
+ * composer, in search. */
+
+$hidden_filter_tags: "" !default;
+
+@function cj-split($value, $separator: "|") {
+  $result: ();
+  $rest: $value;
+
+  @while string.index($rest, $separator) {
+    $at: string.index($rest, $separator);
+    $result: list.append($result, string.slice($rest, 1, $at - 1));
+    $rest: string.slice($rest, $at + 1);
+  }
+
+  @if $rest != "" {
+    $result: list.append($result, $rest);
+  }
+
+  @return $result;
+}
+
+@each $tag in cj-split($hidden_filter_tags) {
+  .tag-drop .select-kit-row[data-value="#{$tag}"] {
+    display: none;
   }
 }

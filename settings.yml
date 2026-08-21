@@ -48,3 +48,10 @@ splash_logo_dark:
   description:
     en: "Logo painted on the loading skeleton in the dark scheme. Same rule as splash_logo."
     pt_BR: "Logo exibido no esqueleto de carregamento no esquema escuro. Mesma regra do splash_logo."
+
+hidden_filter_tags:
+  default: "ficha|imagem"
+  type: string
+  description:
+    en: "Tags to leave out of the discovery tag filter, separated by `|`. They stay usable on topics and in the composer — this only removes them from the filter's list. Empty to show every tag."
+    pt_BR: "Etiquetas que não aparecem no filtro de etiquetas da listagem, separadas por `|`. Continuam válidas nos tópicos e no editor — isto só as remove da lista do filtro. Vazio para mostrar todas."

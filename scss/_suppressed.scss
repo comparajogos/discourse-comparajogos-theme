@@ -68,6 +68,7 @@ body:not(.staff) #show-tag-info {
 /* Navigation the product does not use: tags are browsed from the catalog, the
  * member map lives in the client, and chat threads are not enabled. */
 
+[data-section-name="tags"],
 .sidebar-section-link-wrapper[data-list-item-name="all-tags"],
 .sidebar-section-link-wrapper[data-list-item-name="users map"],
 [data-section-name="user-threads"],
