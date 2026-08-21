@@ -60,12 +60,8 @@ html:has(#d-splash) {
 
   .cj-splash__bar,
   .cj-splash__avatar,
-  .cj-splash__nav-item::before,
   .cj-splash__rail-pill,
-  .cj-splash__rail-description::after,
-  .cj-splash__row::before,
-  .cj-splash__search::before,
-  .cj-splash__log-in::before {
+  .cj-splash__rail-description::after {
     border: 1px solid CanvasText;
     background: none;
   }
@@ -131,6 +127,17 @@ html[lang^="pt"] #cj-splash {
   background: var(--cj-header);
 }
 
+/* The skeleton and booted shell share the same earliest inline Phosphor sprite.
+ * Known controls therefore keep their real silhouettes across the handoff;
+ * only user- and site-configured content remains a neutral placeholder. */
+
+.cj-splash__icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentcolor;
+}
+
 /* `content` makes the span a replaced element, so it takes the logo's own
  * aspect ratio exactly as #site-logo does — no hardcoded width to go stale when
  * the logo is swapped. Both variants come from theme settings; see settings.yml. */
@@ -186,18 +193,6 @@ html[lang^="pt"] #cj-splash {
   font-size: var(--font-down-1);
   line-height: 1;
 
-  &::before {
-    /* Icon placeholder. The booted header inlines Phosphor glyphs; a skeleton
-     * that guessed at their silhouettes would be a second copy to maintain. */
-    content: "";
-    flex: none;
-    inline-size: 1.5rem;
-    block-size: 1.5rem;
-    border-radius: 0.5rem;
-    background: currentcolor;
-    opacity: 0.25;
-  }
-
   &.is-active {
     font-weight: 500;
   }
@@ -236,14 +231,10 @@ html[lang^="pt"] #cj-splash {
   background: var(--cj-card);
   font-size: var(--font-down-1);
 
-  &::before {
-    content: "";
-    flex: none;
-    inline-size: 1rem;
-    block-size: 1rem;
-    border-radius: 999px;
-    background: currentcolor;
-    opacity: 0.5;
+  > .cj-splash__icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--header_primary);
   }
 
   &::after {
@@ -273,14 +264,8 @@ html[lang^="pt"] #cj-splash {
   background: var(--cj-brand);
   font-size: var(--font-down-1);
 
-  &::before {
-    content: "";
-    flex: none;
-    inline-size: 0.875rem;
-    block-size: 0.875rem;
-    border-radius: 999px;
-    background: currentcolor;
-    opacity: 0.7;
+  > .cj-splash__icon {
+    display: none;
   }
 
   &::after {
@@ -299,9 +284,10 @@ html:not(.anon) .cj-splash__log-in {
   color: var(--header_primary);
   background: var(--cj-control);
 
-  &::before {
-    inline-size: 1.5rem;
-    block-size: 1.5rem;
+  > .cj-splash__icon {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
     opacity: 0.35;
   }
 
@@ -341,13 +327,9 @@ html:not(.anon) .cj-splash__log-in {
     margin-block-start: var(--d-sidebar-vertical-gap);
   }
 
-  &::before {
-    content: "";
-    flex: none;
-    inline-size: 1.5rem;
-    block-size: 1.5rem;
-    border-radius: 0.5rem;
-    background: currentcolor;
+  > .cj-splash__icon {
+    width: 1.5rem;
+    height: 1.5rem;
     opacity: 0.3;
   }
 
@@ -798,13 +780,9 @@ body:has(
     border-end-end-radius: var(--d-button-border-radius);
     box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
 
-    &::before {
-      content: "";
+    > .cj-splash__icon {
       width: 1.125rem;
       height: 1.125rem;
-      background: currentcolor;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,36H40A20,20,0,0,0,20,56V200a20,20,0,0,0,20,20H216a20,20,0,0,0,20-20V56A20,20,0,0,0,216,36ZM44,104H72v20H44ZM72,60V80H44V60ZM44,148H72v48H44Zm168,48H96V60H212Z'/%3E%3C/svg%3E")
-        center / contain no-repeat;
     }
   }
 
@@ -850,9 +828,10 @@ body:has(
       content: none;
     }
 
-    &::before {
-      inline-size: 1.25rem;
-      block-size: 1.25rem;
+    > .cj-splash__icon {
+      display: block;
+      width: 1.25rem;
+      height: 1.25rem;
       opacity: 0.3;
     }
   }

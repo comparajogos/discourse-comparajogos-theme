@@ -46,6 +46,26 @@
       d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"
     />
   </symbol>
+  <symbol viewBox="0 0 256 256" fill="currentColor" id="cj-magnifying-glass">
+    <path
+      d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+    />
+  </symbol>
+  <symbol viewBox="0 0 256 256" fill="currentColor" id="cj-user-circle">
+    <path
+      d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"
+    />
+  </symbol>
+  <symbol viewBox="0 0 256 256" fill="currentColor" id="cj-squares-four">
+    <path
+      d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"
+    />
+  </symbol>
+  <symbol viewBox="0 0 256 256" fill="currentColor" id="cj-sidebar">
+    <path
+      d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,152H56a8,8,0,0,0,0-16H40V120H56a8,8,0,0,0,0-16H40V88H56a8,8,0,0,0,0-16H40V56H80V200H40Zm176,48H96V56H216V200Z"
+    />
+  </symbol>
 </svg>
 
 <!--
@@ -73,22 +93,42 @@
       <span class="cj-splash__logo"></span>
 
       <nav class="cj-splash__nav">
-        <span class="cj-splash__nav-item cj-splash__forum is-active"></span>
-        <span class="cj-splash__nav-item cj-splash__lists"></span>
-        <span class="cj-splash__nav-item cj-splash__plays"></span>
-        <span class="cj-splash__nav-item cj-splash__chat"></span>
-        <span class="cj-splash__nav-item cj-splash__market"></span>
+        <span class="cj-splash__nav-item cj-splash__forum is-active">
+          <svg class="cj-splash__icon">
+            <use href="#cj-users-three-fill"></use>
+          </svg>
+        </span>
+        <span class="cj-splash__nav-item cj-splash__lists">
+          <svg class="cj-splash__icon"><use href="#cj-list-star"></use></svg>
+        </span>
+        <span class="cj-splash__nav-item cj-splash__plays">
+          <svg class="cj-splash__icon"><use href="#cj-play-circle"></use></svg>
+        </span>
+        <span class="cj-splash__nav-item cj-splash__chat">
+          <svg class="cj-splash__icon"><use href="#cj-chats-circle"></use></svg>
+        </span>
+        <span class="cj-splash__nav-item cj-splash__market">
+          <svg class="cj-splash__icon"><use href="#cj-storefront"></use></svg>
+        </span>
       </nav>
 
-      <span class="cj-splash__search"></span>
+      <span class="cj-splash__search">
+        <svg class="cj-splash__icon">
+          <use href="#cj-magnifying-glass"></use>
+        </svg>
+      </span>
 
       <span class="cj-splash__auth">
-        <span class="cj-splash__log-in"></span>
+        <span class="cj-splash__log-in">
+          <svg class="cj-splash__icon"><use href="#cj-user-circle"></use></svg>
+        </span>
       </span>
     </div>
   </div>
 
-  <span class="cj-splash__sidebar-toggle"></span>
+  <span class="cj-splash__sidebar-toggle">
+    <svg class="cj-splash__icon"><use href="#cj-sidebar"></use></svg>
+  </span>
 
   <div class="cj-splash__body cj-splash__frame">
     <!--
@@ -99,22 +139,27 @@
       is the theme's and stays exact; the content is a placeholder.
     -->
     <aside class="cj-splash__sidebar">
-      <span class="cj-splash__row is-active"
-        ><span class="cj-splash__bar cj-splash__bar--row"></span
-      ></span>
-      <span class="cj-splash__row is-muted"
-        ><span class="cj-splash__bar cj-splash__bar--row"></span
-      ></span>
+      <span class="cj-splash__row is-active">
+        <svg class="cj-splash__icon"><use href="#cj-squares-four"></use></svg>
+        <span class="cj-splash__bar cj-splash__bar--row"></span>
+      </span>
+      <span class="cj-splash__row is-muted">
+        <svg class="cj-splash__icon"><use href="#cj-squares-four"></use></svg>
+        <span class="cj-splash__bar cj-splash__bar--row"></span>
+      </span>
       <span class="cj-splash__section"></span>
-      <span class="cj-splash__row"
-        ><span class="cj-splash__bar cj-splash__bar--row"></span
-      ></span>
-      <span class="cj-splash__row"
-        ><span class="cj-splash__bar cj-splash__bar--row"></span
-      ></span>
-      <span class="cj-splash__row"
-        ><span class="cj-splash__bar cj-splash__bar--row"></span
-      ></span>
+      <span class="cj-splash__row">
+        <svg class="cj-splash__icon"><use href="#cj-squares-four"></use></svg>
+        <span class="cj-splash__bar cj-splash__bar--row"></span>
+      </span>
+      <span class="cj-splash__row">
+        <svg class="cj-splash__icon"><use href="#cj-squares-four"></use></svg>
+        <span class="cj-splash__bar cj-splash__bar--row"></span>
+      </span>
+      <span class="cj-splash__row">
+        <svg class="cj-splash__icon"><use href="#cj-squares-four"></use></svg>
+        <span class="cj-splash__bar cj-splash__bar--row"></span>
+      </span>
     </aside>
 
     <div class="cj-splash__main">
