@@ -453,21 +453,10 @@ div:has(> .cj-category-carousel) {
     min-width: 0;
   }
 
-  .cj-category-carousel__clear {
-    color: var(--cj-text-muted);
-    font-size: var(--font-down-2-rem);
+  /* The component exposes route state directly, so a selected category with
+   * no description does not fall back to the generic unfiltered blurb. */
 
-    &:hover {
-      color: var(--cj-action);
-    }
-  }
-
-  /* `:has()` because the description only exists on a category page — without
-   * it, a browser that cannot ask the question simply gets no blurb. */
-
-  .cj-category-carousel__content:not(
-      :has(.cj-category-carousel__context)
-    )::after {
+  .cj-category-carousel__content:not(.is-category-selected)::after {
     /* Quoted: Theme#scss_variables emits settings through `unquote()`, so an
      * unquoted string here is invalid in `content` and the declaration is
      * dropped silently. */
