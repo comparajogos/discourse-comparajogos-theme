@@ -347,12 +347,16 @@ div:has(> .cj-category-carousel) {
    * category is selected, so the list never moves between the two states. The
    * clamp is what makes that a guarantee rather than a property of the copy. */
 
+  .cj-category-carousel__context,
+  .cj-category-carousel__content::after {
+    max-width: 66ch;
+    margin-block-start: var(--space-1);
+  }
+
   .cj-category-carousel__description,
   .cj-category-carousel__content::after {
     display: block;
     overflow: hidden;
-    max-width: 66ch;
-    margin-block-start: var(--space-1);
     color: var(--cj-text-muted);
     font-size: var(--font-down-2-rem);
 
@@ -366,11 +370,24 @@ div:has(> .cj-category-carousel) {
     white-space: nowrap;
   }
 
+  .cj-category-carousel__description {
+    min-width: 0;
+  }
+
+  .cj-category-carousel__clear {
+    color: var(--cj-text-muted);
+    font-size: var(--font-down-2-rem);
+
+    &:hover {
+      color: var(--cj-action);
+    }
+  }
+
   /* `:has()` because the description only exists on a category page — without
    * it, a browser that cannot ask the question simply gets no blurb. */
 
   .cj-category-carousel__content:not(
-      :has(.cj-category-carousel__description)
+      :has(.cj-category-carousel__context)
     )::after {
     /* Quoted: Theme#scss_variables emits settings through `unquote()`, so an
      * unquoted string here is invalid in `content` and the declaration is
