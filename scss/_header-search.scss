@@ -250,6 +250,16 @@
         .panel .d-header-icons {
           margin-inline-start: 0;
         }
+
+        /* The avatar button already retains its trailing padding and a >44px
+         * touch target. Core's matching leading padding only creates an
+         * invisible gutter beside the search, making a 4px layout gap read as
+         * 14px. Remove that leading half instead of overlapping the controls
+         * with a negative search margin. */
+
+        .panel .current-user .btn {
+          padding-inline-start: 0;
+        }
       }
 
       .cj-header-search {
