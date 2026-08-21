@@ -159,6 +159,14 @@
   @include cj-search-field;
 }
 
+/* The compact mark only belongs to the focused phone composition below. Keep
+ * it inert by default so a viewport transition can never expose the raw image
+ * during the render in which the responsive component unmounts. */
+
+.d-header .cj-header-search__small-logo {
+  display: none;
+}
+
 /* The outlet carries the nav on desktop and the search field below `sm`, so it
  * is a row in both cases. */
 

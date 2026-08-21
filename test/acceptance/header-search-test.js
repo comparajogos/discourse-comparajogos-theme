@@ -1,4 +1,4 @@
-import { click, visit } from "@ember/test-helpers";
+import { click, settled, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -56,7 +56,7 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
 });
 
 acceptance("Compara Jogos header search - desktop", function () {
-  test("core's field renders and the theme's stands down", async function (assert) {
+  test("core and theme fields trade places across the breakpoint", async function (assert) {
     await visit("/latest");
 
     assert.false(
@@ -70,6 +70,31 @@ acceptance("Compara Jogos header search - desktop", function () {
     assert.false(
       exists(".cj-sidebar-toggle"),
       "the theme adds no second toggle"
+    );
+
+    const site = this.container.lookup("service:site");
+    site.set("narrowDesktopView", true);
+    await settled();
+
+    assert.true(
+      exists(".d-header .cj-header-search"),
+      "the theme field mounts when the viewport narrows"
+    );
+    assert.false(
+      exists(".d-header .floating-search-input"),
+      "core removes its desktop field at the same breakpoint"
+    );
+
+    site.set("narrowDesktopView", false);
+    await settled();
+
+    assert.false(
+      exists(".d-header .cj-header-search"),
+      "the theme field unmounts when the viewport widens again"
+    );
+    assert.true(
+      exists(".d-header .floating-search-input"),
+      "core is once again the only desktop search field"
     );
   });
 });

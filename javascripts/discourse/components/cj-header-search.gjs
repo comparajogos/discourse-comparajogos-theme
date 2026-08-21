@@ -17,9 +17,11 @@ import DButton from "discourse/ui-kit/d-button";
  * wraps, so the search behaviour, results and keyboard handling are all core's.
  * Only the placement is ours.
  *
- * `shouldRender` rather than a reactive getter: both flags come from the boot
- * payload, so there is nothing to react to, and gating here means core's field
- * and this one can never mount two SearchMenus over the same input id.
+ * The gate lives in the template rather than the outlet's static
+ * `shouldRender`: both viewport flags are reactive, so a browser resized from
+ * mobile to desktop must remove this field as core mounts its own (and vice
+ * versa). Keeping both gates in the render tree also prevents two SearchMenus
+ * from owning different inputs after a breakpoint transition.
  *
  * The markup mirrors HeaderSearch's inner two levels — `.search-menu` wrapping
  * the magnifier and the menu — because SearchMenu's own root is
@@ -27,20 +29,19 @@ import DButton from "discourse/ui-kit/d-button";
  * `.search-menu`. One mixin then covers both fields.
  */
 export default class CjHeaderSearch extends Component {
-  static shouldRender(args, context, owner) {
-    const site = owner.lookup("service:site");
-    const search = owner.lookup("service:search");
-
-    return (
-      (site.mobileView || site.narrowDesktopView) &&
-      search.searchExperience === "search_field" &&
-      !args.topicInfoVisible
-    );
-  }
-
   @service interfaceColor;
   @service router;
+  @service search;
+  @service site;
   @service siteSettings;
+
+  get shouldRender() {
+    return (
+      (this.site.mobileView || this.site.narrowDesktopView) &&
+      this.search.searchExperience === "search_field" &&
+      !this.args.topicInfoVisible
+    );
+  }
 
   get isChatRoute() {
     return this.router.currentRouteName?.startsWith("chat");
@@ -71,38 +72,40 @@ export default class CjHeaderSearch extends Component {
   }
 
   <template>
-    {{#unless this.isChatRoute}}
-      <div class="cj-header-search">
-        {{#if this.smallLogoUrl}}
-          <span class="cj-header-search__small-logo" aria-hidden="true">
-            {{#if this.hasDistinctDarkLogo}}
-              <picture>
-                <source
-                  srcset={{this.smallLogoDarkUrl}}
-                  media={{this.darkMediaQuery}}
-                />
+    {{#if this.shouldRender}}
+      {{#unless this.isChatRoute}}
+        <div class="cj-header-search">
+          {{#if this.smallLogoUrl}}
+            <span class="cj-header-search__small-logo" aria-hidden="true">
+              {{#if this.hasDistinctDarkLogo}}
+                <picture>
+                  <source
+                    srcset={{this.smallLogoDarkUrl}}
+                    media={{this.darkMediaQuery}}
+                  />
+                  <img src={{this.smallLogoUrl}} alt="" />
+                </picture>
+              {{else}}
                 <img src={{this.smallLogoUrl}} alt="" />
-              </picture>
-            {{else}}
-              <img src={{this.smallLogoUrl}} alt="" />
-            {{/if}}
-          </span>
-        {{/if}}
+              {{/if}}
+            </span>
+          {{/if}}
 
-        <div class="search-menu">
-          <DButton
-            @icon="magnifying-glass"
-            @title="search.open_advanced"
-            @href="/search?expanded=true"
-            class="btn search-icon"
-          />
+          <div class="search-menu">
+            <DButton
+              @icon="magnifying-glass"
+              @title="search.open_advanced"
+              @href="/search?expanded=true"
+              class="btn search-icon"
+            />
 
-          <SearchMenu
-            @location="header"
-            @searchInputId="cj-header-search-input"
-          />
+            <SearchMenu
+              @location="header"
+              @searchInputId="cj-header-search-input"
+            />
+          </div>
         </div>
-      </div>
-    {{/unless}}
+      {{/unless}}
+    {{/if}}
   </template>
 }
