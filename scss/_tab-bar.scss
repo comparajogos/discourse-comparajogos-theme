@@ -6,9 +6,13 @@
 /* The bar's own height, used by anything that has to clear it. */
 $height: 3.5rem;
 
+:root {
+  --cj-mobile-nav-height: #{$height};
+}
+
 @if $show_mobile_tab_bar == "true" {
   :root {
-    --cj-mobile-tab-bar-clearance: #{$height};
+    --cj-mobile-tab-bar-clearance: var(--cj-mobile-nav-height);
   }
 
   .d-tab-bar {
