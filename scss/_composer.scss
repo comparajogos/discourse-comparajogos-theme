@@ -13,15 +13,12 @@
 @include viewport.from(md) {
   /* Core anchors the previewless composer with a legacy 0.67em inset and, when
    * the sidebar is present, as though the sidebar widened the page frame. This
-   * theme uses one shared 90rem frame in both states, so keep the composer
-   * inside that frame's real gutters. Both insets are intentional: core's
-   * preferred width holds until the content column becomes narrower, then the
-   * composer contracts without crossing either edge. */
+   * theme uses one shared 90rem frame in both states, so move the start edge to
+   * the real content column while leaving core's width and max-width untouched. */
 
   #reply-control:not(.fullscreen).hide-preview {
     --cj-frame-edge: max(0px, calc((100vw - var(--d-max-width)) / 2));
-    inset-inline-end: calc(var(--cj-frame-edge) + var(--d-wrap-padding-x));
-    inline-size: auto;
+    inset-inline-end: auto;
     margin-inline: 0;
   }
 
