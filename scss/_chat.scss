@@ -70,8 +70,13 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
       border-block-start-color: var(--cj-border);
 
       &__item {
+        /* Navigation destinations divide the footer, not the available text.
+         * Core leaves these content-sized, so the longer Threads label shifts
+         * every centre around it instead of producing an even tab rhythm. */
+        flex: 1 1 0;
         gap: 0;
         box-sizing: border-box;
+        min-inline-size: 0;
         block-size: var(--cj-mobile-nav-height, 3.5rem);
         min-block-size: var(--cj-mobile-nav-height, 3.5rem);
         padding-block: 0;
