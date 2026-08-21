@@ -557,7 +557,7 @@ html[lang^="pt"] #cj-splash {
       box-sizing: content-box;
       height: var(--cj-mobile-nav-height, 3.5rem);
       padding-block-end: env(safe-area-inset-bottom);
-      color: var(--cj-text);
+      color: var(--cj-mobile-nav-foreground);
       background: var(--cj-panel);
     }
 

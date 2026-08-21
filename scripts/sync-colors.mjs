@@ -70,6 +70,12 @@ function colorDefinitions() {
       ${light.product.headerSoft},
       ${dark.product.headerSoft}
     )};
+
+  /* React NavigationBar: text-brand light, text-gray-300 dark */
+  --cj-mobile-nav-foreground: #{dark-light-choose(
+      ${light.product.mobileNavForeground},
+      ${dark.product.mobileNavForeground}
+    )};
 }
 `;
 }

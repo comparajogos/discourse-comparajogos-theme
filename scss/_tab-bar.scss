@@ -26,12 +26,12 @@ $height: 3.5rem;
     box-shadow: none;
 
     .tab {
-      color: var(--cj-text);
+      color: var(--cj-mobile-nav-foreground);
 
       &.active {
         /* Match the client and header navigation: the configured filled glyph
          * identifies the current app without introducing an accent color. */
-        color: var(--cj-text);
+        color: var(--cj-mobile-nav-foreground);
       }
 
       .title {

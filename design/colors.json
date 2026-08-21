@@ -22,7 +22,8 @@
         "control": "oklch(94% 0 0deg)",
         "border": "oklch(92% 0.004 286.32deg)",
         "textMuted": "#71717b",
-        "headerSoft": "oklch(95% 0.03 240deg)"
+        "headerSoft": "oklch(95% 0.03 240deg)",
+        "mobileNavForeground": "#2364d8"
       }
     },
     "dark": {
@@ -47,7 +48,8 @@
         "control": "oklch(26% 0 0deg)",
         "border": "oklch(100% 0 0deg / 10%)",
         "textMuted": "#9f9fa9",
-        "headerSoft": "oklch(21% 0.006 285.885deg)"
+        "headerSoft": "oklch(21% 0.006 285.885deg)",
+        "mobileNavForeground": "oklch(87.2% 0.01 258.338deg)"
       }
     }
   },

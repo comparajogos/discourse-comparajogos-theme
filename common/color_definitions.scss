@@ -33,4 +33,10 @@
       oklch(95% 0.03 240deg),
       oklch(21% 0.006 285.885deg)
     )};
+
+  /* React NavigationBar: text-brand light, text-gray-300 dark */
+  --cj-mobile-nav-foreground: #{dark-light-choose(
+      #2364d8,
+      oklch(87.2% 0.01 258.338deg)
+    )};
 }
