@@ -145,12 +145,16 @@
 
 @include viewport.until(md) {
   .nav-pills .list-control-toggle-link-trigger {
-    padding-inline: 0;
-    border-radius: 0;
-    background: none;
     font-size: var(--font-up-2-rem);
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+
+  /* The rail carries 8px of its own inline padding, which set the pills 8px
+   * inside the trigger and the cards below. Boxes share the page's edge. */
+
+  .cj-category-carousel {
+    padding-inline: 0;
   }
 }
 
@@ -218,6 +222,28 @@ body[data-cj-filter="top"] .list-control-toggle-link-trigger::before {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z'/%3E%3C/svg%3E");
 }
 
+/* The tag filter is the rail's counterpart — the other thing that says what you
+ * are looking at — so it carries a glyph the way the filter tabs do. Core's
+ * trailing caret stays; this is the leading mark. */
+
+.tag-drop .select-kit-header-wrapper .select-kit-selected-name::before {
+  content: "";
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin-inline-end: var(--space-2);
+  background: currentcolor;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M243.31,136,144,36.69A15.86,15.86,0,0,0,132.69,32H40a8,8,0,0,0-8,8v92.69A15.86,15.86,0,0,0,36.69,144L136,243.31a16,16,0,0,0,22.63,0l84.68-84.68a16,16,0,0,0,0-22.63Zm-96,96L48,132.69V48h84.69L232,147.31ZM96,84A12,12,0,1,1,84,72,12,12,0,0,1,96,84Z'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.tag-drop .select-kit-header-wrapper .select-kit-selected-name {
+  display: flex;
+  align-items: center;
+}
+
 /* The rail goes above the controls, because the controls are what stays put:
  * .list-controls is pinned below `sm`, so anything between it and the list slides
  * underneath it as you scroll.
@@ -255,14 +281,35 @@ div:has(> .cj-category-carousel) {
 
   /* The selected category's description is the page's subtitle, so it sits with
    * the pill it belongs to rather than floating between the two control rows. A
-   * measure keeps it a line of prose instead of a 1100px band. */
+   * measure keeps it a line of prose instead of a 1100px band.
+   *
+   * Clamped to one line, and the blurb below fills the same line when no
+   * category is selected, so the list never moves between the two states. The
+   * clamp is what makes that a guarantee rather than a property of the copy. */
 
-  .cj-category-carousel__description {
+  .cj-category-carousel__description,
+  .cj-category-carousel__content::after {
+    display: block;
+    overflow: hidden;
     max-width: 66ch;
     margin-block-start: var(--space-2);
     color: var(--cj-text-muted);
     font-size: var(--font-down-1-rem);
     line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* `:has()` because the description only exists on a category page — without
+   * it, a browser that cannot ask the question simply gets no blurb. */
+
+  .cj-category-carousel__content:not(
+      :has(.cj-category-carousel__description)
+    )::after {
+    /* Quoted: Theme#scss_variables emits settings through `unquote()`, so an
+     * unquoted string here is invalid in `content` and the declaration is
+     * dropped silently. */
+    content: "#{$category_rail_blurb}";
   }
 }
 

@@ -55,3 +55,10 @@ hidden_filter_tags:
   description:
     en: "Tags to leave out of the discovery tag filter, separated by `|`. They stay usable on topics and in the composer — this only removes them from the filter's list. Empty to show every tag."
     pt_BR: "Etiquetas que não aparecem no filtro de etiquetas da listagem, separadas por `|`. Continuam válidas nos tópicos e no editor — isto só as remove da lista do filtro. Vazio para mostrar todas."
+
+category_rail_blurb:
+  default: "Escolha uma categoria para filtrar."
+  type: string
+  description:
+    en: "One line shown under the category rail while no category is selected, in place of the selected category's description. Keep it to one line: both states are clamped to the same height so the list never shifts. Empty to show nothing (the rail then changes height between states)."
+    pt_BR: "Uma linha exibida sob a trilha de categorias enquanto nenhuma está selecionada, no lugar da descrição da categoria. Mantenha em uma linha: os dois estados têm a mesma altura para a lista não pular. Vazio para não exibir nada."
