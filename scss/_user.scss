@@ -1,0 +1,28 @@
+/* User profile
+ *
+ * The profile is one panel: the card, its navigation and the content below it
+ * share a single surface, so nothing inside should paint a second one.
+ */
+
+/* Core fills the content region with --secondary — the canvas colour. Against a
+ * page that colour reads as "the surface", but inside our panel it is a slab of
+ * canvas laid on top of it, which is the same inversion the chat navbar had. */
+
+.user-content {
+  background: none;
+}
+
+/* Core's staff bar is deliberately inverted — `background: var(--primary)` with
+ * `color: var(--secondary)` (user.scss:436) — which is a dark bar with light
+ * text in a light scheme, and a white slab in a dark one. It is a quiet staff
+ * notice, so it takes the muted control fill in both. */
+
+.user-main .staff-counters {
+  color: var(--cj-text);
+  background: var(--cj-control);
+  border-radius: var(--d-button-border-radius);
+
+  a {
+    color: var(--cj-text);
+  }
+}
