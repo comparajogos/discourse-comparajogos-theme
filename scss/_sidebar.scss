@@ -12,7 +12,8 @@
 .sidebar-wrapper {
   /* Rows in an unheaded section are the product menu. */
   .sidebar-section-wrapper:not(
-      :has(.sidebar-section-header-wrapper, .admin-sidebar-nav-link)
+      :has(.sidebar-section-header-wrapper, .admin-sidebar-nav-link),
+      [data-section-name="chat-search"]
     )
     .sidebar-section-link {
     background: var(--cj-control);
@@ -114,17 +115,6 @@
 
 .sidebar-wrapper .sidebar-sections {
   scrollbar-width: thin;
-
-  /* Plugin sections expose stable names. Let core and other plugins keep their
-   * source order, then place voice rooms between public chat and DMs. */
-
-  > [data-section-name="resenha-rooms"] {
-    order: 1;
-  }
-
-  > [data-section-name="chat-dms"] {
-    order: 2;
-  }
 }
 
 /* Admin is a dense working surface, not the public destination menu above.
