@@ -24,20 +24,24 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .floating-search-input"),
       "core's own field stays absent, so only one SearchMenu mounts"
     );
-    assert.true(
+    assert.false(
       exists(".cj-sidebar-toggle"),
-      "the attached navigation trigger replaces the header hamburger"
+      "the detached desktop control stays out of the mobile layout"
+    );
+    assert.true(
+      exists(".d-header .hamburger-dropdown #toggle-hamburger-menu"),
+      "core's navigation trigger remains attached to the header"
     );
 
-    await click(".cj-sidebar-toggle");
+    await click("#toggle-hamburger-menu");
 
     assert.true(
       exists(".hamburger-panel"),
-      "the custom trigger opens the mobile navigation drawer"
+      "the header trigger opens the mobile navigation drawer"
     );
     assert.true(
       exists(".header-cloak"),
-      "the custom trigger retains core's navigation cloak"
+      "the header trigger retains core's navigation cloak"
     );
   });
 });
