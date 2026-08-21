@@ -106,8 +106,8 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
         }
 
         /* Match the product navigation's outline-to-fill selection pattern.
-         * Search has no filled Phosphor counterpart, so its bold weight is the
-         * equivalent state while keeping the same foreground as every tab. */
+         * Every active glyph below uses Phosphor's official fill asset while
+         * keeping the same foreground as the inactive tab. */
 
         &.--active {
           color: var(--cj-text-muted);
@@ -156,7 +156,7 @@ html.has-full-page-chat body #main-outlet .full-page-chat {
       }
 
       #c-footer-search {
-        --cj-chat-active-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z'/%3E%3C/svg%3E");
+        --cj-chat-active-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M168,112a56,56,0,1,1-56-56A56,56,0,0,1,168,112Zm61.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88,88,0,1,1,11.32-11.31l50.06,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z'/%3E%3C/svg%3E");
       }
     }
   }
