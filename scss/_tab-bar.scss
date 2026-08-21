@@ -15,7 +15,12 @@ $height: 3.5rem;
     --cj-mobile-tab-bar-clearance: var(--cj-mobile-nav-height);
   }
 
-  .d-tab-bar {
+  /* The component declares the active colour with the same three-class
+   * specificity and component compilation order is not a product contract.
+   * Anchor the override to the document shell so foreground selection remains
+   * fill-only without reaching for !important. */
+
+  html body .d-tab-bar {
     background: var(--cj-panel);
     border-block-start: 1px solid var(--cj-border);
     box-shadow: none;
