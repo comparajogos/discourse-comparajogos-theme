@@ -135,6 +135,48 @@
   white-space: nowrap;
 }
 
+/* Core's social buttons keep a white provider surface in both schemes, but
+ * their inherited default-button hover turns medium gray. Tint that same white
+ * surface toward the product action blue, and keep provider text/icons stable.
+ * Discourse ID is the primary action: its invalid `border-color` token falls
+ * back to the login panel hairline, which reads as a bright outline on dark. */
+
+#login-buttons .btn.btn-social {
+  &:focus-visible {
+    outline: 2px solid var(--cj-action);
+    outline-offset: 2px;
+  }
+
+  &:not(.discourse_id) {
+    &:hover,
+    &:focus-visible,
+    .discourse-no-touch &:hover {
+      color: #000;
+      background-color: color-mix(in oklch, #fff 88%, var(--cj-action));
+
+      .d-icon {
+        color: #000;
+      }
+    }
+  }
+
+  &.discourse_id {
+    border-color: transparent;
+
+    &:hover,
+    &:focus-visible,
+    .discourse-no-touch &:hover {
+      color: var(--discourse_id-text-hover);
+      background-color: var(--discourse_id-background-hover);
+      border-color: transparent;
+
+      .d-icon {
+        color: var(--discourse_id-icon-hover);
+      }
+    }
+  }
+}
+
 /* discourse-social-links: without links, the block still reserves space. */
 .iconic-user-fields {
   padding-block-end: 0;

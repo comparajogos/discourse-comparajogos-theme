@@ -14,7 +14,7 @@ export default apiInitializer((api) => {
   /* A desktop topic title has enough horizontal room beside the complete
    * product identity. Core may still minimize the logo on mobile, where the
    * compact mark makes room for the title and navigation controls. */
-  api.registerValueTransformer("home-logo-minimized", (minimized) =>
+  api.registerValueTransformer("home-logo-minimized", ({ value: minimized }) =>
     site.desktopView ? false : minimized
   );
 

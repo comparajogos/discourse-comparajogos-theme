@@ -28,3 +28,18 @@ acceptance("Compara Jogos header nav", function () {
     );
   });
 });
+
+acceptance("Compara Jogos header nav - mobile", function (needs) {
+  needs.mobileView();
+
+  test("it keeps only Meu Comércio in the compact header", async function (assert) {
+    await visit("/latest");
+
+    assert
+      .dom('.cj-header-nav .cj-nav-item[data-cj-nav="market"]')
+      .isVisible("the market remains available beside search");
+    assert
+      .dom('.cj-header-nav .cj-nav-item[data-cj-nav="forum"]')
+      .isNotVisible("destinations owned by the bottom bar stay out of the row");
+  });
+});

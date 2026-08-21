@@ -1052,12 +1052,42 @@ body:has(
 }
 
 @include viewport.until(sm) {
-  /* The client hides the nav below `sm` (`hidden sm:flex`) and core collapses
-   * the search field to a button (the mobile_header_search setting), with the
-   * account controls after it. */
+  /* React keeps Meu Comércio between its collapsed search and account control.
+   * The other product destinations move to the bottom bar at this width. */
 
   .cj-splash__nav {
-    display: none;
+    order: 3;
+    flex: 0 0 2.5rem;
+    padding-inline-start: 0;
+
+    .cj-splash__nav-item {
+      display: none;
+    }
+
+    .cj-splash__market {
+      display: flex;
+      justify-content: center;
+      inline-size: 2.5rem;
+      padding-inline: 0;
+    }
+  }
+
+  @if $show_header_nav != "true" {
+    .cj-splash__nav {
+      display: none;
+    }
+  }
+
+  .cj-splash__logo {
+    order: 1;
+  }
+
+  .cj-splash__search {
+    order: 2;
+  }
+
+  .cj-splash__auth {
+    order: 4;
   }
 
   /* The toggle rejoins the trailing controls at this width. */

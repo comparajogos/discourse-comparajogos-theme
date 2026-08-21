@@ -232,8 +232,9 @@
         }
 
         .before-header-panel-outlet {
-          flex: 0 1 0;
-          min-width: 2.5rem;
+          flex: 0 1 auto;
+          gap: var(--space-1);
+          min-width: calc(5rem + var(--space-1));
           margin-inline: var(--space-2);
         }
 
@@ -268,7 +269,10 @@
       }
 
       .cj-header-search {
-        width: 100%;
+        order: 1;
+        flex: 1 1 2.5rem;
+        width: auto;
+        min-width: 2.5rem;
 
         /* The dedicated compact mark is present for a stable first focused
          * frame, but only takes the full logo's place while the field is open. */

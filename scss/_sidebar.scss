@@ -183,6 +183,29 @@
 }
 
 @include viewport.until(md) {
+  /* Core hides the whole trailing panel while the topic title is docked. The
+   * edge handle is fixed and consumes no title space, so keep only that child
+   * alive instead of letting its otherwise-hidden panel take it down too. */
+
+  .d-header .extra-info-wrapper ~ .panel {
+    display: block;
+    flex: 0 0 0;
+    inline-size: 0;
+    block-size: 0;
+    margin: 0;
+
+    .header-buttons,
+    .d-header-icons > :not(.hamburger-dropdown) {
+      display: none;
+    }
+
+    .d-header-icons {
+      display: block;
+      inline-size: 0;
+      block-size: 0;
+    }
+  }
+
   /* Keep core's working drawer trigger, but present it as a Discord-like edge
    * handle. Fixed positioning removes it from both the header and document
    * flow; the compact surface keeps an 18px glyph while a transparent extension

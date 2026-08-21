@@ -29,10 +29,20 @@ acceptance("Compara Jogos header logo - mobile", function (needs) {
   needs.mobileView();
   needs.settings(LOGO_SETTINGS);
 
+  test("the normal topic header uses the full wordmark", async function (assert) {
+    await visit(TOPIC_URL);
+
+    assert.dom(".extra-info-wrapper").doesNotExist("topic info is hidden");
+    assert.dom("#site-logo").hasClass("logo-big");
+  });
+
   test("sticky topic info keeps core's compact mark", async function (assert) {
     await showTopicInfo(this);
 
     assert.dom(".extra-info-wrapper").exists("topic info is visible");
     assert.dom("#site-logo").hasClass("logo-small");
+    assert
+      .dom("#toggle-hamburger-menu")
+      .isVisible("the fixed sidebar handle survives the docked-title state");
   });
 });

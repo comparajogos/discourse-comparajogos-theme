@@ -57,9 +57,14 @@ $height: 3.5rem;
     }
 
     /* Floating controls have to clear the bar rather than sit under it. */
-    body:has(.d-tab-bar) #reply-control.draft,
-    body:has(.d-tab-bar) #topic-progress-wrapper:not(.docked) {
+    body:has(.d-tab-bar) #reply-control.draft {
       bottom: calc($height + env(safe-area-inset-bottom));
+    }
+
+    body:has(.d-tab-bar) .with-topic-progress {
+      bottom: calc(
+        $height + env(safe-area-inset-bottom) + var(--composer-height, 0px)
+      );
     }
 
     body:has(.d-tab-bar) .navigation-controls {

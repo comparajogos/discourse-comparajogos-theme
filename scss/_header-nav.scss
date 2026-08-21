@@ -91,10 +91,34 @@
   }
 }
 
-/* The client hides the nav below `sm` (`hidden sm:flex`). Left visible, its five
- * items pushed the header past a 390px viewport. */
+/* Below `sm`, React keeps only Meu Comércio beside search and the account
+ * control. Reuse the same link and glyph rather than creating a second mobile
+ * route owner; the other four destinations already live in the bottom bar. */
 @include viewport.until(sm) {
   .cj-header-nav {
-    display: none;
+    order: 2;
+    flex: 0 0 2.5rem;
+    margin-inline-start: 0;
+
+    .cj-nav-item {
+      display: none;
+    }
+
+    .cj-nav-item[data-cj-nav="market"] {
+      display: inline-flex;
+      justify-content: center;
+      inline-size: 2.5rem;
+      min-block-size: 2.5rem;
+      padding-inline: 0;
+
+      /* Preserve the compact 40px composition while meeting a 44px touch
+       * target. The outlet's 4px gap keeps this extension clear of search. */
+
+      &::before {
+        position: absolute;
+        content: "";
+        inset: -0.125rem;
+      }
+    }
   }
 }
