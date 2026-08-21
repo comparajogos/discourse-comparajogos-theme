@@ -111,11 +111,12 @@ html.has-full-page-chat {
         }
 
         .d-button-label {
-          margin-block-start: 0.125rem;
+          margin-block-start: var(--space-1);
           color: inherit;
-          font-size: var(--font-down-2-rem);
+          font-size: 0.75rem;
+          font-weight: 400;
           line-height: 1rem;
-          letter-spacing: -0.025em;
+          letter-spacing: 0.4px;
         }
 
         &:hover,

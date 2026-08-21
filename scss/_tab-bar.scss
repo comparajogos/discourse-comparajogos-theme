@@ -22,7 +22,7 @@ $height: 3.5rem;
 
   html body .d-tab-bar {
     background: var(--cj-panel);
-    border-block-start: 1px solid var(--cj-border);
+    border-block-start: 0;
     box-shadow: none;
 
     .tab {
@@ -35,10 +35,11 @@ $height: 3.5rem;
       }
 
       .title {
-        margin-block-start: 0.125rem;
-        font-size: var(--font-down-2-rem);
+        margin-block-start: var(--space-1);
+        font-size: 0.75rem;
+        font-weight: 400;
         line-height: 1rem;
-        letter-spacing: -0.025em;
+        letter-spacing: 0.4px;
       }
     }
   }
