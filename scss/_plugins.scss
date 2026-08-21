@@ -3,9 +3,43 @@
 /* Corrections to plugins Compara Jogos runs, kept apart from the theme's own
  * surfaces so an upstream fix is easy to drop. */
 
-/* discourse-ratings: give the star control room to breathe in the composer. */
+/* discourse-ratings still floats a square half-width field for the legacy
+ * composer. In the redesigned grid that shrink-wraps the translated label and
+ * crowds its stars. Let it fill the editor column, but keep it a compact field
+ * when the preview is closed. */
+
 #reply-control .composer-controls-rating {
-  width: inherit;
+  float: none;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 24rem;
+
+  .rating-container {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.5rem;
+    margin: 0 0 var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+    background: var(--d-input-bg-color);
+    border: var(--d-input-border);
+    border-radius: var(--d-input-border-radius);
+
+    input.include-rating,
+    span:not(:last-of-type) {
+      margin: 0;
+    }
+
+    .star-rating {
+      flex: 0 0 4.375rem;
+      margin-inline-start: auto;
+    }
+
+    &:focus-within {
+      border-color: var(--tertiary);
+      box-shadow: var(--cj-focus-ring);
+    }
+  }
 }
 
 /* discourse-locations: the tile layer is a photographic image, so a dark scheme

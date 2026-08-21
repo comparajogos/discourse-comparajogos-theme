@@ -25,6 +25,9 @@
   /* React FeaturedSection: bg-white dark:bg-black */
   --cj-header: #{dark-light-choose(#fff, #000)};
 
+  /* Text on the client's pure white / black content panels */
+  --cj-panel-foreground: #{dark-light-choose(#09090b, #d1d5db)};
+
   /* React --muted-foreground */
   --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
 

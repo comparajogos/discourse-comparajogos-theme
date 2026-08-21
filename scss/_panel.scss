@@ -14,6 +14,14 @@
   background: var(--cj-panel);
   box-shadow: none;
 
+  /* Pure black makes the page foreground read brighter than it does on the
+   * client's softer canvas. Keep the surface and soften only its primary text
+   * by one Tailwind tier; links, actions, and muted metadata retain their own
+   * semantic colours. Core content reads --primary while theme components read
+   * --cj-text, so both names belong to the same local role. */
+  --primary: var(--cj-panel-foreground);
+  --cj-text: var(--cj-panel-foreground);
+
   /* Inside a panel the surface behind you *is* the panel, so core's canvas token
    * has to mean that here — otherwise every region core fills with --secondary
    * (profile stream items, suggested topics, whatever core adds next) lands as a

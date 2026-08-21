@@ -45,8 +45,8 @@
   display: none;
 }
 
-/* Tag info is a staff tool. */
-body:not(.staff) #show-tag-info {
+/* The catalog-backed tag card carries the useful context already. */
+#show-tag-info {
   display: none;
 }
 

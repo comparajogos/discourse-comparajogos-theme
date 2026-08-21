@@ -62,6 +62,9 @@ function colorDefinitions() {
   /* React FeaturedSection: bg-white dark:bg-black */
   --cj-header: #{dark-light-choose(${hex(light.discourse.header_background)}, ${hex(dark.discourse.header_background)})};
 
+  /* Text on the client's pure white / black content panels */
+  --cj-panel-foreground: ${pair("panelForeground")};
+
   /* React --muted-foreground */
   --cj-text-muted: ${pair("textMuted")};
 

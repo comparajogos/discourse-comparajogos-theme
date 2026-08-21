@@ -21,6 +21,7 @@
         "card": "oklch(98% 0 0deg)",
         "control": "oklch(94% 0 0deg)",
         "border": "oklch(92% 0.004 286.32deg)",
+        "panelForeground": "#09090b",
         "textMuted": "#71717b",
         "headerSoft": "oklch(95% 0.03 240deg)",
         "mobileNavForeground": "#2364d8"
@@ -47,6 +48,7 @@
         "card": "oklch(21% 0.006 285.885deg)",
         "control": "oklch(26% 0 0deg)",
         "border": "oklch(100% 0 0deg / 10%)",
+        "panelForeground": "#d1d5db",
         "textMuted": "#9f9fa9",
         "headerSoft": "oklch(21% 0.006 285.885deg)",
         "mobileNavForeground": "oklch(87.2% 0.01 258.338deg)"

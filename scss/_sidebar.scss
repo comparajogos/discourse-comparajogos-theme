@@ -160,6 +160,26 @@
   .d-header .hamburger-dropdown {
     display: none;
   }
+
+  /* Follow the floating header through its short docking travel. The individual
+   * translate property composes with any transform core may use for the sidebar,
+   * and the shared scroll range keeps their resting gap unchanged. */
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      body.has-sidebar-page .sidebar-wrapper {
+        animation: cj-sidebar-dock linear both;
+        animation-range: 0 1.5rem;
+        animation-timeline: scroll();
+      }
+    }
+  }
+}
+
+@keyframes cj-sidebar-dock {
+  to {
+    translate: 0 -1.5rem;
+  }
 }
 
 @include viewport.until(md) {

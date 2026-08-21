@@ -358,16 +358,35 @@
 
 @include viewport.until(sm) {
   .cj-game-card--panel {
-    gap: var(--space-3);
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+    padding: var(--space-3);
 
     .cj-game-card__cover {
+      grid-column: 1;
+      grid-row: 1 / span 2;
       inline-size: 5.5rem;
       block-size: 5.5rem;
-      margin: var(--space-3) 0 var(--space-3) var(--space-3);
+      margin: 0;
     }
 
     .cj-game-card__body {
-      padding: var(--space-3);
+      display: contents;
+    }
+
+    .cj-game-card__name,
+    .cj-game-card__provenance {
+      grid-column: 2;
+    }
+
+    .cj-game-card__name {
+      grid-row: 1;
+    }
+
+    .cj-game-card__provenance {
+      grid-row: 2;
+      align-self: start;
     }
 
     /* The labels are what push the fourth figure onto a second row at this
@@ -379,15 +398,23 @@
     }
 
     .cj-game-card__stats {
+      grid-column: 1 / -1;
       gap: var(--space-3);
+      margin-block-start: 0;
+      padding-block-start: 0;
     }
 
-    /* Below `sm` the price and the links cannot share a line without one of
-     * them wrapping mid-word. */
+    .cj-game-card__players {
+      grid-column: 1 / -1;
+    }
+
+    /* Once the lower rows use the card's full width, price and action fit on
+     * one line instead of producing the tall, narrow stack beside the cover. */
 
     .cj-game-card__footer {
-      flex-direction: column;
-      align-items: stretch;
+      grid-column: 1 / -1;
+      margin-block-start: 0;
+      padding-block-start: var(--space-1);
     }
   }
 }

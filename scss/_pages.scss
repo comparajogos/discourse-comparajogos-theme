@@ -84,6 +84,29 @@ $panels:
   --topic-list-item-background-color--visited: transparent;
 }
 
+/* Pure-black reading surfaces need less glare than chrome and headings. Plain
+ * cooked text otherwise inherits body's already-computed foreground, so the
+ * panel-local token alone would not reach it. */
+
+.archetype-regular .topic-body .cooked {
+  color: var(--cj-panel-foreground);
+}
+
+/* Core cuts the last-visit rule with a square canvas-coloured label. Treat the
+ * message as the compact status chip it is, using the same muted surface and
+ * pill geometry as the rest of the theme. */
+
+.small-action.topic-post-visited
+  .topic-post-visited-line
+  .topic-post-visited-message {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  line-height: 1.25;
+  background: var(--cj-surface-muted);
+  border-radius: var(--cj-radius-pill);
+}
+
 /* Below `sm` the panel gives way to the screen — the client drops the fill and
  * the radius there so content runs to the edge, and on a 390px screen the panel
  * was a third inset (page gutter, then its border, then its padding) around a
