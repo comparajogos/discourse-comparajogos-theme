@@ -59,7 +59,6 @@ html:has(#d-splash) {
   .cj-splash__bar,
   .cj-splash__avatar,
   .cj-splash__nav-item::before,
-  .cj-splash__tab-bar-item::before,
   .cj-splash__rail-pill,
   .cj-splash__rail-description::after,
   .cj-splash__row::before,
@@ -573,23 +572,16 @@ html[lang^="pt"] #cj-splash {
       line-height: 1rem;
       letter-spacing: 0.4px;
 
-      &::before {
-        content: "";
-        width: 1.25rem;
-        height: 1.25rem;
-        background: currentcolor;
-        opacity: 0.35;
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H216V200H40Z'/%3E%3C/svg%3E")
-          center / contain no-repeat;
-      }
-
       &::after {
         margin-block-start: var(--space-1);
       }
+    }
 
-      &.is-active::before {
-        opacity: 0.7;
-      }
+    .cj-splash__tab-bar-icon {
+      flex: none;
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: currentcolor;
     }
 
     .cj-splash__home::after {
