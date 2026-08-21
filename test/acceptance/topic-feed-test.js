@@ -47,11 +47,15 @@ acceptance("Compara Jogos topic feed", function (needs) {
       ".topic-list.--cj-feed .topic-list-item"
     );
     const topicLink = row.querySelector(".cj-feed__title a.title");
-    const destination = new URL(topicLink.href).pathname;
+    const topicId = new URL(topicLink.href).pathname.split("/").at(-1);
 
     await click(row.querySelector(".cj-feed__stats"));
 
-    assert.strictEqual(currentURL(), destination);
+    assert.strictEqual(
+      currentURL().split("/").at(-1),
+      topicId,
+      "the row opens the linked topic even when its canonical slug changes"
+    );
   });
 });
 

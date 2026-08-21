@@ -288,36 +288,23 @@ $filter-glyphs: (
   }
 
   /* Keep the scope and ordering controls on one line. A tag slug is unbounded,
-   * so its half is the one allowed to shrink; the selected name ellipsizes
-   * while its leading icon and trailing caret remain visible. */
+   * and its complete name is useful context, so the row scrolls horizontally
+   * instead of truncating the tag or wrapping it below the ordering control. */
 
   .navigation-container {
     flex-wrap: nowrap;
-    min-inline-size: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .navigation-container .category-breadcrumb {
-    flex: 1 1 auto;
+    flex: none;
     flex-wrap: nowrap;
-    min-inline-size: 0;
-    max-inline-size: 100%;
-  }
-
-  .category-breadcrumb .tag-drop,
-  .category-breadcrumb .tag-drop .select-kit-header,
-  .category-breadcrumb .tag-drop .select-kit-header-wrapper {
-    min-inline-size: 0;
-    max-inline-size: 100%;
-  }
-
-  .category-breadcrumb
-    .tag-drop
-    .select-kit-header-wrapper
-    .select-kit-selected-name {
-    min-inline-size: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
