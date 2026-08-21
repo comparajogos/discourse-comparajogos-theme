@@ -71,6 +71,17 @@ body {
   }
 }
 
+/* A split button needs a seam, or the caret half reads as part of the label
+ * half and the whole thing looks like one wide block. Core separates them with
+ * 1.6px of margin, which shows the page through the gap instead — a hairline in
+ * the on-action colour keeps the two halves one object. */
+
+.d-combo-button > .btn.fk-d-menu__trigger {
+  margin-inline-start: 0;
+  border-inline-start: 1px solid
+    color-mix(in oklch, var(--cj-on-action) 28%, transparent);
+}
+
 .navigation-container {
   --nav-space: var(--space-3);
 }
