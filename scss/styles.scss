@@ -147,8 +147,15 @@ body {
    * instead keeps it a +0.03 nudge, and reverses correctly in the light scheme,
    * where the control is light and the hover should darken it. */
 
+  /* Core's hover is `.discourse-no-touch .btn:hover`, three classes deep and
+   * reading --d-button-default-bg-color--hover, so a plain `.btn-default:hover`
+   * loses to it and the light grey came through untouched. Matched at the same
+   * weight here, with the plain selector kept for touch devices, where core's
+   * rule does not apply. */
+
+  &:focus-visible,
   &:hover,
-  &:focus-visible {
+  .discourse-no-touch &:hover {
     background: color-mix(in oklch, var(--cj-control), var(--cj-text) 4%);
   }
 }

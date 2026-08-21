@@ -94,6 +94,21 @@ div.edit-category,
   margin-inline: var(--space-2) 0;
 }
 
+/* Same inversion the profile had (see _user.scss): inside the topic panel core
+ * fills the suggested and related rows with --secondary, so they stack as
+ * lighter boxes on a black block — which is what reads as nesting. The token
+ * means "the page behind you", and here that is the panel. */
+
+.archetype-regular #main-outlet > .regular {
+  --secondary: var(--cj-panel);
+
+  /* The rows read their own token, and core declares it on :root as
+   * `var(--secondary)` — indirection resolves where it is *declared*, so the
+   * override above never reaches it. It has to be named directly. */
+  --topic-list-item-background-color: transparent;
+  --topic-list-item-background-color--visited: transparent;
+}
+
 /* Below `sm` the panel gives way to the screen — the client drops the fill and
  * the radius there so content runs to the edge, and on a 390px screen the panel
  * was a third inset (page gutter, then its border, then its padding) around a
