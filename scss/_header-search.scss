@@ -252,6 +252,13 @@
       .cj-header-search {
         width: 100%;
 
+        /* The dedicated compact mark is present for a stable first focused
+         * frame, but only takes the full logo's place while the field is open. */
+
+        &__small-logo {
+          display: none;
+        }
+
         .search-menu {
           max-width: none;
         }
@@ -304,19 +311,42 @@
       .contents:has(.cj-header-search .search-menu-panel) {
         .before-header-panel-outlet {
           flex-grow: 1;
+          margin-inline: var(--space-1);
         }
 
-        /* `w-10 overflow-hidden`: the wordmark clips away, the mark stays. The
-         * wrapper rides the complementary grow transition down to a compact
-         * footprint. The signed-in panel is ~55px wide because core's avatar
-         * button owns a larger tap target than the visible image; matching that
-         * footprint here keeps the expanded pill centred in the header rather
-         * than ~7px left of centre. */
+        /* Use Discourse's configured small logo rather than cropping the full
+         * wordmark: logo proportions differ between sites, so clipping can leak
+         * the first letters or cut the mark itself. The original remains the
+         * accessible home link underneath the visual replacement. */
 
         .home-logo-wrapper-outlet {
           flex-grow: 0;
-          min-width: 3.5rem;
+          min-width: 2.5rem;
           overflow: hidden;
+
+          #site-logo {
+            opacity: 0;
+          }
+        }
+
+        .cj-header-search__small-logo {
+          position: absolute;
+          inset-block-start: 50%;
+          inset-inline-start: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          inline-size: 2.5rem;
+          block-size: 2.5rem;
+          pointer-events: none;
+          transform: translateY(-50%);
+
+          picture,
+          img {
+            display: block;
+            max-inline-size: 100%;
+            max-block-size: 100%;
+          }
         }
 
         .cj-header-search {

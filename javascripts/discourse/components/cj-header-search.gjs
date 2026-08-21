@@ -1,5 +1,7 @@
 import Component from "@glimmer/component";
+import { service } from "@ember/service";
 import SearchMenu from "discourse/components/search-menu";
+import getURL from "discourse/lib/get-url";
 import DButton from "discourse/ui-kit/d-button";
 
 /**
@@ -36,8 +38,51 @@ export default class CjHeaderSearch extends Component {
     );
   }
 
+  @service interfaceColor;
+  @service siteSettings;
+
+  get smallLogoUrl() {
+    const url = this.siteSettings.site_logo_small_url;
+    return url ? getURL(url) : null;
+  }
+
+  get smallLogoDarkUrl() {
+    const url = this.siteSettings.site_logo_small_dark_url;
+    return url ? getURL(url) : null;
+  }
+
+  get hasDistinctDarkLogo() {
+    return this.smallLogoDarkUrl && this.smallLogoDarkUrl !== this.smallLogoUrl;
+  }
+
+  get darkMediaQuery() {
+    if (this.interfaceColor.darkModeForced) {
+      return "all";
+    } else if (this.interfaceColor.lightModeForced) {
+      return "none";
+    } else {
+      return "(prefers-color-scheme: dark)";
+    }
+  }
+
   <template>
     <div class="cj-header-search">
+      {{#if this.smallLogoUrl}}
+        <span class="cj-header-search__small-logo" aria-hidden="true">
+          {{#if this.hasDistinctDarkLogo}}
+            <picture>
+              <source
+                srcset={{this.smallLogoDarkUrl}}
+                media={{this.darkMediaQuery}}
+              />
+              <img src={{this.smallLogoUrl}} alt="" />
+            </picture>
+          {{else}}
+            <img src={{this.smallLogoUrl}} alt="" />
+          {{/if}}
+        </span>
+      {{/if}}
+
       <div class="search-menu">
         <DButton
           @icon="magnifying-glass"

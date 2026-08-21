@@ -11,7 +11,10 @@ import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
 acceptance("Compara Jogos header search - mobile", function (needs) {
   needs.mobileView();
-  needs.settings({ search_experience: "search_field" });
+  needs.settings({
+    search_experience: "search_field",
+    site_logo_small_url: "/images/small-logo.png",
+  });
 
   test("the theme renders the search field core leaves out", async function (assert) {
     await visit("/latest");
@@ -20,6 +23,13 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .cj-header-search .search-menu"),
       "the collapsed field is in the header"
     );
+    assert
+      .dom(".d-header .cj-header-search__small-logo img")
+      .hasAttribute(
+        "src",
+        "/images/small-logo.png",
+        "the configured compact logo is ready for the expanded field"
+      );
     assert.false(
       exists(".d-header .floating-search-input"),
       "core's own field stays absent, so only one SearchMenu mounts"
