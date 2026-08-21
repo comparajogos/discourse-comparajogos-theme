@@ -307,11 +307,15 @@
         }
 
         /* `w-10 overflow-hidden`: the wordmark clips away, the mark stays. The
-         * wrapper rides the complementary grow transition down to its 40px
-         * minimum. */
+         * wrapper rides the complementary grow transition down to a compact
+         * footprint. The signed-in panel is ~55px wide because core's avatar
+         * button owns a larger tap target than the visible image; matching that
+         * footprint here keeps the expanded pill centred in the header rather
+         * than ~7px left of centre. */
 
         .home-logo-wrapper-outlet {
           flex-grow: 0;
+          min-width: 3.5rem;
           overflow: hidden;
         }
 
