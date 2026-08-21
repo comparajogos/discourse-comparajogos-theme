@@ -71,6 +71,27 @@ body {
   }
 }
 
+/* The client has no outlined button. Core's modernize flag gives .btn-default a
+ * hard #646464 border — the same harsh outline properties.scss already takes
+ * off inputs — and the fill underneath is the canvas, so the border is the only
+ * thing making the button visible. It takes the client's muted control fill
+ * instead, and the outline goes. */
+
+.btn-default {
+  border-color: transparent;
+  background: var(--cj-control);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--cj-hover);
+  }
+}
+
+/* An icon on its own does not need a label's worth of room either side. */
+.btn.no-text {
+  padding-inline: 0.5em;
+}
+
 /* A split button needs a seam, or the caret half reads as part of the label
  * half and the whole thing looks like one wide block. Core separates them with
  * 1.6px of margin, which shows the page through the gap instead — a hairline in
