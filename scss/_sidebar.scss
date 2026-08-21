@@ -142,6 +142,15 @@
 }
 
 @include viewport.from(md) {
+  /* Flat, scan-heavy lists need a tighter cadence than the filled destination
+   * buttons. Keep each row at 36px and reduce only the space between rows;
+   * mobile retains the looser rhythm for its drawer's touch targets. */
+
+  .sidebar-section-wrapper:has(.sidebar-section-header-wrapper),
+  .sidebar-section-wrapper[data-section-name="chat-search"] {
+    --d-sidebar-vertical-gap: var(--space-1);
+  }
+
   /* Desktop is the persistent-navigation layout: the initializer restores the
    * sidebar when a saved preference says collapsed, and neither core nor the
    * theme offers a collapse control at this width. */
