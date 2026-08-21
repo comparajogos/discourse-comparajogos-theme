@@ -513,8 +513,8 @@ html:not(.anon) .cj-splash__log-in {
   min-height: 14rem;
   margin-block-start: var(--space-5);
   padding: var(--space-6);
-  border: 1px solid var(--primary-low);
-  border-radius: var(--cj-radius-panel);
+  border: 0;
+  border-radius: 1rem;
   background: var(--cj-panel);
 }
 
