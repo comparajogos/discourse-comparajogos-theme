@@ -32,10 +32,16 @@ $splash_logo_dark: "" !default;
  * app takes over, which is the moment this should go too. No lifecycle of its
  * own, no initializer, nothing to keep in sync.
  *
+ * A sibling combinator rather than `:has()` — the two are siblings at the top
+ * and bottom of <body>, so this is an exact equivalent that also works in a
+ * browser without `:has()`. With `:has()` such a browser dropped the rule and,
+ * because `#d-splash { display: none }` below is a plain selector that still
+ * applied, got a blank page instead of core's dots.
+ *
  * `html body` outweighs the guard rule in body_tag.html that keeps the raw
  * markup from ever showing unstyled. */
 
-html body:has(#d-splash) #cj-splash {
+html body #d-splash ~ #cj-splash {
   display: flex;
 }
 
@@ -58,6 +64,30 @@ html:has(#d-splash) {
   overflow-y: scroll !important;
 }
 
+/* Forced colours drop every background, so the skeleton would be a page of
+ * invisible boxes. Borders survive, so the shapes are drawn with those. */
+
+@media (forced-colors: active) {
+  .cj-splash__shell,
+  .cj-splash__card,
+  .cj-splash__search,
+  .cj-splash__row.is-active,
+  .cj-splash__row.is-muted,
+  .cj-splash__log-in {
+    border: 1px solid CanvasText;
+  }
+
+  .cj-splash__bar,
+  .cj-splash__avatar,
+  .cj-splash__nav-item::before,
+  .cj-splash__row::before,
+  .cj-splash__search::before,
+  .cj-splash__log-in::before {
+    border: 1px solid CanvasText;
+    background: none;
+  }
+}
+
 #cj-splash {
   --cj-splash-forum: "Forum";
   --cj-splash-lists: "Lists";
@@ -72,7 +102,6 @@ html:has(#d-splash) {
   --cj-splash-general: "General";
   --cj-splash-feedback: "Site Feedback";
   --cj-splash-all-categories: "All categories";
-  --cj-splash-heading: "All latest topics";
   --cj-splash-categories: "categories";
   --cj-splash-tags: "tags";
   --cj-splash-latest: "Latest";
@@ -103,7 +132,6 @@ html[lang^="pt"] #cj-splash {
   --cj-splash-general: "Geral";
   --cj-splash-feedback: "Feedback do site";
   --cj-splash-all-categories: "Todas as categorias";
-  --cj-splash-heading: "Todos os tópicos recentes";
   --cj-splash-categories: "categorias";
   --cj-splash-tags: "etiquetas";
   --cj-splash-latest: "Recentes";
@@ -387,21 +415,10 @@ html[lang^="pt"] #cj-splash {
   padding-block-start: var(--space-5);
 }
 
-.cj-splash__heading {
-  font-size: var(--font-up-2);
-  font-weight: 700;
-  line-height: 1.2;
-
-  &::after {
-    content: var(--cj-splash-heading);
-  }
-}
-
 .cj-splash__controls {
   display: flex;
   align-items: stretch;
   gap: var(--space-2);
-  margin-block-start: var(--space-4);
   height: 2.375rem;
   color: var(--cj-text);
   font-size: 1rem;
@@ -477,7 +494,7 @@ html[lang^="pt"] #cj-splash {
 
   /* The booted card's cell owns this padding (--space-4 block, see
    * _topic-feed.scss), which is what puts its byline at y+15.4. */
-  padding: 0.9em var(--space-3);
+  padding: var(--space-4) var(--space-3);
 }
 
 .cj-splash__byline {
@@ -697,5 +714,32 @@ html[lang^="pt"] #cj-splash {
   /* Titles wrap at this width, so the card is a line taller. */
   .cj-splash__bar--title {
     block-size: 2.25rem;
+  }
+}
+
+/* Below `md` the booted controls collapse to one trigger that carries the
+ * page's title (see _list-controls.scss), so the skeleton shows that and drops
+ * the rest of the row rather than promising five tabs. */
+
+@include viewport.until(md) {
+  .cj-splash__categories,
+  .cj-splash__tags,
+  .cj-splash__hot,
+  .cj-splash__categories-tab {
+    display: none;
+  }
+
+  .cj-splash__controls-pills {
+    margin-inline-start: 0;
+  }
+
+  .cj-splash__latest {
+    padding-inline: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--cj-text);
+    font-size: var(--font-up-2-rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 }
