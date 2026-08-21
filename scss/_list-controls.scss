@@ -288,23 +288,56 @@ $filter-glyphs: (
   }
 
   /* Keep the scope and ordering controls on one line. A tag slug is unbounded,
-   * and its complete name is useful context, so the row scrolls horizontally
-   * instead of truncating the tag or wrapping it below the ordering control. */
+   * so the tag half gives up width while the ordering control stays intact. */
 
   .navigation-container {
     flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    min-inline-size: 0;
   }
 
   .navigation-container .category-breadcrumb {
-    flex: none;
+    flex: 1 1 auto;
     flex-wrap: nowrap;
+    min-inline-size: 0;
+  }
+
+  /* The chooser sits inside a list item. Core leaves that item at the flexbox
+   * min-content default, which is the full tag name and therefore clips the
+   * entire control at the viewport before the label can ellipsize. */
+
+  .category-breadcrumb > li:has(.tag-drop) {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin-inline-end: 0;
+  }
+
+  .category-breadcrumb .tag-drop,
+  .category-breadcrumb .tag-drop .select-kit-header,
+  .category-breadcrumb .tag-drop .select-kit-header-wrapper,
+  .category-breadcrumb .tag-drop .select-kit-selected-name {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .category-breadcrumb .tag-drop .select-kit-selected-name {
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  /* Core wraps the label in `.name`; ellipsis belongs on that text-bearing
+   * node, not on its flex parent. The configured icon and the caret therefore
+   * remain visible at the two edges of the control. */
+
+  .category-breadcrumb .tag-drop .select-kit-selected-name > .name {
+    display: block;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .category-breadcrumb .tag-drop .angle-icon {
+    flex: none;
   }
 }
 
