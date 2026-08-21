@@ -53,6 +53,11 @@
   },
   "shared": {
     "onAction": "oklch(98.5% 0 0deg)",
-    "focusRing": "0 0 0 2px rgb(66 153 225 / 70%)"
+    "focusRing": "0 0 0 2px rgb(66 153 225 / 70%)",
+    "fill": {
+      "action": "#006aaf",
+      "danger": "#dc2626",
+      "success": "#15803d"
+    }
   }
 }

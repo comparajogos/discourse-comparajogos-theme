@@ -71,6 +71,30 @@ body {
   }
 }
 
+/* Core paints a filled button's label with --secondary, which is white on the
+ * accent in a light scheme and near-black on it in a dark one. The fills come
+ * from the strong accents (see properties.scss) precisely so the label can be
+ * light in both: white measures 4.6-5.5:1 on those, against 1.7-3.7:1 on the
+ * dark scheme's own bright accents. */
+
+.btn-primary,
+.btn-danger,
+.btn-success {
+  color: var(--cj-on-action);
+}
+
+.btn-primary {
+  background: var(--cj-fill-action);
+}
+
+.btn-danger {
+  background: var(--cj-fill-danger);
+}
+
+.btn-success {
+  background: var(--cj-fill-success);
+}
+
 /* The client has no outlined button. Core's modernize flag gives .btn-default a
  * hard #646464 border — the same harsh outline properties.scss already takes
  * off inputs — and the fill underneath is the canvas, so the border is the only

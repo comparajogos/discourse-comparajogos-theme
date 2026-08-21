@@ -95,6 +95,14 @@ generated.set(
     `--cj-on-action: ${colors.shared.onAction};`,
     `--cj-focus-ring: ${colors.shared.focusRing};`,
     "",
+    `/* A filled button is a chip of accent with light text, so it takes the`,
+    ` * strong accent in both schemes. The dark scheme's own tertiary/danger/`,
+    ` * success are the bright variants meant for text on a dark ground, and`,
+    ` * white on them measures 1.7-3.7:1. */`,
+    `--cj-fill-action: ${colors.shared.fill.action};`,
+    `--cj-fill-danger: ${colors.shared.fill.danger};`,
+    `--cj-fill-success: ${colors.shared.fill.success};`,
+    "",
   ])
 );
 
