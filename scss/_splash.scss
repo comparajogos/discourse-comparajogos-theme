@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 /*
  * The first-paint skeleton.
  *
@@ -153,14 +155,14 @@ html[lang^="pt"] #cj-splash {
   object-position: left center;
 
   @if $splash_logo != "" {
-    content: url($splash_logo);
+    content: url("#{$splash_logo}");
   }
 }
 
 @if $splash_logo_dark != "" {
   @media (prefers-color-scheme: dark) {
     .cj-splash__logo {
-      content: url($splash_logo_dark);
+      content: url("#{$splash_logo_dark}");
     }
   }
 }
@@ -546,19 +548,48 @@ html[lang^="pt"] #cj-splash {
 
 /* ------------------------------------------------------------- narrow -- */
 
-/* Below the sidebar breakpoint core hides the sidebar and the header collapses
- * to logo + search button, so the skeleton drops the same pieces rather than
- * modelling a layout the booted page never shows. */
-@media (width < 60rem) {
-  .cj-splash__sidebar,
-  .cj-splash__nav {
-    display: none;
+/* The bands below are the booted page's, measured — not guesses. The previous
+ * pair (960px / 640px) matched nothing in the theme or in core, so between
+ * 768px and 960px the skeleton hid a sidebar the page shows, and between 640px
+ * and 768px it kept a desktop header inside a box styles.scss had already
+ * collapsed to 3.5rem. Core's scale is sm 40rem / md 48rem / lg 64rem.
+ *
+ *   >= lg    sidebar, nav with labels, floating 4.5rem shell
+ *   md..lg   sidebar, nav icons only
+ *   sm..md   no sidebar, nav icons only, full-bleed 3.5rem shell, rows bleed
+ *   < sm     no nav, search collapsed to a button, auth as icons
+ */
+
+/* The client hides nav labels until `lg` (`hidden lg:inline`), which leaves a
+ * 48px icon-only item — 12px of padding either side of a 24px glyph. */
+
+@include viewport.until(lg) {
+  .cj-splash__nav-item {
+    padding-inline: var(--space-3);
+
+    &::after {
+      content: none;
+    }
+  }
+
+  /* Core narrows the sidebar-to-content gap here, on #main-outlet-wrapper
+   * rather than on :root, so the theme's --d-main-content-gap does not follow
+   * it (discourse.scss:1175). */
+
+  .cj-splash__body {
+    gap: var(--space-4);
   }
 }
 
-@media (width < 40rem) {
-  /* The header goes full-bleed below `sm`, exactly as the client's does, so the
-   * frame's gutter is dropped here and the shell's own padding sets the inset. */
+@include viewport.until(md) {
+  /* Core docks the sidebar into a drawer here (narrow-desktop.js keys on
+   * `min-width: 48rem`), and styles.scss collapses the header at the same
+   * width — the shell's own height and radius follow the tokens, so only the
+   * frame's gutter has to be dropped by hand. */
+
+  .cj-splash__sidebar {
+    display: none;
+  }
 
   .cj-splash__header {
     padding-block-start: 0;
@@ -566,24 +597,33 @@ html[lang^="pt"] #cj-splash {
   }
 
   .cj-splash__shell {
-    gap: var(--space-2);
     padding-inline: var(--space-3);
-  }
 
-  /* Core collapses the field to a button at this width (see the
-   * mobile_header_search setting), with the account controls after it. */
+    /* With the sidebar docked into a drawer, core puts its toggle at the head
+     * of the shell — 34px of button in a 50px box before the logo. */
 
-  .cj-splash__search {
-    flex: none;
-    margin-inline-start: auto;
-    width: 2.5rem;
-    padding-inline-start: 0;
-    justify-content: center;
-
-    &::after {
-      content: none;
+    &::before {
+      content: "";
+      flex: none;
+      inline-size: 2.125rem;
+      block-size: 2.125rem;
+      margin-inline-end: var(--space-4);
+      border-radius: 999px;
+      background: currentcolor;
+      opacity: 0.25;
     }
   }
+
+  /* The nav still occupies five slots here, so a purely flexible search is
+   * squeezed to nothing. Core's own field keeps a usable width and overlays the
+   * row when it takes focus; the skeleton just refuses to collapse. */
+
+  .cj-splash__search {
+    min-width: 6rem;
+  }
+
+  /* The account controls are icons from here down — a labelled Sign Up and
+   * Log In pair does not fit beside five nav slots and a usable search. */
 
   .cj-splash__auth {
     padding-inline-end: 0;
@@ -609,21 +649,15 @@ html[lang^="pt"] #cj-splash {
     }
   }
 
-  /* Still one row here — the second row the signed-in list grows (bulk select,
+  /* Still one row: the second row the signed-in list grows (bulk select,
    * dismiss) is not part of the anonymous page this models. */
 
   .cj-splash__controls {
     height: 2.5rem;
   }
 
-  /* Titles wrap at this width, so the card is a line taller. */
-  .cj-splash__bar--title {
-    block-size: 2.25rem;
-  }
-
   /* The booted list drops its cards for hairline-separated rows that bleed past
-   * the page gutter (see styles.scss), so the skeleton does the same — rounded
-   * cards here would be a shape the page never takes. */
+   * the page gutter and give way to the canvas (see styles.scss). */
 
   .cj-splash__cards {
     gap: 0;
@@ -636,5 +670,49 @@ html[lang^="pt"] #cj-splash {
     border-block-start: 0;
     border-radius: 0;
     background: none;
+  }
+}
+
+@include viewport.until(sm) {
+  /* The client hides the nav below `sm` (`hidden sm:flex`) and core collapses
+   * the search field to a button (the mobile_header_search setting), with the
+   * account controls after it. */
+
+  .cj-splash__nav {
+    display: none;
+  }
+
+  /* The toggle rejoins the trailing controls at this width. */
+  .cj-splash__shell {
+    gap: var(--space-2);
+
+    &::before {
+      content: none;
+    }
+  }
+
+  .cj-splash__search {
+    flex: none;
+    justify-content: center;
+    width: 2.5rem;
+    min-width: 0;
+    margin-inline-start: auto;
+    padding-inline-start: 0;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  /* The pinned list controls carry their own block padding here (see
+   * _list-controls.scss), which starts the column that much lower. */
+
+  .cj-splash__main {
+    padding-block-start: calc(var(--space-5) + var(--space-3));
+  }
+
+  /* Titles wrap at this width, so the card is a line taller. */
+  .cj-splash__bar--title {
+    block-size: 2.25rem;
   }
 }
