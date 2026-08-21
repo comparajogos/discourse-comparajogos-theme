@@ -20,10 +20,6 @@ export default apiInitializer((api) => {
   const site = api.container.lookup("service:site");
   let collapsed = false;
 
-  if (!site.mobileView) {
-    return;
-  }
-
   function applyState(controls, button, use) {
     const label = i18n(
       themePrefix(collapsed ? "list_controls.expand" : "list_controls.collapse")
@@ -85,6 +81,10 @@ export default apiInitializer((api) => {
   }
 
   api.onPageChange(() => {
+    if (!site.mobileView) {
+      return;
+    }
+
     requestAnimationFrame(() => requestAnimationFrame(installToggle));
   });
 });
