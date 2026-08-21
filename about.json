@@ -18,7 +18,8 @@
       "pencil",
       "reply",
       "share-nodes",
-      "discourse-sidebar"
+      "discourse-sidebar",
+      "sidebar"
     ],
     "only_theme_color_schemes": true,
     "serialize_topic_excerpts": true

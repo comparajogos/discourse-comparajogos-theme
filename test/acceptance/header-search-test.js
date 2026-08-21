@@ -32,6 +32,9 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
       exists(".d-header .hamburger-dropdown #toggle-hamburger-menu"),
       "core's navigation trigger remains attached to the header"
     );
+    assert
+      .dom("#toggle-hamburger-menu use")
+      .hasAttribute("href", "#ph-bold-sidebar", "the trigger uses Sidebar");
 
     await click("#toggle-hamburger-menu");
 

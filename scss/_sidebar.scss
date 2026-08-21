@@ -168,7 +168,7 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
    * below the row. */
 
   .d-header-wrap {
-    margin-block-end: 2.5rem;
+    margin-block-end: 1.5rem;
   }
 
   .cj-sidebar-toggle {
@@ -183,31 +183,42 @@ body:not(.has-sidebar-page) .cj-sidebar-toggle {
     position: static;
   }
 
-  /* The list glyph distinguishes navigation from the floating create action.
-   * The flat top edge makes the control read as a tab belonging to the header,
-   * not another card floating over the carousel. */
+  /* A small visual tab straddles the header seam. Its transparent pseudo grows
+   * the hit area to 44px without asking the page to reserve a 44px empty row. */
 
   .d-header .header-dropdown-toggle.hamburger-dropdown {
     position: absolute;
     z-index: z("dropdown");
-    inset-block-start: 100%;
-    inset-inline-start: calc(-1 * var(--space-3));
+    inset-block-start: calc(100% - var(--space-2));
+    inset-inline-start: 0;
     display: block;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
 
-    .btn {
-      width: 100%;
-      height: 100%;
+    #toggle-hamburger-menu {
+      position: relative;
+      box-sizing: border-box;
+      min-inline-size: 0;
+      min-block-size: 0;
+      inline-size: 100%;
+      block-size: 100%;
+      padding: 0;
       color: var(--header_primary);
       background: var(--cj-header);
-      border-radius: 0 0 var(--d-button-border-radius) 0;
-      box-shadow: 0 8px 18px -10px rgb(0 0 0 / 40%);
+      border-radius: 0 0 var(--d-button-border-radius)
+        var(--d-button-border-radius);
+      box-shadow: 0 6px 14px -10px rgb(0 0 0 / 45%);
+
+      &::after {
+        position: absolute;
+        content: "";
+        inset: -0.5rem;
+      }
     }
 
     .d-icon {
-      width: 1rem;
-      height: 1rem;
+      width: 0.9375rem;
+      height: 0.9375rem;
     }
   }
 
