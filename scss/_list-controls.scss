@@ -287,6 +287,15 @@ div:has(> .cj-category-carousel) {
 .cj-category-carousel {
   order: -1;
 
+  /* The component puts each category's palette on the link through
+   * `categoryVariables`. Theme-level icon rules load later on production, so
+   * restate the intended role here with enough context to keep the glyph tied
+   * to that category instead of falling back to the rail's neutral text. */
+
+  .cj-category-carousel__icon {
+    color: var(--category-badge-color);
+  }
+
   /* The label is a flex sibling of the pills, so it indented the whole rail —
    * pills and description both — past the frame edge that the tabs, the cards
    * and the header all share. It is `aria-hidden` and the nav carries its own
@@ -393,7 +402,12 @@ $hidden_filter_tags: "" !default;
 }
 
 @each $tag in cj-split($hidden_filter_tags) {
-  .tag-drop .select-kit-row[data-value="#{$tag}"] {
+  /* SelectKit's row layout has the same specificity as the old selector and
+   * can be emitted after a theme stylesheet. Name the discovery picker and its
+   * row type so the setting wins without affecting tag pickers elsewhere or
+   * escalating to `!important`. */
+
+  .tag-drop.select-kit .select-kit-row.tag-row[data-value="#{$tag}"] {
     display: none;
   }
 }
