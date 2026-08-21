@@ -1,6 +1,8 @@
 import { apiInitializer } from "discourse/lib/api";
 
 export default apiInitializer((api) => {
+  const site = api.container.lookup("service:site");
+
   /* The client's header logo goes to the catalog root, so the forum's does too —
    * the logo is the product's home, not the forum's. */
   const productUrl = (settings.product_url || "").replace(/\/$/, "");
@@ -8,6 +10,13 @@ export default apiInitializer((api) => {
   if (settings.header_logo_links_to_product && productUrl) {
     api.registerValueTransformer("home-logo-href", () => productUrl);
   }
+
+  /* A desktop topic title has enough horizontal room beside the complete
+   * product identity. Core may still minimize the logo on mobile, where the
+   * compact mark makes room for the title and navigation controls. */
+  api.registerValueTransformer("home-logo-minimized", (minimized) =>
+    site.desktopView ? false : minimized
+  );
 
   /* Core's default share glyph reads as an export arrow; the client uses a share
    * node in the same position. */
