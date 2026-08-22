@@ -42,6 +42,13 @@
   }
 }
 
+/* discourse-ratings renders once for each name link. Keep the copy after the
+ * secondary name, but preserve the first when core suppresses that name. */
+
+.topic-meta-data .names:has(.second) .first .post-ratings {
+  display: none;
+}
+
 /* discourse-locations: the tile layer is a photographic image, so a dark scheme
  * needs it filtered rather than recoloured. */
 @media (prefers-color-scheme: dark) {
