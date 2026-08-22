@@ -67,6 +67,17 @@ $height: 3.5rem;
       );
     }
 
+    /* The progress control docks directly onto the tab bar. Soften only the
+     * exposed edge; rounding the joined edge would make the contact look
+     * accidental instead of treating both surfaces as one assembly. */
+
+    body:has(.d-tab-bar) #topic-progress {
+      border-start-start-radius: var(--d-button-border-radius);
+      border-start-end-radius: var(--d-button-border-radius);
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+
     body:has(.d-tab-bar) .navigation-controls {
       inset-block-end: calc(
         $height + var(--space-3) + env(safe-area-inset-bottom)
