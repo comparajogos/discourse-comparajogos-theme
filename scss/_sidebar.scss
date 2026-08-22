@@ -150,6 +150,38 @@
     );
     background: transparent;
     overscroll-behavior: contain;
+    scrollbar-color: transparent transparent;
+    scrollbar-gutter: auto;
+
+    /* The admin rail is persistent, so an always-reserved track reads as a
+     * second divider beside the content gutter. Keep scrolling available, but
+     * reveal a quiet thumb only while the rail is being used. */
+
+    &:hover,
+    &:focus-within {
+      scrollbar-color: color-mix(in oklch, var(--primary) 24%, transparent)
+        transparent;
+    }
+
+    &::-webkit-scrollbar {
+      width: var(--space-2);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      background-clip: content-box;
+      border: 2px solid transparent;
+      border-radius: var(--cj-radius-pill);
+    }
+
+    &:hover::-webkit-scrollbar-thumb,
+    &:focus-within::-webkit-scrollbar-thumb {
+      background-color: color-mix(in oklch, var(--primary) 24%, transparent);
+    }
 
     .sidebar-panel-header__row {
       align-items: center;
@@ -280,20 +312,6 @@
       color: var(--cj-text-muted);
       background: color-mix(in oklch, var(--primary) 6%, transparent);
       border-radius: var(--cj-radius-pill);
-    }
-  }
-
-  @include viewport.from(md) {
-    .sidebar-wrapper {
-      background: transparent;
-
-      .sidebar-container {
-        height: calc(100% - var(--space-10));
-        margin-block: var(--space-5);
-        background: var(--cj-card);
-        border: 1px solid var(--cj-border);
-        border-radius: var(--d-border-radius-large);
-      }
     }
   }
 
