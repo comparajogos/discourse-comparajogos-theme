@@ -161,8 +161,8 @@
   }
 
   /* Follow the floating header through its short docking travel. The individual
-   * translate property composes with any transform core may use for the sidebar,
-   * and the shared scroll range keeps their resting gap unchanged. */
+   * translate property composes with any transform core may use for the sidebar;
+   * growing by the same distance keeps its bottom edge pinned to the viewport. */
 
   @supports (animation-timeline: scroll()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -177,6 +177,9 @@
 
 @keyframes cj-sidebar-dock {
   to {
+    height: calc(
+      var(--composer-vh, 1dvh) * 100 - var(--main-outlet-offset, 0px) + 1.5rem
+    );
     translate: 0 -1.5rem;
   }
 }
