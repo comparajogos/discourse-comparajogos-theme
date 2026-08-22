@@ -30,6 +30,7 @@ export default class CjHeaderNav extends Component {
 
   @service currentUser;
   @service router;
+  @service site;
   @service siteSettings;
 
   get productUrl() {
@@ -80,6 +81,10 @@ export default class CjHeaderNav extends Component {
       icon: "storefront",
       requiresAuth: !username,
     });
+
+    if (this.site.mobileView) {
+      return links.filter((link) => link.key === "market");
+    }
 
     return links;
   }

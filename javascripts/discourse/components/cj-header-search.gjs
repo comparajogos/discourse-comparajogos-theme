@@ -7,6 +7,7 @@ import willDestroy from "@ember/render-modifiers/modifiers/will-destroy";
 import { service } from "@ember/service";
 import SearchMenu from "discourse/components/search-menu";
 import getURL from "discourse/lib/get-url";
+import Mobile from "discourse/lib/mobile";
 import DButton from "discourse/ui-kit/d-button";
 
 /**
@@ -29,22 +30,18 @@ import DButton from "discourse/ui-kit/d-button";
  */
 export default class CjHeaderSearch extends Component {
   @service appEvents;
+  @service capabilities;
   @service interfaceColor;
   @service router;
   @service search;
   @service site;
   @service siteSettings;
 
-  @tracked compactHeader;
   @tracked hideSearchResults = false;
 
   keyboardWasVisibleForSearch = false;
   resultsResetFrame = null;
   transitionFrame = null;
-
-  syncCompactHeader = () => {
-    this.compactHeader = this.site.mobileView || this.site.narrowDesktopView;
-  };
 
   onKeyboardVisibilityChange = (visible) => {
     const input = document.getElementById("cj-header-search-input");
@@ -88,14 +85,11 @@ export default class CjHeaderSearch extends Component {
   constructor() {
     super(...arguments);
 
-    this.syncCompactHeader();
-    this.appEvents.on("site-header:force-refresh", this.syncCompactHeader);
     this.appEvents.on(
       "keyboard-visibility-change",
       this.onKeyboardVisibilityChange
     );
     registerDestructor(this, () => {
-      this.appEvents.off("site-header:force-refresh", this.syncCompactHeader);
       this.appEvents.off(
         "keyboard-visibility-change",
         this.onKeyboardVisibilityChange
@@ -132,7 +126,9 @@ export default class CjHeaderSearch extends Component {
 
   get shouldRender() {
     return (
-      this.compactHeader &&
+      (Mobile.mobileForced ||
+        this.site.narrowDesktopView ||
+        !this.capabilities.viewport.md) &&
       this.search.searchExperience === "search_field" &&
       !this.args.topicInfoVisible
     );
@@ -170,7 +166,8 @@ export default class CjHeaderSearch extends Component {
     {{#if this.shouldRender}}
       {{#unless this.isChatRoute}}
         <div
-          class="cj-header-search"
+          class="cj-header-search
+            {{if this.site.mobileView 'cj-header-search--mobile'}}"
           {{didInsert this.armTransitions}}
           {{willDestroy this.cancelTransitionSetup}}
         >

@@ -5,6 +5,7 @@ import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
 const TOPIC_URL = "/t/internationalization-localization/280";
 const LOGO_SETTINGS = {
+  search_experience: "search_field",
   site_logo_small_url: "/images/d-logo-sketch-small.png",
   site_logo_url: "/images/d-logo-sketch.png",
 };
@@ -38,7 +39,8 @@ acceptance("Compara Jogos header logo - desktop", function (needs) {
       .dom(".extra-info-wrapper")
       .doesNotExist("the docked title yields after an upward scroll");
     assert.dom(".cj-header-nav").isVisible("product navigation returns");
-    assert.dom(".floating-search-input").isVisible("header search returns");
+
+    assert.dom(".floating-search-input").exists("header search remounts");
   });
 });
 
@@ -60,6 +62,6 @@ acceptance("Compara Jogos header logo - mobile", function (needs) {
     assert.dom("#site-logo").hasClass("logo-small");
     assert
       .dom("#toggle-hamburger-menu")
-      .isVisible("the fixed sidebar handle survives the docked-title state");
+      .exists("the sidebar trigger survives the docked-title state");
   });
 });

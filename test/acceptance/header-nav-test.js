@@ -40,6 +40,6 @@ acceptance("Compara Jogos header nav - mobile", function (needs) {
       .isVisible("the market remains available beside search");
     assert
       .dom('.cj-header-nav .cj-nav-item[data-cj-nav="forum"]')
-      .isNotVisible("destinations owned by the bottom bar stay out of the row");
+      .doesNotExist("destinations owned by the bottom bar stay out of the row");
   });
 });

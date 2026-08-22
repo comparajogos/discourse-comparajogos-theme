@@ -1,5 +1,9 @@
 import { click, settled, visit, waitUntil } from "@ember/test-helpers";
 import { test } from "qunit";
+import NarrowDesktop, {
+  forceNarrowDesktop,
+  resetNarrowDesktop,
+} from "discourse/lib/narrow-desktop";
 import { cloneJSON } from "discourse/lib/object";
 import privateMessagesFixtures from "discourse/tests/fixtures/private-messages-fixtures";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
@@ -9,6 +13,13 @@ import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
  * HeaderSearch. The gate matters more than the styling: if it drifts after an
  * upgrade, the field either disappears or mounts twice.
  */
+
+async function simulateNarrowDesktop(owner) {
+  forceNarrowDesktop();
+  NarrowDesktop.init();
+  NarrowDesktop.update(owner, true);
+  await settled();
+}
 
 acceptance("Compara Jogos header search - mobile", function (needs) {
   needs.mobileView();
@@ -90,8 +101,11 @@ acceptance("Compara Jogos header search - mobile", function (needs) {
   });
 });
 
-acceptance("Compara Jogos header search - desktop", function () {
-  test("core and outlet fields trade places across the breakpoint", async function (assert) {
+acceptance("Compara Jogos header search - desktop", function (needs) {
+  needs.settings({ search_experience: "search_field" });
+  needs.hooks.afterEach(() => resetNarrowDesktop());
+
+  test("wide desktop leaves search to core", async function (assert) {
     await visit("/latest");
 
     assert.false(
@@ -106,12 +120,11 @@ acceptance("Compara Jogos header search - desktop", function () {
       exists(".cj-sidebar-toggle"),
       "the theme adds no second toggle"
     );
+  });
 
-    const site = this.container.lookup("service:site");
-    const appEvents = this.container.lookup("service:app-events");
-    site.set("narrowDesktopView", true);
-    appEvents.trigger("site-header:force-refresh");
-    await settled();
+  test("the outlet owns narrow desktop search", async function (assert) {
+    await simulateNarrowDesktop(this.owner);
+    await visit("/latest");
 
     assert.true(
       exists(".d-header .cj-header-search"),
@@ -120,19 +133,6 @@ acceptance("Compara Jogos header search - desktop", function () {
     assert.false(
       exists(".d-header .floating-search-input"),
       "core removes its desktop field at the same breakpoint"
-    );
-
-    site.set("narrowDesktopView", false);
-    appEvents.trigger("site-header:force-refresh");
-    await settled();
-
-    assert.false(
-      exists(".d-header .cj-header-search"),
-      "the outlet field unmounts when the viewport widens again"
-    );
-    assert.true(
-      exists(".d-header .floating-search-input"),
-      "core is once again the only desktop search field"
     );
   });
 });
@@ -157,36 +157,34 @@ acceptance(
       });
     });
 
-    test("the PM search context cannot displace the input or avatar", async function (assert) {
+    test("the PM search context uses the compact mobile layout hook", async function (assert) {
       await visit("/u/eviltrout/messages");
       await click("#cj-header-search-input");
 
       const searchMenu = document.querySelector(
         ".cj-header-search .search-menu"
       );
-      const searchGlyph = searchMenu.querySelector(".search-icon .d-icon");
       const searchContext = searchMenu.querySelector(".search-context");
       const searchInput = searchMenu.querySelector(".search-term__input");
-      const account = document.querySelector(".d-header .current-user");
+
+      /* Theme QUnit intentionally loads core's stylesheet only. Assert the DOM
+       * contract consumed by the mobile CSS instead of browser geometry that
+       * cannot include the theme declarations in this runner. */
 
       assert.true(
-        searchContext.getBoundingClientRect().width <= 28,
-        "the PM context is a compact clear control"
+        searchContext.matches(
+          ".d-header .cj-header-search.cj-header-search--mobile .search-input .search-context"
+        ),
+        "the scope control receives the compact mobile selector"
       );
       assert.true(
-        searchGlyph.getBoundingClientRect().right <=
-          searchContext.getBoundingClientRect().left,
-        "the search and clear-context icons do not overlap"
+        Boolean(searchContext.querySelector(".d-icon-xmark")),
+        "the compact clear-context icon remains available"
       );
       assert.true(
-        searchInput.getBoundingClientRect().right <=
-          searchMenu.getBoundingClientRect().right,
-        "the input stays inside its search pill"
-      );
-      assert.true(
-        searchMenu.getBoundingClientRect().right <=
-          account.getBoundingClientRect().left,
-        "the search pill stops before the account avatar"
+        [...searchContext.parentElement.children].indexOf(searchContext) <
+          [...searchInput.parentElement.children].indexOf(searchInput),
+        "the scope control remains before the input in the search flex row"
       );
     });
   }

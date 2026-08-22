@@ -145,6 +145,43 @@
   }
 }
 
+/* `needs.mobileView()` and Discourse's forced-mobile mode intentionally change
+ * the rendered header without resizing the browser. Keep the PM scope control
+ * compact in that supported mode too; ordinary responsive mobile view already
+ * receives the same declarations from the `until(sm)` block below. */
+
+.d-header {
+  .cj-header-search.cj-header-search--mobile {
+    .search-input .search-context {
+      flex: 0 0 1.75rem;
+      box-sizing: border-box;
+      width: 1.75rem;
+      max-width: 1.75rem;
+      inline-size: 1.75rem;
+      max-inline-size: 1.75rem;
+      min-inline-size: 1.75rem;
+      min-width: 1.75rem;
+      height: 1.75rem;
+      min-height: 1.75rem;
+      overflow: hidden;
+      padding: 0;
+      border-radius: var(--cj-radius-pill);
+
+      .d-button-label {
+        position: absolute;
+        overflow: hidden;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        white-space: nowrap;
+        border: 0;
+        clip-path: inset(50%);
+      }
+    }
+  }
+}
+
 /* Core binds through its wrapper chain; the outlet-mounted compact field has
  * none of those ancestors and therefore receives the same mixin at its root. */
 
