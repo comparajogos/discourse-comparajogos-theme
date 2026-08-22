@@ -2,6 +2,7 @@ import { click, currentURL, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
+import privateMessagesFixtures from "discourse/tests/fixtures/private-messages-fixtures";
 import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
@@ -89,5 +90,33 @@ acceptance("Compara Jogos topic feed - mobile", function (needs) {
       exists(".cj-feed__byline > .cj-feed__taxonomy"),
       "category and tags stay grouped in their dedicated metadata region"
     );
+  });
+});
+
+acceptance("Compara Jogos topic feed - private messages", function (needs) {
+  needs.user();
+
+  needs.pretender((server, helper) => {
+    server.get("/topics/private-messages/:username.json", () => {
+      return helper.response(
+        cloneJSON(
+          privateMessagesFixtures["/topics/private-messages/eviltrout.json"]
+        )
+      );
+    });
+  });
+
+  test("messages retain the native participant list", async function (assert) {
+    await visit("/u/eviltrout/messages");
+
+    assert
+      .dom(".topic-list")
+      .doesNotHaveClass("--cj-feed", "PMs do not use public feed rows");
+    assert
+      .dom(".topic-list-item .main-link")
+      .exists("the native PM topic cell remains");
+    assert
+      .dom(".topic-list-item .posters .avatar")
+      .exists("the PM participant avatar remains visible");
   });
 });

@@ -16,6 +16,20 @@ const ABSORBED = [
 const INTERACTIVE_TARGETS =
   "a, button, input, select, textarea, [contenteditable='true']";
 
+/* Match Horizon's boundary for custom topic cards. In particular, private
+ * messages use `listContext: "messages"`; leaving that context alone preserves
+ * core's participant avatars and PM-specific metadata. */
+const TOPIC_FEED_CONTEXTS = [
+  "discovery",
+  "suggested",
+  "related",
+  "group-activity",
+  "user-activity",
+];
+
+const isTopicFeedContext = ({ listContext, category }) =>
+  TOPIC_FEED_CONTEXTS.includes(listContext) && !category?.doc_index_topic_id;
+
 export default apiInitializer((api) => {
   if (!settings.topic_list_feed) {
     return;
@@ -24,27 +38,38 @@ export default apiInitializer((api) => {
   /* The columns API only drives the table layout; on mobile core renders a
    * separate row template, so the feed row would simply not appear there. The
    * feed row is already a vertical stack, so the one layout serves both. */
-  api.registerValueTransformer("topic-list-item-mobile-layout", () => false);
+  api.registerValueTransformer(
+    "topic-list-item-mobile-layout",
+    ({ value, context }) => (isTopicFeedContext(context) ? false : value)
+  );
 
   /* A class on the table beats `:has(.cj-feed)` for styling. */
-  api.registerValueTransformer("topic-list-class", ({ value: classes }) => [
-    ...classes,
-    "--cj-feed",
-  ]);
+  api.registerValueTransformer(
+    "topic-list-class",
+    ({ value: classes, context }) =>
+      isTopicFeedContext(context) ? [...classes, "--cj-feed"] : classes
+  );
 
-  api.registerValueTransformer("topic-list-columns", ({ value: columns }) => {
-    for (const name of ABSORBED) {
-      if (columns.has(name)) {
-        columns.delete(name);
+  api.registerValueTransformer(
+    "topic-list-columns",
+    ({ value: columns, context }) => {
+      if (!isTopicFeedContext(context)) {
+        return columns;
       }
+
+      for (const name of ABSORBED) {
+        if (columns.has(name)) {
+          columns.delete(name);
+        }
+      }
+
+      /* One cell carries the whole row. The header is suppressed in CSS — a
+       * feed has no column labels to sort by. */
+      columns.add("cj-feed", { item: CjTopicRow });
+
+      return columns;
     }
-
-    /* One cell carries the whole row. The header is suppressed in CSS — a feed
-     * has no column labels to sort by. */
-    columns.add("cj-feed", { item: CjTopicRow });
-
-    return columns;
-  });
+  );
 
   /* The card's hover state covers the full row, so its pointer contract must do
    * the same. Use core's row-click extension point rather than an overlay link:
@@ -54,7 +79,16 @@ export default apiInitializer((api) => {
   api.registerBehaviorTransformer(
     "topic-list-item-click",
     ({ context, next }) => {
-      const { event } = context;
+      const { event, topic, listContext } = context;
+
+      if (
+        !isTopicFeedContext({
+          listContext,
+          category: topic?.category,
+        })
+      ) {
+        return next();
+      }
 
       if (!event.target.closest(".cj-feed")) {
         return next();

@@ -1,5 +1,7 @@
 import { click, settled, visit, waitUntil } from "@ember/test-helpers";
 import { test } from "qunit";
+import { cloneJSON } from "discourse/lib/object";
+import privateMessagesFixtures from "discourse/tests/fixtures/private-messages-fixtures";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 
 /*
@@ -134,3 +136,58 @@ acceptance("Compara Jogos header search - desktop", function () {
     );
   });
 });
+
+acceptance(
+  "Compara Jogos header search - mobile private messages",
+  function (needs) {
+    needs.mobileView();
+    needs.user();
+    needs.settings({
+      search_experience: "search_field",
+      site_logo_small_url: "/images/small-logo.png",
+    });
+
+    needs.pretender((server, helper) => {
+      server.get("/topics/private-messages/:username.json", () => {
+        return helper.response(
+          cloneJSON(
+            privateMessagesFixtures["/topics/private-messages/eviltrout.json"]
+          )
+        );
+      });
+    });
+
+    test("the PM search context cannot displace the input or avatar", async function (assert) {
+      await visit("/u/eviltrout/messages");
+      await click("#cj-header-search-input");
+
+      const searchMenu = document.querySelector(
+        ".cj-header-search .search-menu"
+      );
+      const searchGlyph = searchMenu.querySelector(".search-icon .d-icon");
+      const searchContext = searchMenu.querySelector(".search-context");
+      const searchInput = searchMenu.querySelector(".search-term__input");
+      const account = document.querySelector(".d-header .current-user");
+
+      assert.true(
+        searchContext.getBoundingClientRect().width <= 28,
+        "the PM context is a compact clear control"
+      );
+      assert.true(
+        searchGlyph.getBoundingClientRect().right <=
+          searchContext.getBoundingClientRect().left,
+        "the search and clear-context icons do not overlap"
+      );
+      assert.true(
+        searchInput.getBoundingClientRect().right <=
+          searchMenu.getBoundingClientRect().right,
+        "the input stays inside its search pill"
+      );
+      assert.true(
+        searchMenu.getBoundingClientRect().right <=
+          account.getBoundingClientRect().left,
+        "the search pill stops before the account avatar"
+      );
+    });
+  }
+);

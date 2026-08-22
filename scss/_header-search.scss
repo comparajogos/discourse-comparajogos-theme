@@ -321,6 +321,16 @@
 
         .search-input {
           padding-inline-start: 0;
+
+          /* PM routes prepend a full "in messages" context button to the
+           * input. At narrow widths its label is wider than the collapsed
+           * search control, pushing the input beneath the account avatar and
+           * even beyond the viewport. The scope control returns as a compact
+           * clear-context button once search opens below. */
+
+          .search-context {
+            display: none;
+          }
         }
 
         .search-term__input {
@@ -386,6 +396,46 @@
           .search-menu .search-icon {
             inset-inline: 0 auto;
             margin-inline-start: var(--space-3);
+          }
+
+          .search-input .search-context {
+            display: inline-flex;
+            flex: 0 0 1.75rem;
+            box-sizing: border-box;
+            width: 1.75rem;
+            min-width: 1.75rem;
+            height: 1.75rem;
+            min-height: 1.75rem;
+            padding: 0;
+            border-radius: var(--cj-radius-pill);
+
+            /* Retain the button's accessible name while the x icon carries
+             * the compact visual affordance. */
+
+            .d-button-label {
+              position: absolute;
+              overflow: hidden;
+              width: 1px;
+              height: 1px;
+              padding: 0;
+              margin: -1px;
+              white-space: nowrap;
+              border: 0;
+              clip-path: inset(50%);
+            }
+          }
+
+          /* The magnifier is absolutely positioned over the input's leading
+           * inset. When a PM context control precedes that input, reserve the
+           * same inset on the flex row and return the input to ordinary field
+           * padding so the magnifier and clear-context x never stack. */
+
+          .search-input:has(.search-context) {
+            padding-inline-start: 2rem;
+
+            .search-term__input {
+              padding-inline-start: var(--space-2);
+            }
           }
 
           .search-term__input::placeholder {
