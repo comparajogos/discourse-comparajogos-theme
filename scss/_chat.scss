@@ -65,6 +65,20 @@ html.has-full-page-chat {
  * chat runs edge to edge with no radius, hairline or top gap. */
 
 @include viewport.until(sm) {
+  html.has-full-page-chat .d-header {
+    .contents {
+      /* Core lets Chat's full-width header outlet shrink around the account
+       * controls. Our general header gap and non-shrinking logo rule broke that
+       * contract once the mobile market shortcut was added. */
+      gap: var(--space-2);
+    }
+
+    .home-logo-wrapper-outlet {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
   .has-full-page-chat {
     .full-page-chat {
       margin-block-start: 0;
