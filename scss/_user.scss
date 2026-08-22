@@ -1,6 +1,8 @@
-/* The profile is one panel: the card, its navigation and the content below it
- * share a single surface, so nothing inside paints a second one. The canvas
- * inversion comes from cj-panel-surface. */
+@use "lib/viewport";
+
+/* On desktop the profile is one panel: the card, its navigation and the content
+ * below it share a single surface, so nothing inside paints a second one. The
+ * canvas inversion comes from cj-panel-surface. */
 
 .user-content {
   background: none;
@@ -14,6 +16,31 @@
 .user-main .about .details,
 .user-main .about.collapsed-info .details {
   background: none;
+}
+
+/* Core keeps the profile in its compact layout until `md`, but the generic page
+ * panels become edge-to-edge at `sm`. That left the middle mobile range looking
+ * like a single black card. Let the profile content use the page canvas across
+ * the whole compact range, while the identity block and primary overflow nav
+ * remain one dark header. Keeping the nav on the panel surface also lets core's
+ * overflow caret inherit the same `--secondary` logic as it does on desktop. */
+
+@include viewport.until(md) {
+  .container .user-main {
+    padding-inline: 0;
+    background: var(--cj-background);
+    border: 0;
+    border-radius: 0;
+  }
+
+  .user-main .about,
+  .user-main .user-primary-navigation {
+    background: var(--cj-panel);
+  }
+
+  .user-main .user-primary-navigation {
+    --secondary: var(--cj-panel);
+  }
 }
 
 /* Core's staff bar is deliberately inverted — `background: var(--primary)` with
