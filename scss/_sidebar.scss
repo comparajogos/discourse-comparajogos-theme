@@ -117,27 +117,184 @@
   scrollbar-width: thin;
 }
 
-/* Admin is a dense working surface, not the public destination menu above.
- * Core already gives its search field a container and its active row a clear
- * state; reapplying the theme's filled rows and input background creates nested
- * slabs. Keep one control surface and restore the tighter admin rhythm. */
+/* Admin is a high-frequency working surface rather than another destination
+ * menu. Give it a quiet dock of its own, then spend the stronger treatment on
+ * the current tool: a low-contrast row plus one compact action-colour icon. */
 
-.admin-interface .sidebar-sections.admin-panel {
-  --d-sidebar-row-horizontal-padding: var(--space-3);
-  --d-sidebar-vertical-gap: var(--space-1);
-  padding-block-start: var(--space-3);
+:is(.admin-interface, .admin-area) {
+  .sidebar-wrapper .sidebar-sections.admin-panel {
+    --d-sidebar-row-horizontal-padding: var(--space-3);
+    --d-sidebar-vertical-gap: var(--space-1);
+    --sidebar-section-wrapper-padding: var(--space-3) var(--space-2)
+      var(--space-4);
+    --d-sidebar-admin-background: transparent;
+    --d-sidebar-link-color: var(--primary);
+    --d-sidebar-link-icon-color: var(--cj-text-muted);
+    --d-sidebar-highlight-background: var(--cj-hover);
+    --d-sidebar-highlight-color: var(--primary);
+    --d-sidebar-active-background: color-mix(
+      in oklch,
+      var(--cj-action) 12%,
+      transparent
+    );
+    --d-sidebar-active-color: var(--primary);
+    --d-sidebar-active-font-weight: 600;
+    --cj-admin-field-muted: color-mix(
+      in srgb,
+      var(--cj-text-muted) 78%,
+      var(--primary)
+    );
+    background: transparent;
+    overscroll-behavior: contain;
 
-  .sidebar-search__input-container {
-    margin-block: var(--space-1);
-    padding-inline: var(--space-3);
-    background: var(--d-input-bg-color);
-    border: var(--d-input-border);
-    border-radius: var(--d-input-border-radius);
+    .sidebar-panel-header__row {
+      align-items: center;
+    }
+
+    .sidebar-sections__back-to-forum {
+      min-height: var(--d-sidebar-row-height);
+      padding-inline: var(--space-2);
+      color: var(--cj-text-muted);
+      font-size: var(--font-down-1-rem);
+      font-weight: 600;
+      border-radius: var(--d-button-border-radius);
+      transition:
+        color var(--cj-duration-fast) var(--cj-ease-out),
+        background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+      &:hover,
+      &:focus-visible {
+        color: var(--primary);
+        background: var(--cj-hover);
+      }
+
+      .d-icon {
+        color: currentcolor;
+      }
+    }
+
+    .sidebar-toggle-all-sections {
+      min-width: var(--d-sidebar-row-height);
+      min-height: var(--d-sidebar-row-height);
+      padding: 0;
+      border-radius: var(--d-button-border-radius);
+    }
+
+    .sidebar-search__input-container {
+      margin-block: var(--space-2) var(--space-3);
+      padding-inline: var(--space-3);
+      background: var(--cj-control);
+      border: 1px solid transparent;
+      border-radius: var(--d-input-border-radius);
+      transition:
+        border-color var(--cj-duration-fast) var(--cj-ease-out),
+        box-shadow var(--cj-duration-fast) var(--cj-ease-out);
+
+      &:focus-within {
+        border-color: color-mix(in oklch, var(--cj-action) 70%, transparent);
+        box-shadow: var(--cj-focus-ring);
+      }
+    }
+
+    .sidebar-search__icon.btn.btn-transparent {
+      color: var(--cj-admin-field-muted);
+      background: transparent;
+    }
+
+    .sidebar-search__input {
+      color: var(--primary);
+      background: transparent;
+      border-radius: 0;
+
+      &::placeholder {
+        color: var(--cj-admin-field-muted);
+        opacity: 1;
+      }
+    }
+
+    .sidebar-search__shortcut-hint {
+      padding: var(--space-half) var(--space-2);
+      color: var(--cj-admin-field-muted);
+      background: color-mix(in oklch, var(--primary) 6%, transparent);
+      border-radius: var(--d-border-radius);
+    }
+
+    .sidebar-section-wrapper {
+      border-color: transparent;
+
+      &[data-section-name="admin-root"] {
+        padding-block-end: var(--space-4);
+        margin-block-end: var(--space-2);
+        border-bottom-color: var(--cj-border);
+      }
+    }
+
+    .sidebar-section-header-wrapper {
+      border-radius: var(--d-button-border-radius);
+    }
+
+    .sidebar-section-header {
+      min-height: 2rem;
+      padding-inline: var(--space-2);
+      color: var(--cj-text-muted);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    .sidebar-section-link {
+      min-height: var(--d-sidebar-row-height);
+      border-radius: var(--d-button-border-radius);
+
+      .sidebar-section-link-prefix.icon {
+        height: var(--d-sidebar-section-link-prefix-width);
+        border-radius: calc(var(--d-button-border-radius) - var(--space-half));
+        transition:
+          color var(--cj-duration-fast) var(--cj-ease-out),
+          background-color var(--cj-duration-fast) var(--cj-ease-out);
+      }
+
+      &.active,
+      &--active,
+      &.exact-url-match {
+        box-shadow: inset 0 0 0 1px
+          color-mix(in oklch, var(--cj-action) 18%, transparent);
+
+        .sidebar-section-link-prefix.icon {
+          color: var(--cj-on-action);
+          background: var(--cj-fill-action);
+        }
+
+        &:hover,
+        &:focus-visible {
+          background: color-mix(in oklch, var(--cj-action) 16%, transparent);
+        }
+      }
+    }
+
+    .sidebar-section-link-content-badge:not(.icon) {
+      padding: var(--space-half) var(--space-2);
+      color: var(--cj-text-muted);
+      background: color-mix(in oklch, var(--primary) 6%, transparent);
+      border-radius: var(--cj-radius-pill);
+    }
   }
 
-  .sidebar-search__input {
-    background: transparent;
-    border-radius: 0;
+  @include viewport.from(md) {
+    .sidebar-wrapper {
+      background: transparent;
+
+      .sidebar-container {
+        height: calc(100% - var(--space-10));
+        margin-block: var(--space-5);
+        background: var(--cj-card);
+        border: 1px solid var(--cj-border);
+        border-radius: var(--d-border-radius-large);
+      }
+    }
+  }
+
+  @include viewport.from(lg) {
+    --d-sidebar-width: 15.25rem;
   }
 }
 
