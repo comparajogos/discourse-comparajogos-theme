@@ -52,7 +52,7 @@ html:has(#d-splash) {
   .cj-splash__card,
   .cj-splash__topic-post,
   .cj-splash__tab-bar,
-  .cj-splash__search,
+  .cj-splash__search-control,
   .cj-splash__row.is-active,
   .cj-splash__row.is-muted,
   .cj-splash__log-in {
@@ -61,6 +61,7 @@ html:has(#d-splash) {
 
   .cj-splash__bar,
   .cj-splash__avatar,
+  .cj-splash__card::after,
   .cj-splash__topic-avatar,
   .cj-splash__topic-actions > span,
   .cj-splash__rail-pill,
@@ -77,7 +78,7 @@ html:has(#d-splash) {
   --cj-splash-plays: "Plays";
   --cj-splash-chat: "Chat";
   --cj-splash-market: "My Market";
-  --cj-splash-search: "Search";
+  --cj-splash-search: "Search posts and users";
   --cj-splash-log-in: "Log In";
   position: fixed;
   z-index: 1;
@@ -97,7 +98,7 @@ html[lang^="pt"] #cj-splash {
   --cj-splash-plays: "Partidas";
   --cj-splash-chat: "Chat";
   --cj-splash-market: "Meu Comércio";
-  --cj-splash-search: "Pesquisar";
+  --cj-splash-search: "Pesquisar posts e usuários";
   --cj-splash-log-in: "Entrar";
 }
 
@@ -226,16 +227,29 @@ html[lang^="pt"] #cj-splash {
 
 .cj-splash__search {
   display: flex;
-  flex: 1;
+  flex: 1 1 18rem;
+  min-width: 10rem;
+  height: 2.5rem;
+}
+
+/* Core flexes the search slot while capping the pill inside it. */
+.cj-splash__search-control {
+  display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-3);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 28rem;
   min-width: 0;
   height: 2.5rem;
+  margin-inline-start: auto;
   padding-inline-start: var(--space-3);
   border-radius: var(--cj-radius-pill);
-  color: var(--cj-text-muted);
-  background: var(--cj-card);
-  font-size: var(--font-down-1);
+  color: var(--header_primary);
+  background: var(--cj-header-soft);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
 
   > .cj-splash__icon {
     width: 1rem;
@@ -245,7 +259,6 @@ html[lang^="pt"] #cj-splash {
 
   &::after {
     content: var(--cj-splash-search);
-    padding-inline-start: var(--space-1);
   }
 }
 
@@ -299,6 +312,22 @@ html:not(.anon) .cj-splash__log-in {
 
   &::after {
     content: none;
+  }
+}
+
+/* Match core's signed-in control footprint so the search width stays stable. */
+@include viewport.from(md) {
+  html:not(.anon) .cj-splash__auth {
+    justify-content: flex-end;
+    box-sizing: border-box;
+    width: 3.875rem;
+    height: 2.875rem;
+    padding-inline-end: 0.625rem;
+
+    .cj-splash__log-in {
+      width: 2.125rem;
+      height: 2.125rem;
+    }
   }
 }
 
@@ -726,6 +755,10 @@ body:has(
   .cj-splash__bar--excerpt {
     display: none;
   }
+
+  .cj-splash__card::after {
+    display: none;
+  }
 }
 
 .cj-splash__byline {
@@ -779,6 +812,16 @@ body:has(
   block-size: 0.55rem;
   inline-size: 9rem;
   margin-block-start: 0.75rem;
+}
+
+.cj-splash__card::after {
+  content: "";
+  display: block;
+  width: 13.875rem;
+  height: 1.125rem;
+  margin-block-start: var(--space-2);
+  background: var(--cj-surface-muted);
+  border-radius: 999px;
 }
 
 /* ------------------------------------------------------ mobile tab bar -- */
@@ -928,10 +971,14 @@ body:has(
 
     .cj-splash__search {
       flex: none;
-      justify-content: center;
       width: 2.5rem;
       min-width: 0;
       margin-inline-start: auto;
+    }
+
+    .cj-splash__search-control {
+      justify-content: center;
+      max-width: none;
       padding-inline-start: 0;
 
       &::after {
@@ -1103,10 +1150,14 @@ body:has(
 
   .cj-splash__search {
     flex: none;
-    justify-content: center;
     width: 2.5rem;
     min-width: 0;
     margin-inline-start: auto;
+  }
+
+  .cj-splash__search-control {
+    justify-content: center;
+    max-width: none;
     padding-inline-start: 0;
 
     &::after {
