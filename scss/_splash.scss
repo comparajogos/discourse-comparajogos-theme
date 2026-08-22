@@ -345,6 +345,9 @@ html:not(.anon) .cj-splash__log-in {
   flex: none;
   width: var(--d-sidebar-width);
   padding: 2rem calc(var(--space-1) + 1px) var(--space-3) var(--space-1);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
 }
 
 .cj-splash__row {

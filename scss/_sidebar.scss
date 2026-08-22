@@ -114,6 +114,10 @@
 }
 
 .sidebar-wrapper .sidebar-sections {
+  /* Chat and plugin sections arrive asynchronously. Reserve the nested scroll
+   * track before they make this box overflow so every row keeps one width
+   * through the loading handoff. The splash reserves the same gutter. */
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
 }
 
