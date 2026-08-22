@@ -77,6 +77,9 @@ function colorDefinitions() {
   /* React LastVisitMarker: red-500 light / orange-800 dark */
   --cj-last-visit-marker: ${pair("lastVisitMarker")};
 
+  /* Accessible text on the filled last-visit marker */
+  --cj-last-visit-marker-foreground: ${pair("lastVisitMarkerForeground")};
+
   /* React header search and navigation: --muted light, --card dark */
   --cj-header-soft: #{dark-light-choose(
       ${light.product.headerSoft},

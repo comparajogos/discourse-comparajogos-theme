@@ -92,10 +92,10 @@ $panels:
   color: var(--cj-panel-foreground);
 }
 
-/* Match the React LastVisitMarker: the label sits between two centred hairlines,
- * using red-500 in light and the intentionally quieter orange-800 in dark. Core
- * reserves the post-divider baseline at the bottom of this line box, so move the
- * centred marker down by half its height to occupy that boundary. */
+/* Match the React LastVisitMarker: the red marker owns the compact label while
+ * the same colour extends through the two centred hairlines. Core reserves the
+ * post-divider baseline at the bottom of this line box, so move the centred
+ * marker down by half its height to occupy that boundary. */
 
 .small-action.topic-post-visited .topic-post-visited-line {
   display: flex;
@@ -120,8 +120,8 @@ $panels:
     align-items: center;
     flex: 0 0 auto;
     padding-inline: var(--space-2);
-    color: inherit;
-    background: var(--cj-surface-muted);
+    color: var(--cj-last-visit-marker-foreground);
+    background: var(--cj-last-visit-marker);
     border-radius: var(--cj-radius-pill);
   }
 }
