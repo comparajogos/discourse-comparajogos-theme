@@ -53,6 +53,12 @@ function colorDefinitions() {
   /* React --input / --secondary */
   --cj-control: ${pair("control")};
 
+  /* React --secondary-foreground */
+  --cj-control-foreground: #{dark-light-choose(
+      ${light.product.controlForeground},
+      ${dark.product.controlForeground}
+    )};
+
   /* React --border */
   --cj-border: #{dark-light-choose(
       ${light.product.border},

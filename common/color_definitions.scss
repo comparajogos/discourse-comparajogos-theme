@@ -16,6 +16,12 @@
   /* React --input / --secondary */
   --cj-control: #{dark-light-choose(oklch(94% 0 0deg), oklch(26% 0 0deg))};
 
+  /* React --secondary-foreground */
+  --cj-control-foreground: #{dark-light-choose(
+      oklch(21% 0.006 285.885deg),
+      oklch(98.5% 0 0deg)
+    )};
+
   /* React --border */
   --cj-border: #{dark-light-choose(
       oklch(92% 0.004 286.32deg),
