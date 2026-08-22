@@ -92,19 +92,26 @@ $panels:
   color: var(--cj-panel-foreground);
 }
 
-/* Core cuts the last-visit rule with a square canvas-coloured label. Treat the
- * message as the compact status chip it is, using the same muted surface and
- * pill geometry as the rest of the theme. */
+/* Last visit is an informational waypoint, not a warning. Retire core's danger
+ * treatment without erasing the marker's special status: a quiet product-blue
+ * tint replaces red, while the compact chip keeps the existing geometry. */
 
-.small-action.topic-post-visited
-  .topic-post-visited-line
+.small-action.topic-post-visited .topic-post-visited-line {
+  color: color-mix(in oklch, var(--cj-action) 60%, var(--cj-text-muted));
+  border-block-end-color: color-mix(
+    in oklch,
+    var(--cj-action) 38%,
+    var(--cj-border)
+  );
+
   .topic-post-visited-message {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-1) var(--space-2);
-  line-height: 1.25;
-  background: var(--cj-surface-muted);
-  border-radius: var(--cj-radius-pill);
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    line-height: 1.25;
+    background: var(--cj-surface-muted);
+    border-radius: var(--cj-radius-pill);
+  }
 }
 
 /* Below `sm` the panel gives way to the screen — the client drops the fill and

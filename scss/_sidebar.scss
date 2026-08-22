@@ -208,7 +208,7 @@
   /* Keep core's working drawer trigger, but present it as a Discord-like edge
    * handle. Fixed positioning removes it from both the header and document
    * flow. The edge tab stays visually narrower than the neighboring utilities,
-   * while its transparent extension preserves the same 44px touch target. */
+   * while its transparent extension preserves a generous touch target. */
 
   .d-header .header-dropdown-toggle.hamburger-dropdown {
     position: fixed;
@@ -232,20 +232,24 @@
       inline-size: 100%;
       block-size: 100%;
       padding: 0;
-      color: var(--header_primary);
+      color: var(--cj-action);
       background: var(--cj-control);
-      border: 1px solid var(--primary-low);
-      border-inline-start: 0;
+      border: 0;
       border-start-start-radius: 0;
       border-start-end-radius: var(--d-button-border-radius);
       border-end-start-radius: 0;
       border-end-end-radius: var(--d-button-border-radius);
-      box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+      box-shadow: 0 4px 14px rgb(0 0 0 / 24%);
+      transition:
+        color var(--cj-duration-fast) var(--cj-ease-out),
+        background-color var(--cj-duration-fast) var(--cj-ease-out),
+        box-shadow var(--cj-duration-fast) var(--cj-ease-out);
 
       &:hover,
       &:focus-visible {
-        color: var(--cj-action);
+        color: var(--header_primary);
         background: var(--cj-control);
+        box-shadow: 0 5px 16px rgb(0 0 0 / 28%);
       }
 
       &::after {
@@ -257,8 +261,8 @@
     }
 
     .d-icon {
-      width: 1rem;
-      height: 1rem;
+      width: 1.25rem;
+      height: 1.25rem;
       color: currentcolor;
     }
   }
