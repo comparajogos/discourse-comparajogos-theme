@@ -8,10 +8,22 @@
 }
 
 /* Horizon keeps core's new-topic notice geometry and motion, then lowers its
- * visual weight with the quietest accent surface. */
+ * visual weight with the quietest accent surface. On card lists, centre the
+ * floating notice on the first card's top edge instead of aligning their tops.
+ * `translate` stays independent of core's transform-based entrance animation. */
 
 #list-area .show-more .alert.alert-info {
   background: var(--tertiary-very-low);
+}
+
+@include viewport.from(md) {
+  .navigation-topics,
+  .navigation-category,
+  .tags-page {
+    #list-area .show-more.has-topics {
+      translate: 0 -50%;
+    }
+  }
 }
 
 /* Discovery is a column of topic cards, not one boxed table — Horizon's
