@@ -92,25 +92,33 @@ $panels:
   color: var(--cj-panel-foreground);
 }
 
-/* Last visit is an informational waypoint, not a warning. Retire core's danger
- * treatment without erasing the marker's special status: a quiet product-blue
- * tint replaces red, while the compact chip keeps the existing geometry. */
+/* Match the React LastVisitMarker: the label sits between two centred hairlines,
+ * using red-500 in light and the intentionally quieter orange-800 in dark. */
 
 .small-action.topic-post-visited .topic-post-visited-line {
-  color: color-mix(in oklch, var(--cj-action) 60%, var(--cj-text-muted));
-  border-block-end-color: color-mix(
-    in oklch,
-    var(--cj-action) 38%,
-    var(--cj-border)
-  );
+  display: flex;
+  align-items: center;
+  color: var(--cj-last-visit-marker);
+  font-size: var(--cj-text-xs-size);
+  font-weight: 200;
+  line-height: var(--cj-text-xs-line-height);
+  border-block-end: 0;
+
+  &::before,
+  &::after {
+    flex: 1 1 auto;
+    block-size: 1px;
+    background: currentcolor;
+    content: "";
+  }
 
   .topic-post-visited-message {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-1) var(--space-2);
-    line-height: 1.25;
-    background: var(--cj-surface-muted);
-    border-radius: var(--cj-radius-pill);
+    flex: 0 0 auto;
+    padding-inline: var(--space-2);
+    color: inherit;
+    background: transparent;
   }
 }
 

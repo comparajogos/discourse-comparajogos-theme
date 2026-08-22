@@ -31,6 +31,9 @@
   /* React --muted-foreground */
   --cj-text-muted: #{dark-light-choose(#71717b, #9f9fa9)};
 
+  /* React LastVisitMarker: red-500 light / orange-800 dark */
+  --cj-last-visit-marker: #{dark-light-choose(#ef4444, #9a3412)};
+
   /* React header search and navigation: --muted light, --card dark */
   --cj-header-soft: #{dark-light-choose(
       oklch(95% 0.03 240deg),

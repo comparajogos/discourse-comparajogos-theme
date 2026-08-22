@@ -207,8 +207,8 @@
 
   /* Keep core's working drawer trigger, but present it as a Discord-like edge
    * handle. Fixed positioning removes it from both the header and document
-   * flow. The edge tab stays visually narrower than the neighboring utilities,
-   * while its transparent extension preserves a generous touch target. */
+   * flow. It approaches the mobile FAB's scale but stays narrower as an edge
+   * utility; its transparent extension keeps the touch target generous. */
 
   .d-header .header-dropdown-toggle.hamburger-dropdown {
     position: fixed;
@@ -220,8 +220,8 @@
     );
     inset-inline-start: 0;
     display: block;
-    width: 2.25rem;
-    height: 2.75rem;
+    width: 2.5rem;
+    height: 2.875rem;
     transform: none;
 
     #toggle-hamburger-menu {
@@ -261,8 +261,8 @@
     }
 
     .d-icon {
-      width: 1.25rem;
-      height: 1.25rem;
+      width: 1.3125rem;
+      height: 1.3125rem;
       color: currentcolor;
     }
   }
