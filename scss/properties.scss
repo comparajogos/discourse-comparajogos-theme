@@ -48,9 +48,9 @@ body {
    * so a cold load cannot push the remaining header controls sideways. */
   --cj-wordmark-aspect-ratio: 255 / 80;
 
-  /* The client's menu width (`min-w-[200px]`) plus 10px: Discourse rows carry
-   * count badges the client's menu does not, and pt-BR labels ellipsized. */
-  --d-sidebar-width: 13.125rem;
+  /* The client's menu width (`min-w-[200px]`) plus 24px, matching Discourse's
+   * narrow desktop width: its count badges and pt-BR labels need the room. */
+  --d-sidebar-width: 14em;
   --d-sidebar-background: transparent;
   --d-sidebar-border-color: transparent;
   --d-sidebar-section-border-color: transparent;
