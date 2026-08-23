@@ -82,6 +82,54 @@
     }
   }
 
+  /* Core turns the overflow glyph white on hover through the active-icon token.
+   * That works on an accent row, but almost erases the ellipsis on the light
+   * neutral row. Give this nested action its own compact surface and foreground
+   * while keeping the selected-row treatment tied to the row's foreground. */
+
+  .sidebar-section-link-hover .sidebar-section-hover-button {
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    color: var(--cj-text-muted);
+    background: transparent;
+    border-radius: calc(var(--d-button-border-radius) - var(--space-half));
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out),
+      box-shadow var(--cj-duration-fast) var(--cj-ease-out);
+
+    svg {
+      color: currentcolor;
+    }
+
+    &:hover,
+    &:focus-visible,
+    .discourse-no-touch &:hover {
+      color: var(--cj-control-foreground);
+      background: color-mix(in oklch, var(--cj-control) 88%, var(--cj-action));
+
+      svg {
+        color: currentcolor;
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--cj-focus-ring);
+    }
+  }
+
+  .sidebar-section-link:is(
+      .active,
+      .sidebar-section-link--active,
+      .exact-url-match
+    )
+    .sidebar-section-hover-button:is(:hover, :focus-visible) {
+    color: var(--cj-on-action);
+    background: color-mix(in oklch, var(--cj-on-action) 18%, transparent);
+  }
+
   /* Section labels are `text-xs uppercase tracking-wider` on the muted tier — a
    * label for the group, not a row in it. */
 
