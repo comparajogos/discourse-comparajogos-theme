@@ -10,6 +10,12 @@ header_logo_links_to_product:
     en: "Point the header logo at the Compara Jogos catalog, as the client's header does."
     pt_BR: "Faz o logo do cabeçalho apontar para o catálogo do Compara Jogos, como no cliente."
 
+profile_bridge:
+  default: true
+  description:
+    en: "Show a member's public Compara Jogos activity and list links on their forum profile and user card."
+    pt_BR: "Mostra a atividade pública e as listas do Compara Jogos no perfil e no cartão de usuário do fórum."
+
 topic_list_feed:
   default: true
   description:

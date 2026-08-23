@@ -41,6 +41,22 @@
   .user-main .user-primary-navigation {
     --secondary: var(--cj-panel);
   }
+
+  /* Core keeps the collapsed identity details on one flex line. The profile
+   * connector is a full-width region, so let it start a deliberate second row
+   * instead of competing with the avatar and primary details. */
+
+  .user-main .about.collapsed-info .details {
+    flex-wrap: wrap;
+  }
+
+  .user-main .about.collapsed-info .details {
+    > .cj-profile-bridge,
+    > :has(> .cj-profile-bridge) {
+      flex: 0 0 100%;
+      min-width: 0;
+    }
+  }
 }
 
 /* Core's staff bar is deliberately inverted — `background: var(--primary)` with
@@ -55,6 +71,283 @@
 
   a {
     color: var(--cj-text);
+  }
+}
+
+/* Catalog identity bridge. The React profile introduces the same data with a
+ * quiet identity/action row followed by bordered pills; carrying that grammar
+ * here makes leaving `/f` feel like switching surfaces, not following a random
+ * collection of blue links. */
+
+.cj-profile-bridge {
+  display: grid;
+  width: 100%;
+  margin-block: var(--space-4) var(--space-3);
+  gap: var(--space-2);
+
+  &__header,
+  &__brand,
+  &__switch,
+  &__metric,
+  &__lists,
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__header {
+    justify-content: space-between;
+    min-height: 2rem;
+    gap: var(--space-3);
+  }
+
+  &__brand {
+    gap: var(--space-2);
+    color: var(--cj-text);
+    font-size: var(--cj-text-sm-size);
+    font-weight: 700;
+    line-height: var(--cj-text-sm-line-height);
+
+    .d-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+      color: var(--cj-action);
+    }
+  }
+
+  &__switch {
+    min-height: 2rem;
+    padding-inline: var(--space-3);
+    gap: var(--space-2);
+    color: var(--cj-text);
+    background: var(--cj-control);
+    border-radius: var(--cj-radius-pill);
+    font-size: var(--cj-text-xs-size);
+    font-weight: 600;
+    line-height: var(--cj-text-xs-line-height);
+    text-decoration: none;
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+    .d-icon {
+      width: 0.875rem;
+      height: 0.875rem;
+      transition: transform var(--cj-duration-fast) var(--cj-ease-out);
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--cj-text);
+      background: color-mix(in oklab, var(--cj-control) 88%, var(--cj-action));
+
+      .d-icon {
+        transform: translateX(0.125rem);
+      }
+    }
+  }
+
+  &__metrics,
+  &__list-items {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    gap: var(--space-2);
+    list-style: none;
+  }
+
+  &__metric {
+    min-height: 2.125rem;
+    padding-inline: var(--space-3);
+    gap: 0.375rem;
+    color: var(--cj-text-muted);
+    background: var(--cj-card);
+    border: 1px solid var(--cj-border);
+    border-radius: var(--cj-radius-pill);
+    font-size: var(--cj-text-sm-size);
+    line-height: var(--cj-text-sm-line-height);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      border-color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+    .d-icon {
+      width: 1rem;
+      height: 1rem;
+      color: var(--cj-action);
+    }
+
+    &[data-cj-profile-metric="collection"] .d-icon {
+      color: var(--success);
+    }
+
+    &[data-cj-profile-metric="lists"] .d-icon {
+      color: color-mix(in oklab, var(--cj-action) 52%, var(--love));
+    }
+
+    &[data-cj-profile-metric="offers"] .d-icon {
+      color: var(--success);
+    }
+
+    &[data-cj-profile-metric="auctions"] .d-icon {
+      color: var(--love);
+    }
+
+    strong {
+      color: var(--cj-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--cj-text);
+      background: var(--cj-hover);
+      border-color: color-mix(in oklab, var(--cj-action) 42%, var(--cj-border));
+    }
+  }
+
+  &__lists {
+    min-width: 0;
+    gap: var(--space-2);
+  }
+
+  &__lists-label {
+    flex: 0 0 auto;
+    color: var(--cj-text-muted);
+    font-size: var(--cj-text-xs-size);
+    font-weight: 600;
+    line-height: var(--cj-text-xs-line-height);
+  }
+
+  &__list {
+    min-height: 1.875rem;
+    padding-inline: var(--space-2);
+    gap: 0.375rem;
+    color: var(--cj-text-muted);
+    border-radius: var(--cj-radius-control);
+    font-size: var(--cj-text-xs-size);
+    line-height: var(--cj-text-xs-line-height);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+    .d-icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+
+    strong {
+      color: var(--cj-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    span {
+      max-width: 12rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--cj-text);
+      background: var(--cj-hover);
+    }
+  }
+
+  &--loading {
+    pointer-events: none;
+  }
+
+  &__skeleton-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  &__skeleton {
+    display: block;
+    height: 2.125rem;
+    background: var(--cj-control);
+    border-radius: var(--cj-radius-pill);
+
+    &--brand {
+      width: 8rem;
+      height: 1.125rem;
+    }
+
+    &--action {
+      width: 8.5rem;
+      height: 2rem;
+    }
+
+    &--metric {
+      width: 7rem;
+    }
+
+    &--metric-wide {
+      width: 9.5rem;
+    }
+
+    &--metric-short {
+      width: 6rem;
+    }
+
+    &--lists {
+      width: min(26rem, 82%);
+      height: 1.875rem;
+    }
+  }
+}
+
+/* The metadata outlet shares a flex row with core and plugin chips. Its wrapper
+ * differs between legacy and Glimmer outlet modes, so cover both shapes without
+ * coupling the component itself to an implementation detail. */
+
+.user-card .metadata {
+  > .cj-profile-bridge,
+  > :has(> .cj-profile-bridge) {
+    flex-basis: 100%;
+    order: 10;
+  }
+}
+
+.cj-profile-bridge--card {
+  margin-block: var(--space-2) 0;
+  padding-block-start: var(--space-2);
+  border-block-start: 1px solid var(--cj-border);
+
+  .cj-profile-bridge__metrics {
+    flex-wrap: wrap;
+  }
+}
+
+@include viewport.until(sm) {
+  .cj-profile-bridge {
+    &__metric,
+    &__list {
+      min-height: 2.25rem;
+    }
+
+    &__list span {
+      max-width: 9rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cj-profile-bridge__switch .d-icon {
+    transition: none;
+  }
+
+  .cj-profile-bridge__switch:hover .d-icon,
+  .cj-profile-bridge__switch:focus-visible .d-icon {
+    transform: none;
   }
 }
 

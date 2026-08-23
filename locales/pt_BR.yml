@@ -9,6 +9,28 @@ pt_BR:
   topic_feed:
     replied: "respondeu"
     updated: "atualizado"
+  profile_bridge:
+    label: "Perfil no Compara Jogos"
+    brand: "Compara Jogos"
+    view_profile: "Ver no Compara Jogos"
+    metrics_label: "Atividade no Compara Jogos"
+    lists_label: "Listas"
+    metric:
+      collection:
+        one: "na coleção"
+        other: "na coleção"
+      lists:
+        one: "lista"
+        other: "listas"
+      offers:
+        one: "oferta"
+        other: "ofertas"
+      auctions:
+        one: "leilão"
+        other: "leilões"
+      plays:
+        one: "partida"
+        other: "partidas"
   game_card:
     players: "jogadores"
     minutes: "minutos"

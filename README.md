@@ -28,8 +28,9 @@ is on screen, and the catalog has no banner to defer to. Both are themeable site
 settings, so they are first-run defaults only: if the setting already has a value
 on the site, the theme leaves it alone and admin stays the source of truth.
 
-Comparajogos components are deliberately not bundled into the base; validate
-the base first, then enable the production component set one at a time.
+Optional Compara Jogos components are deliberately not bundled into the base;
+validate the base first, then enable the remaining production component set one
+at a time.
 When installing the Category Carousel or mobile Tab Bar, enable the matching
 theme setting as well. Those switches let the first-paint shell reserve the
 component's space without making the standalone base theme promise UI that is
@@ -44,6 +45,9 @@ newer is required for the ui-kit imports the topic feed row uses.
 
 **Uninstall `discourse-tag-game-card`.** Its mention card now ships here; with
 both installed a `#tag` mention opens two cards.
+
+**Uninstall `comparajogos-user-list-links`.** Its profile integration now ships
+here; with both installed the same catalog activity appears twice.
 
 ## Game cards
 
@@ -75,6 +79,14 @@ would fetch a CSRF token and add `X-CSRF-Token` and `Discourse-Script` to a
 cross-origin POST, buying a preflight and a wasted round trip for headers the
 catalog neither needs nor accepts. Because Pretender patches XMLHttpRequest and
 never sees `fetch`, the theme's tests stub `window.fetch` instead.
+
+## Profile bridge
+
+The forum profile surfaces the same member's public Compara Jogos activity:
+plays, collection and list totals, active offers, auctions, and links to their
+first four lists. The user card keeps the hand-off compact with headline metrics
+only. Both surfaces share a session cache and render nothing when the catalog
+has no public activity or is unavailable. Disable it with `profile_bridge`.
 
 ## Development
 

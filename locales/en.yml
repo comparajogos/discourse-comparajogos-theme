@@ -9,6 +9,28 @@ en:
   topic_feed:
     replied: "replied"
     updated: "updated"
+  profile_bridge:
+    label: "Compara Jogos profile"
+    brand: "Compara Jogos"
+    view_profile: "View on Compara Jogos"
+    metrics_label: "Compara Jogos activity"
+    lists_label: "Lists"
+    metric:
+      collection:
+        one: "in collection"
+        other: "in collection"
+      lists:
+        one: "list"
+        other: "lists"
+      offers:
+        one: "offer"
+        other: "offers"
+      auctions:
+        one: "auction"
+        other: "auctions"
+      plays:
+        one: "play"
+        other: "plays"
   game_card:
     players: "players"
     minutes: "minutes"
