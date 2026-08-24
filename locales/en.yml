@@ -10,10 +10,8 @@ en:
     replied: "replied"
     updated: "updated"
   profile_bridge:
-    label: "Compara Jogos profile"
-    brand: "Compara Jogos"
-    view_profile: "View on Compara Jogos"
-    metrics_label: "Compara Jogos activity"
+    label: "Game activity"
+    metrics_label: "Game activity"
     lists_label: "Lists"
     metric:
       collection:
@@ -31,6 +29,12 @@ en:
       plays:
         one: "play"
         other: "plays"
+  unified_profile:
+    tabs:
+      summary: "Summary"
+      plays: "Plays"
+      lists: "Lists"
+      offers: "Offers"
   game_card:
     players: "players"
     minutes: "minutes"

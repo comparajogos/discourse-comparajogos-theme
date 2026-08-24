@@ -16,6 +16,12 @@ profile_bridge:
     en: "Show a member's public Compara Jogos activity and list links on their forum profile and user card."
     pt_BR: "Mostra a atividade pública e as listas do Compara Jogos no perfil e no cartão de usuário do fórum."
 
+unified_profile_shell:
+  default: false
+  description:
+    en: "Use the shared member tabs and make the catalog Summary the canonical profile landing page. Enable only after the client-side profile shell is deployed."
+    pt_BR: "Usa as abas compartilhadas do perfil e torna o Resumo do catálogo a página inicial canônica. Ative somente depois de publicar o cabeçalho de perfil no cliente."
+
 topic_list_feed:
   default: true
   description:

@@ -10,10 +10,8 @@ pt_BR:
     replied: "respondeu"
     updated: "atualizado"
   profile_bridge:
-    label: "Perfil no Compara Jogos"
-    brand: "Compara Jogos"
-    view_profile: "Ver no Compara Jogos"
-    metrics_label: "Atividade no Compara Jogos"
+    label: "Atividade de jogos"
+    metrics_label: "Atividade de jogos"
     lists_label: "Listas"
     metric:
       collection:
@@ -31,6 +29,12 @@ pt_BR:
       plays:
         one: "partida"
         other: "partidas"
+  unified_profile:
+    tabs:
+      summary: "Resumo"
+      plays: "Partidas"
+      lists: "Listas"
+      offers: "Ofertas"
   game_card:
     players: "jogadores"
     minutes: "minutos"

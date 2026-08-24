@@ -83,10 +83,18 @@ never sees `fetch`, the theme's tests stub `window.fetch` instead.
 ## Profile bridge
 
 The forum profile surfaces the same member's public Compara Jogos activity:
-plays, collection and list totals, active offers, auctions, and links to their
-first four lists. The user card keeps the hand-off compact with headline metrics
-only. Both surfaces share a session cache and render nothing when the catalog
-has no public activity or is unavailable. Disable it with `profile_bridge`.
+plays, collection and list totals, active offers, and auctions. These are quiet
+facts inside the native identity header—not a separate profile or product
+switch. The user card may also show two named-list shortcuts. Both surfaces
+share a session cache and render nothing when the catalog has no public activity
+or is unavailable. Disable these facts with `profile_bridge`.
+
+`unified_profile_shell` adds the React-owned Summary, Plays, Lists, and Offers
+tabs to Discourse's native user navigation, keeps Discourse's permission-aware
+Activity, Badges, and private tabs, and redirects legacy HTML Summary routes to
+the canonical React profile. It is off by default and must only be enabled after
+the matching client-side shell is deployed. JSON summary endpoints are not
+redirected.
 
 ## Development
 

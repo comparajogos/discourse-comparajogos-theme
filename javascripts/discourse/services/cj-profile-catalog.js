@@ -21,7 +21,14 @@ const PROFILE_QUERY = `query forumProfileSummary($username: String!) {
       }
     }
   }
-  lists(where: {user: {username: {_eq: $username}}}, limit: 4) {
+  lists(
+    where: {
+      user: {username: {_eq: $username}}
+      type: {_neq: OWN}
+    }
+    order_by: [{slug: asc}]
+    limit: 2
+  ) {
     name
     slug
     type
@@ -58,6 +65,22 @@ const PROFILE_QUERY = `query forumProfileSummary($username: String!) {
   }) {
     aggregate {
       count
+    }
+  }
+  firstLot: price(
+    where: {
+      seller: {username: {_eq: $username}}
+      type: {_eq: LOT}
+      available: {_eq: true}
+      active: {_eq: true}
+      deleted: {_neq: true}
+      auction: {status: {_eq: ACTIVE}}
+    }
+    order_by: [{auction: {end_date: asc}}]
+    limit: 1
+  ) {
+    auction {
+      id
     }
   }
   plays: play_aggregate(where: {user: {username: {_eq: $username}}}) {
@@ -150,17 +173,21 @@ export default class CjProfileCatalog extends Service {
     }
 
     const profileUrl = `${product}/u/${username}`;
-    const lists = (data.lists || []).map((list) => ({
-      count: aggregateCount(list.items_aggregate),
-      href: `${profileUrl}/list/${list.slug}`,
-      icon: LIST_ICONS[list.type] ?? "eye",
-      name: list.name,
-      type: list.type,
-    }));
+    const lists = (data.lists || [])
+      .filter((list) => list.type !== "OWN")
+      .slice(0, 2)
+      .map((list) => ({
+        count: aggregateCount(list.items_aggregate),
+        href: `${profileUrl}/list/${list.slug}`,
+        icon: LIST_ICONS[list.type] ?? "eye",
+        name: list.name,
+        type: list.type,
+      }));
     const listCount = aggregateCount(data.lists_aggregate);
     const collection = data.collection?.[0];
     const offers = aggregateCount(data.offers);
     const lots = aggregateCount(data.lots);
+    const firstAuctionId = data.firstLot?.[0]?.auction?.id;
     const plays = aggregateCount(data.plays);
 
     /* This anonymous query cannot distinguish an unknown catalog username from
@@ -204,7 +231,9 @@ export default class CjProfileCatalog extends Service {
       },
       {
         count: lots,
-        href: profileUrl,
+        href: firstAuctionId
+          ? `${product}/auction/${firstAuctionId}`
+          : profileUrl,
         icon: "gavel",
         key: "auctions",
         labelKey: "profile_bridge.metric.auctions",
@@ -213,8 +242,10 @@ export default class CjProfileCatalog extends Service {
 
     return {
       cardMetrics: headlineMetrics,
+      listCount,
       lists,
-      metrics: [...headlineMetrics, ...commerceMetrics],
+      listsUrl: `${profileUrl}/lists`,
+      metrics: [...commerceMetrics, ...headlineMetrics],
       profileUrl,
     };
   }

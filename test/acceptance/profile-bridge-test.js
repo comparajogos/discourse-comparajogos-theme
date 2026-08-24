@@ -10,9 +10,13 @@ const PROFILE_DATA = {
       items_aggregate: { aggregate: { count: 111 } },
     },
   ],
-  /* Deliberately omit OWN: the collection metric must come from its dedicated
-   * query, even when the unordered four-list preview does not contain it. */
   lists: [
+    {
+      name: "Coleção",
+      slug: "colecao",
+      type: "OWN",
+      items_aggregate: { aggregate: { count: 111 } },
+    },
     {
       name: "Desejos",
       slug: "desejos",
@@ -29,6 +33,7 @@ const PROFILE_DATA = {
   lists_aggregate: { aggregate: { count: 4 } },
   offers: { aggregate: { count: 2 } },
   lots: { aggregate: { count: 0 } },
+  firstLot: [],
   plays: { aggregate: { count: 7 } },
 };
 
@@ -38,6 +43,7 @@ const EMPTY_PROFILE_DATA = {
   lists_aggregate: { aggregate: { count: 0 } },
   offers: { aggregate: { count: 0 } },
   lots: { aggregate: { count: 0 } },
+  firstLot: [],
   plays: { aggregate: { count: 0 } },
 };
 
@@ -63,7 +69,46 @@ function stubProfileCatalog({ data = PROFILE_DATA, ok = true } = {}) {
 }
 
 acceptance("Compara Jogos profile bridge", function () {
-  test("it hands the forum profile off to the matching catalog identity", async function (assert) {
+  test("it adds the shared public profile tabs behind the cutover setting", async function (assert) {
+    const previous = settings.unified_profile_shell;
+    settings.unified_profile_shell = true;
+    stubProfileCatalog();
+
+    try {
+      await visit("/u/eviltrout/activity");
+
+      assert.strictEqual(
+        document.querySelectorAll(".cj-user-nav").length,
+        4,
+        "the connector contributes the four React-owned destinations"
+      );
+      assert
+        .dom(".cj-user-nav--summary > a")
+        .hasAttribute("href", "https://www.comparajogos.com.br/u/eviltrout");
+      assert
+        .dom(".cj-user-nav--plays > a")
+        .hasAttribute(
+          "href",
+          "https://www.comparajogos.com.br/u/eviltrout/plays"
+        );
+      assert
+        .dom(".cj-user-nav--lists > a")
+        .hasAttribute(
+          "href",
+          "https://www.comparajogos.com.br/u/eviltrout/lists"
+        );
+      assert
+        .dom(".cj-user-nav--offers > a")
+        .hasAttribute(
+          "href",
+          "https://www.comparajogos.com.br/store/eviltrout"
+        );
+    } finally {
+      settings.unified_profile_shell = previous;
+    }
+  });
+
+  test("it adds neutral catalog facts to the matching forum identity", async function (assert) {
     const calls = stubProfileCatalog();
 
     await visit("/u/eviltrout/summary");
@@ -72,16 +117,8 @@ acceptance("Compara Jogos profile bridge", function () {
       .dom(".cj-profile-bridge--profile")
       .exists("the profile outlet renders the bridge");
     assert
-      .dom(".cj-profile-bridge__switch")
-      .hasAttribute(
-        "href",
-        "https://www.comparajogos.com.br/u/eviltrout",
-        "the primary action opens the same member in the catalog"
-      )
-      .includesText(
-        "Compara Jogos",
-        "the action names the destination instead of repeating profile"
-      );
+      .dom(".cj-profile-bridge__switcher")
+      .doesNotExist("the identity no longer presents two competing profiles");
     assert
       .dom('[data-cj-profile-metric="collection"]')
       .includesText(
@@ -90,26 +127,26 @@ acceptance("Compara Jogos profile bridge", function () {
       );
     assert
       .dom('[data-cj-profile-metric="lists"]')
+      .hasAttribute(
+        "href",
+        "https://www.comparajogos.com.br/u/eviltrout/lists",
+        "the list total opens the member's complete list index"
+      )
       .includesText(
         "4",
-        "the aggregate is not limited by the four-list preview"
+        "the aggregate is not limited by the two-list preview"
       );
     assert.deepEqual(
       [...document.querySelectorAll("[data-cj-profile-metric]")].map(
         (element) => element.dataset.cjProfileMetric
       ),
-      ["plays", "collection", "lists", "offers"],
-      "headline metrics follow the React profile before commerce metrics"
+      ["offers", "plays", "collection", "lists"],
+      "facts follow the same marketplace, play and library order as React"
     );
     assert
       .dom(".cj-profile-bridge__list")
-      .exists({ count: 2 }, "the public list destinations remain available");
-    assert
-      .dom('.cj-profile-bridge__list[href$="/list/trocas"]')
-      .hasAttribute(
-        "title",
-        "Trocas com um nome deliberadamente longo",
-        "truncated list names retain their full accessible label"
+      .doesNotExist(
+        "the full profile header does not duplicate list navigation"
       );
     assert.strictEqual(
       calls.length,
@@ -123,6 +160,18 @@ acceptance("Compara Jogos profile bridge", function () {
     assert.true(
       calls[0].query.includes("type: {_eq: OWN}"),
       "the collection query targets the OWN list"
+    );
+    assert.true(
+      calls[0].query.includes("type: {_neq: OWN}"),
+      "the compact card preview excludes the collection"
+    );
+    assert.true(
+      calls[0].query.includes("order_by: [{slug: asc}]"),
+      "the compact card shortcuts have deterministic ordering"
+    );
+    assert.true(
+      calls[0].query.includes("firstLot: price"),
+      "the auction fact can target the same live auction as React"
     );
   });
 
@@ -139,6 +188,26 @@ acceptance("Compara Jogos profile bridge", function () {
     assert.strictEqual(first, second, "simultaneous consumers share a result");
     assert.strictEqual(second, third, "later consumers use the session cache");
     assert.strictEqual(calls.length, 1, "all consumers share one fetch");
+  });
+
+  test("it sends auction facts to the soonest live auction", async function (assert) {
+    stubProfileCatalog({
+      data: {
+        ...PROFILE_DATA,
+        lots: { aggregate: { count: 2 } },
+        firstLot: [{ auction: { id: 77 } }],
+      },
+    });
+
+    await visit("/u/eviltrout/summary");
+
+    assert
+      .dom('[data-cj-profile-metric="auctions"]')
+      .hasAttribute(
+        "href",
+        "https://www.comparajogos.com.br/auction/77",
+        "the same visible fact has the same destination in both products"
+      );
   });
 
   test("it stays absent when the catalog profile has no public activity", async function (assert) {
@@ -167,7 +236,7 @@ acceptance("Compara Jogos profile bridge", function () {
 acceptance("Compara Jogos profile bridge - mobile", function (needs) {
   needs.mobileView();
 
-  test("it wraps destinations instead of hiding them in an unmarked scroller", async function (assert) {
+  test("it keeps headline facts touch-sized and visible", async function (assert) {
     stubProfileCatalog();
 
     await visit("/u/eviltrout/summary");
@@ -179,10 +248,10 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
       "mobile metrics remain visible across rows"
     );
     assert.strictEqual(
-      getComputedStyle(document.querySelector(".cj-profile-bridge__list-items"))
-        .flexWrap,
-      "wrap",
-      "mobile list destinations remain visible across rows"
+      getComputedStyle(document.querySelector(".cj-profile-bridge__metric"))
+        .minHeight,
+      "44px",
+      "headline destinations keep a touch-sized target"
     );
   });
 });

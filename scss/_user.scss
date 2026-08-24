@@ -1,5 +1,7 @@
 @use "lib/viewport";
 
+$unified_profile_shell: "false" !default;
+
 /* On desktop the profile is one panel: the card, its navigation and the content
  * below it share a single surface, so nothing inside paints a second one. The
  * canvas inversion comes from cj-panel-surface. */
@@ -74,10 +76,113 @@
   }
 }
 
-/* Catalog identity bridge. The React profile introduces the same data with a
- * quiet identity/action row followed by bordered pills; carrying that grammar
- * here makes leaving `/f` feel like switching surfaces, not following a random
- * collection of blue links. */
+/* The same public profile tabs lead both products. Core keeps ownership and
+ * permission logic for its private destinations; only the obsolete forum
+ * Summary is replaced. DHorizontalOverflowNav continues to own overflow,
+ * keyboard and touch behavior. */
+
+@if $unified_profile_shell == "true" {
+  /* React's Resumo is the expanded landing page. Every Discourse destination
+   * is task-focused, so its native collapsed profile state should also hide
+   * the catalog facts until the existing profile disclosure is opened. Cover
+   * both direct and outlet-wrapped connector shapes to avoid an empty row. */
+
+  .user-main .about.collapsed-info .details {
+    > .cj-profile-bridge,
+    > :has(> .cj-profile-bridge) {
+      display: none;
+    }
+  }
+
+  .user-main .user-nav__summary {
+    display: none;
+  }
+
+  .user-main .cj-user-nav--summary {
+    order: 0;
+  }
+
+  .user-main .cj-user-nav--plays {
+    order: 1;
+  }
+
+  .user-main .cj-user-nav--lists {
+    order: 2;
+  }
+
+  .user-main .cj-user-nav--offers {
+    order: 3;
+  }
+
+  .user-main .user-nav__activity {
+    order: 4;
+  }
+
+  .user-main .user-nav__badges {
+    order: 5;
+  }
+
+  .user-main .user-nav__notifications {
+    order: 6;
+  }
+
+  .user-main .user-nav__personal-messages {
+    order: 7;
+  }
+
+  .user-main .user-nav__invites {
+    order: 8;
+  }
+
+  .user-main .user-nav__preferences,
+  .user-main .user-nav__admin,
+  .user-main .user-main-nav-outlet:not(.cj-user-nav) {
+    order: 9;
+  }
+
+  .user-main .cj-user-nav > a {
+    min-height: 2.75rem;
+  }
+
+  /* Match the React shell's selected-fill tab grammar. Core's global underline
+   * is intentionally disabled by the theme, so the profile needs an explicit
+   * selected surface rather than falling back to color alone. */
+
+  .user-main .user-navigation-primary {
+    .nav-pills {
+      gap: var(--space-1);
+      padding-block: var(--space-1);
+    }
+
+    .nav-pills > li > a {
+      min-height: 2.75rem;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--cj-radius-control);
+
+      &:hover {
+        color: var(--cj-text);
+        background: var(--cj-control);
+      }
+
+      &:focus-visible {
+        outline: 0;
+        box-shadow: var(--cj-focus-ring);
+      }
+
+      &.active {
+        color: var(--cj-action);
+        background: var(--cj-control);
+
+        .d-icon {
+          color: var(--cj-action);
+        }
+      }
+    }
+  }
+}
+
+/* Neutral catalog facts within the forum identity header. Navigation lives in
+ * the primary tabs below; this region only answers what the member does. */
 
 .cj-profile-bridge {
   display: grid;
@@ -85,66 +190,12 @@
   margin-block: var(--space-4) var(--space-3);
   gap: var(--space-2);
 
-  &__header,
-  &__brand,
-  &__switch,
   &__metric,
   &__lists,
+  &__lists-label,
   &__list {
     display: flex;
     align-items: center;
-  }
-
-  &__header {
-    justify-content: space-between;
-    min-height: 2rem;
-    gap: var(--space-3);
-  }
-
-  &__brand {
-    gap: var(--space-2);
-    color: var(--cj-text);
-    font-size: var(--cj-text-sm-size);
-    font-weight: 700;
-    line-height: var(--cj-text-sm-line-height);
-
-    .d-icon {
-      width: 1.125rem;
-      height: 1.125rem;
-      color: var(--cj-action);
-    }
-  }
-
-  &__switch {
-    min-height: 2rem;
-    padding-inline: var(--space-3);
-    gap: var(--space-2);
-    color: var(--cj-text);
-    background: var(--cj-control);
-    border-radius: var(--cj-radius-pill);
-    font-size: var(--cj-text-xs-size);
-    font-weight: 600;
-    line-height: var(--cj-text-xs-line-height);
-    text-decoration: none;
-    transition:
-      color var(--cj-duration-fast) var(--cj-ease-out),
-      background-color var(--cj-duration-fast) var(--cj-ease-out);
-
-    .d-icon {
-      width: 0.875rem;
-      height: 0.875rem;
-      transition: transform var(--cj-duration-fast) var(--cj-ease-out);
-    }
-
-    &:hover,
-    &:focus-visible {
-      color: var(--cj-text);
-      background: color-mix(in oklab, var(--cj-control) 88%, var(--cj-action));
-
-      .d-icon {
-        transform: translateX(0.125rem);
-      }
-    }
   }
 
   &__metrics,
@@ -163,38 +214,20 @@
     padding-inline: var(--space-3);
     gap: 0.375rem;
     color: var(--cj-text-muted);
-    background: var(--cj-card);
-    border: 1px solid var(--cj-border);
-    border-radius: var(--cj-radius-pill);
+    background: var(--cj-control);
+    border-radius: var(--cj-radius-control);
     font-size: var(--cj-text-sm-size);
     line-height: var(--cj-text-sm-line-height);
     text-decoration: none;
     white-space: nowrap;
     transition:
       color var(--cj-duration-fast) var(--cj-ease-out),
-      border-color var(--cj-duration-fast) var(--cj-ease-out),
       background-color var(--cj-duration-fast) var(--cj-ease-out);
 
     .d-icon {
       width: 1rem;
       height: 1rem;
-      color: var(--cj-action);
-    }
-
-    &[data-cj-profile-metric="collection"] .d-icon {
-      color: var(--success);
-    }
-
-    &[data-cj-profile-metric="lists"] .d-icon {
-      color: color-mix(in oklab, var(--cj-action) 52%, var(--love));
-    }
-
-    &[data-cj-profile-metric="offers"] .d-icon {
-      color: var(--success);
-    }
-
-    &[data-cj-profile-metric="auctions"] .d-icon {
-      color: var(--love);
+      color: var(--cj-text-muted);
     }
 
     strong {
@@ -205,8 +238,15 @@
     &:hover,
     &:focus-visible {
       color: var(--cj-text);
-      background: var(--cj-hover);
-      border-color: color-mix(in oklab, var(--cj-action) 42%, var(--cj-border));
+      background: color-mix(in oklch, var(--cj-control), var(--cj-text) 2%);
+      box-shadow:
+        0 1px 3px 0 rgb(0 0 0 / 10%),
+        0 1px 2px -1px rgb(0 0 0 / 10%);
+    }
+
+    &:focus-visible {
+      outline: 0;
+      box-shadow: var(--cj-focus-ring);
     }
   }
 
@@ -221,6 +261,7 @@
     font-size: var(--cj-text-xs-size);
     font-weight: 600;
     line-height: var(--cj-text-xs-line-height);
+    white-space: nowrap;
   }
 
   &__list {
@@ -228,6 +269,7 @@
     padding-inline: var(--space-2);
     gap: 0.375rem;
     color: var(--cj-text-muted);
+    background: var(--cj-control);
     border-radius: var(--cj-radius-control);
     font-size: var(--cj-text-xs-size);
     line-height: var(--cj-text-xs-line-height);
@@ -256,7 +298,15 @@
     &:hover,
     &:focus-visible {
       color: var(--cj-text);
-      background: var(--cj-hover);
+      background: color-mix(in oklch, var(--cj-control), var(--cj-text) 2%);
+      box-shadow:
+        0 1px 3px 0 rgb(0 0 0 / 10%),
+        0 1px 2px -1px rgb(0 0 0 / 10%);
+    }
+
+    &:focus-visible {
+      outline: 0;
+      box-shadow: var(--cj-focus-ring);
     }
   }
 
@@ -274,17 +324,7 @@
     display: block;
     height: 2.125rem;
     background: var(--cj-control);
-    border-radius: var(--cj-radius-pill);
-
-    &--brand {
-      width: 8rem;
-      height: 1.125rem;
-    }
-
-    &--action {
-      width: 8.5rem;
-      height: 2rem;
-    }
+    border-radius: var(--cj-radius-control);
 
     &--metric {
       width: 7rem;
@@ -292,10 +332,6 @@
 
     &--metric-wide {
       width: 9.5rem;
-    }
-
-    &--metric-short {
-      width: 6rem;
     }
 
     &--lists {
@@ -331,24 +367,43 @@
   .cj-profile-bridge {
     &__metric,
     &__list {
-      min-height: 2.25rem;
+      min-height: 2.75rem;
+    }
+
+    &__lists {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-1);
+    }
+
+    &__lists-label {
+      justify-self: start;
+    }
+
+    &__list {
+      font-size: var(--cj-text-sm-size);
+      line-height: var(--cj-text-sm-line-height);
     }
 
     &__list span {
-      max-width: 9rem;
+      max-width: 8rem;
     }
+  }
+
+  .user-main .cj-profile-bridge__metrics,
+  .user-card .cj-profile-bridge__metrics,
+  .user-main .cj-profile-bridge__list-items,
+  .user-card .cj-profile-bridge__list-items {
+    flex-wrap: wrap;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cj-profile-bridge__switch .d-icon {
-    transition: none;
-  }
+/* React writes handles with their conventional prefix. Keep the two identity
+ * surfaces typographically continuous without changing the stored username. */
 
-  .cj-profile-bridge__switch:hover .d-icon,
-  .cj-profile-bridge__switch:focus-visible .d-icon {
-    transform: none;
-  }
+.user-main .user-profile-names__secondary.username::before,
+.user-card .names__secondary.username::before {
+  content: "@";
 }
 
 /* Core floats auth labels across the input border, but cuts that notch with

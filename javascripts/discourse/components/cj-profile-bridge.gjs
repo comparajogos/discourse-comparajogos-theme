@@ -6,9 +6,8 @@ import DAsyncContent from "discourse/ui-kit/d-async-content";
 import { i18n } from "discourse-i18n";
 
 /**
- * A compact hand-off from a forum identity to the same person's catalog
- * identity. The hierarchy mirrors the React profile: identity/action first,
- * headline pills second, list destinations last.
+ * Public game activity for the same member. The full profile uses the metrics
+ * as neutral headline facts; the avatar card may add two list shortcuts.
  */
 export default class CjProfileBridge extends Component {
   @service cjProfileCatalog;
@@ -42,14 +41,6 @@ export default class CjProfileBridge extends Component {
               cj-profile-bridge--loading"
             aria-hidden="true"
           >
-            <div class="cj-profile-bridge__header">
-              <span
-                class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--brand"
-              ></span>
-              <span
-                class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--action"
-              ></span>
-            </div>
             <div class="cj-profile-bridge__skeleton-row">
               <span
                 class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--metric"
@@ -57,15 +48,12 @@ export default class CjProfileBridge extends Component {
               <span
                 class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--metric-wide"
               ></span>
-              <span
-                class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--metric-short"
-              ></span>
             </div>
-            {{#unless @compact}}
+            {{#if @compact}}
               <span
                 class="cj-profile-bridge__skeleton cj-profile-bridge__skeleton--lists"
               ></span>
-            {{/unless}}
+            {{/if}}
           </div>
         </:loading>
         <:empty></:empty>
@@ -74,19 +62,6 @@ export default class CjProfileBridge extends Component {
             class="cj-profile-bridge cj-profile-bridge--{{@variant}}"
             aria-label={{i18n (themePrefix "profile_bridge.label")}}
           >
-            <div class="cj-profile-bridge__header">
-              <span class="cj-profile-bridge__brand">
-                {{icon "dice"}}
-                {{i18n (themePrefix "profile_bridge.brand")}}
-              </span>
-              <a class="cj-profile-bridge__switch" href={{profile.profileUrl}}>
-                <span>{{i18n
-                    (themePrefix "profile_bridge.view_profile")
-                  }}</span>
-                {{icon "arrow-right"}}
-              </a>
-            </div>
-
             <ul
               class="cj-profile-bridge__metrics"
               aria-label={{i18n (themePrefix "profile_bridge.metrics_label")}}
@@ -108,7 +83,7 @@ export default class CjProfileBridge extends Component {
               {{/each}}
             </ul>
 
-            {{#unless @compact}}
+            {{#if @compact}}
               {{#if profile.lists.length}}
                 <div class="cj-profile-bridge__lists">
                   <span class="cj-profile-bridge__lists-label">
@@ -131,7 +106,7 @@ export default class CjProfileBridge extends Component {
                   </ul>
                 </div>
               {{/if}}
-            {{/unless}}
+            {{/if}}
           </section>
         </:content>
       </DAsyncContent>
