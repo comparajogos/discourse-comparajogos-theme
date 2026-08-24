@@ -9,7 +9,9 @@ body {
  * wider during the splash than after it. */
 
 html {
+  scrollbar-color: var(--cj-scrollbar-thumb) transparent;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
 }
 
 body {

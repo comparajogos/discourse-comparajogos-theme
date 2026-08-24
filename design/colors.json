@@ -27,7 +27,8 @@
         "lastVisitMarker": "#ef4444",
         "lastVisitMarkerForeground": "#09090b",
         "headerSoft": "oklch(95% 0.03 240deg)",
-        "mobileNavForeground": "#2364d8"
+        "mobileNavForeground": "#2364d8",
+        "scrollbarThumb": "rgb(0 0 0 / 20%)"
       }
     },
     "dark": {
@@ -57,7 +58,8 @@
         "lastVisitMarker": "#9a3412",
         "lastVisitMarkerForeground": "#fafafa",
         "headerSoft": "oklch(21% 0.006 285.885deg)",
-        "mobileNavForeground": "oklch(87.2% 0.01 258.338deg)"
+        "mobileNavForeground": "oklch(87.2% 0.01 258.338deg)",
+        "scrollbarThumb": "rgb(255 255 255 / 20%)"
       }
     }
   },

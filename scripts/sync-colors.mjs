@@ -91,6 +91,12 @@ function colorDefinitions() {
       ${light.product.mobileNavForeground},
       ${dark.product.mobileNavForeground}
     )};
+
+  /* React html scrollbar thumb */
+  --cj-scrollbar-thumb: #{dark-light-choose(
+      ${light.product.scrollbarThumb},
+      ${dark.product.scrollbarThumb}
+    )};
 }
 `;
 }
