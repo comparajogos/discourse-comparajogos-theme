@@ -122,7 +122,8 @@
 
   .cj-splash__log-in {
     justify-content: center;
-    width: 2.55rem;
+    width: var(--cj-header-account-size);
+    height: var(--cj-header-account-size);
     padding-inline: 0;
     border-radius: 999px;
     color: var(--header_primary);
@@ -232,7 +233,8 @@
 
   .cj-splash__nav {
     order: 3;
-    flex: 0 0 2.5rem;
+    flex: 0 0 var(--cj-mobile-header-market-width);
+    margin-inline-start: var(--cj-mobile-header-search-market-gap);
     padding-inline-start: 0;
 
     .cj-splash__nav-item {
@@ -242,8 +244,15 @@
     .cj-splash__market {
       display: flex;
       justify-content: center;
-      inline-size: 2.5rem;
-      padding-inline: 0;
+      gap: 0.125rem;
+      box-sizing: border-box;
+      inline-size: var(--cj-mobile-header-market-width);
+      height: var(--cj-mobile-header-market-height);
+      padding-inline: 0.375rem;
+
+      .cj-splash__market-caret {
+        display: block;
+      }
     }
   }
 
@@ -263,11 +272,15 @@
 
   .cj-splash__auth {
     order: 4;
+    justify-content: center;
+    width: calc(var(--cj-header-account-size) + 2px);
+    height: calc(var(--cj-header-account-size) + 2px);
+    margin-inline-start: var(--space-2);
   }
 
   /* The toggle rejoins the trailing controls at this width. */
   .cj-splash__shell {
-    gap: var(--space-2);
+    gap: 0;
 
     &::before {
       content: none;

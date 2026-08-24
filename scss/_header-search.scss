@@ -273,14 +273,21 @@
         }
 
         .before-header-panel-outlet {
-          /* Search and market are two fixed 40px controls while search is
-           * closed. Leaving the basis at `auto` lets the search field's
-           * intrinsic width size the whole outlet on Safari, shrinking the
-           * wordmark to its 40px minimum and clipping it underneath the pill. */
-          flex: 0 0 calc(5rem + var(--space-1));
-          gap: var(--space-1);
-          min-width: calc(5rem + var(--space-1));
-          margin-inline: var(--space-2);
+          /* React reserves 40px for search, 12px between controls, and 48px for
+           * the market button (24px glyph, 10px caret, 2px gap and padding).
+           * Keep a fixed basis so Safari cannot size this outlet from the
+           * search field's intrinsic width. */
+          flex: 0 0
+            calc(
+              2.5rem + var(--cj-mobile-header-search-market-gap) +
+                var(--cj-mobile-header-market-width)
+            );
+          gap: var(--cj-mobile-header-search-market-gap);
+          min-width: calc(
+            2.5rem + var(--cj-mobile-header-search-market-gap) +
+              var(--cj-mobile-header-market-width)
+          );
+          margin-inline: var(--space-3) var(--space-2);
         }
 
         /* Core gives the signed-in icon list its own 0.5em leading margin.
@@ -291,16 +298,6 @@
 
         .panel .d-header-icons {
           margin-inline-start: 0;
-        }
-
-        /* The avatar button already retains its trailing padding and a >44px
-         * touch target. Core's matching leading padding only creates an
-         * invisible gutter beside the search, making a 4px layout gap read as
-         * 14px. Remove that leading half instead of overlapping the controls
-         * with a negative search margin. */
-
-        .panel .current-user .btn {
-          padding-inline-start: 0;
         }
       }
 

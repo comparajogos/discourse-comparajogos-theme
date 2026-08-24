@@ -155,10 +155,28 @@
   }
 }
 
-/* React's account control occupies 42px in layout (40px plus a 1px margin on
- * each side) and places the 32px avatar behind 4px of button padding. Core's
- * em-sized button is about 55px wide and its icon list adds another 8px leading
- * margin, which opens the search-to-avatar gap from 29px to roughly 42px. */
+/* React's account control occupies 42px at every width (40px plus a 1px margin
+ * on each side) and places the 32px avatar behind 4px of button padding. Core's
+ * em-sized button changes with its responsive font scale, so leaving mobile on
+ * that default moves the avatar during the handoff and away from the 12px edge. */
+
+.d-header .current-user .btn {
+  box-sizing: border-box;
+  inline-size: var(--cj-header-account-size);
+  block-size: var(--cj-header-account-size);
+  min-block-size: var(--cj-header-account-size);
+  padding: var(--space-1);
+  margin: 1px;
+  border-radius: var(--cj-radius-pill);
+}
+
+/* Match core's `.d-header-icons .icon img.avatar` specificity so its em-sized
+ * image cannot overrun the account button's 4px inset. */
+
+.d-header .panel .d-header-icons .current-user .btn img.avatar {
+  width: var(--cj-header-avatar-size);
+  height: var(--cj-header-avatar-size);
+}
 
 @include viewport.from(sm) {
   .d-header {
@@ -174,24 +192,6 @@
 
     .panel .d-header-icons {
       margin-inline-start: 0;
-    }
-
-    .current-user .btn {
-      box-sizing: border-box;
-      inline-size: var(--cj-header-account-size);
-      block-size: var(--cj-header-account-size);
-      min-block-size: var(--cj-header-account-size);
-      padding: var(--space-1);
-      margin: 1px;
-      border-radius: var(--cj-radius-pill);
-    }
-
-    /* Match core's `.d-header-icons .icon img.avatar` specificity so its
-     * em-sized 34.125px image cannot overrun the account button's 4px inset. */
-
-    .panel .d-header-icons .current-user .btn img.avatar {
-      width: var(--cj-header-avatar-size);
-      height: var(--cj-header-avatar-size);
     }
   }
 }
@@ -230,6 +230,15 @@
     border-start-start-radius: 0;
     border-start-end-radius: 0;
     transform: translateY(-1.5rem);
+  }
+}
+
+/* Core's sub-`sm` `height: 3.66em` resolves to roughly 57px with the forum's
+ * base font size. React's `h-10` plus `py-2` is exactly 56px, as is the splash. */
+
+@include viewport.until(sm) {
+  .d-header {
+    height: var(--cj-header-height);
   }
 }
 

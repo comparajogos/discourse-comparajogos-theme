@@ -29,6 +29,16 @@
   fill: currentcolor;
 }
 
+.cj-splash__market-caret {
+  order: 2;
+  display: none;
+  flex: none;
+  width: var(--cj-header-market-caret-size);
+  height: var(--cj-header-market-caret-size);
+  opacity: 0.6;
+  fill: currentcolor;
+}
+
 /* `content` makes the span a replaced element. Reserve the configured
  * wordmark's ratio before its response arrives so the earliest shell and the
  * booted header occupy the same inline space on a cold load. Both variants
@@ -109,6 +119,7 @@
 }
 
 .cj-splash__market::after {
+  order: 1;
   content: var(--cj-splash-market);
 }
 

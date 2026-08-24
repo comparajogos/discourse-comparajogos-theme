@@ -79,6 +79,7 @@ export default class CjHeaderNav extends Component {
       key: "market",
       href: username ? `${product}/profile` : signIn,
       icon: "storefront",
+      caret: true,
       requiresAuth: !username,
     });
 
@@ -115,6 +116,11 @@ export default class CjHeaderNav extends Component {
             <span class="cj-nav-item__label">
               {{i18n (themePrefix (concat "header_nav." link.key))}}
             </span>
+            {{#if link.caret}}
+              <svg class="cj-nav-item__caret" aria-hidden="true">
+                <use href="#cj-caret-down"></use>
+              </svg>
+            {{/if}}
           </a>
         {{/each}}
       </nav>

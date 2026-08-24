@@ -38,8 +38,10 @@ for (const partial of expectedImports) {
 const properties = read("scss/properties.scss");
 const bootedHeader = `${read("scss/_header.scss")}\n${read(
   "scss/_header-search.scss"
+)}\n${read("scss/_header-nav.scss")}`;
+const splashHeader = `${read("scss/splash/_header.scss")}\n${read(
+  "scss/splash/_responsive.scss"
 )}`;
-const splashHeader = read("scss/splash/_header.scss");
 const splashChrome = read("scss/splash/_chrome.scss");
 
 const sharedGeometry = [
@@ -49,6 +51,10 @@ const sharedGeometry = [
   "--cj-header-avatar-size",
   "--cj-header-search-max-width",
   "--cj-header-nav-search-offset",
+  "--cj-header-market-caret-size",
+  "--cj-mobile-header-market-width",
+  "--cj-mobile-header-market-height",
+  "--cj-mobile-header-search-market-gap",
   "--cj-wordmark-aspect-ratio",
   "--cj-text-sm-size",
   "--cj-text-sm-line-height",
@@ -59,6 +65,27 @@ for (const token of sharedGeometry) {
   assertIncludes(bootedHeader, `var(${token})`, "Hydrated header");
   assertIncludes(splashHeader, `var(${token})`, "Header skeleton");
 }
+
+for (const declaration of [
+  "--cj-header-account-size: 2.5rem",
+  "--cj-header-avatar-size: 2rem",
+  "--cj-mobile-header-market-width: 3rem",
+  "--cj-mobile-header-market-height: 2.25rem",
+  "--cj-mobile-header-search-market-gap: var(--space-3)",
+]) {
+  assertIncludes(properties, declaration, "Mobile header geometry");
+}
+
+assertIncludes(
+  bootedHeader,
+  "height: var(--cj-header-height);",
+  "Hydrated header height"
+);
+assertIncludes(
+  splashHeader,
+  "height: var(--cj-header-height);",
+  "Skeleton header height"
+);
 
 assertIncludes(properties, "--cj-sidebar-top-padding:", "Product geometry");
 assertIncludes(
@@ -76,6 +103,7 @@ const markup = read("common/header.html");
 for (const className of [
   "cj-splash__header",
   "cj-splash__search-control",
+  "cj-splash__market-caret",
   "cj-splash__auth",
   "cj-splash__sidebar",
   "cj-splash__topic",

@@ -48,6 +48,10 @@ body {
   --cj-header-avatar-size: 2rem;
   --cj-header-search-max-width: 32rem;
   --cj-header-nav-search-offset: var(--space-5);
+  --cj-header-market-caret-size: 0.75rem;
+  --cj-mobile-header-market-width: 3rem;
+  --cj-mobile-header-market-height: 2.25rem;
+  --cj-mobile-header-search-market-gap: var(--space-3);
 
   /* Reserve the configured Compara wordmark before its image response arrives.
    * At the shared 2.5rem height, 255 / 80 resolves to the final 127.5px width,
@@ -151,6 +155,7 @@ body {
     --cj-header-shell-height: 3.5rem;
     --cj-header-height: 3.5rem;
     --cj-radius-shell: 0;
+    --cj-header-market-caret-size: 0.625rem;
     --d-wrap-padding-x: var(--space-4);
   }
 }

@@ -64,6 +64,14 @@
     fill: currentcolor;
   }
 
+  .cj-nav-item__caret {
+    display: none;
+    width: var(--cj-header-market-caret-size);
+    height: var(--cj-header-market-caret-size);
+    opacity: 0.6;
+    fill: currentcolor;
+  }
+
   /* Chat's unread indicator, as the client's ChatCountIndicator (`right-1
    * top-0`). Anchored on the icon, since the label is hidden below `lg`. */
 
@@ -97,7 +105,7 @@
 @include viewport.until(sm) {
   .cj-header-nav {
     order: 2;
-    flex: 0 0 2.5rem;
+    flex: 0 0 var(--cj-mobile-header-market-width);
     margin-inline-start: 0;
 
     .cj-nav-item {
@@ -107,17 +115,24 @@
     .cj-nav-item[data-cj-nav="market"] {
       display: inline-flex;
       justify-content: center;
-      inline-size: 2.5rem;
-      min-block-size: 2.5rem;
-      padding-inline: 0;
+      gap: 0.125rem;
+      box-sizing: border-box;
+      inline-size: var(--cj-mobile-header-market-width);
+      min-block-size: var(--cj-mobile-header-market-height);
+      padding-inline: 0.375rem;
 
-      /* Preserve the compact 40px composition while meeting a 44px touch
-       * target. The outlet's 4px gap keeps this extension clear of search. */
+      /* Preserve React's compact 36px visual composition while meeting a 44px
+       * touch target. The outlet's 12px gap keeps the extension clear. */
 
       &::before {
         position: absolute;
         content: "";
-        inset: -0.125rem;
+        inset-block: -0.25rem;
+        inset-inline: 0;
+      }
+
+      .cj-nav-item__caret {
+        display: block;
       }
     }
   }
