@@ -91,9 +91,11 @@
   display: none;
 }
 
-/* Ratings belong on replies, not the first post. TODO: server-side concern —
- * the control should not be rendered. */
+/* Ratings belong on replies, not the first post. `edit-title` is Discourse's
+ * stable composer state for both topic creation and editing the OP; unlike the
+ * tag controls, it is not shared with an ordinary reply edit. TODO: server-side
+ * concern — the control should not be rendered. */
 
-.reply-area.with-tags .composer-controls-rating {
+#reply-control.edit-title .composer-controls-rating {
   display: none;
 }
