@@ -40,6 +40,7 @@ const bootedHeader = `${read("scss/_header.scss")}\n${read(
   "scss/_header-search.scss"
 )}`;
 const splashHeader = read("scss/splash/_header.scss");
+const splashChrome = read("scss/splash/_chrome.scss");
 
 const sharedGeometry = [
   "--cj-header-shell-height",
@@ -58,6 +59,18 @@ for (const token of sharedGeometry) {
   assertIncludes(bootedHeader, `var(${token})`, "Hydrated header");
   assertIncludes(splashHeader, `var(${token})`, "Header skeleton");
 }
+
+assertIncludes(properties, "--cj-sidebar-top-padding:", "Product geometry");
+assertIncludes(
+  properties,
+  "--sidebar-section-wrapper-padding: var(--cj-sidebar-top-padding)",
+  "Hydrated sidebar"
+);
+assertIncludes(
+  splashChrome,
+  "var(--cj-sidebar-top-padding)",
+  "Sidebar skeleton"
+);
 
 const markup = read("common/header.html");
 for (const className of [

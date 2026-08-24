@@ -81,9 +81,12 @@ body {
   --d-sidebar-header-color: var(--cj-text-muted);
   --d-sidebar-header-font-weight: 500;
 
+  /* Keep the first sidebar row stationary when the splash hands off to core. */
+  --cj-sidebar-top-padding: var(--space-5);
+
   /* Rows carry their own inline padding, so the section's inset would double it. */
-  --sidebar-section-wrapper-padding: var(--space-5) var(--space-1)
-    var(--space-3);
+  --sidebar-section-wrapper-padding: var(--cj-sidebar-top-padding)
+    var(--space-1) var(--space-3);
   --cj-text: var(--primary);
   --cj-panel: var(--cj-header);
   --cj-surface-muted: var(--cj-control);
