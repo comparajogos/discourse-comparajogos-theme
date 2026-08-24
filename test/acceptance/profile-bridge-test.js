@@ -86,6 +86,13 @@ acceptance("Compara Jogos profile bridge", function () {
         3,
         "the connector contributes only the missing React-owned destinations"
       );
+      assert.deepEqual(
+        [...document.querySelectorAll(".cj-user-nav")].map((element) =>
+          element.classList[1].replace("cj-user-nav--", "")
+        ),
+        ["offers", "lists", "plays"],
+        "public product tabs keep the same priority and focus order as React"
+      );
       assert
         .dom(".cj-user-nav--summary")
         .doesNotExist("the native Summary slot is not duplicated");

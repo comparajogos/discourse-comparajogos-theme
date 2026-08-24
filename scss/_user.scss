@@ -19,14 +19,15 @@
 }
 
 /* Core keeps the profile in its compact layout until `md`, but the generic page
- * panels become edge-to-edge at `sm`. That left the middle mobile range looking
- * like a single black card. Let the profile content use the page canvas across
- * the whole compact range, while the identity block and primary overflow nav
- * remain one dark header. Keeping the nav on the panel surface also lets core's
- * overflow caret inherit the same `--secondary` logic as it does on desktop. */
+ * panel mixin also leaves its panel-local `--secondary` behind after the fill
+ * and radius are removed. Core activity rows then repaint that inherited token
+ * as black slabs on the softer mobile canvas. Restore the canvas role across
+ * the whole compact profile: identity, tabs and feed become one continuous
+ * surface, while chips and hairlines retain the intended grouping. */
 
 @include viewport.until(md) {
   .container .user-main {
+    --secondary: var(--cj-background);
     padding-inline: 0;
     background: var(--cj-background);
     border: 0;
@@ -35,11 +36,7 @@
 
   .user-main .about,
   .user-main .user-primary-navigation {
-    background: var(--cj-panel);
-  }
-
-  .user-main .user-primary-navigation {
-    --secondary: var(--cj-panel);
+    background: transparent;
   }
 
   /* Core keeps the collapsed identity details on one flex line. The profile
@@ -85,7 +82,7 @@ body.cj-unified-profile-shell {
   }
 
   .user-main .cj-user-nav--plays {
-    order: 1;
+    order: 3;
   }
 
   .user-main .cj-user-nav--lists {
@@ -93,7 +90,7 @@ body.cj-unified-profile-shell {
   }
 
   .user-main .cj-user-nav--offers {
-    order: 3;
+    order: 1;
   }
 
   .user-main .user-nav__activity {

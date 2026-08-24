@@ -27,10 +27,10 @@ export default class CjUnifiedProfileTabs extends Component {
   <template>
     {{#if this.enabled}}
       {{#if this.profileRoot}}
-        <li class="cj-user-nav cj-user-nav--plays">
-          <a href="{{this.profileRoot}}/plays">
-            {{icon "dice"}}
-            <span>{{i18n (themePrefix "unified_profile.tabs.plays")}}</span>
+        <li class="cj-user-nav cj-user-nav--offers">
+          <a href={{this.storeUrl}}>
+            {{icon "tag"}}
+            <span>{{i18n (themePrefix "unified_profile.tabs.offers")}}</span>
           </a>
         </li>
         <li class="cj-user-nav cj-user-nav--lists">
@@ -39,10 +39,10 @@ export default class CjUnifiedProfileTabs extends Component {
             <span>{{i18n (themePrefix "unified_profile.tabs.lists")}}</span>
           </a>
         </li>
-        <li class="cj-user-nav cj-user-nav--offers">
-          <a href={{this.storeUrl}}>
-            {{icon "tag"}}
-            <span>{{i18n (themePrefix "unified_profile.tabs.offers")}}</span>
+        <li class="cj-user-nav cj-user-nav--plays">
+          <a href="{{this.profileRoot}}/plays">
+            {{icon "dice"}}
+            <span>{{i18n (themePrefix "unified_profile.tabs.plays")}}</span>
           </a>
         </li>
       {{/if}}
