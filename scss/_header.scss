@@ -155,6 +155,44 @@
   }
 }
 
+/* React's account control occupies 42px in layout (40px plus a 1px margin on
+ * each side) and places the 32px avatar behind 4px of button padding. Core's
+ * em-sized button is about 55px wide and its icon list adds another 8px leading
+ * margin, which opens the search-to-avatar gap from 29px to roughly 42px. */
+
+@include viewport.from(sm) {
+  .d-header {
+    /* React's flexible nav track ends about 20px later than Discourse's
+     * content-sized outlet. Reserve that difference before the field so its
+     * leading and trailing edges agree at both intermediate and wide desktop
+     * widths. Keep the correction tied to the product nav; the base Discourse
+     * header can still render without that optional integration. */
+
+    .contents:has(.cj-header-nav) .floating-search-input-wrapper {
+      margin-inline-start: var(--space-5);
+    }
+
+    .panel .d-header-icons {
+      margin-inline-start: 0;
+    }
+
+    .current-user .btn {
+      box-sizing: border-box;
+      inline-size: 2.5rem;
+      block-size: 2.5rem;
+      min-block-size: 2.5rem;
+      padding: var(--space-1);
+      margin: 1px;
+      border-radius: var(--cj-radius-pill);
+    }
+
+    .current-user .avatar {
+      inline-size: 2rem;
+      block-size: 2rem;
+    }
+  }
+}
+
 /* The banner's search is the page's primary field, so it matches the header's
  * pill rather than core's bordered input. */
 

@@ -37,10 +37,12 @@ body {
   --d-input-border: 1px solid transparent;
   --input-border-color: transparent;
 
-  /* The 1.5rem inset plus the shell. Core caps .d-header's height, so this is
-   * what stops the pill overhanging its own box. */
-  --cj-header-shell-height: 4.5rem;
-  --cj-header-height: 6rem;
+  /* The React shell resolves to 74px: its 40px account control carries a 1px
+   * outer margin inside 16px block padding. Preserve that rendered height even
+   * though Discourse centres its controls in a min-height row rather than
+   * padding the shell itself. The full header also includes the 1.5rem inset. */
+  --cj-header-shell-height: 4.625rem;
+  --cj-header-height: 6.125rem;
   --cj-radius-shell: 1.5rem;
 
   /* Reserve the configured Compara wordmark before its image response arrives.
