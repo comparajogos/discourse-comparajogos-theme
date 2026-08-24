@@ -1,0 +1,51 @@
+@use "lib/viewport";
+
+/* ------------------------------------------------------ mobile tab bar -- */
+.cj-splash__tab-bar {
+  display: none;
+}
+
+@if $show_mobile_tab_bar == "true" {
+  @include viewport.until(md) {
+    html:not(.anon) .cj-splash__tab-bar {
+      position: fixed;
+      z-index: 3;
+      inset-inline: 0;
+      inset-block-end: 0;
+      display: flex;
+      box-sizing: content-box;
+      height: var(--cj-mobile-nav-height, 3.5rem);
+      padding-block-end: env(safe-area-inset-bottom);
+      color: var(--cj-mobile-nav-foreground);
+      background: var(--cj-panel);
+    }
+
+    .cj-splash__tab-bar-item {
+      display: flex;
+      flex: 1 1 20%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      font-size: var(--cj-text-xs-size);
+      font-weight: 400;
+      line-height: var(--cj-text-xs-line-height);
+      letter-spacing: 0.4px;
+
+      &::after {
+        margin-block-start: var(--space-1);
+      }
+    }
+
+    .cj-splash__tab-bar-icon {
+      flex: none;
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: currentcolor;
+    }
+
+    .cj-splash__home::after {
+      content: var(--cj-splash-home);
+    }
+  }
+}

@@ -1,0 +1,225 @@
+/* -------------------------------------------------------------- content -- */
+.cj-splash__main {
+  flex: 1;
+  min-width: 0;
+  padding-block-start: var(--space-5);
+}
+
+/* Declare the neutral primitive before its size modifiers. Keeping this near
+ * the start of the content section prevents the base height from flattening
+ * title, heading, and copy placeholders later in the cascade. */
+
+.cj-splash__bar {
+  block-size: 0.65rem;
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+/* Generic is the conservative default. Discovery-only structures are enabled
+ * below from the request path that core renders before this header field. This
+ * avoids showing category or feed UI on chat, topics, profiles, admin, search,
+ * and any future route we do not yet know about. */
+
+.cj-splash__generic {
+  display: block;
+  padding-block-start: var(--space-3);
+}
+
+.cj-splash__topic {
+  display: none;
+  max-inline-size: 72ch;
+  padding-block-start: var(--space-3);
+}
+
+.cj-splash__topic-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-block-size: 3.5rem;
+}
+
+.cj-splash__bar--topic-title {
+  inline-size: min(29rem, 68%);
+  block-size: 1.75rem;
+}
+
+.cj-splash__topic-taxonomy {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 1rem;
+}
+
+.cj-splash__bar--topic-category {
+  inline-size: 4.25rem;
+}
+
+.cj-splash__bar--topic-tag {
+  inline-size: 7.5rem;
+}
+
+.cj-splash__topic-post {
+  display: grid;
+  grid-template-columns: 2.8125rem minmax(0, 1fr);
+  margin-block-start: var(--space-4);
+  border-block-start: 1px solid var(--primary-low);
+}
+
+.cj-splash__topic-avatar {
+  inline-size: 2.8125rem;
+  block-size: 2.8125rem;
+  margin-block-start: var(--space-4);
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+.cj-splash__topic-content {
+  min-width: 0;
+  padding-block: var(--space-3) var(--space-4);
+}
+
+.cj-splash__topic-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 1.5rem;
+}
+
+.cj-splash__bar--topic-author {
+  inline-size: 6.5rem;
+}
+
+.cj-splash__bar--topic-age {
+  inline-size: 2rem;
+}
+
+.cj-splash__topic-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: var(--space-3) var(--space-3) var(--space-1);
+
+  > .cj-splash__bar {
+    inline-size: 100%;
+    block-size: 0.75rem;
+  }
+
+  > .cj-splash__bar--topic-line-short {
+    inline-size: 58%;
+  }
+
+  > .cj-splash__bar--topic-line-medium {
+    inline-size: 76%;
+  }
+
+  > .cj-splash__bar--topic-subheading {
+    inline-size: 9rem;
+    block-size: 1rem;
+    margin-block-start: var(--space-3);
+  }
+}
+
+.cj-splash__topic-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-block-start: var(--space-4);
+
+  > span {
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: var(--d-button-border-radius);
+    background: var(--cj-control);
+  }
+}
+
+.cj-splash__generic-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 14rem;
+  margin-block-start: var(--space-5);
+  padding: var(--space-6);
+  border: 0;
+  border-radius: 1rem;
+  background: var(--cj-panel);
+}
+
+.cj-splash__bar--page-title {
+  display: block;
+  inline-size: min(18rem, 42%);
+  block-size: 1.4rem;
+}
+
+.cj-splash__bar--generic-lead {
+  inline-size: min(30rem, 64%);
+  block-size: 1rem;
+}
+
+.cj-splash__bar--generic-line {
+  inline-size: min(44rem, 82%);
+}
+
+.cj-splash__bar--generic-short {
+  inline-size: min(32rem, 58%);
+}
+
+.cj-splash__rail,
+.cj-splash__list-controls,
+.cj-splash__cards {
+  display: none;
+}
+
+/* A topic's data is not available at first paint, but its reading hierarchy is.
+ * Use that stable route shape instead of the generic page-sized rectangle. */
+
+body:has(> noscript[data-path*="/t/"]) #cj-splash {
+  .cj-splash__generic {
+    display: none;
+  }
+
+  .cj-splash__topic {
+    display: block;
+  }
+}
+
+/* Known discovery entry points. Suffix selectors keep the theme correct when
+ * Discourse is mounted below a subfolder; /f is retained for the production
+ * forum homepage, whose root cannot be inferred from CSS alone. */
+
+body:has(
+    > noscript:is(
+        [data-path="/"],
+        [data-path="/f"],
+        [data-path="/f/"],
+        [data-path$="/latest"],
+        [data-path$="/new"],
+        [data-path$="/unread"],
+        [data-path$="/hot"],
+        [data-path$="/top"],
+        [data-path$="/categories"],
+        [data-path*="/c/"],
+        [data-path*="/tag/"],
+        [data-path$="/tags"],
+        [data-path*="/filter/"]
+      )
+  )
+  #cj-splash {
+  .cj-splash__generic {
+    display: none;
+  }
+
+  .cj-splash__list-controls {
+    display: block;
+  }
+
+  .cj-splash__cards {
+    display: flex;
+  }
+
+  @if $show_category_rail_skeleton == "true" {
+    .cj-splash__rail {
+      display: block;
+    }
+  }
+}

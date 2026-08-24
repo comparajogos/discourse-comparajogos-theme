@@ -1,0 +1,73 @@
+/* ------------------------------------------------------------------ body -- */
+.cj-splash__body {
+  display: flex;
+  flex: 1;
+  gap: var(--d-main-content-gap);
+  min-height: 0;
+}
+
+/* -------------------------------------------------------------- sidebar -- */
+.cj-splash__sidebar {
+  box-sizing: border-box;
+  flex: none;
+  width: var(--d-sidebar-width);
+  padding: 2rem calc(var(--space-1) + 1px) var(--space-3) var(--space-1);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.cj-splash__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--d-sidebar-row-height);
+  padding-inline: var(--d-sidebar-row-horizontal-padding);
+  border-radius: var(--d-button-border-radius);
+  color: var(--cj-text);
+  font-size: var(--font-down-1);
+  font-weight: 500;
+
+  & + & {
+    margin-block-start: var(--d-sidebar-vertical-gap);
+  }
+
+  > .cj-splash__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    opacity: 0.3;
+  }
+
+  &.is-active {
+    color: var(--cj-on-action);
+    background: var(--cj-action);
+  }
+
+  &.is-muted {
+    background: var(--cj-control);
+  }
+}
+
+/* Aligned on the row labels, not on the row box: core indents a section header
+ * to where the labels start, past the icon column. */
+
+/* A section header is a short bar on the label column: whether a sidebar has
+ * sections at all, and what they are called, is the forum's configuration. */
+
+.cj-splash__section {
+  display: block;
+  margin-block: 1.21875rem 0.65625rem;
+  padding-inline-start: calc(
+    var(--d-sidebar-row-horizontal-padding) + 1.5rem + var(--space-2)
+  );
+
+  &::after {
+    content: "";
+    display: block;
+    inline-size: 4.5rem;
+    block-size: 0.65rem;
+    border-radius: 999px;
+    background: var(--cj-control);
+    opacity: 0.7;
+  }
+}

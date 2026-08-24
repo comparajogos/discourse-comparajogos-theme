@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "check:colors": "node scripts/sync-colors.mjs --check",
+    "check:splash": "node scripts/check-splash.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:hbs": "ember-template-lint 'javascripts/**/*.gjs' --no-error-on-unmatched-pattern",

@@ -1,0 +1,96 @@
+/* Up exactly as long as core's own splash: core removes #d-splash when the app
+ * takes over, so there is no lifecycle of our own to keep in sync.
+ *
+ * A sibling combinator, not `:has()` — the two are siblings at the top and
+ * bottom of <body>, and a browser without `:has()` would drop the rule while
+ * `#d-splash { display: none }` below still applied, giving a blank page.
+ * `html body` outweighs the guard rule in header.html. */
+
+html body #d-splash ~ #cj-splash {
+  display: flex;
+}
+
+/* Core's splash carries its own <style> in the body, which is later in
+ * document order than this stylesheet and therefore wins at equal specificity —
+ * hence !important on both of these, not as a shortcut. */
+
+#d-splash {
+  display: none !important;
+}
+
+/* Core hides the scrollbar while its splash is up, and `scrollbar-gutter:
+ * stable` only reserves the gutter on a scrollable box — so the layout viewport
+ * was 7.5px wider during the splash than after it. The track is inert here. */
+
+html:has(#d-splash) {
+  overflow-y: scroll !important;
+}
+
+/* Forced colours drop every background, so the skeleton would be a page of
+ * invisible boxes. Borders survive, so the shapes are drawn with those. */
+
+@media (forced-colors: active) {
+  .cj-splash__shell,
+  .cj-splash__card,
+  .cj-splash__topic-post,
+  .cj-splash__tab-bar,
+  .cj-splash__search-control,
+  .cj-splash__row.is-active,
+  .cj-splash__row.is-muted,
+  .cj-splash__log-in {
+    border: 1px solid CanvasText;
+  }
+
+  .cj-splash__bar,
+  .cj-splash__avatar,
+  .cj-splash__card::after,
+  .cj-splash__topic-avatar,
+  .cj-splash__topic-actions > span,
+  .cj-splash__rail-pill,
+  .cj-splash__rail-description::after {
+    border: 1px solid CanvasText;
+    background: none;
+  }
+}
+
+#cj-splash {
+  --cj-splash-home: "Home";
+  --cj-splash-forum: "Forum";
+  --cj-splash-lists: "Lists";
+  --cj-splash-plays: "Plays";
+  --cj-splash-chat: "Chat";
+  --cj-splash-market: "My Market";
+  --cj-splash-search: "Search posts and users";
+  --cj-splash-log-in: "Log In";
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--cj-text);
+  background: var(--cj-background);
+  font-family: var(--font-family);
+}
+
+html[lang^="pt"] #cj-splash {
+  --cj-splash-home: "Início";
+  --cj-splash-forum: "Fórum";
+  --cj-splash-lists: "Listas";
+  --cj-splash-plays: "Partidas";
+  --cj-splash-chat: "Chat";
+  --cj-splash-market: "Meu Comércio";
+  --cj-splash-search: "Pesquisar posts e usuários";
+  --cj-splash-log-in: "Entrar";
+}
+
+/* The one frame the whole product sits in: the client's `max-w-8xl` with
+ * `sm:px-10` gutters, which is what --d-max-width / --d-wrap-padding-x carry. */
+
+.cj-splash__frame {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--d-max-width);
+  margin-inline: auto;
+  padding-inline: var(--d-wrap-padding-x);
+}

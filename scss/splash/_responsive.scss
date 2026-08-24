@@ -1,0 +1,327 @@
+@use "lib/viewport";
+
+/* ------------------------------------------------------------- narrow -- */
+
+/* Core's scale, measured against the booted page:
+ *
+ *   >= lg    sidebar, nav with labels, floating 4.5rem shell
+ *   md..lg   sidebar, nav icons only
+ *   sm..md   no sidebar, nav icons only, full-bleed 3.5rem shell, rows bleed
+ *   < sm     no nav, search collapsed to a button, auth as icons */
+
+/* The client hides nav labels until `lg` (`hidden lg:inline`), which leaves a
+ * 48px icon-only item — 12px of padding either side of a 24px glyph. */
+
+@include viewport.until(lg) {
+  .cj-splash__nav-item {
+    padding-inline: var(--space-3);
+
+    &::after {
+      content: none;
+    }
+  }
+
+  /* Core narrows the sidebar-to-content gap here, on #main-outlet-wrapper
+   * rather than on :root, so the theme's --d-main-content-gap does not follow
+   * it (discourse.scss:1175). */
+
+  .cj-splash__body {
+    gap: var(--space-4);
+  }
+}
+
+@if $show_header_nav != "true" {
+  .cj-splash__nav {
+    display: none;
+  }
+}
+
+@include viewport.until(md) {
+  /* Core docks the sidebar into a drawer here (narrow-desktop.js keys on
+   * `min-width: 48rem`). The shell's height and radius follow the tokens, so
+   * only the frame's gutter has to be dropped by hand. */
+
+  .cj-splash__sidebar {
+    display: none;
+  }
+
+  .cj-splash__header {
+    padding-block-start: 0;
+    padding-inline: 0;
+  }
+
+  .cj-splash__shell {
+    padding-inline: var(--space-3);
+  }
+
+  /* Match the booted Discord-like edge handle without reserving space in the
+   * header or body. */
+
+  .cj-splash__sidebar-toggle {
+    position: fixed;
+    z-index: 2;
+    inset-block-start: auto;
+    inset-block-end: calc(
+      var(--cj-mobile-tab-bar-clearance, 0px) + var(--space-5) +
+        env(safe-area-inset-bottom)
+    );
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2.5rem;
+    color: var(--header_primary);
+    background: var(--cj-control);
+    border: 1px solid var(--primary-low);
+    border-inline-start: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: var(--d-button-border-radius);
+    border-end-start-radius: 0;
+    border-end-end-radius: var(--d-button-border-radius);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+
+    > .cj-splash__icon {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  @if $mobile_header_search == "true" {
+    /* Five nav slots would squeeze a purely flexible search to nothing. */
+    .cj-splash__search {
+      min-width: 6rem;
+    }
+  } @else {
+    /* Core's narrow header keeps a search trigger here when the theme's
+     * expanding mobile field is disabled. */
+
+    .cj-splash__search {
+      flex: none;
+      width: 2.5rem;
+      min-width: 0;
+      margin-inline-start: auto;
+    }
+
+    .cj-splash__search-control {
+      justify-content: center;
+      max-width: none;
+      padding-inline-start: 0;
+
+      &::after {
+        content: none;
+      }
+    }
+  }
+
+  /* Icons from here down: a labelled auth pair does not fit beside five nav
+   * slots and a usable search. */
+
+  .cj-splash__auth {
+    padding-inline-end: 0;
+  }
+
+  .cj-splash__log-in {
+    justify-content: center;
+    width: 2.55rem;
+    padding-inline: 0;
+    border-radius: 999px;
+    color: var(--header_primary);
+    background: none;
+
+    &::after {
+      content: none;
+    }
+
+    > .cj-splash__icon {
+      display: block;
+      width: 1.25rem;
+      height: 1.25rem;
+      opacity: 0.3;
+    }
+  }
+
+  /* Still one row: the signed-in list's second row is not modelled here. */
+  .cj-splash__controls {
+    height: 2.5rem;
+  }
+
+  .cj-splash__rail {
+    margin-block: var(--space-1) var(--space-3);
+  }
+
+  .cj-splash__rail-pills {
+    height: 2.5rem;
+  }
+
+  .cj-splash__rail-pill {
+    block-size: 2rem;
+  }
+
+  .cj-splash__list-controls {
+    padding-block: var(--space-3) calc(var(--space-3) + var(--space-3));
+  }
+
+  /* The booted list drops its cards for hairline-separated rows that bleed past
+   * the page gutter and give way to the canvas (see styles.scss). */
+
+  .cj-splash__cards {
+    gap: 0;
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+  }
+
+  .cj-splash__card {
+    padding-inline: var(--d-wrap-padding-x);
+    border-inline: 0;
+    border-block-start: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .cj-splash__generic {
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__topic {
+    max-inline-size: none;
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__bar--topic-title {
+    inline-size: min(25rem, 78%);
+    block-size: 1.5rem;
+  }
+
+  .cj-splash__topic-post {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+    padding-inline: var(--d-wrap-padding-x);
+  }
+
+  .cj-splash__topic-avatar {
+    inline-size: 2rem;
+    block-size: 2rem;
+    margin-block-start: var(--space-3);
+  }
+
+  .cj-splash__topic-content {
+    padding-block-start: var(--space-2);
+  }
+
+  .cj-splash__topic-copy {
+    gap: var(--space-2);
+    padding-inline-end: 0;
+  }
+
+  .cj-splash__topic-actions {
+    justify-content: flex-start;
+    padding-inline-start: var(--space-3);
+  }
+
+  .cj-splash__generic-panel {
+    min-height: 11rem;
+    margin-inline: calc(var(--d-wrap-padding-x) * -1);
+    padding-inline: var(--d-wrap-padding-x);
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+
+@include viewport.until(sm) {
+  /* React keeps Meu Comércio between its collapsed search and account control.
+   * The other product destinations move to the bottom bar at this width. */
+
+  .cj-splash__nav {
+    order: 3;
+    flex: 0 0 2.5rem;
+    padding-inline-start: 0;
+
+    .cj-splash__nav-item {
+      display: none;
+    }
+
+    .cj-splash__market {
+      display: flex;
+      justify-content: center;
+      inline-size: 2.5rem;
+      padding-inline: 0;
+    }
+  }
+
+  @if $show_header_nav != "true" {
+    .cj-splash__nav {
+      display: none;
+    }
+  }
+
+  .cj-splash__logo {
+    order: 1;
+  }
+
+  .cj-splash__search {
+    order: 2;
+  }
+
+  .cj-splash__auth {
+    order: 4;
+  }
+
+  /* The toggle rejoins the trailing controls at this width. */
+  .cj-splash__shell {
+    gap: var(--space-2);
+
+    &::before {
+      content: none;
+    }
+  }
+
+  .cj-splash__search {
+    flex: none;
+    width: 2.5rem;
+    min-width: 0;
+    margin-inline-start: auto;
+  }
+
+  .cj-splash__search-control {
+    justify-content: center;
+    max-width: none;
+    padding-inline-start: 0;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  /* Match the booted filter row's compact rhythm so hydration replaces
+   * like-for-like instead of adding a vertical jump below the category rail. */
+
+  .cj-splash__list-controls {
+    padding-block: var(--space-1) var(--space-2);
+  }
+
+  /* Titles wrap at this width, so the card is a line taller. */
+  .cj-splash__bar--title {
+    block-size: 2.25rem;
+  }
+}
+
+/* Below `md` the booted controls collapse to one trigger carrying the page's
+ * title (see _list-controls.scss), so the skeleton keeps the selected tab alone
+ * and gives it a title's weight rather than promising a row of them. */
+
+@include viewport.until(md) {
+  .cj-splash__tab:not(.is-active) {
+    display: none;
+  }
+
+  .cj-splash__tab.is-active {
+    padding-inline: 0;
+    border-radius: 0;
+    background: none;
+
+    &::after {
+      inline-size: 5.5rem;
+      block-size: 1.1rem;
+      background: var(--cj-control);
+    }
+  }
+}

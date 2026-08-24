@@ -1,0 +1,226 @@
+@use "lib/viewport";
+
+/* ---------------------------------------------------------------- header -- */
+.cj-splash__header {
+  flex: none;
+  box-sizing: border-box;
+  height: var(--cj-header-height);
+  padding-block-start: var(--space-6);
+}
+
+.cj-splash__shell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: var(--cj-header-shell-height);
+  padding-inline: var(--space-4);
+  border-radius: var(--cj-radius-shell);
+  background: var(--cj-header);
+}
+
+/* The skeleton and booted shell share the same earliest inline Phosphor sprite.
+ * Known controls therefore keep their real silhouettes across the handoff;
+ * only user- and site-configured content remains a neutral placeholder. */
+
+.cj-splash__icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentcolor;
+}
+
+/* `content` makes the span a replaced element. Reserve the configured
+ * wordmark's ratio before its response arrives so the earliest shell and the
+ * booted header occupy the same inline space on a cold load. Both variants
+ * come from theme settings; see settings.yml. */
+
+.cj-splash__logo {
+  flex: none;
+  width: auto;
+  max-width: 10rem;
+  height: 2.5rem;
+  aspect-ratio: var(--cj-wordmark-aspect-ratio);
+  object-fit: contain;
+  object-position: left center;
+
+  @if $splash_logo != "" {
+    content: url("#{$splash_logo}");
+  }
+}
+
+.cj-splash__sidebar-toggle {
+  display: none;
+}
+
+/* KNOWN LIMITATION: follows the OS, not the scheme Discourse served, so a
+ * cookie-forced scheme gets the wrong logo until boot. A per-scheme *image*
+ * needs color_definitions, where `dark-light-choose()` on a string evaluates to
+ * null and Sass drops the declaration — no logo at all, which is worse. */
+
+@if $splash_logo_dark != "" {
+  @media (prefers-color-scheme: dark) {
+    .cj-splash__logo {
+      content: url("#{$splash_logo_dark}");
+    }
+  }
+}
+
+/* Core's before-header-panel outlet pads the leading edge only, so the search
+ * field starts one --space-6 gap past the last nav item, not past a trailing
+ * pad as well. */
+
+.cj-splash__nav {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-inline-start: var(--space-2);
+}
+
+.cj-splash__nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.5rem;
+  padding-inline: var(--space-4);
+  color: var(--header_primary);
+  font-size: var(--cj-text-sm-size);
+  font-weight: 400;
+  line-height: var(--cj-text-sm-line-height);
+
+  &.is-active {
+    font-weight: 500;
+  }
+}
+
+.cj-splash__forum::after {
+  content: var(--cj-splash-forum);
+}
+
+.cj-splash__lists::after {
+  content: var(--cj-splash-lists);
+}
+
+.cj-splash__plays::after {
+  content: var(--cj-splash-plays);
+}
+
+.cj-splash__chat::after {
+  content: var(--cj-splash-chat);
+}
+
+.cj-splash__market::after {
+  content: var(--cj-splash-market);
+}
+
+.cj-splash__search {
+  display: flex;
+  flex: 1 1 18rem;
+  min-width: 10rem;
+  height: 2.5rem;
+}
+
+@include viewport.from(sm) {
+  @if $show_header_nav == "true" {
+    .cj-splash__search {
+      margin-inline-start: var(--cj-header-nav-search-offset);
+    }
+  }
+}
+
+/* Core flexes the search slot while capping the pill inside it. */
+.cj-splash__search-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--cj-header-search-max-width);
+  min-width: 0;
+  height: 2.5rem;
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-3);
+  border-radius: var(--cj-radius-pill);
+  color: var(--header_primary);
+  background: var(--cj-header-soft);
+  font-family: var(--font-family);
+  font-size: var(--cj-text-sm-size);
+  font-weight: 400;
+  line-height: var(--cj-text-sm-line-height);
+
+  > .cj-splash__icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--header_primary);
+  }
+
+  &::after {
+    content: var(--cj-splash-search);
+  }
+}
+
+.cj-splash__auth {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline-end: var(--space-2);
+}
+
+.cj-splash__log-in {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  box-sizing: border-box;
+  height: 2.5rem;
+  padding-inline: var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--cj-radius-pill);
+  color: #fff;
+  background: var(--cj-brand);
+  font-size: var(--font-down-1);
+
+  > .cj-splash__icon {
+    display: none;
+  }
+
+  &::after {
+    content: var(--cj-splash-log-in);
+  }
+}
+
+/* The anonymous class is server-rendered, so a returning member gets an avatar
+ * silhouette in the first frame instead of an anonymous Log In pill. */
+
+html:not(.anon) .cj-splash__log-in {
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--cj-header-account-size);
+  height: var(--cj-header-account-size);
+  padding: var(--space-1);
+  border-radius: 999px;
+  color: var(--header_primary);
+  background: transparent;
+
+  > .cj-splash__icon {
+    display: block;
+    width: var(--cj-header-avatar-size);
+    height: var(--cj-header-avatar-size);
+    opacity: 0.35;
+  }
+
+  &::after {
+    content: none;
+  }
+}
+
+/* Match the hydrated signed-in control's 40px button plus 1px outer margin on
+ * each side so the search width stays stable through the handoff. */
+@include viewport.from(md) {
+  html:not(.anon) .cj-splash__auth {
+    justify-content: flex-end;
+    box-sizing: border-box;
+    width: calc(var(--cj-header-account-size) + 2px);
+    height: calc(var(--cj-header-account-size) + 2px);
+    padding-inline-end: 0;
+  }
+}

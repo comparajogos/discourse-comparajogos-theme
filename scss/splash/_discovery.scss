@@ -1,0 +1,195 @@
+/* The category rail is installed above discovery controls. It owns a pill row
+ * and a fixed one-line description in the booted page, so both rows are
+ * represented here; matching its margins removes the vertical swap when Ember
+ * replaces the skeleton. */
+
+.cj-splash__rail {
+  margin-block: var(--space-2) var(--space-4);
+}
+
+.cj-splash__rail-pills {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.75rem;
+  overflow: hidden;
+}
+
+.cj-splash__rail-pill {
+  flex: none;
+  inline-size: 7rem;
+  block-size: 2.25rem;
+  border-radius: var(--d-nav-pill-border-radius);
+  background: var(--cj-control);
+
+  &:nth-child(2) {
+    inline-size: 8.5rem;
+  }
+
+  &:nth-child(3) {
+    inline-size: 5.75rem;
+  }
+}
+
+.cj-splash__rail-description {
+  display: block;
+  margin-block-start: var(--space-1);
+  font-size: var(--font-down-2-rem);
+  line-height: 1.4;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    inline-size: min(66ch, 72%);
+    block-size: 0.65rem;
+    border-radius: 999px;
+    background: var(--cj-control);
+    vertical-align: middle;
+  }
+}
+
+/* Core's navigation container contributes its own trailing space inside
+ * `.list-controls`; keeping that wrapper distinct is what aligns the first
+ * placeholder card with the first booted topic row. */
+
+.cj-splash__list-controls {
+  padding-block-end: var(--space-3);
+}
+
+.cj-splash__controls {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  height: 2.5rem;
+  color: var(--cj-text);
+  font-size: 1rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    padding-inline: var(--space-2);
+  }
+}
+
+/* Tabs are bars of a label's height. The top menu is a site setting — recentes
+ * / novos / em alta on one forum, latest / hot / categories on another — so the
+ * skeleton shows how many and which is selected, not what they say. */
+
+.cj-splash__tab {
+  padding-inline: 0.65rem;
+
+  &::after {
+    content: "";
+    inline-size: 3.25rem;
+    block-size: 0.7rem;
+    border-radius: 999px;
+    background: var(--cj-control);
+  }
+
+  &.is-active {
+    border-radius: var(--d-nav-pill-border-radius);
+    background: color-mix(in oklch, var(--cj-action) 5%, transparent);
+
+    &::after {
+      background: color-mix(in oklch, var(--cj-action) 55%, transparent);
+    }
+  }
+}
+
+.cj-splash__cards {
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: 0;
+}
+
+.cj-splash__card {
+  @include cj-panel-surface;
+
+  /* The booted card's cell owns this padding (--space-4 block, see
+   * _topic-feed.scss), which is what puts its byline at y+15.4. */
+  padding: var(--space-4) var(--space-3);
+}
+
+@if $topic_list_feed != "true" {
+  .cj-splash__cards {
+    gap: 0;
+  }
+
+  .cj-splash__card {
+    border-inline: 0;
+    border-block-start: 1px solid var(--primary-low);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .cj-splash__bar--excerpt {
+    display: none;
+  }
+
+  .cj-splash__card::after {
+    display: none;
+  }
+}
+
+.cj-splash__byline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 1.5rem;
+}
+
+.cj-splash__avatar {
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: 999px;
+  background: var(--cj-control);
+}
+
+/* currentcolor so the bar reads on whichever fill its row carries: the label
+ * colour on a plain or muted row, the on-action colour on the selected one. */
+
+.cj-splash__bar--row {
+  inline-size: 4.75rem;
+  background: currentcolor;
+  opacity: 0.3;
+}
+
+.cj-splash__bar--author {
+  inline-size: 4rem;
+}
+
+.cj-splash__bar--age {
+  inline-size: 2rem;
+}
+
+.cj-splash__bar--title {
+  block-size: 1rem;
+  margin-block: 0.375rem 0.5rem;
+  inline-size: 32%;
+}
+
+.cj-splash__bar--excerpt {
+  inline-size: 62%;
+  margin-block-start: 0.3125rem;
+}
+
+.cj-splash__bar--excerpt-short {
+  inline-size: 44%;
+}
+
+.cj-splash__bar--stats {
+  block-size: 0.55rem;
+  inline-size: 9rem;
+  margin-block-start: 0.75rem;
+}
+
+.cj-splash__card::after {
+  content: "";
+  display: block;
+  width: 13.875rem;
+  height: 1.125rem;
+  margin-block-start: var(--space-2);
+  background: var(--cj-surface-muted);
+  border-radius: 999px;
+}

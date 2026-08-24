@@ -93,6 +93,7 @@ has no public activity or is unavailable. Disable it with `profile_bridge`.
 ```sh
 pnpm install
 pnpm check:colors
+pnpm check:splash
 pnpm format:check
 pnpm lint:hbs
 pnpm lint:styles
