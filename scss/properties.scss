@@ -122,9 +122,9 @@ body {
   --metadata-color: var(--cj-text-muted);
 
   /* Core's own title hooks, rather than out-specificity-ing `.visited a.title`.
-   * A read topic dims, never un-bolds, so the column stays scannable. */
+   * A read topic steps down once in weight and colour so state stays scannable. */
   --topic-title-font-weight: 700;
-  --topic-title-font-weight--visited: 700;
+  --topic-title-font-weight--visited: 600;
   --title-color: var(--cj-text);
   --title-color--read: var(--cj-text-muted);
 
