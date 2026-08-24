@@ -77,14 +77,25 @@ acceptance("Compara Jogos profile bridge", function () {
     try {
       await visit("/u/eviltrout/activity");
 
+      assert.true(
+        document.body.classList.contains("cj-unified-profile-shell"),
+        "the runtime class activates matching navigation styles atomically"
+      );
       assert.strictEqual(
         document.querySelectorAll(".cj-user-nav").length,
-        4,
-        "the connector contributes the four React-owned destinations"
+        3,
+        "the connector contributes only the missing React-owned destinations"
       );
       assert
-        .dom(".cj-user-nav--summary > a")
-        .hasAttribute("href", "https://www.comparajogos.com.br/u/eviltrout");
+        .dom(".cj-user-nav--summary")
+        .doesNotExist("the native Summary slot is not duplicated");
+      assert
+        .dom(".user-nav__summary > a")
+        .hasAttribute(
+          "href",
+          "https://www.comparajogos.com.br/u/eviltrout",
+          "the native Summary slot opens the canonical React profile"
+        );
       assert
         .dom(".cj-user-nav--plays > a")
         .hasAttribute(

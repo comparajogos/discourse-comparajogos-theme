@@ -1,7 +1,5 @@
 @use "lib/viewport";
 
-$unified_profile_shell: "false" !default;
-
 /* On desktop the profile is one panel: the card, its navigation and the content
  * below it share a single surface, so nothing inside paints a second one. The
  * canvas inversion comes from cj-panel-surface. */
@@ -81,24 +79,8 @@ $unified_profile_shell: "false" !default;
  * Summary is replaced. DHorizontalOverflowNav continues to own overflow,
  * keyboard and touch behavior. */
 
-@if $unified_profile_shell == "true" {
-  /* React's Resumo is the expanded landing page. Every Discourse destination
-   * is task-focused, so its native collapsed profile state should also hide
-   * the catalog facts until the existing profile disclosure is opened. Cover
-   * both direct and outlet-wrapped connector shapes to avoid an empty row. */
-
-  .user-main .about.collapsed-info .details {
-    > .cj-profile-bridge,
-    > :has(> .cj-profile-bridge) {
-      display: none;
-    }
-  }
-
+body.cj-unified-profile-shell {
   .user-main .user-nav__summary {
-    display: none;
-  }
-
-  .user-main .cj-user-nav--summary {
     order: 0;
   }
 
@@ -124,6 +106,9 @@ $unified_profile_shell: "false" !default;
 
   .user-main .user-nav__notifications {
     order: 6;
+    margin-inline-start: var(--space-2);
+    padding-inline-start: var(--space-2);
+    border-inline-start: 1px solid var(--cj-border);
   }
 
   .user-main .user-nav__personal-messages {

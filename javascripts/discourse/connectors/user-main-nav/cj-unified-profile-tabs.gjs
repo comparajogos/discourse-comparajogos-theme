@@ -27,12 +27,6 @@ export default class CjUnifiedProfileTabs extends Component {
   <template>
     {{#if this.enabled}}
       {{#if this.profileRoot}}
-        <li class="cj-user-nav cj-user-nav--summary">
-          <a href={{this.profileRoot}}>
-            {{icon "user"}}
-            <span>{{i18n (themePrefix "unified_profile.tabs.summary")}}</span>
-          </a>
-        </li>
         <li class="cj-user-nav cj-user-nav--plays">
           <a href="{{this.profileRoot}}/plays">
             {{icon "dice"}}

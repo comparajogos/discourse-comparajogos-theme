@@ -89,12 +89,12 @@ switch. The user card may also show two named-list shortcuts. Both surfaces
 share a session cache and render nothing when the catalog has no public activity
 or is unavailable. Disable these facts with `profile_bridge`.
 
-`unified_profile_shell` adds the React-owned Summary, Plays, Lists, and Offers
-tabs to Discourse's native user navigation, keeps Discourse's permission-aware
-Activity, Badges, and private tabs, and redirects legacy HTML Summary routes to
-the canonical React profile. It is off by default and must only be enabled after
-the matching client-side shell is deployed. JSON summary endpoints are not
-redirected.
+`unified_profile_shell` repoints Discourse's native Summary item to the React
+profile and adds only the missing Plays, Lists, and Offers destinations. It
+keeps Discourse's permission-aware Activity, Badges, and private tabs without a
+duplicate Summary, and redirects legacy HTML Summary routes to the canonical
+React profile. It is off by default and must only be enabled after the matching
+client-side shell is deployed. JSON summary endpoints are not redirected.
 
 ## Development
 

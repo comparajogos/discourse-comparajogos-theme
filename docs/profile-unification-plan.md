@@ -37,12 +37,13 @@ achievements, notifications, messages, invites, and preferences. There is no
 Compara Jogos bridge, Fórum/Jogos switch, duplicate “Perfil” link, or “Ver no
 Compara Jogos” action in the finished shell.
 
-The shell has two deliberate densities. Resumo is expanded by default because
-its job is orientation. Partidas, Listas, Ofertas, and every Discourse-owned
-destination start compact so their task-specific interface remains dominant.
-Those focused pages expose the same secondary profile facts through an inline,
-accessible disclosure; opening it never changes routes. In particular, Ofertas
-remains a store surface rather than becoming a second profile summary.
+The shell stays compact and stable across routes: identity, useful catalog
+facts, the shared tab rail, then page content. There is no profile-details
+disclosure. Resumo additionally carries public forum identity facts—bio, last
+activity, membership age, and profile views—because its job is orientation.
+Partidas, Listas, Ofertas, and Discourse-owned destinations hand hierarchy to
+their task content immediately after the same fixed shell. In particular,
+Ofertas remains a store surface rather than becoming a second profile summary.
 
 ## Canonical route contract
 
@@ -72,7 +73,9 @@ always concern `:username` in the profile shell.
 ### Legacy summary behavior
 
 - `/f/u/:username/summary` and the Discourse user-root route redirect to
-  `/u/:username` only after React reaches summary parity.
+  `/u/:username` only after React reaches summary parity. On every other forum
+  route, repoint the single native Summary item to React; never inject a second
+  Summary item.
 - Use `window.location.replace` for the compatibility redirect so Back does
   not bounce through the obsolete page.
 - Never redirect `/f/u/:username/summary.json`; React continues to consume it.
