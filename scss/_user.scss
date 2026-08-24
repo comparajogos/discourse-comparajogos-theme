@@ -137,6 +137,22 @@ body.cj-unified-profile-shell {
     .nav-pills {
       gap: var(--space-1);
       padding-block: var(--space-1);
+
+      /* Core switches this navigation to icon-only below 64rem. The unified
+       * profile has more destinations, so keep the labels and let the native
+       * overflow nav scroll horizontally instead of making every icon a
+       * memory test. Content-sized items also prevent the restored labels
+       * from being squeezed into ellipses. */
+
+      > li {
+        flex: 0 0 auto;
+      }
+
+      &.main-nav > li > a > span {
+        display: inline;
+        overflow: visible;
+        text-overflow: clip;
+      }
     }
 
     .nav-pills > li > a {
