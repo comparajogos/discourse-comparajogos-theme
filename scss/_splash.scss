@@ -232,6 +232,14 @@ html[lang^="pt"] #cj-splash {
   height: 2.5rem;
 }
 
+@include viewport.from(sm) {
+  @if $show_header_nav == "true" {
+    .cj-splash__search {
+      margin-inline-start: var(--cj-header-nav-search-offset);
+    }
+  }
+}
+
 /* Core flexes the search slot while capping the pill inside it. */
 .cj-splash__search-control {
   display: flex;
@@ -239,7 +247,7 @@ html[lang^="pt"] #cj-splash {
   gap: var(--space-3);
   box-sizing: border-box;
   width: 100%;
-  max-width: 28rem;
+  max-width: var(--cj-header-search-max-width);
   min-width: 0;
   height: 2.5rem;
   margin-inline-start: auto;
@@ -247,9 +255,10 @@ html[lang^="pt"] #cj-splash {
   border-radius: var(--cj-radius-pill);
   color: var(--header_primary);
   background: var(--cj-header-soft);
-  font-size: 1rem;
+  font-family: var(--font-family);
+  font-size: var(--cj-text-sm-size);
   font-weight: 400;
-  line-height: normal;
+  line-height: var(--cj-text-sm-line-height);
 
   > .cj-splash__icon {
     width: 1rem;
@@ -297,16 +306,18 @@ html[lang^="pt"] #cj-splash {
 
 html:not(.anon) .cj-splash__log-in {
   justify-content: center;
-  width: 2.5rem;
-  padding-inline: 0;
+  box-sizing: border-box;
+  width: var(--cj-header-account-size);
+  height: var(--cj-header-account-size);
+  padding: var(--space-1);
   border-radius: 999px;
   color: var(--header_primary);
-  background: var(--cj-control);
+  background: transparent;
 
   > .cj-splash__icon {
     display: block;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: var(--cj-header-avatar-size);
+    height: var(--cj-header-avatar-size);
     opacity: 0.35;
   }
 
@@ -315,19 +326,15 @@ html:not(.anon) .cj-splash__log-in {
   }
 }
 
-/* Match core's signed-in control footprint so the search width stays stable. */
+/* Match the hydrated signed-in control's 40px button plus 1px outer margin on
+ * each side so the search width stays stable through the handoff. */
 @include viewport.from(md) {
   html:not(.anon) .cj-splash__auth {
     justify-content: flex-end;
     box-sizing: border-box;
-    width: 3.875rem;
-    height: 2.875rem;
-    padding-inline-end: 0.625rem;
-
-    .cj-splash__log-in {
-      width: 2.125rem;
-      height: 2.125rem;
-    }
+    width: calc(var(--cj-header-account-size) + 2px);
+    height: calc(var(--cj-header-account-size) + 2px);
+    padding-inline-end: 0;
   }
 }
 

@@ -22,7 +22,7 @@
 
     /* `sm:max-w-lg`; the remaining header controls naturally constrain the
      * rendered field below 32rem at ordinary desktop widths. */
-    max-width: 32rem;
+    max-width: var(--cj-header-search-max-width);
     min-height: 2.5rem;
     margin-inline: auto 0;
     background: var(--cj-header-soft);

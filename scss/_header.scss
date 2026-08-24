@@ -169,7 +169,7 @@
      * header can still render without that optional integration. */
 
     .contents:has(.cj-header-nav) .floating-search-input-wrapper {
-      margin-inline-start: var(--space-5);
+      margin-inline-start: var(--cj-header-nav-search-offset);
     }
 
     .panel .d-header-icons {
@@ -178,17 +178,20 @@
 
     .current-user .btn {
       box-sizing: border-box;
-      inline-size: 2.5rem;
-      block-size: 2.5rem;
-      min-block-size: 2.5rem;
+      inline-size: var(--cj-header-account-size);
+      block-size: var(--cj-header-account-size);
+      min-block-size: var(--cj-header-account-size);
       padding: var(--space-1);
       margin: 1px;
       border-radius: var(--cj-radius-pill);
     }
 
-    .current-user .avatar {
-      inline-size: 2rem;
-      block-size: 2rem;
+    /* Match core's `.d-header-icons .icon img.avatar` specificity so its
+     * em-sized 34.125px image cannot overrun the account button's 4px inset. */
+
+    .panel .d-header-icons .current-user .btn img.avatar {
+      width: var(--cj-header-avatar-size);
+      height: var(--cj-header-avatar-size);
     }
   }
 }

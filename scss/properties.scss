@@ -44,6 +44,10 @@ body {
   --cj-header-shell-height: 4.625rem;
   --cj-header-height: 6.125rem;
   --cj-radius-shell: 1.5rem;
+  --cj-header-account-size: 2.5rem;
+  --cj-header-avatar-size: 2rem;
+  --cj-header-search-max-width: 32rem;
+  --cj-header-nav-search-offset: var(--space-5);
 
   /* Reserve the configured Compara wordmark before its image response arrives.
    * At the shared 2.5rem height, 255 / 80 resolves to the final 127.5px width,
