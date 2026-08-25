@@ -55,6 +55,170 @@ html.has-full-page-chat {
   }
 }
 
+/* Browse is the only chat surface with a free-text filter. Core has shipped
+ * this control through both DcFilterInput and the current DFilterInput, so keep
+ * the compatibility selector at the composition boundary rather than styling
+ * every filter input in Discourse. The result follows the product Input: a
+ * filled 40px control, 10px corners, a leading 16px glyph, and no hard border. */
+
+.chat-browse-view__actions {
+  :is(.filter-input-container, .dc-filter-input-container) {
+    box-sizing: border-box;
+    min-height: 2.5rem;
+    overflow: hidden;
+    background: var(--cj-control);
+    border: 1px solid transparent;
+    border-radius: var(--d-input-border-radius);
+    transition: var(--cj-transition-input);
+
+    &.is-focused,
+    &:focus-within {
+      border-color: transparent;
+      outline: none;
+      box-shadow: var(--cj-focus-ring);
+    }
+
+    :is(input.filter-input, .dc-filter-input) {
+      box-sizing: border-box;
+      min-width: 0;
+      min-height: calc(2.5rem - 2px);
+      padding: 0.5rem var(--space-3);
+      color: var(--cj-control-foreground);
+      font-family: var(--font-family);
+      font-size: var(--cj-text-sm-size);
+      line-height: var(--cj-text-sm-line-height);
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+
+      &::placeholder {
+        color: color-mix(
+          in oklch,
+          var(--cj-control-foreground) 78%,
+          var(--cj-control)
+        );
+        opacity: 1;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    /* Core names this slot for its DOM position. Product search consistently
+     * leads with the magnifier, so move it visually without changing semantics
+     * or the component's interaction contract. */
+
+    .d-icon.-right {
+      order: -1;
+    }
+
+    .d-icon {
+      flex: 0 0 1rem;
+      width: 1rem;
+      height: 1rem;
+      margin-inline: var(--space-3) 0;
+      color: var(--cj-control-foreground);
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Channel information is a settings flow, not a document. Give its controls
+ * the same filled Input surface used everywhere else and keep long translated
+ * notification labels inside the row at narrow phone widths. */
+
+.c-channel-settings {
+  .chat-form__row-label {
+    min-width: 0;
+  }
+
+  .chat-form__row-action {
+    flex: 0 0 auto;
+  }
+
+  :is(.edit-name-slug-btn, .edit-description-btn) {
+    color: var(--tertiary);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--tertiary);
+    }
+  }
+
+  .c-channel-settings__selector.select-kit.combo-box {
+    width: min(12rem, 48vw);
+    max-width: 100%;
+
+    .select-kit-header {
+      box-sizing: border-box;
+      min-height: 2.5rem;
+      color: var(--cj-control-foreground);
+      background: var(--cj-control);
+      border: 0;
+      border-radius: var(--d-input-border-radius);
+
+      &.is-focused {
+        outline: none;
+        box-shadow: var(--cj-focus-ring);
+      }
+    }
+  }
+}
+
+/* Core's mobile chat form paints each section as a square primary-very-low
+ * slab. On the product's black chat canvas these are content groups: use the
+ * card role, the shared panel radius and the same quiet hairline as every other
+ * grouped surface. Mobile-only keeps the denser desktop settings layout intact. */
+
+.mobile-view .c-channel-settings {
+  .chat-form__section-content {
+    padding: var(--space-4);
+    background: var(--cj-card);
+    border: 1px solid var(--cj-border);
+    border-radius: var(--cj-radius-panel);
+  }
+
+  .chat-form__section-title {
+    color: var(--cj-text-muted);
+    font-size: var(--cj-text-sm-size);
+    font-weight: 600;
+    line-height: var(--cj-text-sm-line-height);
+  }
+
+  /* Description and Members are separate semantic sections in core but one
+   * visual group in this mobile flow. Join their adjacent edges while retaining
+   * the DOM and route-sized touch target. */
+
+  .chat-form__section:has(
+      + .chat-form__section:not(
+          :has(.chat-form__section-title),
+          .--leave-channel
+        )
+    )
+    .chat-form__section-content {
+    border-block-end: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .chat-form__section:not(:has(.chat-form__section-title), .--leave-channel)
+    .chat-form__section-content {
+    border-block-start: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+  }
+
+  .chat-form__section.--leave-channel .chat-form__section-content {
+    padding-inline: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
 @include viewport.until(md) {
   html.has-full-page-chat .d-header .header-dropdown-toggle.hamburger-dropdown {
     display: none;

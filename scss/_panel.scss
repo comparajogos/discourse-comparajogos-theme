@@ -10,7 +10,7 @@
 @mixin cj-panel-surface {
   box-sizing: border-box;
   border: 1px solid var(--cj-border);
-  border-radius: 1rem;
+  border-radius: var(--cj-radius-panel);
   background: var(--cj-panel);
   box-shadow: none;
 

@@ -37,6 +37,12 @@ body {
   --d-input-border: 1px solid transparent;
   --input-border-color: transparent;
 
+  /* Newer ui-kit controls read the token family instead of the legacy --d-*
+   * aliases. Keep both generations on the same filled, borderless Input
+   * contract so plugin-owned fields cannot fall back to core's canvas fill. */
+  --token-color-background-input: var(--cj-control);
+  --token-color-border-input: transparent;
+
   /* The React shell resolves to 74px: its 40px account control carries a 1px
    * outer margin inside 16px block padding. Preserve that rendered height even
    * though Discourse centres its controls in a min-height row rather than
@@ -116,6 +122,7 @@ body {
   /* color-contract:shared:end */
 
   --cj-radius-control: var(--d-button-border-radius);
+  --cj-radius-panel: 1rem;
   --cj-radius-pill: 999px;
   --cj-duration-fast: 150ms;
   --cj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
