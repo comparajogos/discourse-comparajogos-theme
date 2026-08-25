@@ -161,8 +161,9 @@
     }
   }
 
-  /* Last-reply context is useful but tertiary. Keep it on its own line without
-   * a filled pill, which otherwise becomes brighter than an unread title. */
+  /* Last-reply context is useful but tertiary. Its quiet filled pill separates
+   * activity from engagement stats; read state is carried by text contrast,
+   * not by removing the shared surface. */
 
   &__last-reply {
     display: inline-flex;
@@ -171,7 +172,9 @@
     align-self: start;
     max-width: 100%;
     margin-block-start: var(--space-2);
-    padding-block: 0.125rem;
+    padding: 0.125rem var(--space-2);
+    background: var(--cj-control);
+    border-radius: var(--cj-radius-pill);
     font-size: var(--font-down-2-rem);
     transition: color var(--cj-duration-fast) var(--cj-ease-out);
 
@@ -183,7 +186,7 @@
 
   &__last-reply-name {
     overflow: hidden;
-    font-weight: inherit;
+    font-weight: 500;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -222,7 +225,12 @@ a.cj-feed__last-reply:active {
   .topic-list-item:is(.unseen-topic, .unread-posts)
   a.cj-feed__last-reply {
   color: var(--cj-text-muted);
-  font-weight: 500;
+}
+
+.topic-list.--cj-feed
+  .topic-list-item:not(:is(.unseen-topic, .unread-posts))
+  .cj-feed__last-reply-name {
+  font-weight: 400;
 }
 
 a.cj-feed__last-reply:hover {
