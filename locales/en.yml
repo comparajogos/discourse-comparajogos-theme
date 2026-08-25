@@ -52,8 +52,8 @@ en:
     used: "used"
     unavailable: "Unavailable"
     ranking: "#%{count}"
-    visit_item: "View in the catalog"
-    visit_tag: "View topics"
+    visit_item: "Full details"
+    visit_tag: "Topics"
     rail_label: "Games in this topic"
     type:
       expansion: "Expansion"

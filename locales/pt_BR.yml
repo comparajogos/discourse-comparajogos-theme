@@ -52,8 +52,8 @@ pt_BR:
     used: "usado"
     unavailable: "Indisponível"
     ranking: "%{count}º"
-    visit_item: "Ver no catálogo"
-    visit_tag: "Ver tópicos"
+    visit_item: "Ficha completa"
+    visit_tag: "Tópicos"
     rail_label: "Jogos deste tópico"
     type:
       expansion: "Expansão"

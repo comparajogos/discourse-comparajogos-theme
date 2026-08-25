@@ -286,6 +286,7 @@
     font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 0.2em;
+    white-space: nowrap;
   }
 }
 
@@ -450,15 +451,23 @@
     .cj-game-card__cover {
       inline-size: 6rem;
       block-size: 6rem;
-      margin: var(--space-3) 0 var(--space-3) var(--space-3);
+      margin: var(--space-2) 0 var(--space-2) var(--space-3);
     }
 
     .cj-game-card__body {
-      padding: var(--space-3);
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
     }
 
     .cj-game-card__stats {
       gap: var(--space-3);
+      margin-block-start: 0;
+      padding-block-start: 0;
+    }
+
+    .cj-game-card__footer {
+      gap: var(--space-2) var(--space-3);
+      padding-block-start: var(--space-1);
     }
   }
 }
