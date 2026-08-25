@@ -209,14 +209,31 @@ a.cj-feed__last-reply:active {
   color: var(--cj-control-foreground);
 }
 
+/* Read state belongs to the whole hierarchy, not only the title. Category and
+ * tags retain their semantic colours; the author, age, excerpt and engagement
+ * step back together using core's accessible secondary-text role. */
+
+.topic-list-item.visited {
+  .cj-feed__author,
+  .cj-feed__age,
+  .cj-feed__excerpt,
+  .cj-feed__stats {
+    color: var(--primary-medium);
+  }
+}
+
 /* Recent activity remains available on a read topic, but no longer competes
  * with the title as a filled status chip. Unread rows retain the chip, making
  * the state difference extend beyond typography without changing the copy. */
 
 .topic-list-item.visited .cj-feed__last-reply {
   padding-inline: 0;
-  color: var(--cj-text-muted);
+  color: var(--primary-medium);
   background: transparent;
+
+  .d-icon {
+    color: currentcolor;
+  }
 
   &:hover {
     color: var(--cj-text);
@@ -227,7 +244,7 @@ a.cj-feed__last-reply:active {
 .topic-list-item.visited a.cj-feed__last-reply,
 .topic-list-item.visited a.cj-feed__last-reply:visited,
 .topic-list-item.visited a.cj-feed__last-reply:active {
-  color: var(--cj-text-muted);
+  color: var(--primary-medium);
 }
 
 @include viewport.until(sm) {
