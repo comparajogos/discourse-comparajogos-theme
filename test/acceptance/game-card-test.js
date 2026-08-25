@@ -311,12 +311,15 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     assert
       .dom('.cooked .hashtag-cooked[data-slug="gi-joe-mission-critical"]')
       .hasAttribute(
-        "data-cj-game",
-        "gi-joe-mission-critical",
-        "a recognised mention is marked"
+        "href",
+        "/tag/gi-joe-mission-critical",
+        "the general handler leaves the cooked link intact"
       );
 
-    await click(".cooked .hashtag-cooked[data-cj-game]");
+    await click('.cooked .hashtag-cooked[data-slug="gi-joe-mission-critical"]');
+    await waitFor(
+      '.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name'
+    );
 
     assert
       .dom('.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name')
@@ -324,6 +327,34 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     assert
       .dom('.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__action')
       .exists({ count: 2 }, "the popup offers the catalog and the tag page");
+  });
+
+  test("tapping a game mention in the post preview opens its card", async function (assert) {
+    stubCatalog({ "gi-joe-mission-critical": GI_JOE });
+
+    await visit("/t/internationalization-localization/280");
+    await click("#topic-footer-buttons .create");
+    await fillIn(
+      "#reply-control .d-editor-input",
+      "Previewing #gi-joe-mission-critical"
+    );
+    await waitFor(
+      '#reply-control .d-editor-preview .hashtag-cooked[data-slug="gi-joe-mission-critical"]'
+    );
+
+    await click(
+      '#reply-control .d-editor-preview .hashtag-cooked[data-slug="gi-joe-mission-critical"]'
+    );
+    await waitFor(
+      '.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name'
+    );
+
+    assert
+      .dom('.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name')
+      .hasText(
+        "G.I. JOE Mission Critical",
+        "the preview uses the same handler"
+      );
   });
 
   test("tapping a game mention in the rich editor opens its card", async function (assert) {
@@ -365,10 +396,7 @@ acceptance("Compara Jogos game card - topic", function (needs) {
 
     assert
       .dom('.cooked .hashtag-cooked[data-slug="ficha"]')
-      .doesNotHaveAttribute(
-        "data-cj-game",
-        "an unrecognised mention is not marked"
-      );
+      .hasAttribute("href", "/tag/ficha", "the original tag link is present");
 
     await click('.cooked .hashtag-cooked[data-slug="ficha"]');
 

@@ -427,6 +427,10 @@
   width: auto;
   max-width: calc(100vw - var(--space-6));
 
+  /* FloatKit's base dropdown layer sits below the composer. This menu can be
+   * opened from either editor, so it belongs on the global dropdown layer. */
+  z-index: z("modal", "dropdown");
+
   .fk-d-menu__inner-content {
     min-width: 0;
     padding: 0;

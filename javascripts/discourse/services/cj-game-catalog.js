@@ -12,9 +12,9 @@ import {
  *
  * Every card surface asks the same question — "is this tag a game, and what is
  * it?" — about overlapping sets of slugs: the tag route asks for one, the topic
- * rail for the topic's tags, a cooked post for every mention it just rendered.
- * Answering that per component would mean one request per card; answering it
- * here means one request per render tick.
+ * rail for the topic's tags, and a clicked mention for its tag. Answering that
+ * per component would mean one request per card; answering it here means one
+ * request per render tick.
  *
  * Three caches, all session-lifetime:
  *

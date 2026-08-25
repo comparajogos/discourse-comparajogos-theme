@@ -1,12 +1,15 @@
 import { apiInitializer } from "discourse/lib/api";
 import { wantsNewWindow } from "discourse/lib/intercept-click";
+import DiscourseURL from "discourse/lib/url";
 import CjGameCardPopup from "../components/cj-game-card-popup";
 
 const MENU_IDENTIFIER = "cj-game-card";
-const TAG_MENTION = 'a.hashtag-cooked[data-type="tag"]';
-const RICH_TAG_MENTION = "a.hashtag-cooked[data-name]";
-const GAME_ATTRIBUTE = "cjGame";
-const GAME_SELECTOR = "[data-cj-game]";
+const TAG_MENTION = [
+  'a.hashtag-cooked[data-type="tag"]',
+  ".ProseMirror a.hashtag-cooked[data-name]",
+].join(", ");
+
+let activeClickHandler;
 
 /* Rich-editor hashtag nodes keep the resolved type in their name only when it
  * is needed to disambiguate two results. A plain name is the usual tag case;
@@ -20,16 +23,17 @@ function tagNameFromHashtag(name) {
 /**
  * A `#game` mention opens the game's card instead of leaving the page.
  *
- * The mention keeps its `href` throughout. The previous implementation blanked
- * the href on every tag mention so core's click handling would let go of it,
- * which cost a non-game mention its destination and a modified click its new
- * tab. Marking only the mentions the catalog recognised, and cancelling the
- * event with `preventDefault`, gets the same result without taking anything
- * away: `interceptClick` already stands down on a defaulted-prevented event,
- * `ClickTrack` ignores `hashtag-cooked` links outright, and everything the
- * catalog does not recognise is left exactly as core rendered it.
+ * One capture-level listener covers every hashtag surface: cooked posts, chat,
+ * the plain composer preview, and the rich editor. Resolving on interaction
+ * avoids racing an async cooked decorator against a preview that is replaced as
+ * the user types.
  */
 export default apiInitializer((api) => {
+  if (activeClickHandler) {
+    document.removeEventListener("click", activeClickHandler, true);
+    activeClickHandler = null;
+  }
+
   if (!settings.game_card_mentions) {
     return;
   }
@@ -48,79 +52,56 @@ export default apiInitializer((api) => {
     });
   }
 
-  function openCard(event) {
-    const mention = event.target.closest(GAME_SELECTOR);
-
-    if (!mention || wantsNewWindow(event, mention)) {
-      return false;
-    }
-
-    event.preventDefault();
-    showCard(
-      mention,
-      mention.dataset[GAME_ATTRIBUTE],
-      mention.dataset.slug ?? mention.dataset[GAME_ATTRIBUTE]
-    );
-
-    return true;
-  }
-
-  /* The rich editor owns hashtag nodes rather than cooked links. Resolve only
-   * the node that was clicked; returning false leaves selection and non-game
-   * hashtag behavior entirely with ProseMirror. */
-  api.registerRichEditorExtension({
-    plugins: {
-      props: {
-        handleClickOn(_view, _pos, node, _nodePos, event, direct) {
-          if (!direct || node.type.name !== "hashtag") {
-            return false;
-          }
-
-          const mention = event.target.closest(RICH_TAG_MENTION);
-          const tagName = tagNameFromHashtag(node.attrs.name);
-
-          if (!mention || !tagName || wantsNewWindow(event, mention)) {
-            return false;
-          }
-
-          void catalog.resolveOne(tagName).then((game) => {
-            if (game && mention.isConnected) {
-              showCard(mention, game.slug, tagName);
-            }
-          });
-
-          return false;
-        },
-      },
-    },
-  });
-
-  /* One listener per cooked element rather than one on the document: it is
-   * removed with the post or message it belongs to, so nothing outlives the
-   * content it was for. A named function keeps re-decoration idempotent. */
-  async function markGameMentions(element) {
-    const mentions = [...element.querySelectorAll(TAG_MENTION)];
-
-    if (!mentions.length) {
+  async function openCard(event) {
+    if (!(event.target instanceof Element)) {
       return;
     }
 
-    element.addEventListener("click", openCard);
+    const mention = event.target.closest(TAG_MENTION);
 
-    /* One request for every mention in this post, then read the answers back
-     * through `cached` rather than the returned map: it normalizes the slug and
-     * follows a rename the same way every other surface does, so the attribute
-     * always carries the catalog's canonical slug. */
-    await catalog.resolve(mentions.map((mention) => mention.dataset.slug));
+    if (!mention) {
+      return;
+    }
 
-    mentions.forEach((mention) => {
-      const game = catalog.cached(mention.dataset.slug);
+    const tagName = tagNameFromHashtag(
+      mention.dataset.slug ?? mention.dataset.name
+    );
 
-      if (game) {
-        mention.dataset[GAME_ATTRIBUTE] = game.slug;
-      }
-    });
+    if (!tagName || wantsNewWindow(event, mention)) {
+      return;
+    }
+
+    const isRichEditorMention = Boolean(mention.closest(".ProseMirror"));
+    const href = isRichEditorMention ? null : mention.getAttribute("href");
+
+    /* Cooked links need to wait for the catalog answer before core routes them.
+     * Rich-editor hashtags have editor semantics rather than navigation, so
+     * their click is deliberately left untouched while the lookup runs. */
+    if (href) {
+      event.preventDefault();
+    }
+
+    const game = catalog.cached(tagName) ?? (await catalog.resolveOne(tagName));
+
+    if (!mention.isConnected) {
+      return;
+    }
+
+    if (game) {
+      showCard(mention, game.slug, tagName);
+      return;
+    }
+
+    /* Continue through the same router core uses for cooked links after a miss.
+     * Modified clicks never enter this path, so their native browser behavior
+     * remains intact. */
+    if (href) {
+      DiscourseURL.routeTo(href);
+    }
   }
+
+  activeClickHandler = openCard;
+  document.addEventListener("click", activeClickHandler, true);
 
   /* The card's own links go to the catalog, which unloads the page, but "ver
    * tópicos" is an in-app transition and the menu would otherwise still be
@@ -128,10 +109,4 @@ export default apiInitializer((api) => {
    * change covers that link and every future one, rather than each link having
    * to remember to close its own card. */
   api.onPageChange(() => menu.close(MENU_IDENTIFIER));
-
-  api.decorateCookedElement(markGameMentions);
-
-  /* Chat is optional; its decorator arrives with the plugin. Same signature as
-   * the cooked one since chat moved to `decorateCookedMessage`. */
-  api.decorateChatMessage?.(markGameMentions);
 });
