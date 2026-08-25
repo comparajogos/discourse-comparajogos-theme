@@ -56,10 +56,28 @@ export default apiInitializer((api) => {
     window.location.assign(summaryLink.href);
   }
 
+  function resyncAfterDisclosureChange(event) {
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    if (!event.target.closest(".user-profile-toggle-btn")) {
+      return;
+    }
+
+    // Core rerenders the native LinkTo and toggle when the profile disclosure
+    // changes state. Reapply both cross-product contracts after that render so
+    // expanding the profile cannot restore the forum Summary destination or
+    // drop the catalog panel from aria-controls.
+    scheduleOnce("afterRender", null, syncSummaryLink);
+    scheduleOnce("afterRender", null, syncProfileDisclosure);
+  }
+
   // Capture before Discourse's internal-link interceptor. The native Summary
   // item remains the single semantic slot, but its destination belongs to the
   // React application outside the forum's `/f` router.
   document.addEventListener("click", openCanonicalSummary, true);
+  document.addEventListener("click", resyncAfterDisclosureChange);
 
   api.onPageChange((path) => {
     if (!settings.unified_profile_shell || !product) {
