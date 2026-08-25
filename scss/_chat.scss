@@ -194,18 +194,16 @@ html.has-full-page-chat {
    * the surface is deliberately borderless. */
 
   .chat-form__section:has(
-      + .chat-form__section:not(
-          :has(.chat-form__section-title),
-          .--leave-channel
-        )
+      + .chat-form__section:not(.--leave-channel)
+        > .chat-form__section-content:first-child
     )
-    .chat-form__section-content {
+    > .chat-form__section-content {
     border-end-start-radius: 0;
     border-end-end-radius: 0;
   }
 
-  .chat-form__section:not(:has(.chat-form__section-title), .--leave-channel)
-    .chat-form__section-content {
+  .chat-form__section:not(.--leave-channel)
+    > .chat-form__section-content:first-child {
     border-start-start-radius: 0;
     border-start-end-radius: 0;
   }
