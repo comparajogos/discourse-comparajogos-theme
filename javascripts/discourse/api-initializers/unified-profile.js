@@ -10,17 +10,17 @@ const PROFILE_DETAILS_ID = "cj-profile-catalog-details";
 
 export default apiInitializer((api) => {
   const product = (settings.product_url || "").replace(/\/$/, "");
+  let profileUsername;
   let profileObserver;
 
   function syncSummaryLink() {
-    const match = window.location.pathname.match(USER_ROUTE);
     const summaryLink = document.querySelector(SUMMARY_LINK);
 
-    if (!match || !summaryLink) {
+    if (!profileUsername || !summaryLink) {
       return;
     }
 
-    const href = `${product}/u/${encodeURIComponent(match[1])}`;
+    const href = `${product}/u/${encodeURIComponent(profileUsername)}`;
 
     if (summaryLink.href !== href) {
       summaryLink.href = href;
@@ -57,7 +57,7 @@ export default apiInitializer((api) => {
     if (
       !settings.unified_profile_shell ||
       !document.body.classList.contains(SHELL_CLASS) ||
-      !window.location.pathname.match(USER_ROUTE)
+      !profileUsername
     ) {
       return;
     }
@@ -93,10 +93,10 @@ export default apiInitializer((api) => {
 
     event.preventDefault();
     event.stopPropagation();
-    const match = window.location.pathname.match(USER_ROUTE);
-
-    if (match) {
-      window.location.assign(`${product}/u/${encodeURIComponent(match[1])}`);
+    if (profileUsername) {
+      window.location.assign(
+        `${product}/u/${encodeURIComponent(profileUsername)}`
+      );
     }
   }
 
@@ -107,6 +107,7 @@ export default apiInitializer((api) => {
 
   api.onPageChange((path) => {
     stopProfileSync();
+    profileUsername = null;
 
     const pathname = new URL(path, window.location.origin).pathname;
     const userMatch = pathname.match(USER_ROUTE);
@@ -117,6 +118,7 @@ export default apiInitializer((api) => {
     }
 
     document.body.classList.add(SHELL_CLASS);
+    profileUsername = userMatch[1];
     const match = pathname.match(LEGACY_PROFILE);
 
     if (!match) {
