@@ -68,7 +68,9 @@ function stubProfileCatalog({ data = PROFILE_DATA, ok = true } = {}) {
   return calls;
 }
 
-acceptance("Compara Jogos profile bridge", function () {
+acceptance("Compara Jogos profile bridge", function (needs) {
+  needs.user();
+
   test("it adds the shared public profile tabs behind the cutover setting", async function (assert) {
     const previous = settings.unified_profile_shell;
     settings.unified_profile_shell = true;
@@ -300,6 +302,7 @@ acceptance("Compara Jogos profile bridge", function () {
 });
 
 acceptance("Compara Jogos profile bridge - mobile", function (needs) {
+  needs.user();
   needs.mobileView();
 
   test("it keeps focused-page expansion compact", async function (assert) {
