@@ -385,3 +385,17 @@ html.has-full-page-chat {
 .chat-message-container:has(.chat-message-avatar) .chat-message {
   padding-block-start: 0.625rem;
 }
+
+/* Core already owns the hover and action-rail behavior, but its opaque
+ * --d-hover colour reads like a selected row inside our pure white/black chat
+ * panel. Discord uses a much quieter, full-width wash. Keep the active state
+ * in lockstep so the row does not flash back to core's stronger fill while its
+ * action menu or a descendant control has focus. Message-specific bookmark,
+ * highlight and deletion colours remain more specific in core. */
+
+.no-touch .chat-message-container {
+  &:hover,
+  &.-active {
+    background: var(--cj-hover);
+  }
+}
