@@ -183,7 +183,7 @@
 
   &__last-reply-name {
     overflow: hidden;
-    font-weight: 500;
+    font-weight: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -215,7 +215,14 @@
 a.cj-feed__last-reply,
 a.cj-feed__last-reply:visited,
 a.cj-feed__last-reply:active {
+  color: var(--cj-text-subtle);
+}
+
+.topic-list.--cj-feed
+  .topic-list-item:is(.unseen-topic, .unread-posts)
+  a.cj-feed__last-reply {
   color: var(--cj-text-muted);
+  font-weight: 500;
 }
 
 a.cj-feed__last-reply:hover {

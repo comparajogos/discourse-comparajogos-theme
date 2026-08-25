@@ -74,6 +74,9 @@ function colorDefinitions() {
   /* React --muted-foreground */
   --cj-text-muted: ${pair("textMuted")};
 
+  /* Tertiary metadata: unchanged in light, quieter against dark surfaces */
+  --cj-text-subtle: ${pair("textSubtle")};
+
   /* React LastVisitMarker: red-500 light / orange-800 dark */
   --cj-last-visit-marker: ${pair("lastVisitMarker")};
 
