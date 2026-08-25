@@ -423,6 +423,14 @@
  * Mention popup
  * -------------------------------------------------------------------------- */
 
+/* Core gives cooked and preview hashtags link semantics, while the rich editor
+ * keeps the same anchor inside ProseMirror's editable surface. Match the cursor
+ * to the card-opening behavior shared by all three surfaces. */
+
+.ProseMirror a.hashtag-cooked[data-name] {
+  cursor: pointer;
+}
+
 .fk-d-menu[data-identifier="cj-game-card"] {
   width: auto;
   max-width: calc(100vw - var(--space-6));
