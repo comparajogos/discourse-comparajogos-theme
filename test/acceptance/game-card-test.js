@@ -263,6 +263,15 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     server.get("/tag/8/l/latest.json", () =>
       helper.response(tagList(8, "ficha", "Data sheet"))
     );
+    server.get("/tag/8/notifications.json", () =>
+      helper.response({
+        tag_notification: {
+          id: 8,
+          name: "ficha",
+          notification_level: 1,
+        },
+      })
+    );
     server.get("/hashtags", () =>
       helper.response({
         tags: [
