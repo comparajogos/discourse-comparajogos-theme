@@ -338,6 +338,11 @@ acceptance("Compara Jogos game card - topic", function (needs) {
       "#reply-control .d-editor-input",
       "Previewing #gi-joe-mission-critical"
     );
+
+    if (!document.querySelector("#reply-control.show-preview")) {
+      await click("#reply-control .toggle-preview");
+    }
+
     await waitFor(
       '#reply-control .d-editor-preview .hashtag-cooked[data-slug="gi-joe-mission-critical"]'
     );

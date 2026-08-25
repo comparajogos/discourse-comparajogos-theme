@@ -10,6 +10,7 @@ const PROFILE_DETAILS_ID = "cj-profile-catalog-details";
 
 export default apiInitializer((api) => {
   const product = (settings.product_url || "").replace(/\/$/, "");
+  let profileObserver;
 
   function syncSummaryLink() {
     const match = window.location.pathname.match(USER_ROUTE);
@@ -37,6 +38,32 @@ export default apiInitializer((api) => {
     toggle.setAttribute("aria-controls", [...controls].join(" "));
   }
 
+  function stopProfileSync() {
+    profileObserver?.disconnect();
+    profileObserver = null;
+  }
+
+  function startProfileSync() {
+    stopProfileSync();
+
+    if (
+      !settings.unified_profile_shell ||
+      !document.body.classList.contains(SHELL_CLASS) ||
+      !window.location.pathname.match(USER_ROUTE)
+    ) {
+      return;
+    }
+
+    profileObserver = new MutationObserver(() => {
+      syncSummaryLink();
+      syncProfileDisclosure();
+    });
+    profileObserver.observe(document.body, { childList: true, subtree: true });
+
+    syncSummaryLink();
+    syncProfileDisclosure();
+  }
+
   function openCanonicalSummary(event) {
     if (!settings.unified_profile_shell || !product) {
       return;
@@ -53,45 +80,34 @@ export default apiInitializer((api) => {
 
     event.preventDefault();
     event.stopPropagation();
-    window.location.assign(summaryLink.href);
-  }
+    const match = window.location.pathname.match(USER_ROUTE);
 
-  function resyncAfterDisclosureChange(event) {
-    if (!(event.target instanceof Element)) {
-      return;
+    if (match) {
+      window.location.assign(`${product}/u/${encodeURIComponent(match[1])}`);
     }
-
-    if (!event.target.closest(".user-profile-toggle-btn")) {
-      return;
-    }
-
-    // Core rerenders the native LinkTo and toggle when the profile disclosure
-    // changes state. Reapply both cross-product contracts after that render so
-    // expanding the profile cannot restore the forum Summary destination or
-    // drop the catalog panel from aria-controls.
-    scheduleOnce("afterRender", null, syncSummaryLink);
-    scheduleOnce("afterRender", null, syncProfileDisclosure);
   }
 
   // Capture before Discourse's internal-link interceptor. The native Summary
   // item remains the single semantic slot, but its destination belongs to the
   // React application outside the forum's `/f` router.
   document.addEventListener("click", openCanonicalSummary, true);
-  document.addEventListener("click", resyncAfterDisclosureChange);
 
   api.onPageChange((path) => {
-    if (!settings.unified_profile_shell || !product) {
+    stopProfileSync();
+
+    const pathname = new URL(path, window.location.origin).pathname;
+    const userMatch = pathname.match(USER_ROUTE);
+
+    if (!settings.unified_profile_shell || !product || !userMatch) {
       document.body.classList.remove(SHELL_CLASS);
       return;
     }
 
     document.body.classList.add(SHELL_CLASS);
-    const pathname = new URL(path, window.location.origin).pathname;
     const match = pathname.match(LEGACY_PROFILE);
 
     if (!match) {
-      scheduleOnce("afterRender", null, syncSummaryLink);
-      scheduleOnce("afterRender", null, syncProfileDisclosure);
+      scheduleOnce("afterRender", null, startProfileSync);
       return;
     }
 
