@@ -103,20 +103,6 @@
     }
   }
 
-  /* Core already marks a read row with `.visited`, but its default distinction
-   * is only a modest title colour/weight change. The present/absent dot adds a
-   * shape and a stable position, so unread state does not depend on colour. */
-
-  .topic-list-item:not(.visited) &__title::before {
-    flex: 0 0 0.45rem;
-    width: 0.45rem;
-    height: 0.45rem;
-    margin-block-start: 0.38em;
-    background: var(--cj-action);
-    border-radius: var(--cj-radius-pill);
-    content: "";
-  }
-
   /* Without an excerpt the row is three short lines adrift in a wide box. */
   &__excerpt {
     display: -webkit-box;
