@@ -1,4 +1,4 @@
-import { visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import sinon from "sinon";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
@@ -93,6 +93,31 @@ acceptance("Compara Jogos profile bridge", function () {
         ["offers", "lists", "plays"],
         "public product tabs keep the same priority and focus order as React"
       );
+      assert
+        .dom(".about.collapsed-info .cj-profile-bridge--profile")
+        .isNotVisible(
+          "focused forum pages keep catalog facts behind the native disclosure"
+        );
+      assert
+        .dom(".user-profile-toggle-btn")
+        .hasAttribute("aria-expanded", "false");
+
+      await click(".user-profile-toggle-btn");
+
+      assert
+        .dom(".cj-profile-bridge--profile")
+        .isVisible("the native disclosure reveals catalog facts too");
+      assert
+        .dom(".user-profile-toggle-btn")
+        .hasAttribute("aria-expanded", "true");
+
+      await click(".user-profile-toggle-btn");
+
+      assert
+        .dom(".about.collapsed-info .cj-profile-bridge--profile")
+        .isNotVisible(
+          "collapsing the native details hides catalog facts again"
+        );
       assert
         .dom(".cj-user-nav--summary")
         .doesNotExist("the native Summary slot is not duplicated");

@@ -77,6 +77,59 @@
  * keyboard and touch behavior. */
 
 body.cj-unified-profile-shell {
+  /* Focused forum destinations start with only the member identity. Core's
+   * native disclosure already owns the expanded state, so the catalog facts
+   * follow that same state instead of competing with a second accordion. */
+
+  .user-main .about.collapsed-info .cj-profile-bridge--profile {
+    display: none;
+  }
+
+  /* Core presents this as a primary, filled action (and stretches it across
+   * the compact profile on mobile). It is a tertiary disclosure: keep the
+   * label, but match the quiet React "Sobre" control and preserve a 36px hit
+   * target without occupying a whole row. */
+
+  .user-main .about .controls > ul > li:has(> .user-profile-toggle-btn) {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .user-main .user-profile-toggle-btn {
+    width: auto;
+    min-height: 2.25rem;
+    padding: var(--space-2);
+    gap: var(--space-1);
+    color: var(--cj-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--cj-radius-control);
+    box-shadow: none;
+    font-size: var(--cj-text-xs-size);
+    font-weight: 500;
+    line-height: var(--cj-text-xs-line-height);
+    transition:
+      color var(--cj-duration-fast) var(--cj-ease-out),
+      background-color var(--cj-duration-fast) var(--cj-ease-out);
+
+    .d-icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+
+    &:hover {
+      color: var(--cj-text);
+      background: var(--cj-control);
+    }
+
+    &:focus-visible {
+      color: var(--cj-text);
+      background: var(--cj-control);
+      outline: 0;
+      box-shadow: var(--cj-focus-ring);
+    }
+  }
+
   .user-main .user-nav__summary {
     order: 0;
   }
