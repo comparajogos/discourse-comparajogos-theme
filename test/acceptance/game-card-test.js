@@ -272,19 +272,37 @@ acceptance("Compara Jogos game card - topic", function (needs) {
         },
       })
     );
-    server.get("/hashtags", () =>
-      helper.response({
-        tags: [
-          {
-            type: "tag",
-            ref: "gi-joe-mission-critical",
-            icon: "tag",
-            id: 7,
-          },
-          { type: "tag", ref: "ficha", icon: "tag", id: 8 },
-        ],
-      })
-    );
+    server.get("/hashtags", () => {
+      const tags = [
+        {
+          type: "tag",
+          ref: "gi-joe-mission-critical",
+          text: "gi-joe-mission-critical",
+          slug: "gi-joe-mission-critical",
+          icon: "tag",
+          id: 7,
+          relative_url: "/tag/gi-joe-mission-critical",
+          style_type: "icon",
+        },
+        {
+          type: "tag",
+          ref: "ficha",
+          text: "ficha",
+          slug: "ficha",
+          icon: "tag",
+          id: 8,
+          relative_url: "/tag/ficha",
+          style_type: "icon",
+        },
+      ];
+
+      return helper.response({
+        category: [],
+        tag: tags,
+        categories: [],
+        tags,
+      });
+    });
   });
 
   test("the rail lists the topic's games and skips its marker tags", async function (assert) {

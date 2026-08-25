@@ -20,7 +20,11 @@ export default apiInitializer((api) => {
       return;
     }
 
-    summaryLink.href = `${product}/u/${encodeURIComponent(match[1])}`;
+    const href = `${product}/u/${encodeURIComponent(match[1])}`;
+
+    if (summaryLink.href !== href) {
+      summaryLink.href = href;
+    }
   }
 
   function syncProfileDisclosure() {
@@ -35,7 +39,11 @@ export default apiInitializer((api) => {
       (toggle.getAttribute("aria-controls") || "").split(/\s+/).filter(Boolean)
     );
     controls.add(PROFILE_DETAILS_ID);
-    toggle.setAttribute("aria-controls", [...controls].join(" "));
+    const ariaControls = [...controls].join(" ");
+
+    if (toggle.getAttribute("aria-controls") !== ariaControls) {
+      toggle.setAttribute("aria-controls", ariaControls);
+    }
   }
 
   function stopProfileSync() {
@@ -58,7 +66,12 @@ export default apiInitializer((api) => {
       syncSummaryLink();
       syncProfileDisclosure();
     });
-    profileObserver.observe(document.body, { childList: true, subtree: true });
+    profileObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["aria-controls"],
+      childList: true,
+      subtree: true,
+    });
 
     syncSummaryLink();
     syncProfileDisclosure();
