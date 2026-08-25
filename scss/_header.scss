@@ -215,6 +215,13 @@
 @include viewport.from(md) {
   @supports (animation-timeline: scroll()) {
     @media (prefers-reduced-motion: no-preference) {
+      :root,
+      body {
+        /* Once the floating inset has scrolled away, sticky page context must
+         * meet the shell itself rather than the header's original outer box. */
+        --cj-sticky-header-offset: var(--cj-header-shell-height);
+      }
+
       .d-header > .wrap {
         animation: cj-header-dock linear both;
         animation-range: 0 1.5rem;

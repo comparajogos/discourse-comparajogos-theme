@@ -49,6 +49,7 @@ body {
    * padding the shell itself. The full header also includes the 1.5rem inset. */
   --cj-header-shell-height: 4.625rem;
   --cj-header-height: 6.125rem;
+  --cj-sticky-header-offset: var(--cj-header-height);
   --cj-radius-shell: 1.5rem;
   --cj-header-account-size: 2.5rem;
   --cj-header-avatar-size: 2rem;

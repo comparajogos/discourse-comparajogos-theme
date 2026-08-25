@@ -30,14 +30,14 @@ $category-rail-sticky-height: 4.5rem;
 .list-controls {
   position: sticky;
   z-index: z("base") + 1;
-  inset-block-start: var(--cj-header-height);
+  inset-block-start: var(--cj-sticky-header-offset);
   background: var(--cj-background);
 }
 
 #main-outlet > .cj-category-carousel {
   position: sticky;
   z-index: z("base") + 1;
-  inset-block-start: var(--cj-header-height);
+  inset-block-start: var(--cj-sticky-header-offset);
   box-sizing: border-box;
   block-size: $category-rail-sticky-height;
   margin-block: 0;
@@ -47,7 +47,7 @@ $category-rail-sticky-height: 4.5rem;
 
 #main-outlet:has(> .cj-category-carousel) > .list-controls {
   inset-block-start: calc(
-    var(--cj-header-height) + $category-rail-sticky-height
+    var(--cj-sticky-header-offset) + $category-rail-sticky-height
   );
 }
 
