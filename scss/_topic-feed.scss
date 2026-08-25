@@ -161,8 +161,8 @@
     }
   }
 
-  /* The strongest signal a thread is alive, so it gets its own line rather than
-   * becoming another number in the row. */
+  /* Last-reply context is useful but tertiary. Keep it on its own line without
+   * a filled pill, which otherwise becomes brighter than an unread title. */
 
   &__last-reply {
     display: inline-flex;
@@ -171,22 +171,13 @@
     align-self: start;
     max-width: 100%;
     margin-block-start: var(--space-2);
-    padding: 0.125rem var(--space-3);
-    color: var(--cj-control-foreground);
+    padding-block: 0.125rem;
     font-size: var(--font-down-2-rem);
-    background: var(--cj-surface-muted);
-    border-radius: var(--cj-radius-pill);
-    transition: background-color var(--cj-duration-fast) var(--cj-ease-out);
-
-    &:hover {
-      color: var(--cj-control-foreground);
-      background: var(--cj-hover);
-    }
+    transition: color var(--cj-duration-fast) var(--cj-ease-out);
 
     .d-icon {
       width: 0.85em;
       height: 0.85em;
-      color: var(--cj-text-muted);
     }
   }
 
@@ -218,14 +209,19 @@
 }
 
 /* Core groups every anchor state into a selector that can outrank the component
- * class depending on compilation order. The React pill is neutral in every
- * state, so pin the real link (including visited) to its control foreground. */
+ * class depending on compilation order. Pin this tertiary link to metadata
+ * colour in every persistent state; hover alone promotes it for interaction. */
 
 a.cj-feed__last-reply,
 a.cj-feed__last-reply:visited,
-a.cj-feed__last-reply:hover,
 a.cj-feed__last-reply:active {
-  color: var(--cj-control-foreground);
+  color: var(--cj-text-muted);
+}
+
+a.cj-feed__last-reply:hover {
+  color: var(--cj-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 @include viewport.until(sm) {
