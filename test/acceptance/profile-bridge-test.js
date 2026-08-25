@@ -101,6 +101,14 @@ acceptance("Compara Jogos profile bridge", function () {
       assert
         .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "false");
+      assert.true(
+        document
+          .querySelector(".user-profile-toggle-btn")
+          .getAttribute("aria-controls")
+          .split(/\s+/)
+          .includes("cj-profile-catalog-details"),
+        "the native disclosure names the catalog facts it controls"
+      );
 
       await click(".user-profile-toggle-btn");
 
@@ -278,6 +286,34 @@ acceptance("Compara Jogos profile bridge", function () {
 
 acceptance("Compara Jogos profile bridge - mobile", function (needs) {
   needs.mobileView();
+
+  test("it keeps focused-page expansion compact", async function (assert) {
+    const previous = settings.unified_profile_shell;
+    settings.unified_profile_shell = true;
+    stubProfileCatalog();
+
+    try {
+      await visit("/u/eviltrout/activity");
+      await click(".user-profile-toggle-btn");
+
+      assert.strictEqual(
+        getComputedStyle(document.querySelector(".user-profile-avatar .avatar"))
+          .width,
+        "45px",
+        "expansion preserves the compact identity avatar"
+      );
+      assert.strictEqual(
+        getComputedStyle(document.querySelector(".about .secondary")).display,
+        "none",
+        "secondary forum metadata does not displace the focused task"
+      );
+      assert
+        .dom(".cj-profile-bridge--profile")
+        .isVisible("the compact expansion still reveals catalog facts");
+    } finally {
+      settings.unified_profile_shell = previous;
+    }
+  });
 
   test("it keeps headline facts touch-sized and visible", async function (assert) {
     stubProfileCatalog();

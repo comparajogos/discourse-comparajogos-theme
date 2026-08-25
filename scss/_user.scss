@@ -54,6 +54,85 @@
       min-width: 0;
     }
   }
+
+  /* Expanding core's profile on a phone normally switches to a centred hero:
+   * 144px avatar, bio, location, staff counters and a long definition list.
+   * Those details displace the focused task below the fold. Keep the native
+   * expanded state (and its ARIA contract), but adapt its mobile presentation
+   * to the same compact identity and reveal only the catalog facts. */
+
+  body.cj-unified-profile-shell .user-main .about:not(.collapsed-info) {
+    .staff-counters,
+    .user-profile-image,
+    .user-profile__featured-topic,
+    .user-profile__location-and-website,
+    .bio,
+    .secondary,
+    .controls > ul > li:not(:has(> .user-profile-toggle-btn)) {
+      display: none;
+    }
+
+    .details {
+      text-align: start;
+    }
+
+    .primary {
+      display: grid;
+      grid-template-columns: 3.75rem minmax(0, 1fr) auto;
+      align-items: start;
+      min-height: 0;
+    }
+
+    .user-profile-avatar {
+      grid-column: 1;
+      grid-row: 1;
+      width: 3.75rem;
+      height: 3.5rem;
+      margin: 0;
+    }
+
+    .user-profile-avatar .avatar {
+      width: 2.8125rem;
+      height: 2.8125rem;
+      margin: 0.3125rem 0.625rem 0.3125rem 0.3125rem;
+    }
+
+    .primary-textual {
+      grid-column: 2;
+      grid-row: 1;
+      min-width: 0;
+      padding-block-end: var(--space-2);
+      text-align: start;
+    }
+
+    .user-profile-names__primary {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+    }
+
+    .user-profile-names__secondary {
+      font-size: var(--cj-text-sm-size);
+      line-height: var(--cj-text-sm-line-height);
+    }
+
+    .controls {
+      display: flex;
+      grid-column: 3;
+      grid-row: 1;
+      align-self: start;
+      width: auto;
+      margin-inline-start: var(--space-2);
+    }
+
+    .controls > ul {
+      width: auto;
+      margin: 0;
+    }
+
+    .cj-profile-bridge--profile {
+      margin-block: var(--space-3) var(--space-2);
+    }
+  }
 }
 
 /* Core's staff bar is deliberately inverted — `background: var(--primary)` with
@@ -81,7 +160,7 @@ body.cj-unified-profile-shell {
    * native disclosure already owns the expanded state, so the catalog facts
    * follow that same state instead of competing with a second accordion. */
 
-  .user-main .about.collapsed-info .cj-profile-bridge--profile {
+  .user-main .about.collapsed-info #cj-profile-catalog-details {
     display: none;
   }
 

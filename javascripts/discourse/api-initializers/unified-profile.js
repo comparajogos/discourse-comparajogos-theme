@@ -6,6 +6,7 @@ const LEGACY_PROFILE = /(?:^|\/)u\/([^/?#]+)(?:\/summary)?\/?$/;
 const USER_ROUTE = /(?:^|\/)u\/([^/?#]+)/;
 const SUMMARY_LINK = ".user-main .user-nav__summary > a";
 const SHELL_CLASS = "cj-unified-profile-shell";
+const PROFILE_DETAILS_ID = "cj-profile-catalog-details";
 
 export default apiInitializer((api) => {
   const product = (settings.product_url || "").replace(/\/$/, "");
@@ -19,6 +20,21 @@ export default apiInitializer((api) => {
     }
 
     summaryLink.href = `${product}/u/${encodeURIComponent(match[1])}`;
+  }
+
+  function syncProfileDisclosure() {
+    const toggle = document.querySelector(".user-profile-toggle-btn");
+    const details = document.getElementById(PROFILE_DETAILS_ID);
+
+    if (!toggle || !details) {
+      return;
+    }
+
+    const controls = new Set(
+      (toggle.getAttribute("aria-controls") || "").split(/\s+/).filter(Boolean)
+    );
+    controls.add(PROFILE_DETAILS_ID);
+    toggle.setAttribute("aria-controls", [...controls].join(" "));
   }
 
   function openCanonicalSummary(event) {
@@ -57,6 +73,7 @@ export default apiInitializer((api) => {
 
     if (!match) {
       scheduleOnce("afterRender", null, syncSummaryLink);
+      scheduleOnce("afterRender", null, syncProfileDisclosure);
       return;
     }
 
