@@ -309,6 +309,19 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
 
     try {
       await visit("/u/eviltrout/activity");
+
+      assert.strictEqual(
+        getComputedStyle(document.querySelector(".about .primary")).display,
+        "grid",
+        "collapsed identity and disclosure share one row"
+      );
+      assert.strictEqual(
+        getComputedStyle(document.querySelector(".about .controls"))
+          .gridColumnStart,
+        "3",
+        "the disclosure stays on the right edge"
+      );
+
       await click(".user-profile-toggle-btn");
 
       assert.strictEqual(
@@ -316,6 +329,12 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
           .width,
         "45px",
         "expansion preserves the compact identity avatar"
+      );
+      assert.strictEqual(
+        getComputedStyle(document.querySelector(".about .primary-textual"))
+          .justifySelf,
+        "start",
+        "expansion keeps the member identity left-aligned"
       );
       assert.strictEqual(
         getComputedStyle(document.querySelector(".about .secondary")).display,
@@ -330,7 +349,7 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
     }
   });
 
-  test("it keeps headline facts touch-sized and visible", async function (assert) {
+  test("it keeps headline facts compact and visible", async function (assert) {
     stubProfileCatalog();
 
     await visit("/u/eviltrout/summary");
@@ -344,8 +363,8 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
     assert.strictEqual(
       getComputedStyle(document.querySelector(".cj-profile-bridge__metric"))
         .minHeight,
-      "44px",
-      "headline destinations keep a touch-sized target"
+      "36px",
+      "headline destinations match the compact shared metric height"
     );
   });
 });

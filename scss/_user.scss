@@ -39,19 +39,64 @@
     background: transparent;
   }
 
-  /* Core keeps the collapsed identity details on one flex line. The profile
-   * connector is a full-width region, so let it start a deliberate second row
-   * instead of competing with the avatar and primary details. */
+  /* Keep the compact identity stable across disclosure states: avatar and
+   * names stay left while the native toggle owns the right edge. Applying the
+   * grid to `.primary` is important because that is where core places the
+   * controls; wrapping `.details` instead pushes Expandir onto a second row. */
 
-  .user-main .about.collapsed-info .details {
-    flex-wrap: wrap;
-  }
+  body.cj-unified-profile-shell .user-main .about .details {
+    .primary {
+      display: grid;
+      grid-template-columns: 2.8125rem minmax(0, 1fr) auto;
+      align-items: center;
+      width: 100%;
+      min-height: 0;
+      column-gap: var(--space-2);
+    }
 
-  .user-main .about.collapsed-info .details {
-    > .cj-profile-bridge,
-    > :has(> .cj-profile-bridge) {
-      flex: 0 0 100%;
+    .user-profile-avatar {
+      grid-column: 1;
+      grid-row: 1;
+      width: 2.8125rem;
+      height: 2.8125rem;
+      margin: 0;
+    }
+
+    .user-profile-avatar .avatar {
+      width: 2.8125rem;
+      height: 2.8125rem;
+      margin: 0;
+    }
+
+    .primary-textual {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      justify-self: start;
       min-width: 0;
+      margin: 0;
+      padding: 0;
+      text-align: start;
+    }
+
+    .user-profile-names {
+      align-items: flex-start;
+      text-align: start;
+    }
+
+    .controls {
+      display: flex;
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+      justify-self: end;
+      width: auto;
+      margin: 0;
+    }
+
+    .controls > ul {
+      width: auto;
+      margin: 0;
     }
   }
 
@@ -72,39 +117,6 @@
       display: none;
     }
 
-    .details {
-      text-align: start;
-    }
-
-    .primary {
-      display: grid;
-      grid-template-columns: 3.75rem minmax(0, 1fr) auto;
-      align-items: start;
-      min-height: 0;
-    }
-
-    .user-profile-avatar {
-      grid-column: 1;
-      grid-row: 1;
-      width: 3.75rem;
-      height: 3.5rem;
-      margin: 0;
-    }
-
-    .user-profile-avatar .avatar {
-      width: 2.8125rem;
-      height: 2.8125rem;
-      margin: 0.3125rem 0.625rem 0.3125rem 0.3125rem;
-    }
-
-    .primary-textual {
-      grid-column: 2;
-      grid-row: 1;
-      min-width: 0;
-      padding-block-end: var(--space-2);
-      text-align: start;
-    }
-
     .user-profile-names__primary {
       font-size: 1.25rem;
       line-height: 1.5rem;
@@ -113,20 +125,6 @@
     .user-profile-names__secondary {
       font-size: var(--cj-text-sm-size);
       line-height: var(--cj-text-sm-line-height);
-    }
-
-    .controls {
-      display: flex;
-      grid-column: 3;
-      grid-row: 1;
-      align-self: start;
-      width: auto;
-      margin-inline-start: var(--space-2);
-    }
-
-    .controls > ul {
-      width: auto;
-      margin: 0;
     }
 
     .cj-profile-bridge--profile {
@@ -495,7 +493,12 @@ body.cj-unified-profile-shell {
 
 @include viewport.until(sm) {
   .cj-profile-bridge {
-    &__metric,
+    &__metric {
+      min-height: 2.25rem;
+      padding-inline: var(--space-2);
+      gap: var(--space-1);
+    }
+
     &__list {
       min-height: 2.75rem;
     }
