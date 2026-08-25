@@ -231,6 +231,7 @@ acceptance("Compara Jogos game card - tag page", function (needs) {
 });
 
 acceptance("Compara Jogos game card - topic", function (needs) {
+  needs.user();
   needs.settings({ rich_editor: true, tagging_enabled: true });
 
   needs.pretender((server, helper) => {
