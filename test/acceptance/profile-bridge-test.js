@@ -95,8 +95,8 @@ acceptance("Compara Jogos profile bridge", function () {
       );
       assert
         .dom(".about.collapsed-info #cj-profile-catalog-details")
-        .isNotVisible(
-          "focused forum pages keep catalog facts behind the native disclosure"
+        .exists(
+          "focused forum pages keep catalog facts inside the native disclosure"
         );
       assert
         .dom(".user-profile-toggle-btn")
@@ -113,8 +113,8 @@ acceptance("Compara Jogos profile bridge", function () {
       await click(".user-profile-toggle-btn");
 
       assert
-        .dom("#cj-profile-catalog-details")
-        .isVisible("the native disclosure reveals catalog facts too");
+        .dom(".about:not(.collapsed-info) #cj-profile-catalog-details")
+        .exists("the native disclosure expands around catalog facts too");
       assert
         .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "true");
@@ -123,9 +123,12 @@ acceptance("Compara Jogos profile bridge", function () {
 
       assert
         .dom(".about.collapsed-info #cj-profile-catalog-details")
-        .isNotVisible(
-          "collapsing the native details hides catalog facts again"
+        .exists(
+          "collapsing returns catalog facts to the disclosure's collapsed state"
         );
+      assert
+        .dom(".user-profile-toggle-btn")
+        .hasAttribute("aria-expanded", "false");
       assert
         .dom(".cj-user-nav--summary")
         .doesNotExist("the native Summary slot is not duplicated");
@@ -317,9 +320,7 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
         .dom(".about.collapsed-info .primary > .primary-textual")
         .exists("the member names remain in the primary identity row");
       assert
-        .dom(
-          ".about.collapsed-info .primary > .controls .user-profile-toggle-btn"
-        )
+        .dom(".about.collapsed-info .controls .user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "false");
       assert.true(
         document
