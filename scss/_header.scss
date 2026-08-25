@@ -233,16 +233,16 @@
   }
 }
 
-/* Core's sub-`sm` `height: 3.66em` resolves to roughly 57px with the forum's
- * base font size. React's `h-10` plus `py-2` is exactly 56px, as is the splash. */
+/* Core's sub-`sm` `height: 3.66em` resolves fractionally. Pin the mobile box to
+ * the shared 58px token instead: React's 42px account control drives `py-2` to
+ * that rendered height. */
 
 @include viewport.until(sm) {
   .d-header {
     height: var(--cj-header-height);
 
-    /* Mobile is the only surface where core's fractional content metrics made
-     * the shell render a pixel taller than React. Keep desktop content-driven,
-     * where its geometry was already correct. */
+    /* Mobile is the only surface where core's fractional content metrics drift
+     * from React. Keep desktop content-driven, where its geometry is correct. */
 
     &.d-header > .wrap {
       block-size: var(--cj-header-shell-height);

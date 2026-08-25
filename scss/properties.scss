@@ -146,14 +146,15 @@ body {
   --d-nav-underline-height: 0;
 }
 
-/* Below `md` the client's header is `px-3 py-2` around the same `h-10` logo and
- * flush to the top, so shell and header box are the same 3.5rem. */
+/* Below `md` the client's header is flush to the top. Its 42px account control
+ * (40px plus the 1px outer margin on each side) drives `py-2` to a 58px shell,
+ * so shell and header box share that rendered height. */
 
 @include viewport.until(md) {
   :root,
   body {
-    --cj-header-shell-height: 3.5rem;
-    --cj-header-height: 3.5rem;
+    --cj-header-shell-height: 3.625rem;
+    --cj-header-height: 3.625rem;
     --cj-radius-shell: 0;
     --cj-header-market-caret-size: 0.625rem;
     --d-wrap-padding-x: var(--space-4);
