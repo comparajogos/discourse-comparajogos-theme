@@ -169,16 +169,16 @@ html.has-full-page-chat {
 }
 
 /* Core's mobile chat form paints each section as a square primary-very-low
- * slab. On the product's black chat canvas these are content groups: use the
- * card role, the shared panel radius and the same quiet hairline as every other
- * grouped surface. Mobile-only keeps the denser desktop settings layout intact. */
+ * slab. These are compact settings groups rather than nested cards: use the
+ * same filled, borderless surface and 10px radius as product inputs.
+ * Mobile-only keeps the denser desktop settings layout intact. */
 
 .mobile-view .c-channel-settings {
   .chat-form__section-content {
     padding: var(--space-4);
-    background: var(--cj-card);
-    border: 1px solid var(--cj-border);
-    border-radius: var(--cj-radius-panel);
+    background: var(--cj-control);
+    border: 0;
+    border-radius: var(--d-input-border-radius);
   }
 
   .chat-form__section-title {
@@ -190,7 +190,8 @@ html.has-full-page-chat {
 
   /* Description and Members are separate semantic sections in core but one
    * visual group in this mobile flow. Join their adjacent edges while retaining
-   * the DOM and route-sized touch target. */
+   * the DOM and route-sized touch target. There is no seam to retire because
+   * the surface is deliberately borderless. */
 
   .chat-form__section:has(
       + .chat-form__section:not(
@@ -199,14 +200,12 @@ html.has-full-page-chat {
         )
     )
     .chat-form__section-content {
-    border-block-end: 0;
     border-end-start-radius: 0;
     border-end-end-radius: 0;
   }
 
   .chat-form__section:not(:has(.chat-form__section-title), .--leave-channel)
     .chat-form__section-content {
-    border-block-start: 0;
     border-start-start-radius: 0;
     border-start-end-radius: 0;
   }
@@ -229,6 +228,14 @@ html.has-full-page-chat {
  * chat runs edge to edge with no radius, hairline or top gap. */
 
 @include viewport.until(sm) {
+  /* The channel navbar is sticky beneath the app header. Its transparent core
+   * surface let section titles scroll through the channel name on settings
+   * routes; an opaque mobile surface preserves the two-layer header contract. */
+
+  html.has-full-page-chat .c-navbar-container {
+    background: var(--cj-header);
+  }
+
   html.has-full-page-chat .d-header {
     .contents {
       /* Core lets Chat's full-width header outlet shrink around the account
