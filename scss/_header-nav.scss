@@ -72,13 +72,13 @@
     fill: currentcolor;
   }
 
-  /* Chat's unread indicator, as the client's ChatCountIndicator (`right-1
-   * top-0`). Anchored on the icon, since the label is hidden below `lg`. */
+  /* Anchor Chat's unread indicator to the glyph instead of the item's far edge,
+   * so its position stays stable when the label appears at `lg`. */
 
   .chat-channel-unread-indicator {
     position: absolute;
     top: var(--space-1);
-    inset-inline-start: calc(var(--space-4) + var(--space-3));
+    inset-inline-start: calc(var(--space-4) + 1rem);
   }
 }
 

@@ -41,6 +41,17 @@ $height: 3.5rem;
         line-height: var(--cj-text-xs-line-height);
         letter-spacing: 0.4px;
       }
+
+      /* Match the client's compact unread dot: its 2px ring touches the
+       * Phosphor glyph, while the blue center remains visually separate. */
+
+      &.tab-chat .icon .chat-channel-unread-indicator:not(.-urgent) {
+        top: -0.125rem;
+        right: -0.75rem;
+        width: 0.625rem;
+        height: 0.625rem;
+        border-width: 0.125rem;
+      }
     }
   }
 
