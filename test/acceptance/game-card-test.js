@@ -1,4 +1,4 @@
-import { click, currentURL, visit } from "@ember/test-helpers";
+import { click, currentURL, fillIn, visit, waitFor } from "@ember/test-helpers";
 import { test } from "qunit";
 import sinon from "sinon";
 import { cloneJSON } from "discourse/lib/object";
@@ -231,7 +231,7 @@ acceptance("Compara Jogos game card - tag page", function (needs) {
 });
 
 acceptance("Compara Jogos game card - topic", function (needs) {
-  needs.settings({ tagging_enabled: true });
+  needs.settings({ rich_editor: true, tagging_enabled: true });
 
   needs.pretender((server, helper) => {
     server.get("/t/280.json", () => helper.response(topicWithGameTags()));
@@ -261,6 +261,19 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     );
     server.get("/tag/8/l/latest.json", () =>
       helper.response(tagList(8, "ficha", "Data sheet"))
+    );
+    server.get("/hashtags", () =>
+      helper.response({
+        tags: [
+          {
+            type: "tag",
+            ref: "gi-joe-mission-critical",
+            icon: "tag",
+            id: 7,
+          },
+          { type: "tag", ref: "ficha", icon: "tag", id: 8 },
+        ],
+      })
     );
   });
 
@@ -301,6 +314,38 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     assert
       .dom('.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__action')
       .exists({ count: 2 }, "the popup offers the catalog and the tag page");
+  });
+
+  test("tapping a game mention in the rich editor opens its card", async function (assert) {
+    stubCatalog({ "gi-joe-mission-critical": GI_JOE });
+
+    await visit("/t/internationalization-localization/280");
+    await click("#topic-footer-buttons .create");
+    await fillIn(
+      "#reply-control .d-editor-input",
+      "Comparing #gi-joe-mission-critical with #ficha"
+    );
+    await click(".composer-toggle-switch");
+    await waitFor(
+      '.ProseMirror .hashtag-cooked[data-name="gi-joe-mission-critical"][data-processed="true"]'
+    );
+
+    await click('.ProseMirror .hashtag-cooked[data-name="ficha"]');
+
+    assert
+      .dom('.fk-d-menu[data-identifier="cj-game-card"]')
+      .doesNotExist("a non-game editor mention leaves the editor alone");
+
+    await click(
+      '.ProseMirror .hashtag-cooked[data-name="gi-joe-mission-critical"]'
+    );
+    await waitFor(
+      '.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name'
+    );
+
+    assert
+      .dom('.fk-d-menu[data-identifier="cj-game-card"] .cj-game-card__name')
+      .hasText("G.I. JOE Mission Critical", "the card opens while composing");
   });
 
   test("a mention that is not a game keeps its link", async function (assert) {
