@@ -192,6 +192,20 @@
   }
 }
 
+/* Who's Online marks a topic row from the last poster's presence and, on
+ * mobile, applies that state to every avatar inside the row. This feed shows
+ * the original author instead, so inheriting that ring or glow attributes one
+ * member's presence to another. Keep presence styling on the plugin's native
+ * surfaces and suppress only this semantically different avatar. */
+
+html:is(.whos-online-ring, .whos-online-glow).mobile-view
+  .topic-list.--cj-feed
+  .topic-list-item.last-poster-online
+  .cj-feed__avatar
+  img.avatar {
+  box-shadow: none;
+}
+
 /* Promote only core's explicit unseen/unread states in the feed. */
 .topic-list.--cj-feed .topic-list-item {
   .cj-feed__title a.title {
@@ -235,8 +249,7 @@ a.cj-feed__last-reply:active {
 
 a.cj-feed__last-reply:hover {
   color: var(--cj-text);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration: none;
 }
 
 @include viewport.until(sm) {

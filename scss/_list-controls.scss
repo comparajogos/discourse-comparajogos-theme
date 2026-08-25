@@ -2,7 +2,7 @@
 @use "sass:string";
 @use "lib/viewport";
 
-$mobile-category-rail-height: 4.5rem;
+$category-rail-sticky-height: 4.5rem;
 
 /* The row above the topic list, and the sheet its collapsed form opens.
  *
@@ -21,6 +21,36 @@ $mobile-category-rail-height: 4.5rem;
   }
 }
 
+/* Keep browsing context available at every viewport, as Horizon does with its
+ * compact list-controls region. Our category rail is a separate sibling, so it
+ * owns a stable slot and the filter row pins immediately beneath it. The fixed
+ * slot is also what makes the offset deterministic when labels or descriptions
+ * contain unusually long content. */
+
+.list-controls {
+  position: sticky;
+  z-index: z("base") + 1;
+  inset-block-start: var(--cj-header-height);
+  background: var(--cj-background);
+}
+
+#main-outlet > .cj-category-carousel {
+  position: sticky;
+  z-index: z("base") + 1;
+  inset-block-start: var(--cj-header-height);
+  box-sizing: border-box;
+  block-size: $category-rail-sticky-height;
+  margin-block: 0;
+  padding-block: var(--space-1);
+  background: var(--cj-background);
+}
+
+#main-outlet:has(> .cj-category-carousel) > .list-controls {
+  inset-block-start: calc(
+    var(--cj-header-height) + $category-rail-sticky-height
+  );
+}
+
 @include viewport.until(sm) {
   /* Topic rows deliberately bleed to the mobile frame edge. The sticky
    * context header must paint that same full width or scrolled titles remain
@@ -34,11 +64,7 @@ $mobile-category-rail-height: 4.5rem;
   }
 
   .list-controls {
-    position: sticky;
-    z-index: z("base") + 1;
-    inset-block-start: var(--cj-header-height);
     padding-block: var(--space-1) var(--space-2);
-    background: var(--cj-background);
 
     /* Core's navigation row already owns its 40px control height. Its trailing
      * margin duplicated the sticky wrapper's spacing and made this compact row
@@ -47,28 +73,6 @@ $mobile-category-rail-height: 4.5rem;
     .navigation-container {
       margin-block-end: 0;
     }
-  }
-
-  /* The category rail and the filters are consecutive siblings. Give the rail
-   * a stable one-line mobile slot, then pin the filters directly beneath it so
-   * they behave as one context header without wrapping utility actions into the
-   * reading area. The offset applies only while the optional carousel exists. */
-
-  #main-outlet > .cj-category-carousel {
-    position: sticky;
-    z-index: z("base") + 1;
-    inset-block-start: var(--cj-header-height);
-    box-sizing: border-box;
-    block-size: $mobile-category-rail-height;
-    margin-block: 0;
-    padding-block: var(--space-1);
-    background: var(--cj-background);
-  }
-
-  #main-outlet:has(> .cj-category-carousel) > .list-controls {
-    inset-block-start: calc(
-      var(--cj-header-height) + $mobile-category-rail-height
-    );
   }
 }
 
@@ -366,9 +370,8 @@ $filter-glyphs: (
   }
 }
 
-/* The rail goes above the controls, because the controls are what stays put:
- * .list-controls is pinned below `sm`, so anything between it and the list slides
- * underneath it as you scroll.
+/* The rail goes above the controls because both layers stay put while the topic
+ * list slides underneath them as the page scrolls.
  *
  * The two are siblings in an unclassed div, so the parent has to become a flex
  * column for `order` to mean anything. `:has()` scopes it to where the rail
