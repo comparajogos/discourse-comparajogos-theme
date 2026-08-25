@@ -239,6 +239,19 @@
 @include viewport.until(sm) {
   .d-header {
     height: var(--cj-header-height);
+
+    /* Mobile is the only surface where core's fractional content metrics made
+     * the shell render a pixel taller than React. Keep desktop content-driven,
+     * where its geometry was already correct. */
+
+    &.d-header > .wrap {
+      block-size: var(--cj-header-shell-height);
+    }
+
+    .contents {
+      block-size: 100%;
+      min-height: 0;
+    }
   }
 }
 
