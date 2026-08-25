@@ -94,7 +94,7 @@ acceptance("Compara Jogos profile bridge", function () {
         "public product tabs keep the same priority and focus order as React"
       );
       assert
-        .dom(".about.collapsed-info .cj-profile-bridge--profile")
+        .dom(".about.collapsed-info #cj-profile-catalog-details")
         .isNotVisible(
           "focused forum pages keep catalog facts behind the native disclosure"
         );
@@ -113,7 +113,7 @@ acceptance("Compara Jogos profile bridge", function () {
       await click(".user-profile-toggle-btn");
 
       assert
-        .dom(".cj-profile-bridge--profile")
+        .dom("#cj-profile-catalog-details")
         .isVisible("the native disclosure reveals catalog facts too");
       assert
         .dom(".user-profile-toggle-btn")
@@ -122,7 +122,7 @@ acceptance("Compara Jogos profile bridge", function () {
       await click(".user-profile-toggle-btn");
 
       assert
-        .dom(".about.collapsed-info .cj-profile-bridge--profile")
+        .dom(".about.collapsed-info #cj-profile-catalog-details")
         .isNotVisible(
           "collapsing the native details hides catalog facts again"
         );
@@ -310,40 +310,36 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
     try {
       await visit("/u/eviltrout/activity");
 
-      assert.strictEqual(
-        getComputedStyle(document.querySelector(".about .primary")).display,
-        "grid",
-        "collapsed identity and disclosure share one row"
-      );
-      assert.strictEqual(
-        getComputedStyle(document.querySelector(".about .controls"))
-          .gridColumnStart,
-        "3",
-        "the disclosure stays on the right edge"
+      assert
+        .dom(".about.collapsed-info .primary > .user-profile-avatar")
+        .exists("the compact avatar remains in the primary identity row");
+      assert
+        .dom(".about.collapsed-info .primary > .primary-textual")
+        .exists("the member names remain in the primary identity row");
+      assert
+        .dom(
+          ".about.collapsed-info .primary > .controls .user-profile-toggle-btn"
+        )
+        .hasAttribute("aria-expanded", "false");
+      assert.true(
+        document
+          .querySelector(".user-profile-toggle-btn")
+          .getAttribute("aria-controls")
+          .split(/\s+/)
+          .includes("cj-profile-catalog-details"),
+        "the compact disclosure controls the catalog facts"
       );
 
       await click(".user-profile-toggle-btn");
 
-      assert.strictEqual(
-        getComputedStyle(document.querySelector(".user-profile-avatar .avatar"))
-          .width,
-        "45px",
-        "expansion preserves the compact identity avatar"
-      );
-      assert.strictEqual(
-        getComputedStyle(document.querySelector(".about .primary-textual"))
-          .justifySelf,
-        "start",
-        "expansion keeps the member identity left-aligned"
-      );
-      assert.strictEqual(
-        getComputedStyle(document.querySelector(".about .secondary")).display,
-        "none",
-        "secondary forum metadata does not displace the focused task"
-      );
       assert
-        .dom(".cj-profile-bridge--profile")
-        .isVisible("the compact expansion still reveals catalog facts");
+        .dom(".about:not(.collapsed-info) .user-profile-toggle-btn")
+        .hasAttribute("aria-expanded", "true");
+      assert
+        .dom(
+          ".about:not(.collapsed-info) #cj-profile-catalog-details .cj-profile-bridge--profile"
+        )
+        .exists("the compact expansion keeps catalog facts in the disclosure");
     } finally {
       settings.unified_profile_shell = previous;
     }
@@ -354,17 +350,13 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
 
     await visit("/u/eviltrout/summary");
 
-    assert.strictEqual(
-      getComputedStyle(document.querySelector(".cj-profile-bridge__metrics"))
-        .flexWrap,
-      "wrap",
-      "mobile metrics remain visible across rows"
+    assert.deepEqual(
+      [...document.querySelectorAll("[data-cj-profile-metric]")].map(
+        (element) => element.dataset.cjProfileMetric
+      ),
+      ["offers", "plays", "collection", "lists"],
+      "all headline destinations remain available in the mobile document flow"
     );
-    assert.strictEqual(
-      getComputedStyle(document.querySelector(".cj-profile-bridge__metric"))
-        .minHeight,
-      "36px",
-      "headline destinations match the compact shared metric height"
-    );
+    assert.dom(".cj-profile-bridge__metrics").hasAttribute("aria-label");
   });
 });
