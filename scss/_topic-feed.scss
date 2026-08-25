@@ -103,6 +103,20 @@
     }
   }
 
+  /* Core already marks a read row with `.visited`, but its default distinction
+   * is only a modest title colour/weight change. The present/absent dot adds a
+   * shape and a stable position, so unread state does not depend on colour. */
+
+  .topic-list-item:not(.visited) &__title::before {
+    flex: 0 0 0.45rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-block-start: 0.38em;
+    background: var(--cj-action);
+    border-radius: var(--cj-radius-pill);
+    content: "";
+  }
+
   /* Without an excerpt the row is three short lines adrift in a wide box. */
   &__excerpt {
     display: -webkit-box;
@@ -207,6 +221,27 @@ a.cj-feed__last-reply:visited,
 a.cj-feed__last-reply:hover,
 a.cj-feed__last-reply:active {
   color: var(--cj-control-foreground);
+}
+
+/* Recent activity remains available on a read topic, but no longer competes
+ * with the title as a filled status chip. Unread rows retain the chip, making
+ * the state difference extend beyond typography without changing the copy. */
+
+.topic-list-item.visited .cj-feed__last-reply {
+  padding-inline: 0;
+  color: var(--cj-text-muted);
+  background: transparent;
+
+  &:hover {
+    color: var(--cj-text);
+    background: transparent;
+  }
+}
+
+.topic-list-item.visited a.cj-feed__last-reply,
+.topic-list-item.visited a.cj-feed__last-reply:visited,
+.topic-list-item.visited a.cj-feed__last-reply:active {
+  color: var(--cj-text-muted);
 }
 
 @include viewport.until(sm) {
