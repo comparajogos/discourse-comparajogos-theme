@@ -1,4 +1,4 @@
-import { click, visit } from "@ember/test-helpers";
+import { click, visit, waitFor } from "@ember/test-helpers";
 import { test } from "qunit";
 import sinon from "sinon";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
@@ -103,6 +103,9 @@ acceptance("Compara Jogos profile bridge", function (needs) {
       assert
         .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "false");
+      await waitFor(
+        '.user-profile-toggle-btn[aria-controls~="cj-profile-catalog-details"]'
+      );
       assert.true(
         document
           .querySelector(".user-profile-toggle-btn")
@@ -322,6 +325,9 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
       assert
         .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "false");
+      await waitFor(
+        '.user-profile-toggle-btn[aria-controls~="cj-profile-catalog-details"]'
+      );
       assert.true(
         document
           .querySelector(".user-profile-toggle-btn")
