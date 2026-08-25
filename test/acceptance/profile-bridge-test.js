@@ -143,11 +143,17 @@ acceptance("Compara Jogos profile bridge", function () {
           "https://www.comparajogos.com.br/u/eviltrout/plays"
         );
       assert
+        .dom(".cj-user-nav--plays .d-icon-cj-ph-bold-dice-five")
+        .exists("Partidas uses the same Phosphor DiceFive as React");
+      assert
         .dom(".cj-user-nav--lists > a")
         .hasAttribute(
           "href",
           "https://www.comparajogos.com.br/u/eviltrout/lists"
         );
+      assert
+        .dom(".cj-user-nav--lists .d-icon-list-check")
+        .exists("Listas uses the same Phosphor ListChecks as React");
       assert
         .dom(".cj-user-nav--offers > a")
         .hasAttribute(
@@ -176,6 +182,15 @@ acceptance("Compara Jogos profile bridge", function () {
         "111",
         "the dedicated collection query survives an unordered list preview"
       );
+    assert
+      .dom('[data-cj-profile-metric="collection"] .d-icon-cube')
+      .exists("collection uses the same Phosphor Cube as React");
+    assert
+      .dom('[data-cj-profile-metric="plays"] .d-icon-cj-ph-bold-dice-five')
+      .exists("play metrics use the shared Phosphor DiceFive");
+    assert
+      .dom('[data-cj-profile-metric="lists"] .d-icon-list-check')
+      .exists("list metrics use the shared Phosphor ListChecks");
     assert
       .dom('[data-cj-profile-metric="lists"]')
       .hasAttribute(

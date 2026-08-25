@@ -7,14 +7,15 @@
   "theme_version": "2.0.0-beta.23",
   "minimum_discourse_version": "3.6.0.beta1",
   "maximum_discourse_version": null,
-  "assets": {},
+  "assets": {
+    "icons-sprite": "/assets/cj-icons.svg"
+  },
   "modifiers": {
     "svg_icons": [
       "arrow-right",
-      "box-archive",
       "check",
       "clock",
-      "dice",
+      "cube",
       "eye",
       "far-comment",
       "far-eye",
@@ -22,7 +23,7 @@
       "gavel",
       "graduation-cap",
       "heart",
-      "list",
+      "list-check",
       "magnifying-glass",
       "pencil",
       "puzzle-piece",

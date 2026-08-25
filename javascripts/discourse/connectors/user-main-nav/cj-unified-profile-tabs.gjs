@@ -35,13 +35,13 @@ export default class CjUnifiedProfileTabs extends Component {
         </li>
         <li class="cj-user-nav cj-user-nav--lists">
           <a href="{{this.profileRoot}}/lists">
-            {{icon "list"}}
+            {{icon "list-check"}}
             <span>{{i18n (themePrefix "unified_profile.tabs.lists")}}</span>
           </a>
         </li>
         <li class="cj-user-nav cj-user-nav--plays">
           <a href="{{this.profileRoot}}/plays">
-            {{icon "dice"}}
+            {{icon "cj-ph-bold-dice-five"}}
             <span>{{i18n (themePrefix "unified_profile.tabs.plays")}}</span>
           </a>
         </li>
