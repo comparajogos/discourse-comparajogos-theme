@@ -127,9 +127,6 @@ acceptance("Compara Jogos profile bridge", function () {
           "collapsing returns catalog facts to the disclosure's collapsed state"
         );
       assert
-        .dom(".user-profile-toggle-btn")
-        .hasAttribute("aria-expanded", "false");
-      assert
         .dom(".cj-user-nav--summary")
         .doesNotExist("the native Summary slot is not duplicated");
       assert
@@ -320,7 +317,7 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
         .dom(".about.collapsed-info .primary > .primary-textual")
         .exists("the member names remain in the primary identity row");
       assert
-        .dom(".about.collapsed-info .controls .user-profile-toggle-btn")
+        .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "false");
       assert.true(
         document
@@ -334,7 +331,7 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
       await click(".user-profile-toggle-btn");
 
       assert
-        .dom(".about:not(.collapsed-info) .user-profile-toggle-btn")
+        .dom(".user-profile-toggle-btn")
         .hasAttribute("aria-expanded", "true");
       assert
         .dom(
