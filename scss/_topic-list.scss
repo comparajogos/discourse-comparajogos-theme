@@ -21,6 +21,10 @@
   .navigation-category,
   .tags-page {
     #list-area .show-more.has-topics {
+      /* The preceding controls keep their sticky stacking level even before
+       * they stick. The notice straddles that boundary, so it must paint one
+       * layer above them instead of losing its translated upper half. */
+      z-index: z("base") + 2;
       translate: 0 -50%;
     }
   }
