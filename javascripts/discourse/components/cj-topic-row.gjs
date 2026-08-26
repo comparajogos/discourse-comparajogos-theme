@@ -140,13 +140,12 @@ export default class CjTopicRow extends Component {
             </span>
             <span>
               {{i18n (themePrefix "topic_feed.replied")}}
-              {{! `leaveAgo` only applies to the medium format — core's
-                    formatter ignores it for `tiny`, which is why Horizon's own
-                    activity column still reads "5h". Medium is what produces
-                    "5 hours ago" / "5 horas atrás" from core's own strings,
-                    rather than a preposition glued onto the theme's label,
-                    which would read wrong the moment the date turns absolute. }}
-              {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
+              {{dFormatDate
+                @topic.bumpedAt
+                format="medium"
+                leaveAgo="true"
+                noTitle="true"
+              }}
             </span>
           </a>
         {{/if}}
@@ -160,7 +159,12 @@ export default class CjTopicRow extends Component {
             {{dIcon "pencil"}}
             <span>
               {{i18n (themePrefix "topic_feed.updated")}}
-              {{dFormatDate @topic.bumpedAt leaveAgo="true" noTitle="true"}}
+              {{dFormatDate
+                @topic.bumpedAt
+                format="medium"
+                leaveAgo="true"
+                noTitle="true"
+              }}
             </span>
           </a>
         {{/if}}
