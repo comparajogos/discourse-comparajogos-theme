@@ -41,16 +41,13 @@
       color 200ms ease-in-out,
       background-color 200ms ease-in-out;
 
-    /* Hover only. The current item is marked by its filled icon and
-     * `font-medium`; a fill as well reads as a selected tab. */
+    /* Hover only. The current item is marked by its filled icon. Keeping the
+     * label at the shared weight also keeps every following item on the exact
+     * same x-position as the product header. */
 
     &:hover {
       color: var(--header_primary);
       background: var(--cj-header-soft);
-    }
-
-    &.active {
-      font-weight: 500;
     }
 
     &.requires-auth {

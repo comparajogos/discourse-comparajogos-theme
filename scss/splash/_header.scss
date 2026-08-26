@@ -96,10 +96,6 @@
   font-size: var(--cj-text-sm-size);
   font-weight: 400;
   line-height: var(--cj-text-sm-line-height);
-
-  &.is-active {
-    font-weight: 500;
-  }
 }
 
 .cj-splash__forum::after {
