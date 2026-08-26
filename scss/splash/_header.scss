@@ -174,7 +174,10 @@
   flex: none;
   align-items: center;
   gap: var(--space-2);
-  padding-inline-end: var(--space-2);
+
+  /* The shell already owns the trailing inset. A second gutter here left the
+   * skeleton controls 8px short of the live React-aligned header. */
+  padding-inline-end: 0;
 }
 
 .cj-splash__log-in {
