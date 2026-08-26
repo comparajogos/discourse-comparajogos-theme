@@ -6,6 +6,7 @@ import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 const TOPIC_URL = "/t/internationalization-localization/280";
 const LOGO_SETTINGS = {
   search_experience: "search_field",
+  site_mobile_logo_url: "/images/d-logo-sketch-small.png",
   site_logo_small_url: "/images/d-logo-sketch-small.png",
   site_logo_url: "/images/d-logo-sketch.png",
 };

@@ -18,6 +18,14 @@ export default apiInitializer((api) => {
     site.desktopView ? false : minimized
   );
 
+  /* Core prefers site_mobile_logo_url throughout the mobile app, including
+   * ordinary discovery pages. Keep the complete product identity there; the
+   * minimized topic header and our expanded-search treatment each request the
+   * compact mark through their own explicit paths. */
+  api.registerValueTransformer("home-logo-image-url", ({ value, context }) =>
+    context?.name === "mobile_logo" ? "" : value
+  );
+
   /* Core's default share glyph reads as an export arrow; the client uses a share
    * node in the same position. */
   api.replaceIcon("d-post-share", "share-nodes");
