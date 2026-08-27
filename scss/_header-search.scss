@@ -374,6 +374,11 @@
         .search-term__input {
           padding-inline-start: 2rem;
 
+          /* iOS Safari zooms the viewport when a focused form control computes
+           * below 16px. Keep the compact desktop field at 14px, but meet the
+           * mobile browser's focus threshold here. */
+          font-size: 1rem;
+
           &::placeholder {
             opacity: 0;
           }
