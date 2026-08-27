@@ -151,6 +151,13 @@ acceptance(
         const controls = document.querySelector(
           ".about.collapsed-info .controls"
         );
+        const about = document.querySelector(".about.collapsed-info");
+        const notification = document.querySelector(
+          ".about.collapsed-info .user-notifications"
+        );
+        const disclosure = document.querySelector(
+          ".about.collapsed-info .user-profile-toggle-btn"
+        );
 
         assert.true(
           names.getBoundingClientRect().width > 0,
@@ -163,6 +170,37 @@ acceptance(
               names.getBoundingClientRect().bottom
             ),
           "member actions occupy their own row below the identity"
+        );
+        assert.true(
+          Math.abs(
+            notification.getBoundingClientRect().top -
+              disclosure.getBoundingClientRect().top
+          ) <= 1,
+          "notification level and profile disclosure share the second action row"
+        );
+        assert.true(
+          about.getBoundingClientRect().bottom -
+            notification.getBoundingClientRect().bottom >=
+            4,
+          "the notification control has visible space below its border"
+        );
+
+        await click(".user-profile-toggle-btn");
+
+        assert.strictEqual(
+          Math.round(
+            document
+              .querySelector(
+                ".about:not(.collapsed-info) .user-profile-toggle-btn"
+              )
+              .getBoundingClientRect().width
+          ),
+          Math.round(
+            document
+              .querySelector(".about:not(.collapsed-info) .controls")
+              .getBoundingClientRect().width
+          ),
+          "the remaining Collapse action spans the expanded mobile profile"
         );
       } finally {
         settings.unified_profile_shell = previous;

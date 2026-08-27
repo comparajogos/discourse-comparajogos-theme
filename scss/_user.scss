@@ -136,7 +136,8 @@
 /* On a narrow phone, Message, Chat and the notification level need more width
  * than the identity can surrender. Give identity and actions their own rows;
  * otherwise the auto-sized controls column collapses the member name to 0px.
- * The primary actions stay together and the permission control spans below. */
+ * Primary actions stay together, while notification level and disclosure form
+ * a second balanced row with enough clearance above the profile navigation. */
 
 .mobile-view body.cj-unified-profile-shell .user-main .about .details {
   .primary {
@@ -146,6 +147,7 @@
     align-items: center;
     width: 100%;
     min-height: 0;
+    padding-block-end: var(--space-2);
     column-gap: var(--space-2);
     row-gap: var(--space-3);
   }
@@ -182,7 +184,12 @@
   }
 
   .controls > ul > li:has(.user-notifications) {
-    grid-column: 1 / -1;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .controls > ul > li:has(> .user-profile-toggle-btn) {
+    grid-column: 2;
     grid-row: 2;
   }
 
@@ -191,11 +198,41 @@
     grid-column: 1 / -1;
   }
 
+  .controls
+    > ul:not(:has(> li > .user-profile-toggle-btn))
+    > li:has(.user-notifications),
+  .controls
+    > ul:not(:has(> li > .user-notifications))
+    > li:has(> .user-profile-toggle-btn) {
+    grid-column: 1 / -1;
+  }
+
+  .controls
+    > ul:not(:has(.compose-pm, > .chat-button))
+    > li:has(.user-notifications),
+  .controls
+    > ul:not(:has(.compose-pm, > .chat-button))
+    > li:has(> .user-profile-toggle-btn) {
+    grid-row: 1;
+  }
+
   .controls .btn,
   .controls .user-notifications,
-  .controls .user-notifications > summary {
+  .controls .user-notifications > summary,
+  .controls .user-profile-toggle-btn {
     width: 100%;
   }
+}
+
+.mobile-view
+  body.cj-unified-profile-shell
+  .user-main
+  .about:not(.collapsed-info)
+  .details
+  .controls
+  > ul
+  > li:has(> .user-profile-toggle-btn) {
+  grid-column: 1 / -1;
 }
 
 /* Core's staff bar is deliberately inverted — `background: var(--primary)` with

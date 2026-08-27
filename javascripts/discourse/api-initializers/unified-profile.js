@@ -1,3 +1,4 @@
+import { computed } from "@ember/object";
 import { scheduleOnce } from "@ember/runloop";
 import { apiInitializer } from "discourse/lib/api";
 import { wantsNewWindow } from "discourse/lib/intercept-click";
@@ -23,6 +24,24 @@ export default apiInitializer((api) => {
           return settings.unified_profile_shell
             ? "userActivity"
             : super.viewingOtherUserDefaultRoute;
+        }
+      }
+  );
+
+  // Core only offers its profile disclosure when members view themselves.
+  // Activity is the unified shell's default route, however, and core keeps
+  // every other member collapsed on that route. Preserve the native state,
+  // action and translations while making the same disclosure available on
+  // viewed profiles instead of leaving their details permanently hidden.
+  api.modifyClass(
+    "controller:user",
+    (Superclass) =>
+      class extends Superclass {
+        @computed("viewingSelf", "model.profile_hidden")
+        get canExpandProfile() {
+          return settings.unified_profile_shell
+            ? !this.model?.profile_hidden
+            : super.canExpandProfile;
         }
       }
   );
