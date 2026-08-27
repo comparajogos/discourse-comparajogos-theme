@@ -128,6 +128,49 @@ acceptance("Compara Jogos unified profile navigation", function (needs) {
   });
 });
 
+acceptance(
+  "Compara Jogos unified profile navigation - mobile",
+  function (needs) {
+    needs.user({ username: "forum-member" });
+    needs.mobileView();
+
+    test("it preserves identity width above member controls", async function (assert) {
+      const previous = settings.unified_profile_shell;
+      settings.unified_profile_shell = true;
+      stubProfileCatalog();
+
+      try {
+        await visit("/u/eviltrout/activity");
+
+        const avatar = document.querySelector(
+          ".about.collapsed-info .user-profile-avatar"
+        );
+        const names = document.querySelector(
+          ".about.collapsed-info .primary-textual"
+        );
+        const controls = document.querySelector(
+          ".about.collapsed-info .controls"
+        );
+
+        assert.true(
+          names.getBoundingClientRect().width > 0,
+          "member names keep measurable room on a narrow profile"
+        );
+        assert.true(
+          controls.getBoundingClientRect().top >=
+            Math.max(
+              avatar.getBoundingClientRect().bottom,
+              names.getBoundingClientRect().bottom
+            ),
+          "member actions occupy their own row below the identity"
+        );
+      } finally {
+        settings.unified_profile_shell = previous;
+      }
+    });
+  }
+);
+
 acceptance("Compara Jogos profile bridge", function (needs) {
   needs.user();
 

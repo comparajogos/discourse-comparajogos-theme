@@ -40,9 +40,9 @@
   }
 
   /* Keep the compact identity stable across disclosure states: avatar and
-   * names stay left while the native toggle owns the right edge. Applying the
-   * grid to `.primary` is important because that is where core places the
-   * controls; wrapping `.details` instead pushes Expandir onto a second row. */
+   * names stay left while the native controls use the remaining room. Applying
+   * the grid to `.primary` is important because that is where core places the
+   * controls; wrapping `.details` instead detaches them from the identity. */
 
   body.cj-unified-profile-shell .user-main .about .details {
     .primary {
@@ -130,6 +130,71 @@
     .cj-profile-bridge--profile {
       margin-block: var(--space-3) var(--space-2);
     }
+  }
+}
+
+/* On a narrow phone, Message, Chat and the notification level need more width
+ * than the identity can surrender. Give identity and actions their own rows;
+ * otherwise the auto-sized controls column collapses the member name to 0px.
+ * The primary actions stay together and the permission control spans below. */
+
+.mobile-view body.cj-unified-profile-shell .user-main .about .details {
+  .primary {
+    display: grid;
+    grid-template-columns: 2.8125rem minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+    column-gap: var(--space-2);
+    row-gap: var(--space-3);
+  }
+
+  .controls {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .controls > ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .controls > ul > li {
+    grid-column: 1 / -1;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+  }
+
+  .controls > ul > li:has(.compose-pm) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .controls > ul > .chat-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .controls > ul > li:has(.user-notifications) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .controls > ul:not(:has(> .chat-button)) > li:has(.compose-pm),
+  .controls > ul:not(:has(.compose-pm)) > .chat-button {
+    grid-column: 1 / -1;
+  }
+
+  .controls .btn,
+  .controls .user-notifications,
+  .controls .user-notifications > summary {
+    width: 100%;
   }
 }
 
