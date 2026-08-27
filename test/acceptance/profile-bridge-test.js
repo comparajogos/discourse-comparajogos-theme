@@ -148,8 +148,8 @@ acceptance("Compara Jogos profile bridge", function (needs) {
           "https://www.comparajogos.com.br/u/eviltrout/plays"
         );
       assert
-        .dom(".cj-user-nav--plays .d-icon-cj-ph-bold-dice-five")
-        .exists("Partidas uses the same Phosphor DiceFive as React");
+        .dom(".cj-user-nav--plays .d-icon-cj-ph-regular-play-circle")
+        .exists("Partidas uses the same Phosphor PlayCircle as the header");
       assert
         .dom(".cj-user-nav--lists > a")
         .hasAttribute(
@@ -157,8 +157,8 @@ acceptance("Compara Jogos profile bridge", function (needs) {
           "https://www.comparajogos.com.br/u/eviltrout/lists"
         );
       assert
-        .dom(".cj-user-nav--lists .d-icon-list-check")
-        .exists("Listas uses the same Phosphor ListChecks as React");
+        .dom(".cj-user-nav--lists .d-icon-cj-ph-regular-list-star")
+        .exists("Listas uses the same Phosphor ListStar as the header");
       assert
         .dom(".cj-user-nav--offers > a")
         .hasAttribute(

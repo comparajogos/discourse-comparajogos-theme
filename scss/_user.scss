@@ -262,7 +262,7 @@ body.cj-unified-profile-shell {
 
   .user-main .user-navigation-primary {
     .nav-pills {
-      gap: var(--space-1);
+      gap: 0;
       padding-block: var(--space-1);
 
       /* Core switches this navigation to icon-only below 64rem. The unified
@@ -284,8 +284,19 @@ body.cj-unified-profile-shell {
 
     .nav-pills > li > a {
       min-height: 2.75rem;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--cj-radius-control);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--cj-radius-pill);
+      font-size: var(--cj-text-sm-size);
+      font-weight: 400;
+      line-height: var(--cj-text-sm-line-height);
+      transition:
+        color 200ms ease-in-out,
+        background-color 200ms ease-in-out;
+
+      .d-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
 
       &:hover {
         color: var(--cj-text);
@@ -300,6 +311,7 @@ body.cj-unified-profile-shell {
       &.active {
         color: var(--cj-action);
         background: var(--cj-control);
+        font-weight: 500;
 
         .d-icon {
           color: var(--cj-action);
