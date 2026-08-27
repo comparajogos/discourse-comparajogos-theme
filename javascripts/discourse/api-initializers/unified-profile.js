@@ -2,7 +2,6 @@ import { scheduleOnce } from "@ember/runloop";
 import { apiInitializer } from "discourse/lib/api";
 import { wantsNewWindow } from "discourse/lib/intercept-click";
 
-const LEGACY_PROFILE = /(?:^|\/)u\/([^/?#]+)(?:\/summary)?\/?$/;
 const USER_ROUTE = /(?:^|\/)u\/([^/?#]+)/;
 const SUMMARY_LINK = ".user-main .user-nav__summary > a";
 const SHELL_CLASS = "cj-unified-profile-shell";
@@ -12,6 +11,38 @@ export default apiInitializer((api) => {
   const product = (settings.product_url || "").replace(/\/$/, "");
   let profileUsername;
   let profileObserver;
+
+  // A forum identity entry belongs to the forum. Let core resolve every bare
+  // user link (including the user card) to Activity before any profile content
+  // renders. The visible Summary tab remains the explicit handoff to React.
+  api.modifyClass(
+    "route:user/index",
+    (Superclass) =>
+      class extends Superclass {
+        get viewingOtherUserDefaultRoute() {
+          return settings.unified_profile_shell
+            ? "userActivity"
+            : super.viewingOtherUserDefaultRoute;
+        }
+      }
+  );
+
+  // No current UI emits the native Summary URL after cutover, but old links
+  // may still exist. Keep those entries inside Discourse without adding a
+  // redundant history item or briefly rendering the native Summary page.
+  api.modifyClass(
+    "route:user/summary",
+    (Superclass) =>
+      class extends Superclass {
+        beforeModel(...args) {
+          if (settings.unified_profile_shell) {
+            return this.router.replaceWith("userActivity");
+          }
+
+          return super.beforeModel(...args);
+        }
+      }
+  );
 
   function syncSummaryLink() {
     const summaryLink = document.querySelector(SUMMARY_LINK);
@@ -93,10 +124,8 @@ export default apiInitializer((api) => {
 
     event.preventDefault();
     event.stopPropagation();
-    if (profileUsername) {
-      window.location.assign(
-        `${product}/u/${encodeURIComponent(profileUsername)}`
-      );
+    if (summaryLink.href) {
+      window.location.assign(summaryLink.href);
     }
   }
 
@@ -119,13 +148,6 @@ export default apiInitializer((api) => {
 
     document.body.classList.add(SHELL_CLASS);
     profileUsername = userMatch[1];
-    const match = pathname.match(LEGACY_PROFILE);
-
-    if (!match) {
-      scheduleOnce("afterRender", null, startProfileSync);
-      return;
-    }
-
-    window.location.replace(`${product}/u/${encodeURIComponent(match[1])}`);
+    scheduleOnce("afterRender", null, startProfileSync);
   });
 });

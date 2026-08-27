@@ -1,4 +1,4 @@
-import { click, visit, waitFor } from "@ember/test-helpers";
+import { click, currentURL, visit, waitFor } from "@ember/test-helpers";
 import { test } from "qunit";
 import sinon from "sinon";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
@@ -67,6 +67,66 @@ function stubProfileCatalog({ data = PROFILE_DATA, ok = true } = {}) {
 
   return calls;
 }
+
+acceptance("Compara Jogos unified profile navigation", function (needs) {
+  needs.user({ username: "forum-member" });
+
+  test("it keeps native profile entry points on forum Activity", async function (assert) {
+    const previous = settings.unified_profile_shell;
+    settings.unified_profile_shell = true;
+    stubProfileCatalog();
+
+    try {
+      await visit("/u/eviltrout");
+
+      assert.strictEqual(
+        currentURL(),
+        "/u/eviltrout/activity",
+        "a bare profile resolves before render to the forum Activity"
+      );
+
+      await visit("/u/eviltrout/summary");
+
+      assert.strictEqual(
+        currentURL(),
+        "/u/eviltrout/activity",
+        "a legacy native Summary URL is replaced by the forum Activity"
+      );
+
+      await visit("/t/internationalization-localization/280");
+      await click(".topic-map__users-trigger");
+      await click('a[data-user-card="charlie"]');
+      await click(".card-huge-avatar");
+
+      assert.strictEqual(
+        currentURL(),
+        "/u/charlie/activity",
+        "the native user card inherits the Activity landing route"
+      );
+      assert.dom(".user-card").doesNotExist("the user card closes normally");
+    } finally {
+      settings.unified_profile_shell = previous;
+    }
+  });
+
+  test("it preserves native Summary behavior before cutover", async function (assert) {
+    const previous = settings.unified_profile_shell;
+    settings.unified_profile_shell = false;
+    stubProfileCatalog();
+
+    try {
+      await visit("/u/eviltrout/summary");
+
+      assert.strictEqual(
+        currentURL(),
+        "/u/eviltrout/summary",
+        "disabling the shell leaves the core Summary route untouched"
+      );
+    } finally {
+      settings.unified_profile_shell = previous;
+    }
+  });
+});
 
 acceptance("Compara Jogos profile bridge", function (needs) {
   needs.user();

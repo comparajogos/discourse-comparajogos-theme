@@ -19,8 +19,8 @@ profile_bridge:
 unified_profile_shell:
   default: false
   description:
-    en: "Use the shared member tabs and make the catalog Summary the canonical profile landing page. Enable only after the client-side profile shell is deployed."
-    pt_BR: "Usa as abas compartilhadas do perfil e torna o Resumo do catálogo a página inicial canônica. Ative somente depois de publicar o cabeçalho de perfil no cliente."
+    en: "Use the shared member tabs, keep forum entry on Activity, and point Summary to the catalog profile. Enable only after the client-side profile shell is deployed."
+    pt_BR: "Usa as abas compartilhadas, mantém a entrada do fórum em Atividade e aponta Resumo para o perfil do catálogo. Ative somente depois de publicar o cabeçalho de perfil no cliente."
 
 topic_list_feed:
   default: true
