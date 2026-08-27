@@ -100,21 +100,14 @@
     }
   }
 
-  /* Expanding core's profile on a phone normally switches to a centred hero:
-   * 144px avatar, bio, location, staff counters and a long definition list.
-   * Those details displace the focused task below the fold. Keep the native
-   * expanded state (and its ARIA contract), but adapt its mobile presentation
-   * to the same compact identity and reveal only the catalog facts. */
+  /* Activity is now the forum profile's landing page, so this disclosure also
+   * owns the native profile summary that no longer has a forum tab of its own.
+   * Keep the identity compact, but let expansion reveal the banner, bio,
+   * location, featured topic, staff counters and secondary profile facts. */
 
   body.cj-unified-profile-shell .user-main .about:not(.collapsed-info) {
-    .staff-counters,
-    .user-profile-image,
-    .user-profile__featured-topic,
-    .user-profile__location-and-website,
-    .bio,
-    .secondary,
-    .controls > ul > li:not(:has(> .user-profile-toggle-btn)) {
-      display: none;
+    &.has-background .user-profile-image {
+      height: clamp(7.5rem, 36vw, 10rem);
     }
 
     .user-profile-names__primary {
@@ -125,6 +118,11 @@
     .user-profile-names__secondary {
       font-size: var(--cj-text-sm-size);
       line-height: var(--cj-text-sm-line-height);
+    }
+
+    .bio {
+      margin-block-start: var(--space-3);
+      text-align: start;
     }
 
     .cj-profile-bridge--profile {
@@ -224,17 +222,6 @@
   }
 }
 
-.mobile-view
-  body.cj-unified-profile-shell
-  .user-main
-  .about:not(.collapsed-info)
-  .details
-  .controls
-  > ul
-  > li:has(> .user-profile-toggle-btn) {
-  grid-column: 1 / -1;
-}
-
 /* Core's staff bar is deliberately inverted — `background: var(--primary)` with
  * `color: var(--secondary)` (user.scss:436) — which is a dark bar with light
  * text in a light scheme, and a white slab in a dark one. It is a quiet staff
@@ -257,9 +244,10 @@
 
 body.cj-unified-profile-shell {
   /* Focused forum destinations start with only the member identity. Core's
-   * native disclosure already owns the expanded state, so the catalog facts
-   * follow that same state instead of competing with a second accordion. */
+   * native disclosure already owns the expanded state, so the banner and
+   * catalog facts follow it instead of competing with a second accordion. */
 
+  .user-main .about.collapsed-info .user-profile-image,
   .user-main .about.collapsed-info #cj-profile-catalog-details {
     display: none;
   }

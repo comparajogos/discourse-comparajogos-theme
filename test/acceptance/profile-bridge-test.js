@@ -184,24 +184,6 @@ acceptance(
             4,
           "the notification control has visible space below its border"
         );
-
-        await click(".user-profile-toggle-btn");
-
-        assert.strictEqual(
-          Math.round(
-            document
-              .querySelector(
-                ".about:not(.collapsed-info) .user-profile-toggle-btn"
-              )
-              .getBoundingClientRect().width
-          ),
-          Math.round(
-            document
-              .querySelector(".about:not(.collapsed-info) .controls")
-              .getBoundingClientRect().width
-          ),
-          "the remaining Collapse action spans the expanded mobile profile"
-        );
       } finally {
         settings.unified_profile_shell = previous;
       }
@@ -449,7 +431,7 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
   needs.user();
   needs.mobileView();
 
-  test("it keeps focused-page expansion compact", async function (assert) {
+  test("it reveals profile details on focused pages", async function (assert) {
     const previous = settings.unified_profile_shell;
     settings.unified_profile_shell = true;
     stubProfileCatalog();
@@ -488,6 +470,14 @@ acceptance("Compara Jogos profile bridge - mobile", function (needs) {
           ".about:not(.collapsed-info) #cj-profile-catalog-details .cj-profile-bridge--profile"
         )
         .exists("the compact expansion keeps catalog facts in the disclosure");
+      assert
+        .dom(".about:not(.collapsed-info) #collapsed-info-panel")
+        .isVisible(
+          "the same disclosure restores the native summary information"
+        );
+      assert
+        .dom(".about:not(.collapsed-info) #collapsed-info-panel dt")
+        .isVisible("expanded summary information has visible field labels");
     } finally {
       settings.unified_profile_shell = previous;
     }
