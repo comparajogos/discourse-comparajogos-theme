@@ -384,6 +384,16 @@ html.has-full-page-chat {
   padding-block-start: 0.625rem;
 }
 
+/* Topic prose already steps down from chrome's brighter foreground on the
+ * pure-black reading panel. Chat is an even denser reading surface, so give
+ * message copy the same quieter foreground while leaving names, timestamps and
+ * controls on their own hierarchy. The light scheme resolves to its existing
+ * foreground, making this specifically a dark-mode glare reduction. */
+
+.chat-message-text {
+  color: var(--cj-panel-foreground);
+}
+
 /* Core already owns the hover and action-rail behavior, but its opaque
  * --d-hover colour reads like a selected row inside our pure white/black chat
  * panel. Discord uses a much quieter, full-width wash. Keep the active state
