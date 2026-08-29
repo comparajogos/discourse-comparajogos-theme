@@ -1,0 +1,10 @@
+/* Core positions the nested-replies controls, context banner, and sticky avatars
+ * from --header-offset, which measures the full .d-header box. On desktop our
+ * visible header shell docks 1.5rem above that box's bottom, so the measured
+ * offset leaves a transparent strip beneath the shell. Scope core's token to the
+ * visual sticky edge for the whole nested view instead of chasing its individual
+ * sticky selectors. */
+
+.nested-view {
+  --header-offset: var(--cj-sticky-header-offset);
+}
