@@ -120,6 +120,23 @@
     width: 100%;
   }
 
+  .geo-d-multi-select-trigger__content {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .d-multi-select-trigger:not(.--has-selection) {
+    .geo-d-multi-select-trigger__content {
+      padding-inline: var(--space-3);
+    }
+
+    .d-multi-select-trigger__label {
+      font-size: var(--cj-text-sm-size);
+      line-height: var(--cj-text-sm-line-height);
+    }
+  }
+
   .d-multi-select-trigger__selection {
     flex-wrap: nowrap;
   }
