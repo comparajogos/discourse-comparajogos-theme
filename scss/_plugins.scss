@@ -71,6 +71,157 @@
   }
 }
 
+/* The locations plugin composes a selected-value chip, current-location button,
+ * and menu trigger inside one field. Its defaults give those pieces unrelated
+ * heights and surfaces, which makes the preference look like three controls
+ * that happen to touch. Keep the plugin behaviour, but present it as one input
+ * with a consistent touch target and a single visual boundary. */
+
+.user-preferences .user-location-selector {
+  margin-block-end: var(--space-4);
+
+  .control-label,
+  .location-selector-container,
+  .user-location-warning {
+    margin-inline: 0;
+  }
+
+  .location-selector-container,
+  .location-selector-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .d-multi-select-trigger {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0;
+    overflow: hidden;
+    background: var(--d-input-bg-color);
+    border: var(--d-input-border);
+    border-radius: var(--d-input-border-radius);
+
+    &.-expanded {
+      box-shadow: var(--cj-focus-ring);
+    }
+  }
+
+  .geo-d-multi-select-trigger,
+  .geo-d-multi-select-trigger__content,
+  .d-multi-select-trigger__selection,
+  .d-multi-select-trigger__selected-item {
+    min-height: 2.75rem;
+  }
+
+  .geo-d-multi-select-trigger__content,
+  .d-multi-select-trigger__selection {
+    width: 100%;
+  }
+
+  .d-multi-select-trigger__selection {
+    flex-wrap: nowrap;
+  }
+
+  .d-multi-select-trigger__selected-item {
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding-inline: var(--space-3);
+    color: var(--cj-text);
+    text-align: start;
+    background: transparent;
+    border-radius: 0;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--cj-hover);
+    }
+  }
+
+  .d-multi-select-trigger__selection-label {
+    flex: 1 1 auto;
+    text-align: start;
+  }
+
+  .d-multi-select-trigger__remove-selection-icon {
+    flex: 0 0 auto;
+    margin-inline-start: var(--space-2);
+  }
+
+  .geo-d-multi-select-trigger__actions {
+    align-self: stretch;
+    gap: 0;
+  }
+
+  .geo-d-multi-select-trigger__actions > .btn {
+    align-self: stretch;
+    justify-content: center;
+    width: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-inline-start: 1px solid var(--cj-border);
+    border-radius: 0;
+    box-shadow: none;
+
+    &:hover,
+    &:focus-visible,
+    .discourse-no-touch &:hover {
+      background: var(--cj-hover);
+      box-shadow: none;
+    }
+  }
+
+  .user-location-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-block-start: var(--space-2);
+    color: var(--cj-text-muted);
+    font-size: var(--cj-text-sm-size);
+    line-height: var(--cj-text-sm-line-height);
+
+    .d-icon {
+      flex: 0 0 auto;
+      margin-block-start: 0.1875rem;
+    }
+  }
+}
+
+/* Float Kit portals the open menu to the document body, so it cannot inherit
+ * the selector's local scope. Restrict the correction to the location field's
+ * expanded state: the search row fills the panel instead of leaving a dead
+ * half-width area, and the panel has a clear edge above the next preference. */
+
+body:has(.user-location-selector .d-multi-select-trigger.-expanded)
+  .fk-d-menu[data-identifier="d-multi-select"] {
+  max-width: calc(100vw - (2 * var(--space-4)));
+
+  .fk-d-menu__inner-content {
+    background: var(--cj-panel);
+    border-color: var(--cj-border);
+    border-radius: var(--d-input-border-radius);
+  }
+
+  .d-multi-select__content,
+  .d-multi-select__search-container {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .d-multi-select__search-container {
+    padding: var(--space-3);
+  }
+
+  .d-multi-select__search-input {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+}
+
 .location-and-website.map-location-enabled .user-location-widget {
   align-items: center;
 }
