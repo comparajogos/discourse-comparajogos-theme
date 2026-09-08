@@ -63,4 +63,12 @@
       rgb(0 0 0 / 20%),
       rgb(255 255 255 / 20%)
     )};
+
+  /* Map imagery follows the selected Discourse scheme, not the OS preference. */
+  --cj-map-filter: #{dark-light-choose(
+      "none",
+      "brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7)"
+    )};
+  --cj-map-marker-shadow-display: #{dark-light-choose(block, none)};
+  --cj-map-marker-label: #{dark-light-choose(inherit, #000)};
 }

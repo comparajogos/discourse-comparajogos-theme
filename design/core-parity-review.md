@@ -45,19 +45,28 @@ including their group unread indicator and participant controls.
   them; removal needs live desktop/mobile geometry checks.
 - Catalog registration, profile fields and catalog navigation suppressions are
   product decisions rather than obsolete core fixes. They remain intact.
-- The locations map filter follows the operating-system dark preference rather
-  than the selected Discourse scheme. It should move to scheme-specific tokens;
-  verify marker labels and shadows with the live locations plugin when doing so.
-- `_copy.scss` replaces some action labels with CSS-generated Portuguese text and
-  hides the rating-tip link. These deserve a separate migration to translated
-  component content, preserving the intended review/photo actions and their
-  accessible names instead of silently reverting product copy.
+
+## Follow-ups completed
+
+- Map filter, marker shadows and marker-label colors now come from generated
+  Discourse scheme tokens. Both schemes are tested against the opposite OS
+  preference, using the plugin's CSS structure without fetching remote tiles.
+- Review/photo reply actions now use translated component labels and retain
+  core's reply permissions and action. Edit and special composer labels remain
+  native. The optional ratings tip has a translated button, expanded state and
+  its original details/dismissal behavior; the CSS hiding its control is gone.
+- The mobile-profile failure was a test-environment mismatch: QUnit omits theme
+  CSS and does not resize its viewport when mobile mode is forced. Geometry is
+  now tested in a system browser at 390 × 844; QUnit checks the disclosure and
+  member controls without making CSS assertions.
 
 ## Validation
 
 - JavaScript, template and stylesheet lint pass; repository formatting, color
   synchronization, splash checks and `git diff --check` pass.
-- Local Discourse browser suite: 40/41 pass, including all 10 feed tests.
-- The remaining mobile profile geometry failure also occurs on unchanged
-  `4077444`: baseline 35/36 pass. It is not introduced by this change.
-- No live deployment or manual production visual verification was performed.
+- Local Discourse QUnit suite: 46/46 pass, including all 10 feed tests.
+- System browser checks: 3/3 pass, covering mobile profile geometry and both map
+  schemes. The theme CSS is compiled and loaded for these checks.
+- Ruby lint, JavaScript, template, stylesheet, formatting and contract checks pass.
+- No manual production visual verification was performed. The optional ratings
+  adapter was checked against its source; its translated content is tested in QUnit.

@@ -49,25 +49,21 @@
   display: none;
 }
 
-/* discourse-locations: the tile layer is a photographic image, so a dark scheme
- * needs it filtered rather than recoloured. */
-@media (prefers-color-scheme: dark) {
-  .locations-map {
-    --cj-map-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg)
-      saturate(0.3) brightness(0.7);
+/* Scheme-specific tokens keep map imagery aligned with Discourse even when
+ * the member's chosen scheme differs from the operating-system preference. */
 
-    .leaflet-tile-pane {
-      filter: var(--cj-map-filter);
-    }
+.locations-map {
+  .leaflet-tile-pane {
+    filter: var(--cj-map-filter);
+  }
 
-    /* Marker shadows read as smudges once the tiles are inverted. */
-    .leaflet-marker-shadow {
-      display: none;
-    }
+  /* Marker shadows read as smudges once the tiles are inverted. */
+  .leaflet-marker-shadow {
+    display: var(--cj-map-marker-shadow-display);
+  }
 
-    .leaflet-marker-icon div span {
-      color: #000;
-    }
+  .leaflet-marker-icon div span {
+    color: var(--cj-map-marker-label);
   }
 }
 

@@ -29,7 +29,10 @@
         "lastVisitMarkerForeground": "#09090b",
         "headerSoft": "oklch(95% 0.03 240deg)",
         "mobileNavForeground": "#2364d8",
-        "scrollbarThumb": "rgb(0 0 0 / 20%)"
+        "scrollbarThumb": "rgb(0 0 0 / 20%)",
+        "mapFilter": "none",
+        "mapMarkerShadowDisplay": "block",
+        "mapMarkerLabel": "inherit"
       }
     },
     "dark": {
@@ -61,7 +64,10 @@
         "lastVisitMarkerForeground": "#fafafa",
         "headerSoft": "oklch(21% 0.006 285.885deg)",
         "mobileNavForeground": "oklch(87.2% 0.01 258.338deg)",
-        "scrollbarThumb": "rgb(255 255 255 / 20%)"
+        "scrollbarThumb": "rgb(255 255 255 / 20%)",
+        "mapFilter": "brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7)",
+        "mapMarkerShadowDisplay": "none",
+        "mapMarkerLabel": "#000"
       }
     }
   },

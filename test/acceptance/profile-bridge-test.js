@@ -1,6 +1,8 @@
 import { click, currentURL, visit, waitFor } from "@ember/test-helpers";
 import { test } from "qunit";
 import sinon from "sinon";
+import { cloneJSON } from "discourse/lib/object";
+import userFixtures from "discourse/tests/fixtures/user-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
 const PROFILE_DATA = {
@@ -133,57 +135,26 @@ acceptance(
   function (needs) {
     needs.user({ username: "forum-member" });
     needs.mobileView();
+    needs.pretender((server, helper) => {
+      server.get("/u/eviltrout.json", () => {
+        const response = cloneJSON(userFixtures["/u/eviltrout.json"]);
+        response.user.can_mute_user = true;
+        return helper.response(response);
+      });
+    });
 
-    test("it preserves identity width above member controls", async function (assert) {
+    test("it retains accessible member actions and the profile disclosure", async function (assert) {
       const previous = settings.unified_profile_shell;
       settings.unified_profile_shell = true;
       stubProfileCatalog();
 
       try {
         await visit("/u/eviltrout/activity");
-
-        const avatar = document.querySelector(
-          ".about.collapsed-info .user-profile-avatar"
-        );
-        const names = document.querySelector(
-          ".about.collapsed-info .primary-textual"
-        );
-        const controls = document.querySelector(
-          ".about.collapsed-info .controls"
-        );
-        const about = document.querySelector(".about.collapsed-info");
-        const notification = document.querySelector(
-          ".about.collapsed-info .user-notifications"
-        );
-        const disclosure = document.querySelector(
-          ".about.collapsed-info .user-profile-toggle-btn"
-        );
-
-        assert.true(
-          names.getBoundingClientRect().width > 0,
-          "member names keep measurable room on a narrow profile"
-        );
-        assert.true(
-          controls.getBoundingClientRect().top >=
-            Math.max(
-              avatar.getBoundingClientRect().bottom,
-              names.getBoundingClientRect().bottom
-            ),
-          "member actions occupy their own row below the identity"
-        );
-        assert.true(
-          Math.abs(
-            notification.getBoundingClientRect().top -
-              disclosure.getBoundingClientRect().top
-          ) <= 1,
-          "notification level and profile disclosure share the second action row"
-        );
-        assert.true(
-          about.getBoundingClientRect().bottom -
-            notification.getBoundingClientRect().bottom >=
-            4,
-          "the notification control has visible space below its border"
-        );
+        assert.dom(".about.collapsed-info .primary-textual").exists();
+        assert.dom(".about.collapsed-info .user-notifications").exists();
+        assert.dom(".about.collapsed-info .user-profile-toggle-btn").exists();
+        await click(".user-profile-toggle-btn");
+        assert.dom(".about").doesNotHaveClass("collapsed-info");
       } finally {
         settings.unified_profile_shell = previous;
       }

@@ -114,6 +114,17 @@ Creator. Validate both color schemes in Discourse's Styleguide, then cover at
 least `/latest`, `/categories`, one topic, composer, search, user profile,
 chat, and the mobile sidebar.
 
+QUnit covers component behavior. Geometry and scheme checks live in
+`spec/system/theme_followups_spec.rb`, because core's QUnit runner omits theme
+stylesheets. Run that spec from a local Discourse checkout with `bundle exec
+rspec /path/to/this/theme/spec/system/theme_followups_spec.rb`; it imports the
+theme into the test database and uses the real compiled CSS.
+
+Review (`ficha`) and image (`imagem`) reply labels live in `locales/` and use
+native composer/footer actions. Editing, private messages and special composer
+labels retain core's wording. The optional ratings-plugin tip keeps its details
+and dismissal behavior, with a translated button replacing its icon-only control.
+
 ### Colors
 
 `design/colors.json` is the color contract. Edit it, then run:

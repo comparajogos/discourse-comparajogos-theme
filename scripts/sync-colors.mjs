@@ -100,6 +100,14 @@ function colorDefinitions() {
       ${light.product.scrollbarThumb},
       ${dark.product.scrollbarThumb}
     )};
+
+  /* Map imagery follows the selected Discourse scheme, not the OS preference. */
+  --cj-map-filter: #{dark-light-choose(
+      "${light.product.mapFilter}",
+      "${dark.product.mapFilter}"
+    )};
+  --cj-map-marker-shadow-display: ${pair("mapMarkerShadowDisplay")};
+  --cj-map-marker-label: ${pair("mapMarkerLabel")};
 }
 `;
 }
