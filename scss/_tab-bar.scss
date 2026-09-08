@@ -21,6 +21,8 @@ $height: 3.5rem;
    * fill-only without reaching for !important. */
 
   html body .d-tab-bar {
+    box-sizing: content-box;
+    height: $height;
     background: var(--cj-panel);
     border-block-start: 0;
     box-shadow: none;
@@ -67,9 +69,14 @@ $height: 3.5rem;
       padding-block-end: calc($height + env(safe-area-inset-bottom));
     }
 
-    /* Floating controls have to clear the bar rather than sit under it. */
-    body:has(.d-tab-bar) #reply-control.draft {
+    /* The bar owns the safe area. The component's draft margin and core's
+     * mobile draft/saving padding would otherwise count that inset again,
+     * leaving a gap below the draft or an empty strip inside it. */
+
+    body:has(.d-tab-bar) #reply-control:is(.draft, .saving) {
       bottom: calc($height + env(safe-area-inset-bottom));
+      margin-block-end: 0;
+      padding-block-end: 0;
     }
 
     body:has(.d-tab-bar) .with-topic-progress {
