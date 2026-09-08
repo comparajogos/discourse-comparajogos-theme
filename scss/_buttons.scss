@@ -45,6 +45,14 @@ body {
   --d-button-default-text-color--hover: var(--cj-text);
   --d-button-default-icon-color: var(--cj-text);
   --d-button-default-icon-color--hover: var(--cj-text);
+  --d-button-default-bg-color: var(--cj-control);
+  --d-button-default-bg-color--hover: color-mix(
+    in oklch,
+    var(--cj-control),
+    var(--cj-text) 2%
+  );
+  --d-button-default-border: 1px solid transparent;
+  --d-button-default-border--hover: 1px solid transparent;
   --d-button-primary-bg-color: var(--cj-fill-action);
   --d-button-primary-bg-color--hover: color-mix(
     in srgb,
@@ -65,32 +73,7 @@ body {
   );
 }
 
-/* --cj-fill-* are the strong accents, so white clears 4.6:1 in both schemes;
- * core's own --secondary label would be near-black on a dark scheme's accent. */
-
-.btn-primary,
-.btn-danger,
-.btn-success {
-  color: var(--cj-on-action);
-
-  .d-icon {
-    color: var(--cj-on-action);
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: var(--cj-on-action);
-
-    .d-icon {
-      color: var(--cj-on-action);
-    }
-  }
-}
-
 .btn-default {
-  border-color: transparent;
-  background: var(--cj-control);
-
   /* Core's hover is `.discourse-no-touch .btn:hover` — matched at the same
    * weight, with the plain selector kept for touch. The shadow is the client's;
    * dark also needs the 2% step, where a 10% black shadow is invisible. */
@@ -98,7 +81,6 @@ body {
   &:focus-visible,
   &:hover,
   .discourse-no-touch &:hover {
-    background: color-mix(in oklch, var(--cj-control), var(--cj-text) 2%);
     box-shadow:
       0 1px 3px 0 rgb(0 0 0 / 10%),
       0 1px 2px -1px rgb(0 0 0 / 10%);

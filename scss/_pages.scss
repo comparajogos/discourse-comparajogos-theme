@@ -158,15 +158,7 @@ $panels:
 
 @include viewport.until(md) {
   /* Rows are separated by their own borders; core adds one more above the body. */
-  tbody {
+  .topic-list tbody {
     border-top: none;
-  }
-
-  /* Selection is a fill, so the ring core adds on top of it is a second marker. */
-  .topic-list tr.selected td:first-of-type,
-  .topic-list .topic-list-item.selected td:first-of-type,
-  .topic-list .latest-topic-list-item.selected,
-  .search-results .fps-result.selected {
-    box-shadow: none;
   }
 }

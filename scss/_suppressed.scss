@@ -27,24 +27,6 @@
   flex-direction: column;
 }
 
-/* Events are always public and always in America/Sao_Paulo. */
-.event-field.timezone,
-.add-event-controls .control:last-of-type {
-  display: none;
-}
-
-/* The event's private toggle. TODO: positional — discourse-calendar exposes no
- * class for this control. */
-
-.post-event-builder-modal form > div:nth-child(5) {
-  display: none;
-}
-
-/* Polls are open to everyone; the group restriction only invites mistakes. */
-.poll-ui-builder-form .options .poll-select:nth-child(3) {
-  display: none;
-}
-
 /* The catalog-backed tag card carries the useful context already. */
 #show-tag-info {
   display: none;
@@ -67,13 +49,6 @@
 [data-section-name="user-threads"],
 .chat-channel-row.--threads,
 .nav-item_nearby {
-  display: none;
-}
-
-/* A moderator tool in the reader's way; the actions behind it are available
- * from the topic itself. Parked, not removed. */
-
-.list-controls .bulk-select {
   display: none;
 }
 
