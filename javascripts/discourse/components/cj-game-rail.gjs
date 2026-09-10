@@ -14,7 +14,7 @@ import CjGameMini from "./cj-game-mini";
  * comparison threads and trade posts are where it earns the scroll.
  *
  * Core's `DOverflowControls` owns overflow detection and chevrons while the
- * rail keeps its semantic list and card layout through the owned scroller API.
+ * rail keeps its semantic list and card layout inside core's styled scroller.
  */
 export default class CjGameRail extends Component {
   @service cjGameCatalog;
@@ -63,12 +63,8 @@ export default class CjGameRail extends Component {
           class="cj-game-rail"
           aria-label={{i18n (themePrefix "game_card.rail_label")}}
         >
-          <DOverflowControls
-            @axis="horizontal"
-            @ownedScroller={{true}}
-            as |strip|
-          >
-            <ul class="cj-game-rail__track" {{strip.scroller}}>
+          <DOverflowControls @axis="horizontal" @class="cj-game-rail__scroller">
+            <ul class="cj-game-rail__track">
               {{#each games key="slug" as |game|}}
                 <li class="cj-game-rail__item">
                   <CjGameMini @game={{game}} />

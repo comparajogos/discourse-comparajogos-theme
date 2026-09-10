@@ -479,16 +479,19 @@
 .cj-game-rail {
   margin-block-end: var(--space-4);
 
-  &__track {
-    @include scroll-strip;
-    display: flex;
-    gap: var(--space-3);
+  // Core styles the generated scroller with its private scroll-strip mixin.
+  &__scroller {
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  &__track {
+    display: flex;
+    gap: var(--space-3);
     margin: 0;
     padding: 0 0 var(--space-1);
     list-style: none;
-    scroll-snap-type: x proximity;
   }
 
   /* Sized to its content, not to the column: a chip is an object sitting above
