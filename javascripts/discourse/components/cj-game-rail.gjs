@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import { bind } from "discourse/lib/decorators";
 import DAsyncContent from "discourse/ui-kit/d-async-content";
+import DOverflowControls from "discourse/ui-kit/d-overflow-controls";
 import { i18n } from "discourse-i18n";
 import CjGameMini from "./cj-game-mini";
 
@@ -12,12 +13,8 @@ import CjGameMini from "./cj-game-mini";
  * Most topics carry exactly one game, so the strip is usually a single chip;
  * comparison threads and trade posts are where it earns the scroll.
  *
- * A plain scroll container rather than core's `DHorizontalOverflowNav`: that
- * component yields into `ul.nav-pills`, and core styles `.nav-pills > li > a`
- * with `white-space: nowrap`, pill padding and its own `.d-icon` colour and
- * margin — all of which fight a card-shaped chip with a two-line title and four
- * stat glyphs. Its overflow chevrons would also never appear at one or two
- * chips, so the trade was paying for a styling fight to gain nothing.
+ * Core's `DOverflowControls` owns overflow detection and chevrons while the
+ * rail keeps its semantic list and card layout through the owned scroller API.
  */
 export default class CjGameRail extends Component {
   @service cjGameCatalog;
@@ -66,13 +63,19 @@ export default class CjGameRail extends Component {
           class="cj-game-rail"
           aria-label={{i18n (themePrefix "game_card.rail_label")}}
         >
-          <ul class="cj-game-rail__track">
-            {{#each games key="slug" as |game|}}
-              <li class="cj-game-rail__item">
-                <CjGameMini @game={{game}} />
-              </li>
-            {{/each}}
-          </ul>
+          <DOverflowControls
+            @axis="horizontal"
+            @ownedScroller={{true}}
+            as |strip|
+          >
+            <ul class="cj-game-rail__track" {{strip.scroller}}>
+              {{#each games key="slug" as |game|}}
+                <li class="cj-game-rail__item">
+                  <CjGameMini @game={{game}} />
+                </li>
+              {{/each}}
+            </ul>
+          </DOverflowControls>
         </section>
       </:content>
     </DAsyncContent>

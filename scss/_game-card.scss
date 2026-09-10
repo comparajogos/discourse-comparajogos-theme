@@ -479,10 +479,8 @@
 .cj-game-rail {
   margin-block-end: var(--space-4);
 
-  /* A plain scroll container: at one or two chips there is nothing for overflow
-   * controls to do, and native inline scrolling is what a thumb reaches for. */
-
   &__track {
+    @include scroll-strip;
     display: flex;
     gap: var(--space-3);
     overflow-x: auto;
@@ -491,7 +489,6 @@
     padding: 0 0 var(--space-1);
     list-style: none;
     scroll-snap-type: x proximity;
-    scrollbar-width: thin;
   }
 
   /* Sized to its content, not to the column: a chip is an object sitting above
