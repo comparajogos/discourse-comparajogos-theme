@@ -2,7 +2,6 @@ en:
   topic_actions:
     submit_review: "Submit review"
     submit_images: "Upload images"
-    rating_tip: "Review this game in this topic"
   header_nav:
     label: "Compara Jogos"
     forum: "Forum"

@@ -1,6 +1,5 @@
 import { apiInitializer } from "discourse/lib/api";
 import Composer, { SAVE_LABELS } from "discourse/models/composer";
-import CjRatingTipContent from "../components/cj-rating-tip-content";
 import { topicActionLabel } from "../lib/topic-action-label";
 
 export default apiInitializer((api) => {
@@ -48,22 +47,4 @@ export default apiInitializer((api) => {
     },
     action: "replyToPost",
   });
-
-  // The optional ratings plugin still owns visibility, details and dismissal.
-  // Give its control a translated, keyboard-accessible label instead of hiding
-  // the control behind generated CSS text.
-  api.modifyClass(
-    "component:topic-rating-tip",
-    (Superclass) =>
-      class extends Superclass {
-        <template>
-          <CjRatingTipContent
-            @onToggle={{this.toggleDetails}}
-            @expanded={{this.showDetails}}
-            @details={{this.details}}
-          />
-        </template>
-      },
-    { ignoreMissing: true }
-  );
 });

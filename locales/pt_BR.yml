@@ -2,7 +2,6 @@ pt_BR:
   topic_actions:
     submit_review: "Enviar avaliação"
     submit_images: "Enviar imagens"
-    rating_tip: "Envie sua avaliação deste jogo neste tópico"
   header_nav:
     label: "Compara Jogos"
     forum: "Fórum"

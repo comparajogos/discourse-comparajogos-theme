@@ -122,8 +122,8 @@ theme into the test database and uses the real compiled CSS.
 
 Review (`ficha`) and image (`imagem`) reply labels live in `locales/` and use
 native composer/footer actions. Editing, private messages and special composer
-labels retain core's wording. The optional ratings-plugin tip keeps its details
-and dismissal behavior, with a translated button replacing its icon-only control.
+labels retain core's wording. The optional ratings-plugin tip uses the plugin's
+native markup, styling, and dismissal behavior.
 
 ### Colors
 
