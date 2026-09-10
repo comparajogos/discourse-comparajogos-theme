@@ -49,6 +49,14 @@
   display: none;
 }
 
+/* Pair scheme-aware colors instead of inheriting topic text over the plugin's
+ * Sass-derived tooltip background. */
+
+.topic-rating-tip .tip-details {
+  color: var(--cj-control-foreground);
+  background-color: var(--cj-control);
+}
+
 /* Scheme-specific tokens keep map imagery aligned with Discourse even when
  * the member's chosen scheme differs from the operating-system preference. */
 
