@@ -151,11 +151,11 @@
         background: none;
       }
 
-      /* Core strips .last-visit's bottom border, expecting the separator row to
-       * follow; as full-bleed rows every card keeps its rule. */
+      /* The last-visit separator supplies its own hairlines. With no mobile
+       * row gap, a card border here would create a doubled divider. */
 
       > .topic-list-body > .topic-list-item.last-visit {
-        border-block-end: 1px solid var(--cj-border);
+        border-block-end: 0;
       }
     }
   }
