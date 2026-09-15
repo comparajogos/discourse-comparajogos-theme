@@ -80,13 +80,15 @@
 
   &__title {
     display: flex;
-    flex-wrap: wrap;
     gap: var(--space-2);
     align-items: baseline;
     min-width: 0;
     margin-block-start: var(--space-1);
 
     a.title {
+      /* Let the clamped title shrink to leave room for unread badges on the
+       * same row, even when the title itself spans two lines. */
+      min-width: 0;
       display: -webkit-box;
       overflow: hidden;
 
@@ -101,6 +103,17 @@
       &:hover {
         opacity: 0.75;
       }
+    }
+
+    /* Featured domains share this row too; a long domain must not crowd the
+     * title and unread count out of a narrow feed. */
+
+    a.topic-featured-link {
+      display: block;
+      overflow: hidden;
+      min-width: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
