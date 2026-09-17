@@ -109,6 +109,10 @@
         display: block;
         width: 100%;
         max-width: none;
+
+        /* Core paints the keyboard-selection marker as an inset shadow on
+         * this cell. Follow the card's corners, including its mobile reset. */
+        border-radius: inherit;
       }
     }
 
