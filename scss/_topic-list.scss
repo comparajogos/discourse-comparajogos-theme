@@ -110,9 +110,15 @@
         width: 100%;
         max-width: none;
 
-        /* Core paints the keyboard-selection marker as an inset shadow on
-         * this cell. Follow the card's corners, including its mobile reset. */
+        /* Follow the card's corners, including its mobile reset. */
         border-radius: inherit;
+      }
+
+      /* Replace core's left-side keyboard marker with a full 1px inset ring.
+       * Painting on the cell preserves selection without changing geometry. */
+
+      &.selected > .cj-feed-cell:first-of-type {
+        box-shadow: inset 0 0 0 1px var(--d-nav-color--active);
       }
     }
 
