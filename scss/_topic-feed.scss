@@ -83,11 +83,15 @@
     gap: var(--space-2);
     align-items: baseline;
     min-width: 0;
+    flex-wrap: wrap;
     margin-block-start: var(--space-1);
 
     a.title {
       /* Let the clamped title shrink to leave room for unread badges on the
-       * same row, even when the title itself spans two lines. */
+       * same row, even when the title itself spans two lines. The zero
+       * basis keeps the row's wrapping from measuring the full title and
+       * pushing the badges to the next line. */
+      flex: 1 1 0;
       min-width: 0;
       display: -webkit-box;
       overflow: hidden;
@@ -114,6 +118,55 @@
       min-width: 0;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    /* Plugins (calendar's event date, locations, ratings) append their own
+     * nodes after the title link. Inline they squeezed the title into a
+     * column and wrapped word by word at title size. A zero-height break
+     * sends them to their own row of stats-sized, one-line chips, while the
+     * unread badges and featured link stay beside the title. */
+
+    &::after {
+      content: "";
+      order: 1;
+      flex-basis: 100%;
+      height: 0;
+    }
+
+    > :not(a.title, .topic-post-badges, a.topic-featured-link) {
+      display: inline-flex;
+      order: 2;
+      gap: var(--space-1);
+      margin-block-start: var(--space-1);
+      align-items: center;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      color: var(--cj-text-muted);
+      font-size: var(--font-down-1-rem);
+      font-weight: 400;
+      line-height: 1.3;
+      white-space: nowrap;
+
+      * {
+        overflow: hidden;
+        font-size: inherit;
+        line-height: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .d-icon,
+      svg {
+        flex: 0 0 auto;
+        overflow: visible;
+        width: 1em;
+        height: 1em;
+      }
     }
   }
 
