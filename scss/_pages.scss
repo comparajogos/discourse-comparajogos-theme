@@ -137,6 +137,11 @@ $panels:
     border: 0;
     border-radius: 0;
     background: none;
+
+    /* The panel's --secondary override follows the fill: with the fill gone,
+     * the surface behind is the canvas, so core's --secondary regions (the
+     * game rail's overflow chevron and its fade) must paint the canvas too. */
+    --secondary: var(--cj-background);
   }
 
   /* Core places the read-state container in the mobile page gutter, then
