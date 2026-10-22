@@ -42,6 +42,58 @@
   }
 }
 
+/* Locations ships a square outlined button against the category row. Keep this
+ * optional action compact and inset, with room for a selected place and remove
+ * control. Scope to the plugin field, leaving core's composer layout alone. */
+.composer-controls-location {
+  margin: var(--space-2) 0;
+  padding-inline: var(--space-3);
+  min-width: 0;
+
+  .location-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .btn {
+    --d-button-default-bg-color: transparent;
+    --d-button-default-bg-color--hover: var(--cj-control);
+
+    min-height: 2rem;
+    max-width: 100%;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid transparent;
+    border-radius: var(--cj-radius-control);
+    font-size: var(--font-down-1);
+    box-shadow: none;
+
+    &:not(:hover) {
+      background: transparent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--tertiary);
+      outline-offset: 2px;
+    }
+  }
+
+  .add-location-btn {
+    min-width: 0;
+
+    .d-button-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .remove {
+    flex-shrink: 0;
+  }
+}
+
 /* discourse-ratings renders once for each name link. Keep the copy after the
  * secondary name, but preserve the first when core suppresses that name. */
 
