@@ -44,18 +44,15 @@
 
 /* Locations ships a square outlined button against the category row. Keep this
  * optional action compact and inset, with room for a selected place and remove
- * control. Scope to the plugin field, leaving core's composer layout alone. */
-.composer-controls-location {
+ * control. Modern plugin outlets don't emit the old composer-controls-location
+ * wrapper, so anchor to the component's own markup inside the composer. */
+#reply-control .location-label:has(> .add-location-btn) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
   margin: var(--space-2) 0;
   padding-inline: var(--space-3);
   min-width: 0;
-
-  .location-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    min-width: 0;
-  }
 
   .btn {
     --d-button-default-bg-color: transparent;
