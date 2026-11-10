@@ -433,11 +433,6 @@ div:has(> .cj-category-carousel) {
     overflow: hidden;
     color: var(--cj-text-muted);
     font-size: var(--font-down-2-rem);
-
-    /* styles.scss turns synthesis off globally so nothing gets faux-bolded, and
-     * Inter ships here without an italic face — so the slant needs an explicit
-     * opt-in or `font-style` is silently inert. */
-    font-synthesis: style;
     font-style: italic;
     line-height: 1.4;
     text-overflow: ellipsis;
