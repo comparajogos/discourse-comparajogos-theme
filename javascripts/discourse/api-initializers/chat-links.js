@@ -12,8 +12,8 @@ export default apiInitializer((api) => {
   api.decorateChatMessage?.(
     (element) => {
       element.querySelectorAll("a[target='_blank'][href]").forEach((link) => {
-        const url = new URL(link.href, window.location.href);
-        if (ownOrigins.has(url.origin) && !samePrefix(url.href)) {
+        if (ownOrigins.has(link.origin) && !samePrefix(link.href)) {
+          link.setAttribute("href", link.href);
           link.removeAttribute("target");
         }
       });
