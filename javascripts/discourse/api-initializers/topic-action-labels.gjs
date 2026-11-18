@@ -47,4 +47,21 @@ export default apiInitializer((api) => {
     },
     action: "replyToPost",
   });
+
+  api.registerTopicFooterButton({
+    id: "cj-contextual-reply-anon",
+    icon: "reply",
+    classNames: ["btn-primary", "cj-contextual-reply"],
+    priority: -1000,
+    anonymousOnly: true,
+    label() {
+      return topicActionLabel(this.topic);
+    },
+    displayed() {
+      return !api.getCurrentUser() && Boolean(topicActionLabel(this.topic));
+    },
+    action() {
+      api.container.lookup("route:application").send("showLogin");
+    },
+  });
 });

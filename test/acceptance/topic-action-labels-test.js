@@ -70,3 +70,44 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
     assert.dom(".topic-footer-main-buttons .create").doesNotExist();
   });
 });
+
+acceptance(
+  "Compara Jogos contextual reply labels (anonymous)",
+  function (needs) {
+    let tag;
+
+    needs.hooks.beforeEach(() => {
+      tag = null;
+    });
+
+    needs.pretender((server, helper) => {
+      const responseTopic = () => {
+        const response = cloneJSON(topicFixtures["/t/280/1.json"]);
+        response.tags = tag ? [{ id: 1, name: tag, slug: tag }] : [];
+        return helper.response(response);
+      };
+      server.get("/t/280.json", responseTopic);
+      server.get("/t/280/:post_number.json", responseTopic);
+    });
+
+    test("ficha shows Avaliar and opens login", async function (assert) {
+      tag = "ficha";
+      await visit("/t/internationalization-localization/280");
+
+      assert
+        .dom(".cj-contextual-reply")
+        .hasText(i18n(themePrefix("topic_actions.review")));
+
+      await click(".cj-contextual-reply");
+      assert.dom(".login-modal, .d-modal.login-modal, #login-form").exists();
+    });
+
+    test("ordinary topics keep core's reply button", async function (assert) {
+      await visit("/t/internationalization-localization/280");
+      assert.dom(".cj-contextual-reply").doesNotExist();
+      assert
+        .dom(".topic-footer-main-buttons > .btn-primary")
+        .hasText(i18n("topic.reply.title"));
+    });
+  }
+);

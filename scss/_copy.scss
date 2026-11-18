@@ -78,3 +78,10 @@
     font-weight: 600;
   }
 }
+
+body:is(.tag-ficha, .tag-imagem)
+  #topic-footer-buttons
+  .topic-footer-main-buttons
+  > .btn-primary:not(.cj-contextual-reply) {
+  display: none;
+}
