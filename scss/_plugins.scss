@@ -46,6 +46,7 @@
  * optional action compact and inset, with room for a selected place and remove
  * control. Modern plugin outlets don't emit the old composer-controls-location
  * wrapper, so anchor to the component's own markup inside the composer. */
+
 #reply-control .location-label:has(> .add-location-btn) {
   display: flex;
   align-items: center;
@@ -57,7 +58,6 @@
   .btn {
     --d-button-default-bg-color: transparent;
     --d-button-default-bg-color--hover: var(--cj-control);
-
     min-height: 2rem;
     max-width: 100%;
     padding: var(--space-1) var(--space-2);
