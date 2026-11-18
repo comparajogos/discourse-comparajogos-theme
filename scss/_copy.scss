@@ -79,7 +79,7 @@
   }
 }
 
-body:is(.tag-ficha, .tag-imagem)
+body.tag-ficha
   #topic-footer-buttons
   .topic-footer-main-buttons
   > .btn-primary:not(.cj-contextual-reply) {

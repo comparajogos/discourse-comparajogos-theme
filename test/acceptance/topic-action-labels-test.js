@@ -27,32 +27,27 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
     server.get("/t/280/:post_number.json", responseTopic);
   });
 
-  [
-    ["ficha", "review", "submit_review"],
-    ["imagem", "submit_images", "submit_images"],
-  ].forEach(([topicTag, buttonLabel, composerLabel]) => {
-    test(`${topicTag} uses translated labels and the native reply action`, async function (assert) {
-      tag = topicTag;
-      await visit("/t/internationalization-localization/280");
+  test("ficha uses translated labels and the native reply action", async function (assert) {
+    tag = "ficha";
+    await visit("/t/internationalization-localization/280");
 
-      assert.dom(".topic-footer-main-buttons .create").exists({ count: 1 });
-      assert
-        .dom(".cj-contextual-reply")
-        .hasText(i18n(themePrefix(`topic_actions.${buttonLabel}`)));
-      await click(".cj-contextual-reply");
-      assert
-        .dom("#reply-control .save-or-cancel .create")
-        .hasText(i18n(themePrefix(`topic_actions.${composerLabel}`)));
+    assert.dom(".topic-footer-main-buttons .create").exists({ count: 1 });
+    assert
+      .dom(".cj-contextual-reply")
+      .hasText(i18n(themePrefix("topic_actions.review")));
+    await click(".cj-contextual-reply");
+    assert
+      .dom("#reply-control .save-or-cancel .create")
+      .hasText(i18n(themePrefix("topic_actions.submit_review")));
 
-      const model = this.owner.lookup("service:composer").model;
-      assert.strictEqual(model.action, Composer.REPLY);
-      assert.strictEqual(model.topic.id, 280);
-      model.set("action", Composer.EDIT);
-      await settled();
-      assert
-        .dom("#reply-control .save-or-cancel .create")
-        .hasText(i18n("composer.save_edit"));
-    });
+    const model = this.owner.lookup("service:composer").model;
+    assert.strictEqual(model.action, Composer.REPLY);
+    assert.strictEqual(model.topic.id, 280);
+    model.set("action", Composer.EDIT);
+    await settled();
+    assert
+      .dom("#reply-control .save-or-cancel .create")
+      .hasText(i18n("composer.save_edit"));
   });
 
   test("ordinary topics retain the native reply button", async function (assert) {

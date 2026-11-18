@@ -120,7 +120,7 @@ stylesheets. Run that spec from a local Discourse checkout with `bundle exec
 rspec /path/to/this/theme/spec/system/theme_followups_spec.rb`; it imports the
 theme into the test database and uses the real compiled CSS.
 
-Review (`ficha`) and image (`imagem`) reply labels live in `locales/` and use
+Review (`ficha`) reply labels live in `locales/` and use
 native composer/footer actions. Editing, private messages and special composer
 labels retain core's wording. The optional ratings-plugin tip uses the plugin's
 native markup, styling, and dismissal behavior.

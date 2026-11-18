@@ -68,7 +68,7 @@ splash_logo_dark:
     pt_BR: "Logo exibido no esqueleto de carregamento no esquema escuro. Mesma regra do splash_logo."
 
 hidden_filter_tags:
-  default: "ficha|imagem"
+  default: "ficha"
   type: string
   description:
     en: "Tags to leave out of the discovery tag filter, separated by `|`. They stay usable on topics and in the composer — this only removes them from the filter's list. Empty to show every tag."
@@ -107,7 +107,7 @@ game_card_graphql_url:
     pt_BR: "Endereço GraphQL do Compara Jogos usado pelos cards. Consultado anonimamente, sem credenciais."
 
 game_card_ignored_tags:
-  default: "ficha|imagem|video|arquivo"
+  default: "ficha|video|arquivo"
   type: string
   description:
     en: "Tags that are markers rather than games, separated by `|`. They are never looked up in the catalog, so they never show a card and never lose their link. Any other tag is looked up once per session and remembered either way."
