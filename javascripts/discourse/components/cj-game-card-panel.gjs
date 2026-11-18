@@ -8,7 +8,7 @@ import CjGameCard from "./cj-game-card";
  * The tag route's header: the game this tag is about, above its topic list.
  *
  * Deliberately silent until the catalog answers — no skeleton, no spinner. Most
- * tags on this forum are games, but `ficha` and every future marker
+ * tags on this forum are games, but `video` and every other marker
  * tag are not, and a placeholder that appears and then collapses on those pages
  * is worse than one that never appears. The service's negative cache means a
  * non-game tag pays for that lookup once per session.

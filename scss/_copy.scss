@@ -79,9 +79,8 @@
   }
 }
 
-body.tag-ficha
-  #topic-footer-buttons
-  .topic-footer-main-buttons
+#topic-footer-buttons
+  .topic-footer-main-buttons:has(> .cj-contextual-reply)
   > .btn-primary:not(.cj-contextual-reply) {
   display: none;
 }

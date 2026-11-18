@@ -20,8 +20,8 @@ import {
  *
  * - `games` maps a canonical slug to its game.
  * - `missing` remembers slugs proven *not* to be games. This is what makes
- *   failing gracefully cheap: `/tag/ficha` asks once, and every later mention of
- *   `#ficha` is answered without touching the network or the DOM.
+ *   failing gracefully cheap: `/tag/video` asks once, and every later mention of
+ *   `#video` is answered without touching the network or the DOM.
  * - `aliases` maps a requested slug to the canonical one the catalog redirected
  *   it to, so a game renamed after its tag was created keeps its card.
  */
@@ -33,9 +33,9 @@ export default class CjGameCatalog extends Service {
   #queue = new Set();
   #scheduled = null;
 
-  /* Tags that are structural rather than games — the data-sheet and image-bank
-   * tags, and anything else the site uses as a marker. Skipping them here keeps
-   * them out of every request and out of every cache. */
+  /* Tags that are structural rather than games — `video`, `arquivo`, and
+   * anything else the site uses as a marker. Skipping them here keeps them out
+   * of every request and out of every cache. */
   get ignoredTags() {
     return new Set(
       (settings.game_card_ignored_tags || "")

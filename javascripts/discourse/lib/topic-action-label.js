@@ -3,8 +3,10 @@ export function topicActionLabel(topic, { composer = false } = {}) {
     return;
   }
 
-  const tags = (topic.tags || []).map((tag) => tag.name || tag);
-  if (tags.includes("ficha")) {
+  const reviewCategories = (settings.review_categories || "")
+    .split("|")
+    .map(Number);
+  if (reviewCategories.includes(topic.category_id)) {
     return themePrefix(
       composer ? "topic_actions.submit_review" : "topic_actions.review"
     );

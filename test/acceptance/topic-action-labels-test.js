@@ -8,18 +8,22 @@ import { i18n } from "discourse-i18n";
 
 acceptance("Compara Jogos contextual reply labels", function (needs) {
   needs.user();
-  let tag;
   let canReply;
+  let previous;
 
   needs.hooks.beforeEach(() => {
-    tag = null;
     canReply = true;
+    previous = settings.review_categories;
+    settings.review_categories = "";
+  });
+
+  needs.hooks.afterEach(() => {
+    settings.review_categories = previous;
   });
 
   needs.pretender((server, helper) => {
     const responseTopic = () => {
       const response = cloneJSON(topicFixtures["/t/280/1.json"]);
-      response.tags = tag ? [{ id: 1, name: tag, slug: tag }] : [];
       response.details.can_create_post = canReply;
       return helper.response(response);
     };
@@ -27,8 +31,8 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
     server.get("/t/280/:post_number.json", responseTopic);
   });
 
-  test("ficha uses translated labels and the native reply action", async function (assert) {
-    tag = "ficha";
+  test("review categories use translated labels and the native reply action", async function (assert) {
+    settings.review_categories = "2";
     await visit("/t/internationalization-localization/280");
 
     assert.dom(".topic-footer-main-buttons .create").exists({ count: 1 });
@@ -59,7 +63,7 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
   });
 
   test("contextual labels do not bypass reply permission", async function (assert) {
-    tag = "ficha";
+    settings.review_categories = "2";
     canReply = false;
     await visit("/t/internationalization-localization/280");
     assert.dom(".topic-footer-main-buttons .create").doesNotExist();
@@ -69,24 +73,28 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
 acceptance(
   "Compara Jogos contextual reply labels (anonymous)",
   function (needs) {
-    let tag;
+    let previous;
 
     needs.hooks.beforeEach(() => {
-      tag = null;
+      previous = settings.review_categories;
+      settings.review_categories = "";
+    });
+
+    needs.hooks.afterEach(() => {
+      settings.review_categories = previous;
     });
 
     needs.pretender((server, helper) => {
       const responseTopic = () => {
         const response = cloneJSON(topicFixtures["/t/280/1.json"]);
-        response.tags = tag ? [{ id: 1, name: tag, slug: tag }] : [];
         return helper.response(response);
       };
       server.get("/t/280.json", responseTopic);
       server.get("/t/280/:post_number.json", responseTopic);
     });
 
-    test("ficha shows Avaliar and opens login", async function (assert) {
-      tag = "ficha";
+    test("review categories show Avaliar and opens login", async function (assert) {
+      settings.review_categories = "2";
       await visit("/t/internationalization-localization/280");
 
       assert

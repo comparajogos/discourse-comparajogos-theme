@@ -133,15 +133,15 @@ function topicWithGameTags() {
 
   topic.tags = [
     { id: 7, name: "gi-joe-mission-critical" },
-    { id: 8, name: "ficha" },
+    { id: 8, name: "video" },
   ];
   topic.tags_descriptions = {
     "gi-joe-mission-critical": "G.I. JOE Mission Critical",
-    ficha: "Data sheet",
+    video: "Videos",
   };
   topic.post_stream.posts[0].cooked =
     `<p>Comparing ${mention("gi-joe-mission-critical", "gi-joe")} against the ` +
-    `${mention("ficha", "ficha")} marker.</p>`;
+    `${mention("video", "video")} marker.</p>`;
 
   return topic;
 }
@@ -154,7 +154,7 @@ acceptance("Compara Jogos game card - tag page", function (needs) {
       helper.response(tagList(7, "brass-birmingham", "Brass: Birmingham"))
     );
     server.get("/tag/8/l/latest.json", () =>
-      helper.response(tagList(8, "ficha", "Data sheet"))
+      helper.response(tagList(8, "video", "Videos"))
     );
     server.get("/tag/9/l/latest.json", () =>
       helper.response(tagList(9, "brass", "Brass: Birmingham"))
@@ -193,7 +193,7 @@ acceptance("Compara Jogos game card - tag page", function (needs) {
   test("a tag that is not a game is left alone", async function (assert) {
     const calls = stubCatalog({});
 
-    await visit("/tag/ficha/8");
+    await visit("/tag/video/8");
 
     assert
       .dom(".cj-game-card-panel")
@@ -245,12 +245,12 @@ acceptance("Compara Jogos game card - topic", function (needs) {
      * echoes the slug back as the id, and a non-numeric id sends the route
      * redirecting to itself forever — so this returns a real numeric one, as a
      * forum does. */
-    server.get("/tag/ficha/info.json", () =>
+    server.get("/tag/video/info.json", () =>
       helper.response({
         tag_info: {
           id: 8,
-          name: "ficha",
-          slug: "ficha",
+          name: "video",
+          slug: "video",
           topic_count: 1,
           staff: false,
           synonyms: [],
@@ -261,13 +261,13 @@ acceptance("Compara Jogos game card - topic", function (needs) {
       })
     );
     server.get("/tag/8/l/latest.json", () =>
-      helper.response(tagList(8, "ficha", "Data sheet"))
+      helper.response(tagList(8, "video", "Videos"))
     );
     server.get("/tag/8/notifications.json", () =>
       helper.response({
         tag_notification: {
           id: 8,
-          name: "ficha",
+          name: "video",
           notification_level: 1,
         },
       })
@@ -286,12 +286,12 @@ acceptance("Compara Jogos game card - topic", function (needs) {
         },
         {
           type: "tag",
-          ref: "ficha",
-          text: "ficha",
-          slug: "ficha",
+          ref: "video",
+          text: "video",
+          slug: "video",
           icon: "tag",
           id: 8,
-          relative_url: "/tag/ficha",
+          relative_url: "/tag/video",
           style_type: "icon",
         },
       ];
@@ -312,7 +312,7 @@ acceptance("Compara Jogos game card - topic", function (needs) {
 
     assert
       .dom(".cj-game-rail .cj-game-mini")
-      .exists({ count: 1 }, "one chip per game tag, and none for `ficha`");
+      .exists({ count: 1 }, "one chip per game tag, and none for `video`");
     assert
       .dom(".cj-game-rail .cj-game-mini__name")
       .hasText("G.I. JOE Mission Critical");
@@ -387,14 +387,14 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     await click("#topic-footer-buttons .create");
     await fillIn(
       "#reply-control .d-editor-input",
-      "Comparing #gi-joe-mission-critical with #ficha"
+      "Comparing #gi-joe-mission-critical with #video"
     );
     await click(".composer-toggle-switch");
     await waitFor(
       '.ProseMirror .hashtag-cooked[data-name="gi-joe-mission-critical"][data-processed="true"]'
     );
 
-    await click('.ProseMirror .hashtag-cooked[data-name="ficha"]');
+    await click('.ProseMirror .hashtag-cooked[data-name="video"]');
 
     assert
       .dom('.fk-d-menu[data-identifier="cj-game-card"]')
@@ -418,14 +418,14 @@ acceptance("Compara Jogos game card - topic", function (needs) {
     await visit("/t/internationalization-localization/280");
 
     assert
-      .dom('.cooked .hashtag-cooked[data-slug="ficha"]')
-      .hasAttribute("href", "/tag/ficha", "the original tag link is present");
+      .dom('.cooked .hashtag-cooked[data-slug="video"]')
+      .hasAttribute("href", "/tag/video", "the original tag link is present");
 
-    await click('.cooked .hashtag-cooked[data-slug="ficha"]');
+    await click('.cooked .hashtag-cooked[data-slug="video"]');
 
     assert.strictEqual(
       currentURL(),
-      "/tag/ficha/8",
+      "/tag/video/8",
       "it navigates to the tag as core intends"
     );
     assert

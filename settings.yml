@@ -67,8 +67,16 @@ splash_logo_dark:
     en: "Logo painted on the loading skeleton in the dark scheme. Same rule as splash_logo."
     pt_BR: "Logo exibido no esqueleto de carregamento no esquema escuro. Mesma regra do splash_logo."
 
+review_categories:
+  default: "24"
+  type: list
+  list_type: category
+  description:
+    en: 'Categories whose topics are game data sheets: replies there are reviews, so the reply button reads "Avaliar".'
+    pt_BR: 'Categorias cujos tópicos são fichas de jogos: respostas nelas são avaliações, então o botão de resposta mostra "Avaliar".'
+
 hidden_filter_tags:
-  default: "ficha"
+  default: ""
   type: string
   description:
     en: "Tags to leave out of the discovery tag filter, separated by `|`. They stay usable on topics and in the composer — this only removes them from the filter's list. Empty to show every tag."
@@ -107,7 +115,7 @@ game_card_graphql_url:
     pt_BR: "Endereço GraphQL do Compara Jogos usado pelos cards. Consultado anonimamente, sem credenciais."
 
 game_card_ignored_tags:
-  default: "ficha|video|arquivo"
+  default: "video|arquivo"
   type: string
   description:
     en: "Tags that are markers rather than games, separated by `|`. They are never looked up in the catalog, so they never show a card and never lose their link. Any other tag is looked up once per session and remembered either way."
