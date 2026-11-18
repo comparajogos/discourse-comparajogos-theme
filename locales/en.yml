@@ -1,5 +1,6 @@
 en:
   topic_actions:
+    review: "Review"
     submit_review: "Submit review"
     submit_images: "Upload images"
   header_nav:

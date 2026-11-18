@@ -1,4 +1,4 @@
-export function topicActionLabel(topic) {
+export function topicActionLabel(topic, { composer = false } = {}) {
   if (!topic || topic.isPrivateMessage) {
     return;
   }
@@ -8,6 +8,8 @@ export function topicActionLabel(topic) {
     return themePrefix("topic_actions.submit_images");
   }
   if (tags.includes("ficha")) {
-    return themePrefix("topic_actions.submit_review");
+    return themePrefix(
+      composer ? "topic_actions.submit_review" : "topic_actions.review"
+    );
   }
 }

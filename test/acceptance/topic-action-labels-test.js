@@ -28,20 +28,21 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
   });
 
   [
-    ["ficha", "submit_review"],
-    ["imagem", "submit_images"],
-  ].forEach(([topicTag, label]) => {
+    ["ficha", "review", "submit_review"],
+    ["imagem", "submit_images", "submit_images"],
+  ].forEach(([topicTag, buttonLabel, composerLabel]) => {
     test(`${topicTag} uses translated labels and the native reply action`, async function (assert) {
       tag = topicTag;
       await visit("/t/internationalization-localization/280");
 
-      const expectedLabel = i18n(themePrefix(`topic_actions.${label}`));
       assert.dom(".topic-footer-main-buttons .create").exists({ count: 1 });
-      assert.dom(".cj-contextual-reply").hasText(expectedLabel);
+      assert
+        .dom(".cj-contextual-reply")
+        .hasText(i18n(themePrefix(`topic_actions.${buttonLabel}`)));
       await click(".cj-contextual-reply");
       assert
         .dom("#reply-control .save-or-cancel .create")
-        .hasText(expectedLabel);
+        .hasText(i18n(themePrefix(`topic_actions.${composerLabel}`)));
 
       const model = this.owner.lookup("service:composer").model;
       assert.strictEqual(model.action, Composer.REPLY);

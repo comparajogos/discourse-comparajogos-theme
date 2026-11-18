@@ -8,7 +8,7 @@ export default apiInitializer((api) => {
     // Editing and creating topics retain their native Save/Create labels.
     return model?.action === Composer.REPLY &&
       value === SAVE_LABELS[Composer.REPLY]
-      ? topicActionLabel(model.topic) || value
+      ? topicActionLabel(model.topic, { composer: true }) || value
       : value;
   });
 

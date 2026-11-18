@@ -1,5 +1,6 @@
 pt_BR:
   topic_actions:
+    review: "Avaliar"
     submit_review: "Enviar avaliação"
     submit_images: "Enviar imagens"
   header_nav:
