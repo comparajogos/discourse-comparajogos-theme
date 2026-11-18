@@ -25,9 +25,4 @@ export default apiInitializer((api) => {
   api.registerValueTransformer("home-logo-image-url", ({ value, context }) =>
     context?.name === "mobile_logo" ? "" : value
   );
-
-  /* Core's default share glyph reads as an export arrow; the client uses a share
-   * node in the same position. */
-  api.replaceIcon("d-post-share", "share-nodes");
-  api.replaceIcon("d-topic-share", "share-nodes");
 });
