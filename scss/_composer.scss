@@ -18,20 +18,31 @@
   body.has-sidebar-page #reply-control:not(.fullscreen).hide-preview,
   body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
     --cj-frame-edge: max(0px, calc((100% - var(--d-max-width)) / 2));
-    inset-inline-start: calc(var(--cj-frame-edge) + var(--d-wrap-padding-x));
+    inset-inline-start: calc(
+      var(--cj-frame-edge) + var(--d-wrap-padding-x) +
+        var(--cj-composer-topic-inset, 0px)
+    );
     inset-inline-end: max(
       var(--d-page-inset-inline-end, 0px),
-      calc(var(--cj-frame-edge) + var(--d-wrap-padding-x))
+      calc(
+        var(--cj-frame-edge) + var(--d-wrap-padding-x) +
+          var(--cj-composer-topic-inset, 0px)
+      )
     );
     width: auto;
     margin-inline: 0;
+  }
+
+  /* Regular topics use cj-panel: its padding and border sit inside the outlet. */
+  body.archetype-regular #reply-control {
+    --cj-composer-topic-inset: calc(var(--space-5) + 1px);
   }
 
   body.has-sidebar-page #reply-control:not(.fullscreen).hide-preview {
     --cj-composer-main-gap: var(--d-main-content-gap);
     inset-inline-start: calc(
       var(--cj-frame-edge) + var(--d-wrap-padding-x) + var(--d-sidebar-width) +
-        var(--cj-composer-main-gap)
+        var(--cj-composer-main-gap) + var(--cj-composer-topic-inset, 0px)
     );
 
     @include viewport.until(lg) {
