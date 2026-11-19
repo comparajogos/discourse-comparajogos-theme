@@ -49,6 +49,13 @@ both installed a `#tag` mention opens two cards.
 **Uninstall `comparajogos-user-list-links`.** Its profile integration now ships
 here; with both installed the same catalog activity appears twice.
 
+## Review categories
+
+The `review_categories` setting (default: category 24) also hides the AI retry
+button from post menus in those categories. Workflow-generated replies there
+should not be regenerated through the regular AI conversation action. This is
+a theme-only visibility rule; it does not change server permissions.
+
 ## Game cards
 
 On this forum a board game _is_ a tag: the tag name is the catalog's product
