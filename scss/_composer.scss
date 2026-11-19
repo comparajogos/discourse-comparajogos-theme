@@ -1,5 +1,3 @@
-@use "lib/viewport";
-
 /* Core's composer redesign (`uc-enable-composer-redesign`) treats the title as a
  * headline and leaves its surface to the input tokens — which properties.scss
  * makes the client's filled control, putting a rounded grey slab where the
@@ -8,33 +6,4 @@
 .uc-enable-composer-redesign #reply-title {
   border-radius: 0;
   background: transparent;
-}
-
-@include viewport.from(md) {
-  /* Core anchors the previewless composer with a legacy 0.67em inset and, when
-   * the sidebar is present, as though the sidebar widened the page frame. This
-   * theme uses one shared 90rem frame in both states, so move the start edge to
-   * the real content column while leaving core's width and max-width untouched. */
-
-  #reply-control:not(.fullscreen).hide-preview {
-    --cj-frame-edge: max(0px, calc((100vw - var(--d-max-width)) / 2));
-    inset-inline-end: auto;
-    margin-inline: 0;
-  }
-
-  body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
-    inset-inline-start: calc(var(--cj-frame-edge) + var(--d-wrap-padding-x));
-  }
-
-  body.has-sidebar-page #reply-control:not(.fullscreen).hide-preview {
-    --cj-composer-main-gap: var(--d-main-content-gap);
-    inset-inline-start: calc(
-      var(--cj-frame-edge) + var(--d-wrap-padding-x) + var(--d-sidebar-width) +
-        var(--cj-composer-main-gap)
-    );
-
-    @include viewport.until(lg) {
-      --cj-composer-main-gap: var(--space-4);
-    }
-  }
 }
