@@ -4,6 +4,7 @@ import sinon from "sinon";
 import { cloneJSON } from "discourse/lib/object";
 import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import { stubNonChannelAuthors } from "../helpers/channel-fixtures";
 
 /*
  * The game cards read a third-party GraphQL API with `fetch`, which Pretender
@@ -150,6 +151,7 @@ acceptance("Compara Jogos game card - tag page", function (needs) {
   needs.settings({ tagging_enabled: true });
 
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     server.get("/tag/7/l/latest.json", () =>
       helper.response(tagList(7, "brass-birmingham", "Brass: Birmingham"))
     );
@@ -235,6 +237,7 @@ acceptance("Compara Jogos game card - topic", function (needs) {
   needs.settings({ rich_editor: true, tagging_enabled: true });
 
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     server.get("/t/280.json", () => helper.response(topicWithGameTags()));
     server.get("/t/280/:post_number.json", () =>
       helper.response(topicWithGameTags())

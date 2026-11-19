@@ -173,3 +173,17 @@ rules stay visible — a stale block whose component was removed months earlier 
 unnoticed in a 790-line `styles.scss` while silently breaking two other rules.
 `styles.scss` is page-level base only; anything with a home goes in its partial,
 including that surface's own media queries.
+
+## Creator channels
+
+Groups with the plugin's `is_channel: true` marker open with their description,
+image and recent topics. The Team tab (`?channel_team=true`) keeps the native
+membership UI; management and the full `/g/:name/activity/topics` archive remain
+Discourse pages. Publications use `/topics/groups/:name.json`, ordered by creation.
+They reflect current membership, including existing topics, and retain core visibility
+checks. The theme does not persist topic attribution.
+
+Profiles, user cards and topic opening posts link to the author's visible channel
+groups. Membership comes from the secured user endpoint and is cached for one minute.
+Replies and private messages do not show the channel block. Multiple channel
+memberships are shown without choosing an arbitrary attribution.

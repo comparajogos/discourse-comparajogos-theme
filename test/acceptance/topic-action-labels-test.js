@@ -5,6 +5,7 @@ import Composer from "discourse/models/composer";
 import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import { i18n } from "discourse-i18n";
+import { stubNonChannelAuthors } from "../helpers/channel-fixtures";
 
 acceptance("Compara Jogos contextual reply labels", function (needs) {
   needs.user();
@@ -22,6 +23,7 @@ acceptance("Compara Jogos contextual reply labels", function (needs) {
   });
 
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     const responseTopic = () => {
       const response = cloneJSON(topicFixtures["/t/280/1.json"]);
       response.details.can_create_post = canReply;
@@ -85,6 +87,7 @@ acceptance(
     });
 
     needs.pretender((server, helper) => {
+      stubNonChannelAuthors(server, helper);
       const responseTopic = () => {
         const response = cloneJSON(topicFixtures["/t/280/1.json"]);
         return helper.response(response);

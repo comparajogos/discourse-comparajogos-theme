@@ -62,3 +62,13 @@ pt_BR:
       expansion: "Expansão"
       accessory: "Acessório"
       rpg: "RPG"
+
+  channels:
+    label: "Canal"
+    from: "Canal"
+    manage: "Gerenciar canal"
+    publications: "Publicações"
+    team: "Equipe"
+    all_publications: "Ver todas as publicações"
+    empty: "Este canal ainda não tem publicações visíveis."
+    load_error: "Não foi possível carregar as publicações."

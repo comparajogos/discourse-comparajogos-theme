@@ -4,6 +4,7 @@ import sinon from "sinon";
 import { cloneJSON } from "discourse/lib/object";
 import userFixtures from "discourse/tests/fixtures/user-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import { stubNonChannelAuthors } from "../helpers/channel-fixtures";
 
 const PROFILE_DATA = {
   collection: [
@@ -71,6 +72,7 @@ function stubProfileCatalog({ data = PROFILE_DATA, ok = true } = {}) {
 }
 
 acceptance("Compara Jogos unified profile navigation", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.user({ username: "forum-member" });
 
   test("it keeps native profile entry points on forum Activity", async function (assert) {
@@ -136,6 +138,7 @@ acceptance(
     needs.user({ username: "forum-member" });
     needs.mobileView();
     needs.pretender((server, helper) => {
+      stubNonChannelAuthors(server, helper);
       server.get("/u/eviltrout.json", () => {
         const response = cloneJSON(userFixtures["/u/eviltrout.json"]);
         response.user.can_mute_user = true;
@@ -163,6 +166,7 @@ acceptance(
 );
 
 acceptance("Compara Jogos profile bridge", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.user();
 
   test("it adds the shared public profile tabs behind the cutover setting", async function (assert) {
@@ -399,6 +403,7 @@ acceptance("Compara Jogos profile bridge", function (needs) {
 });
 
 acceptance("Compara Jogos profile bridge - mobile", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.user();
   needs.mobileView();
 
