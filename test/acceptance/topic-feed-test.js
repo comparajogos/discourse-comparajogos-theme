@@ -6,6 +6,7 @@ import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import privateMessagesFixtures from "discourse/tests/fixtures/private-messages-fixtures";
 import topicFixtures from "discourse/tests/fixtures/topic";
 import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
+import { stubNonChannelAuthors } from "../helpers/channel-fixtures";
 
 /*
  * Smoke tests for the feed row. The row replaces every core topic-list column
@@ -20,6 +21,7 @@ acceptance("Compara Jogos topic feed", function (needs) {
    * real Ember transition, so let it complete instead of leaving an unhandled
    * topic request pending until QUnit's timeout. */
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     server.get("/latest.json", () => {
       const response = cloneJSON(discoveryFixtures["/latest.json"]);
       response.topic_list.topics[0].excerpt = "A topic with :heart: emoji";
@@ -122,6 +124,7 @@ acceptance("Compara Jogos topic feed - core topic details", function (needs) {
   });
 
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     server.get("/latest.json", () => {
       const response = cloneJSON(discoveryFixtures["/latest.json"]);
       Object.assign(response.topic_list.topics[0], topicAttributes);
@@ -172,6 +175,7 @@ acceptance("Compara Jogos topic feed - core topic details", function (needs) {
 });
 
 acceptance("Compara Jogos topic feed - mobile", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.mobileView();
 
   test("the mobile layout uses the same feed row", async function (assert) {
@@ -193,6 +197,7 @@ acceptance("Compara Jogos topic feed - private messages", function (needs) {
   needs.user();
 
   needs.pretender((server, helper) => {
+    stubNonChannelAuthors(server, helper);
     server.get("/topics/private-messages/:username.json", () => {
       return helper.response(
         cloneJSON(

@@ -62,3 +62,13 @@ en:
       expansion: "Expansion"
       accessory: "Accessory"
       rpg: "RPG"
+
+  channels:
+    label: "Channel"
+    from: "Channel"
+    manage: "Manage channel"
+    publications: "Publications"
+    team: "Team"
+    all_publications: "View all publications"
+    empty: "This channel has no visible publications yet."
+    load_error: "Publications could not be loaded."

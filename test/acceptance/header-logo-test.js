@@ -2,6 +2,7 @@ import { settled, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { SCROLLED_UP } from "discourse/services/scroll-direction";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import { stubNonChannelAuthors } from "../helpers/channel-fixtures";
 
 const TOPIC_URL = "/t/internationalization-localization/280";
 const LOGO_SETTINGS = {
@@ -18,6 +19,7 @@ async function showTopicInfo(context) {
 }
 
 acceptance("Compara Jogos header logo - desktop", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.settings(LOGO_SETTINGS);
 
   test("the full wordmark remains beside sticky topic info", async function (assert) {
@@ -46,6 +48,7 @@ acceptance("Compara Jogos header logo - desktop", function (needs) {
 });
 
 acceptance("Compara Jogos header logo - mobile", function (needs) {
+  needs.pretender(stubNonChannelAuthors);
   needs.mobileView();
   needs.settings(LOGO_SETTINGS);
 
