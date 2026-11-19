@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 /* Core's composer redesign (`uc-enable-composer-redesign`) treats the title as a
  * headline and leaves its surface to the input tokens — which properties.scss
  * makes the client's filled control, putting a rounded grey slab where the
@@ -6,4 +8,34 @@
 .uc-enable-composer-redesign #reply-title {
   border-radius: 0;
   background: transparent;
+}
+
+@include viewport.from(md) {
+  /* Our sidebar sits inside the shared frame. Anchor both edges to that frame:
+   * core uses width:auto, so an auto end inset collapses the empty editor.
+   * Percentages exclude the scrollbar gutter, matching the page's wrap. */
+
+  body.has-sidebar-page #reply-control:not(.fullscreen).hide-preview,
+  body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
+    --cj-frame-edge: max(0px, calc((100% - var(--d-max-width)) / 2));
+    inset-inline-start: calc(var(--cj-frame-edge) + var(--d-wrap-padding-x));
+    inset-inline-end: max(
+      var(--d-page-inset-inline-end, 0px),
+      calc(var(--cj-frame-edge) + var(--d-wrap-padding-x))
+    );
+    width: auto;
+    margin-inline: 0;
+  }
+
+  body.has-sidebar-page #reply-control:not(.fullscreen).hide-preview {
+    --cj-composer-main-gap: var(--d-main-content-gap);
+    inset-inline-start: calc(
+      var(--cj-frame-edge) + var(--d-wrap-padding-x) + var(--d-sidebar-width) +
+        var(--cj-composer-main-gap)
+    );
+
+    @include viewport.until(lg) {
+      --cj-composer-main-gap: var(--space-4);
+    }
+  }
 }

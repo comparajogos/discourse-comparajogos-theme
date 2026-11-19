@@ -144,7 +144,9 @@ rejects changes when any generated color surface is stale.
 - Extend `--cj-*` tokens before adding isolated values.
 - Use logical properties for direction-safe spacing.
 - Preserve visible focus and reduced-motion handling.
-- Never restyle `#reply-control`; composer compatibility belongs to core.
+- Keep composer sizing and behavior in core. The desktop previewless composer
+  needs only a frame-alignment exception: preserve both inline anchors and
+  `width: auto` so it stretches up to core’s maximum width.
 - Test production theme components one at a time after the base passes.
 
 ### Token over selector
