@@ -28,6 +28,7 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
   }
 
   &__identity {
+    overflow-wrap: anywhere;
     flex: 1;
     min-width: 0;
 
@@ -88,6 +89,11 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
   display: flex;
   gap: 1em;
   min-width: 0;
+
+  > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 
   h2 {
     font-size: var(--font-up-1);

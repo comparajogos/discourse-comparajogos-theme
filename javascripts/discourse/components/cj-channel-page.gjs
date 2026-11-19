@@ -3,6 +3,8 @@ import { hash } from "@ember/helper";
 import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 import { trustHTML } from "@ember/template";
+import GroupMembershipButton from "discourse/components/group-membership-button";
+import routeAction from "discourse/helpers/route-action";
 import { bind } from "discourse/lib/decorators";
 import getURL from "discourse/lib/get-url";
 import { or } from "discourse/truth-helpers";
@@ -73,6 +75,12 @@ export default class CjChannelPage extends Component {
               class="btn btn-default cj-channel-page__manage"
               href={{this.manageURL}}
             >{{i18n (themePrefix "channels.manage")}}</a>{{/if}}
+          {{#if this.team}}
+            <GroupMembershipButton
+              @model={{@group}}
+              @showLogin={{routeAction "showLogin"}}
+            />
+          {{/if}}
         </header>
         <nav
           class="cj-channel-page__nav"

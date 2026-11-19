@@ -41,6 +41,8 @@ acceptance("Creator channels", function (needs) {
     server.get("/groups/discourse.json", () => {
       const response = cloneJSON(GroupFixtures["/groups/discourse.json"]);
       response.group.is_channel = true;
+      response.group.public_exit = true;
+      response.group.is_group_user = true;
       response.group.full_name = "Canal de exemplo";
       response.group.bio_cooked = "<p>Conteúdo da equipe</p>";
       return helper.response(response);
@@ -92,6 +94,9 @@ acceptance("Creator channels", function (needs) {
       .dom(".cj-channel-publication")
       .doesNotExist("does not mix publications with the team table");
     assert.dom(".group-members").exists("retains the native member list");
+    assert
+      .dom(".cj-channel-page .group-index-leave")
+      .exists("keeps the native leave-team action");
     assert.strictEqual(
       currentURL(),
       "/g/discourse?channel_team=true",
