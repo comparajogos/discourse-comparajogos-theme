@@ -261,6 +261,11 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
   }
 
   &__description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
     color: var(--primary-high);
     line-height: 1.5;
   }

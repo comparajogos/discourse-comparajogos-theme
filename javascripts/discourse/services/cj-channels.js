@@ -11,6 +11,9 @@ export function channelLink(group) {
     ...group,
     image: channelImage(group.flair_url),
     label: group.full_name || group.name,
+    description: new DOMParser()
+      .parseFromString(group.bio_excerpt || "", "text/html")
+      .body.textContent.trim(),
     href: getURL(`/g/${encodeURIComponent(group.name)}`),
   };
 }

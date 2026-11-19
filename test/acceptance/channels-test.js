@@ -19,6 +19,8 @@ acceptance("Creator channels", function (needs) {
               id: 101,
               name: "example-channel",
               full_name: "Example channel",
+              bio_excerpt:
+                'Histórias &amp; <a href="/about">jogos</a> da mesa.',
               is_channel: true,
             },
           ],
@@ -119,6 +121,12 @@ acceptance("Creator channels", function (needs) {
     assert
       .dom('#post_1 .cj-channel-banner[href="/g/example-channel"]')
       .exists("links the opening post to the author's channel");
+    assert
+      .dom("#post_1 .cj-channel-banner__description")
+      .hasText("Histórias & jogos da mesa.");
+    assert
+      .dom("#post_1 .cj-channel-banner__description a")
+      .doesNotExist("does not nest links inside the banner");
     assert
       .dom("#post_2 .cj-channel-links--publication")
       .doesNotExist("does not label replies as channel publications");

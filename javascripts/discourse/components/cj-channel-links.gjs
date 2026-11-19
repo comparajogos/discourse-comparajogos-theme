@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import { bind } from "discourse/lib/decorators";
+import { or } from "discourse/truth-helpers";
 import DAsyncContent from "discourse/ui-kit/d-async-content";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { i18n } from "discourse-i18n";
@@ -39,8 +40,9 @@ export default class CjChannelLinks extends Component {
                     <strong
                       class="cj-channel-banner__name"
                     >{{channel.label}}</strong>
-                    <span class="cj-channel-banner__description">{{i18n
-                        (themePrefix "channels.banner_description")
+                    <span class="cj-channel-banner__description">{{or
+                        channel.description
+                        (i18n (themePrefix "channels.banner_description"))
                       }}</span>
                     <span class="cj-channel-banner__cta">{{i18n
                         (themePrefix "channels.visit")
