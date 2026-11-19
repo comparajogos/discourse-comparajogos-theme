@@ -165,11 +165,36 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
 @media (width <= 650px) {
   .cj-channel-page {
     &__header {
-      flex-wrap: wrap;
-      gap: 1em;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.25em 1em;
+
+      &:has(.cj-channel-page__image) {
+        grid-template-columns: 64px minmax(0, 1fr);
+      }
+    }
+
+    &__identity {
+      display: contents;
+
+      h1 {
+        grid-column: -2 / -1;
+      }
+    }
+
+    &__handle {
+      grid-column: -2 / -1;
+    }
+
+    &__bio,
+    &__manage,
+    .group-membership-button {
+      grid-column: 1 / -1;
     }
 
     &__image {
+      grid-column: 1;
+      grid-row: 1 / 3;
       width: 64px;
       height: 64px;
     }
