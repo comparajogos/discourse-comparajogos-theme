@@ -117,9 +117,7 @@ acceptance("Creator channels", function (needs) {
   test("opening post links to the channel without branding replies", async function (assert) {
     await visit("/t/internationalization-localization/280");
     assert
-      .dom(
-        '#post_1 .cj-channel-links--publication a[href="/g/example-channel"]'
-      )
+      .dom('#post_1 .cj-channel-banner[href="/g/example-channel"]')
       .exists("links the opening post to the author's channel");
     assert
       .dom("#post_2 .cj-channel-links--publication")

@@ -1,9 +1,47 @@
 import { apiInitializer } from "discourse/lib/api";
 import { and, eq, not } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
+import CjChannelDirectory from "../components/cj-channel-directory";
 import CjChannelLinks from "../components/cj-channel-links";
 import CjChannelPage from "../components/cj-channel-page";
 
 export default apiInitializer((api) => {
+  api.modifyClass(
+    "controller:groups/index",
+    (Superclass) =>
+      class extends Superclass {
+        init() {
+          super.init(...arguments);
+          this.queryParams = [...this.queryParams, "is_channel"];
+          this.is_channel = false;
+        }
+      }
+  );
+  api.modifyClass(
+    "route:groups/index",
+    (Superclass) =>
+      class extends Superclass {
+        init() {
+          super.init(...arguments);
+          this.queryParams = {
+            ...this.queryParams,
+            is_channel: { refreshModel: true },
+          };
+        }
+
+        titleToken() {
+          const value = this.paramsFor("groups.index").is_channel;
+          return value === true || value === "true"
+            ? i18n(themePrefix("channels.directory_title"))
+            : super.titleToken();
+        }
+      }
+  );
+  api.renderInOutlet(
+    "before-groups-index-container",
+    <template><CjChannelDirectory /></template>
+  );
+
   api.modifyClass(
     "controller:group/index",
     (Superclass) =>

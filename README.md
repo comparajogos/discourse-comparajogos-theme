@@ -196,3 +196,12 @@ Profiles, user cards and topic opening posts link to the author's visible channe
 groups. Membership comes from the secured user endpoint and is cached for one minute.
 Replies and private messages do not show the channel block. Multiple channel
 memberships are shown without choosing an arbitrary attribution.
+
+Topic opening posts show a channel banner with a link to its page. Profiles and
+user cards keep the compact attribution.
+
+`/g?is_channel=true` reuses the group directory with channel-only search and native
+pagination. It requires the creator-channels plugin's server-side filter; group
+visibility rules still apply. The directory links to the existing channel creation
+workflow. Ordinary `/g` retains the full group directory, with navigation between
+both views. Channel pages link back to the channel directory.

@@ -35,6 +35,10 @@ export default class CjChannelPage extends Component {
     );
   }
 
+  get directoryURL() {
+    return getURL("/g?is_channel=true");
+  }
+
   get archiveURL() {
     return getURL(
       `/g/${encodeURIComponent(this.args.group.name)}/activity/topics`
@@ -98,6 +102,10 @@ export default class CjChannelPage extends Component {
             @model={{@group.name}}
             @query={{hash channel_team=true}}
           >{{i18n (themePrefix "channels.team")}}</LinkTo>
+          <a
+            class="cj-channel-page__directory"
+            href={{this.directoryURL}}
+          >{{i18n (themePrefix "channels.all_channels")}}</a>
         </nav>
         {{#unless this.team}}
           <DAsyncContent @asyncData={{this.load}} @context={{@group.name}}>
