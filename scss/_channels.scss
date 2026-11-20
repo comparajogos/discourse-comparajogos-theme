@@ -156,6 +156,43 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
   }
 }
 
+/* The profile outlet is a sibling of .primary. Core lays out collapsed
+ * details with flex, so channel metadata must take a separate row instead of
+ * squeezing the identity and actions into a narrow column. */
+
+.user-main .about .details:has(> .cj-channel-links) {
+  flex-wrap: wrap;
+
+  > .primary {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  > .cj-channel-links {
+    flex: 0 0 100%;
+    min-width: 0;
+    align-content: center;
+    gap: 0.375rem 0.75rem;
+    margin-block: 0.5rem;
+    font-size: var(--font-down-1);
+
+    .cj-channel-links__link {
+      min-width: 0;
+      max-width: 100%;
+
+      img {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+}
+
 @media (width <= 650px) {
   .cj-channel-page {
     &__header {
