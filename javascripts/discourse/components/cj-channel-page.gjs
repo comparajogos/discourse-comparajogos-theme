@@ -114,13 +114,13 @@ export default class CjChannelPage extends Component {
                 <div class="cj-channel-page__publications">
                   {{#each topics key="id" as |topic|}}
                     <article class="cj-channel-publication">
-                      {{#if topic.image_url}}<a
+                      {{#if topic.thumbnail}}<a
                           class="cj-channel-publication__image"
                           href={{topic.href}}
                           tabindex="-1"
                           aria-hidden="true"
                         ><img
-                            src={{topic.image_url}}
+                            src={{topic.thumbnail}}
                             alt=""
                             loading="lazy"
                           /></a>{{/if}}

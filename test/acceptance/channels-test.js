@@ -63,6 +63,21 @@ acceptance("Creator channels", function (needs) {
               title: "Publicação da equipe",
               created_at: "2026-11-01T12:00:00Z",
               excerpt: "Uma apresentação do jogo.",
+              image_url: "/uploads/default/original/1X/full.jpeg",
+              thumbnails: [
+                {
+                  max_width: null,
+                  url: "/uploads/default/original/1X/full.jpeg",
+                },
+                {
+                  max_width: 1024,
+                  url: "/uploads/default/optimized/1X/share.jpeg",
+                },
+                {
+                  max_width: 512,
+                  url: "/uploads/default/optimized/1X/small.jpeg",
+                },
+              ],
             },
           ],
         },
@@ -80,6 +95,13 @@ acceptance("Creator channels", function (needs) {
       .hasText(
         "Publicação da equipe",
         "loads topics from the group's native endpoint"
+      );
+    assert
+      .dom(".cj-channel-publication__image img")
+      .hasAttribute(
+        "src",
+        "/uploads/default/optimized/1X/small.jpeg",
+        "uses the small registered thumbnail instead of the share image"
       );
     assert
       .dom(".cj-channel-page__more")

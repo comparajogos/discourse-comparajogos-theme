@@ -2,6 +2,16 @@ import Service from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 
+const PUBLICATION_THUMBNAIL_WIDTH = 512;
+
+export function topicThumbnail(topic) {
+  return (
+    topic.thumbnails?.find(
+      ({ max_width }) => max_width === PUBLICATION_THUMBNAIL_WIDTH
+    )?.url || topic.image_url
+  );
+}
+
 export function channelImage(url) {
   return typeof url === "string" && /^(https?:\/\/|\/)/.test(url) ? url : null;
 }
@@ -54,6 +64,7 @@ export default class CjChannels extends Service {
     return (result.topic_list?.topics || []).map((topic) => ({
       ...topic,
       href: getURL(`/t/${topic.slug || "topic"}/${topic.id}`),
+      thumbnail: topicThumbnail(topic),
     }));
   }
 }
