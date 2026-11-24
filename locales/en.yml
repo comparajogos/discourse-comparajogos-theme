@@ -69,7 +69,6 @@ en:
     manage: "Manage channel"
     publications: "Publications"
     team: "Team"
-    all_publications: "View all publications"
     empty: "This channel has no visible publications yet."
     load_error: "Publications could not be loaded."
     banner_description: "Meet the channel and discover more publications."

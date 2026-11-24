@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import PluginOutlet from "discourse/components/plugin-outlet";
@@ -12,6 +13,7 @@ import TopicStatus from "discourse/components/topic-status";
 import lazyHash from "discourse/helpers/lazy-hash";
 import topicFeaturedLink from "discourse/helpers/topic-featured-link";
 import { groupPath } from "discourse/lib/url";
+import { and, or } from "discourse/truth-helpers";
 import DUserLink from "discourse/ui-kit/d-user-link";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import dCategoryLink from "discourse/ui-kit/helpers/d-category-link";
@@ -20,6 +22,7 @@ import dFormatDate from "discourse/ui-kit/helpers/d-format-date";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
 import dNumber from "discourse/ui-kit/helpers/d-number";
 import { i18n } from "discourse-i18n";
+import { channelImage, topicThumbnail } from "../services/cj-channels";
 
 const UPDATED_AFTER_LAST_POST_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
@@ -35,6 +38,39 @@ const UPDATED_AFTER_LAST_POST_THRESHOLD_MS = 24 * 60 * 60 * 1000;
  * unread state, permissions, emoji, and localisation stay correct.
  */
 export default class CjTopicRow extends Component {
+  @tracked imageFailed = false;
+
+  showMedia = false;
+  showAttribution = true;
+  textTile = false;
+
+  get image() {
+    return this.showMedia && !this.imageFailed
+      ? topicThumbnail(this.args.topic)
+      : null;
+  }
+
+  get showTextTile() {
+    return this.textTile && !this.image && this.args.topic.excerpt;
+  }
+
+  get showExcerpt() {
+    return (
+      (this.args.expandPinned ||
+        (this.showMedia && this.args.topic.image_url)) &&
+      this.args.topic.excerpt
+    );
+  }
+
+  get titleFirst() {
+    return this.showExcerpt;
+  }
+
+  @action
+  onImageError() {
+    this.imageFailed = true;
+  }
+
   get participantGroups() {
     return (this.args.topic.participant_groups || []).map((name) => ({
       name,
@@ -54,6 +90,11 @@ export default class CjTopicRow extends Component {
 
   get originalPoster() {
     return this.args.topic.posters?.[0]?.user;
+  }
+
+  get originalPosterFlair() {
+    const flair = this.args.topic.posters?.[0]?.flair_group;
+    return channelImage(flair?.flair_url) ? flair : null;
   }
 
   get lastPoster() {
@@ -94,197 +135,259 @@ export default class CjTopicRow extends Component {
 
   <template>
     <td class="topic-list-data cj-feed-cell">
-      <div class="cj-feed">
-        <PluginOutlet
-          @name="topic-list-before-link"
-          @outletArgs={{lazyHash topic=@topic}}
-        />
-        <div class="cj-feed__byline">
-          {{#if this.originalPoster}}
-            <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
-              {{dAvatar this.originalPoster imageSize="small"}}
-            </DUserLink>
-            <DUserLink @user={{this.originalPoster}}>
-              <span class="cj-feed__author">
-                {{this.originalPoster.username}}
-              </span>
-            </DUserLink>
-          {{/if}}
-          <span class="cj-feed__age">
-            {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
-          </span>
+      <div
+        class="cj-feed
+          {{if this.image '--media'}}
+          {{if this.showTextTile '--text-tile'}}
+          {{if this.titleFirst '--title-first'}}"
+      >
+        {{#if this.image}}
+          <img
+            class="cj-feed__media"
+            src={{this.image}}
+            alt=""
+            loading="lazy"
+            {{on "error" this.onImageError}}
+          />
+        {{else if this.showTextTile}}
+          <div class="cj-feed__tile">
+            <TopicExcerpt @topic={{@topic}} />
+          </div>
+        {{/if}}
+        <div class="cj-feed__body">
+          <PluginOutlet
+            @name="topic-list-before-link"
+            @outletArgs={{lazyHash topic=@topic}}
+          />
+          <div class="cj-feed__byline">
+            {{#if (and this.showAttribution this.originalPoster)}}
+              <DUserLink @user={{this.originalPoster}} class="cj-feed__avatar">
+                {{#if this.originalPosterFlair}}
+                  <img
+                    class="avatar"
+                    src={{this.originalPosterFlair.flair_url}}
+                    title={{this.originalPosterFlair.name}}
+                    alt=""
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                  />
+                {{else}}
+                  {{dAvatar this.originalPoster imageSize="small"}}
+                {{/if}}
+              </DUserLink>
+              <DUserLink @user={{this.originalPoster}}>
+                <span class="cj-feed__author">
+                  {{this.originalPoster.username}}
+                </span>
+              </DUserLink>
+            {{/if}}
+            <span class="cj-feed__age">
+              {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
+            </span>
 
-          <div class="cj-feed__taxonomy">
+            {{#if this.showAttribution}}
+              <div class="cj-feed__taxonomy">
+                <PluginOutlet
+                  @name="topic-list-topic-cell-link-bottom-line"
+                  @outletArgs={{lazyHash topic=@topic tagsForUser=@tagsForUser}}
+                >
+                  <PluginOutlet
+                    @name="topic-list-before-category"
+                    @outletArgs={{lazyHash topic=@topic}}
+                  />
+                  {{#unless @hideCategory}}
+                    {{#unless @topic.isPinnedUncategorized}}
+                      {{dCategoryLink @topic.category}}
+                    {{/unless}}
+                  {{/unless}}
+                  <PluginOutlet
+                    @name="topic-list-after-category"
+                    @outletArgs={{lazyHash topic=@topic}}
+                  />
+                  {{dDiscourseTags @topic mode="list" tagsForUser=@tagsForUser}}
+                  {{#if this.participantGroups}}
+                    <ParticipantGroups @groups={{this.participantGroups}} />
+                  {{/if}}
+                  <ActionList
+                    @topic={{@topic}}
+                    @postNumbers={{@topic.liked_post_numbers}}
+                    @icon="heart"
+                    class="likes"
+                  />
+                </PluginOutlet>
+              </div>
+            {{/if}}
+
             <PluginOutlet
-              @name="topic-list-topic-cell-link-bottom-line"
+              @name="topic-list-before-status"
+              @outletArgs={{lazyHash topic=@topic}}
+            />
+            <TopicStatus @topic={{@topic}} @context="topic-list" />
+          </div>
+
+          <div
+            class="cj-feed__title topic-list-main-link"
+            role="heading"
+            aria-level="2"
+          >
+            <PluginOutlet
+              @name="topic-list-topic-cell-link-top-line"
               @outletArgs={{lazyHash topic=@topic tagsForUser=@tagsForUser}}
             >
-              <PluginOutlet
-                @name="topic-list-before-category"
-                @outletArgs={{lazyHash topic=@topic}}
-              />
-              {{#unless @hideCategory}}
-                {{#unless @topic.isPinnedUncategorized}}
-                  {{dCategoryLink @topic.category}}
-                {{/unless}}
-              {{/unless}}
-              <PluginOutlet
-                @name="topic-list-after-category"
-                @outletArgs={{lazyHash topic=@topic}}
-              />
-              {{dDiscourseTags @topic mode="list" tagsForUser=@tagsForUser}}
-              {{#if this.participantGroups}}
-                <ParticipantGroups @groups={{this.participantGroups}} />
-              {{/if}}
-              <ActionList
+              <TopicLink
+                {{on "focus" this.onTitleFocus}}
+                {{on "blur" this.onTitleBlur}}
                 @topic={{@topic}}
-                @postNumbers={{@topic.liked_post_numbers}}
-                @icon="heart"
-                class="likes"
+                class="raw-link raw-topic-link"
+              />
+              {{#if @topic.featured_link}}
+                {{topicFeaturedLink @topic}}
+              {{/if}}
+              <PluginOutlet
+                @name="topic-list-after-title"
+                @outletArgs={{lazyHash topic=@topic}}
+              />
+              {{#if @topic.is_nested_view}}
+                {{#if @topic.has_new_replies}}
+                  <NewRepliesDot @topic={{@topic}} />
+                {{/if}}
+              {{else if @showTopicPostBadges}}
+                <TopicPostBadges
+                  @unreadPosts={{@topic.unread_posts}}
+                  @unseen={{@topic.unseen}}
+                  @url={{@topic.lastUnreadUrl}}
+                />
+              {{/if}}
+              <PluginOutlet
+                @name="topic-list-after-badges"
+                @outletArgs={{lazyHash topic=@topic}}
               />
             </PluginOutlet>
           </div>
 
+          {{#if this.showExcerpt}}
+            <div class="cj-feed__excerpt">
+              <TopicExcerpt @topic={{@topic}} />
+            </div>
+          {{/if}}
+
           <PluginOutlet
-            @name="topic-list-before-status"
-            @outletArgs={{lazyHash topic=@topic}}
+            @name="topic-list-main-link-bottom"
+            @outletArgs={{lazyHash topic=@topic expandPinned=@expandPinned}}
           />
-          <TopicStatus @topic={{@topic}} @context="topic-list" />
-        </div>
 
-        <div
-          class="cj-feed__title topic-list-main-link"
-          role="heading"
-          aria-level="2"
-        >
-          <PluginOutlet
-            @name="topic-list-topic-cell-link-top-line"
-            @outletArgs={{lazyHash topic=@topic tagsForUser=@tagsForUser}}
-          >
-            <TopicLink
-              {{on "focus" this.onTitleFocus}}
-              {{on "blur" this.onTitleBlur}}
-              @topic={{@topic}}
-              class="raw-link raw-topic-link"
-            />
-            {{#if @topic.featured_link}}
-              {{topicFeaturedLink @topic}}
-            {{/if}}
-            <PluginOutlet
-              @name="topic-list-after-title"
-              @outletArgs={{lazyHash topic=@topic}}
-            />
-            {{#if @topic.is_nested_view}}
-              {{#if @topic.has_new_replies}}
-                <NewRepliesDot @topic={{@topic}} />
+          {{#if (or @topic.like_count @topic.views @topic.replyCount)}}
+            <div class="cj-feed__stats">
+              {{#if @topic.like_count}}
+                <span
+                  class="cj-feed__stat {{if @topic.liked '--liked'}}"
+                  title={{i18n "likes_lowercase" count=@topic.like_count}}
+                >
+                  {{dIcon (if @topic.liked "heart" "far-heart")}}
+                  {{@topic.like_count}}
+                </span>
               {{/if}}
-            {{else if @showTopicPostBadges}}
-              <TopicPostBadges
-                @unreadPosts={{@topic.unread_posts}}
-                @unseen={{@topic.unseen}}
-                @url={{@topic.lastUnreadUrl}}
-              />
-            {{/if}}
-            <PluginOutlet
-              @name="topic-list-after-badges"
-              @outletArgs={{lazyHash topic=@topic}}
-            />
-          </PluginOutlet>
+
+              {{#if @topic.views}}
+                <span class="cj-feed__stat">
+                  {{dIcon "far-eye"}}
+                  <PluginOutlet
+                    @name="topic-list-before-view-count"
+                    @outletArgs={{lazyHash topic=@topic}}
+                  />
+                  {{dNumber @topic.views numberKey="views_long"}}
+                </span>
+              {{/if}}
+
+              {{#if @topic.replyCount}}
+                <a
+                  class="cj-feed__stat badge-posts"
+                  href={{@topic.firstPostUrl}}
+                  aria-label={{i18n
+                    "topic.reply_count_link"
+                    count=@topic.replyCount
+                  }}
+                >
+                  {{dIcon "far-comment"}}
+                  <PluginOutlet
+                    @name="topic-list-before-reply-count"
+                    @outletArgs={{lazyHash topic=@topic}}
+                  />
+                  {{dNumber @topic.replyCount noTitle="true"}}
+                </a>
+              {{/if}}
+            </div>
+          {{/if}}
+
+          {{#if this.showLastReply}}
+            <a
+              href={{@topic.lastPostUrl}}
+              title={{@topic.bumpedAtTitle}}
+              class="cj-feed__last-reply post-activity"
+            >
+              {{dIcon "reply"}}
+              <span class="cj-feed__last-reply-name">
+                {{this.lastPoster.username}}
+              </span>
+              <span>
+                {{i18n (themePrefix "topic_feed.replied")}}
+                <PluginOutlet
+                  @name="topic-list-before-relative-date"
+                  @outletArgs={{lazyHash topic=@topic}}
+                />
+                {{dFormatDate
+                  @topic.bumpedAt
+                  format="medium"
+                  leaveAgo="true"
+                  noTitle="true"
+                }}
+              </span>
+            </a>
+          {{/if}}
+
+          {{#if this.showUpdated}}
+            <a
+              href={{@topic.lastPostUrl}}
+              title={{@topic.bumpedAtTitle}}
+              class="cj-feed__last-reply post-activity"
+            >
+              {{dIcon "pencil"}}
+              <span>
+                {{i18n (themePrefix "topic_feed.updated")}}
+                <PluginOutlet
+                  @name="topic-list-before-relative-date"
+                  @outletArgs={{lazyHash topic=@topic}}
+                />
+                {{dFormatDate
+                  @topic.bumpedAt
+                  format="medium"
+                  leaveAgo="true"
+                  noTitle="true"
+                }}
+              </span>
+            </a>
+          {{/if}}
         </div>
-
-        {{#if @expandPinned}}
-          <div class="cj-feed__excerpt">
-            <TopicExcerpt @topic={{@topic}} />
-          </div>
-        {{/if}}
-
-        <PluginOutlet
-          @name="topic-list-main-link-bottom"
-          @outletArgs={{lazyHash topic=@topic expandPinned=@expandPinned}}
-        />
-
-        <div class="cj-feed__stats">
-          <span
-            class="cj-feed__stat {{if @topic.liked '--liked'}}"
-            title={{i18n "likes_lowercase" count=@topic.like_count}}
-          >
-            {{dIcon (if @topic.liked "heart" "far-heart")}}
-            {{@topic.like_count}}
-          </span>
-
-          <span class="cj-feed__stat">
-            {{dIcon "far-eye"}}
-            <PluginOutlet
-              @name="topic-list-before-view-count"
-              @outletArgs={{lazyHash topic=@topic}}
-            />
-            {{dNumber @topic.views numberKey="views_long"}}
-          </span>
-
-          <a
-            class="cj-feed__stat badge-posts"
-            href={{@topic.firstPostUrl}}
-            aria-label={{i18n "topic.reply_count_link" count=@topic.replyCount}}
-          >
-            {{dIcon "far-comment"}}
-            <PluginOutlet
-              @name="topic-list-before-reply-count"
-              @outletArgs={{lazyHash topic=@topic}}
-            />
-            {{dNumber @topic.replyCount noTitle="true"}}
-          </a>
-
-        </div>
-
-        {{#if this.showLastReply}}
-          <a
-            href={{@topic.lastPostUrl}}
-            title={{@topic.bumpedAtTitle}}
-            class="cj-feed__last-reply post-activity"
-          >
-            {{dIcon "reply"}}
-            <span class="cj-feed__last-reply-name">
-              {{this.lastPoster.username}}
-            </span>
-            <span>
-              {{i18n (themePrefix "topic_feed.replied")}}
-              <PluginOutlet
-                @name="topic-list-before-relative-date"
-                @outletArgs={{lazyHash topic=@topic}}
-              />
-              {{dFormatDate
-                @topic.bumpedAt
-                format="medium"
-                leaveAgo="true"
-                noTitle="true"
-              }}
-            </span>
-          </a>
-        {{/if}}
-
-        {{#if this.showUpdated}}
-          <a
-            href={{@topic.lastPostUrl}}
-            title={{@topic.bumpedAtTitle}}
-            class="cj-feed__last-reply post-activity"
-          >
-            {{dIcon "pencil"}}
-            <span>
-              {{i18n (themePrefix "topic_feed.updated")}}
-              <PluginOutlet
-                @name="topic-list-before-relative-date"
-                @outletArgs={{lazyHash topic=@topic}}
-              />
-              {{dFormatDate
-                @topic.bumpedAt
-                format="medium"
-                leaveAgo="true"
-                noTitle="true"
-              }}
-            </span>
-          </a>
-        {{/if}}
       </div>
     </td>
   </template>
+}
+
+export class CjMediaRow extends CjTopicRow {
+  showMedia = true;
+}
+
+export class CjChannelRow extends CjTopicRow {
+  showMedia = true;
+  showAttribution = false;
+  textTile = true;
+
+  get showExcerpt() {
+    return false;
+  }
+
+  get titleFirst() {
+    return true;
+  }
 }

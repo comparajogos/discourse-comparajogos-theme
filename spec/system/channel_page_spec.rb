@@ -29,18 +29,18 @@ RSpec.describe "Creator channel page" do
   it "shows publications and the existing team without overflowing on mobile" do
     visit("/g/#{channel.name}")
     expect(page).to have_css(".cj-channel-page h1", text: channel.full_name)
-    expect(page).to have_css(".cj-channel-publication h2", text: publication.topic.title)
+    expect(page).to have_css(".cj-channel-page .cj-feed__title", text: publication.topic.title)
     expect(page).to have_no_css(".group-members")
 
     resize_window(width: 390, height: 844) do
-      expect(page).to have_css(".cj-channel-publication")
+      expect(page).to have_css(".cj-channel-page .cj-feed")
       expect(
         page.evaluate_script("document.documentElement.scrollWidth - window.innerWidth"),
       ).to be <= 1
       find('.cj-channel-page__nav a[href*="channel_team=true"]').click
       expect(page).to have_current_path("/g/#{channel.name}?channel_team=true")
       expect(page).to have_css(".group-members", text: creator.username)
-      expect(page).to have_no_css(".cj-channel-publication")
+      expect(page).to have_no_css(".cj-channel-page .cj-feed")
       page.refresh
       expect(page).to have_css(".group-members", text: creator.username)
     end

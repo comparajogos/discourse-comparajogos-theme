@@ -3,7 +3,10 @@
 /* Feed rows own their padding (_topic-feed.scss); this is for the column lists
  * that keep core's table layout. */
 
-.topic-list .topic-list-body .topic-list-item td.topic-list-data {
+.topic-list:not(.--cj-feed)
+  .topic-list-body
+  .topic-list-item
+  td.topic-list-data {
   padding-block: 0.9em;
 }
 
@@ -49,10 +52,6 @@
   .topic-list {
     background: transparent;
     border: 0;
-
-    &.--cj-feed .topic-list-item {
-      cursor: pointer;
-    }
 
     .topic-list-body {
       display: flex;

@@ -3,19 +3,21 @@ import { hash } from "@ember/helper";
 import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 import { trustHTML } from "@ember/template";
+import BasicTopicList from "discourse/components/basic-topic-list";
 import GroupMembershipButton from "discourse/components/group-membership-button";
 import routeAction from "discourse/helpers/route-action";
 import { bind } from "discourse/lib/decorators";
 import getURL from "discourse/lib/get-url";
 import { or } from "discourse/truth-helpers";
 import DAsyncContent from "discourse/ui-kit/d-async-content";
-import dAgeWithTooltip from "discourse/ui-kit/helpers/d-age-with-tooltip";
+import DConditionalLoadingSpinner from "discourse/ui-kit/d-conditional-loading-spinner";
+import DLoadMore from "discourse/ui-kit/d-load-more";
 import { i18n } from "discourse-i18n";
 import { channelImage } from "../services/cj-channels";
 
 export default class CjChannelPage extends Component {
   @service router;
-  @service cjChannels;
+  @service store;
 
   get image() {
     return channelImage(this.args.group.flair_url);
@@ -39,12 +41,6 @@ export default class CjChannelPage extends Component {
     return getURL("/g?is_channel=true");
   }
 
-  get archiveURL() {
-    return getURL(
-      `/g/${encodeURIComponent(this.args.group.name)}/activity/topics`
-    );
-  }
-
   get manageURL() {
     return getURL(
       `/g/${encodeURIComponent(this.args.group.name)}/manage/profile`
@@ -53,7 +49,10 @@ export default class CjChannelPage extends Component {
 
   @bind
   load(name) {
-    return this.cjChannels.publications(name);
+    return this.store.findFiltered("topicList", {
+      filter: `topics/groups/${name}`,
+      params: { order: "created" },
+    });
   }
 
   <template>
@@ -109,47 +108,23 @@ export default class CjChannelPage extends Component {
         </nav>
         {{#unless this.team}}
           <DAsyncContent @asyncData={{this.load}} @context={{@group.name}}>
-            <:content as |topics|>
-              {{#if topics.length}}
-                <div class="cj-channel-page__publications">
-                  {{#each topics key="id" as |topic|}}
-                    <article class="cj-channel-publication">
-                      {{#if topic.thumbnail}}<a
-                          class="cj-channel-publication__image"
-                          href={{topic.href}}
-                          tabindex="-1"
-                          aria-hidden="true"
-                        ><img
-                            src={{topic.thumbnail}}
-                            alt=""
-                            loading="lazy"
-                          /></a>{{/if}}
-                      <div>
-                        <h2><a href={{topic.href}}>{{topic.title}}</a></h2>
-                        {{#if topic.excerpt}}<p>{{trustHTML
-                              topic.excerpt
-                            }}</p>{{/if}}
-                        <span
-                          class="cj-channel-publication__date"
-                        >{{dAgeWithTooltip topic.created_at}}</span>
-                      </div>
-                    </article>
-                  {{/each}}
-                </div>
-                <a
-                  class="btn btn-default cj-channel-page__more"
-                  href={{this.archiveURL}}
-                >{{i18n (themePrefix "channels.all_publications")}}</a>
+            <:content as |list|>
+              {{#if list.topics.length}}
+                <DLoadMore @action={{list.loadMore}}>
+                  <BasicTopicList
+                    @topicList={{list}}
+                    @showPosters={{true}}
+                    @listContext="channel"
+                  />
+                  <DConditionalLoadingSpinner @condition={{list.loadingMore}} />
+                </DLoadMore>
               {{else}}
                 <p class="cj-channel-page__empty">{{i18n
                     (themePrefix "channels.empty")
                   }}</p>
               {{/if}}
             </:content>
-            <:error><p>{{i18n (themePrefix "channels.load_error")}}
-                <a href={{this.archiveURL}}>{{i18n
-                    (themePrefix "channels.all_publications")
-                  }}</a></p></:error>
+            <:error><p>{{i18n (themePrefix "channels.load_error")}}</p></:error>
           </DAsyncContent>
         {{/unless}}
       </section>

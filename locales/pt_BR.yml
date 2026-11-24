@@ -69,7 +69,6 @@ pt_BR:
     manage: "Gerenciar canal"
     publications: "Publicações"
     team: "Equipe"
-    all_publications: "Ver todas as publicações"
     empty: "Este canal ainda não tem publicações visíveis."
     load_error: "Não foi possível carregar as publicações."
     banner_description: "Conheça o canal e veja outras publicações."

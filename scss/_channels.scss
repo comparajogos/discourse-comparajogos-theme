@@ -1,3 +1,5 @@
+@use "lib/viewport";
+
 body:has(.cj-channel-page) .container.group {
   .group-details-container,
   .user-primary-navigation {
@@ -69,65 +71,9 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
     }
   }
 
-  &__publications {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2em;
-  }
-
-  &__more {
-    margin-top: 2em;
-  }
-
   &__empty {
     padding-block: 1.5em;
     color: var(--primary-medium);
-  }
-}
-
-.cj-channel-publication {
-  display: flex;
-  gap: 1em;
-  min-width: 0;
-
-  > div {
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  h2 {
-    font-size: var(--font-up-1);
-    margin: 0 0 0.5em;
-    line-height: 1.35;
-
-    a {
-      color: var(--primary);
-    }
-  }
-
-  p {
-    margin: 0 0 0.5em;
-    color: var(--primary-high);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  &__image {
-    flex: 0 0 35%;
-
-    img {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      border-radius: var(--d-border-radius);
-    }
-  }
-
-  &__date {
-    color: var(--primary-medium);
-    font-size: var(--font-down-1);
   }
 }
 
@@ -228,11 +174,6 @@ body:has(.cj-channel-page[data-view="publications"]) .container.group {
       grid-row: 1 / 3;
       width: 64px;
       height: 64px;
-    }
-
-    &__publications {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1.5em;
     }
   }
 }
@@ -418,4 +359,130 @@ body:has(.cj-channel-directory[data-channels="true"]) .groups-index {
   margin-top: 1.5em;
   width: 100%;
   max-width: 32em;
+}
+
+.topic-list.--cj-channel {
+  --title-color--read: var(--title-color);
+
+  .topic-list-item > .cj-feed-cell {
+    padding-inline: 0;
+  }
+
+  .cj-feed__tile {
+    .topic-excerpt {
+      display: -webkit-box;
+      overflow: hidden;
+      max-width: 100%;
+      margin: 0;
+      color: var(--cj-text-muted);
+      font-size: var(--font-down-1-rem);
+      line-height: 1.5;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .topic-excerpt-more {
+      display: none;
+    }
+  }
+}
+
+@include viewport.until(sm) {
+  .topic-list.--cj-channel {
+    .topic-list-item {
+      border-bottom: 0;
+    }
+
+    .topic-list-item > .cj-feed-cell {
+      padding-block: var(--space-3);
+    }
+
+    .cj-feed.--media {
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+    }
+
+    .cj-feed__title a.title {
+      font-size: var(--font-0-rem);
+    }
+
+    .cj-feed.--text-tile {
+      display: flex;
+      flex-direction: column;
+
+      .cj-feed__body {
+        display: contents;
+      }
+
+      .cj-feed__tile {
+        margin-block-start: var(--space-1);
+      }
+
+      .cj-feed__byline {
+        margin-block-start: var(--space-2);
+      }
+    }
+  }
+}
+
+@include viewport.from(sm) {
+  .topic-list.--cj-channel {
+    .topic-list-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem var(--space-4);
+      border-top: 0;
+    }
+
+    .topic-list-item,
+    .topic-list-item > .cj-feed-cell {
+      display: block;
+    }
+
+    .topic-list-item {
+      border-bottom: 0;
+    }
+
+    .topic-list-item > .cj-feed-cell {
+      padding-block: 0;
+    }
+
+    .cj-feed.--media,
+    .cj-feed.--text-tile {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .cj-feed__media {
+      flex: none;
+      width: 100%;
+    }
+
+    .cj-feed__tile {
+      display: flex;
+      align-items: flex-start;
+      box-sizing: border-box;
+      aspect-ratio: 16 / 9;
+      padding: var(--space-4);
+      background: var(--cj-control);
+      border-radius: var(--d-border-radius);
+
+      .topic-excerpt {
+        color: var(--cj-text);
+        font-size: var(--font-0-rem);
+        -webkit-line-clamp: 4;
+      }
+    }
+
+    .cj-feed__title a.title {
+      font-size: var(--font-0-rem);
+      -webkit-line-clamp: 2;
+    }
+  }
+}
+
+@include viewport.from(lg) {
+  .topic-list.--cj-channel .topic-list-body {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }

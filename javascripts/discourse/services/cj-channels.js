@@ -53,18 +53,4 @@ export default class CjChannels extends Service {
     this.#users.set(key, { promise, expires: Date.now() + 60000 });
     return promise;
   }
-
-  async publications(name) {
-    const result = await ajax(
-      `/topics/groups/${encodeURIComponent(name)}.json`,
-      {
-        data: { order: "created", ascending: false },
-      }
-    );
-    return (result.topic_list?.topics || []).map((topic) => ({
-      ...topic,
-      href: getURL(`/t/${topic.slug || "topic"}/${topic.id}`),
-      thumbnail: topicThumbnail(topic),
-    }));
-  }
 }

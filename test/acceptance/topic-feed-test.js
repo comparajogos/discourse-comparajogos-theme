@@ -118,9 +118,11 @@ acceptance("Compara Jogos topic feed", function (needs) {
 
 acceptance("Compara Jogos topic feed - core topic details", function (needs) {
   let topicAttributes;
+  let flairGroups;
 
   needs.hooks.beforeEach(() => {
     topicAttributes = {};
+    flairGroups = [];
   });
 
   needs.pretender((server, helper) => {
@@ -128,8 +130,48 @@ acceptance("Compara Jogos topic feed - core topic details", function (needs) {
     server.get("/latest.json", () => {
       const response = cloneJSON(discoveryFixtures["/latest.json"]);
       Object.assign(response.topic_list.topics[0], topicAttributes);
+      response.flair_groups = flairGroups;
+      response.topic_list.topics[0].posters[0].flair_group_id =
+        flairGroups[0]?.id;
       return helper.response(response);
     });
+  });
+
+  test("general lists keep image topics as compact rows", async function (assert) {
+    topicAttributes = {
+      image_url: "/images/publicacao.png",
+      excerpt: "Uma apresentação do jogo.",
+    };
+    await visit("/latest");
+
+    const row = document.querySelector(
+      ".topic-list.--cj-feed .topic-list-item"
+    );
+    assert.dom(row.querySelector(".cj-feed")).doesNotHaveClass("--media");
+    assert.dom(row.querySelector(".cj-feed__media")).doesNotExist();
+  });
+
+  test("an image flair stands in for the author avatar", async function (assert) {
+    flairGroups = [{ id: 77, name: "mesa", flair_url: "/images/mesa.png" }];
+    await visit("/latest");
+
+    assert
+      .dom(".cj-feed__avatar img.avatar")
+      .hasAttribute("src", "/images/mesa.png");
+  });
+
+  test("zero counts are left out of the stats row", async function (assert) {
+    topicAttributes = { like_count: 0, posts_count: 1, reply_count: 0 };
+    await visit("/latest");
+
+    const row = document.querySelector(
+      ".topic-list.--cj-feed .topic-list-item"
+    );
+    assert
+      .dom(row.querySelector(".cj-feed__stat .d-icon-far-heart"))
+      .doesNotExist();
+    assert.dom(row.querySelector(".cj-feed__stat.badge-posts")).doesNotExist();
+    assert.dom(row.querySelector(".cj-feed__stat .d-icon-far-eye")).exists();
   });
 
   test("nested topics show the native new-replies dot instead of numbered badges", async function (assert) {

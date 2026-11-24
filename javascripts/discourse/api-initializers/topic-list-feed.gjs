@@ -1,5 +1,8 @@
 import { apiInitializer } from "discourse/lib/api";
-import CjTopicRow from "../components/cj-topic-row";
+import CjTopicRow, {
+  CjChannelRow,
+  CjMediaRow,
+} from "../components/cj-topic-row";
 
 /* Columns core builds that the feed row absorbs. Bulk select stays: it is a
  * control, not information, and moderators need it. */
@@ -20,6 +23,7 @@ const INTERACTIVE_TARGETS =
  * messages use `listContext: "messages"`; leaving that context alone preserves
  * core's participant avatars and PM-specific metadata. */
 const TOPIC_FEED_CONTEXTS = [
+  "channel",
   "discovery",
   "suggested",
   "related",
@@ -43,11 +47,51 @@ export default apiInitializer((api) => {
     ({ value, context }) => (isTopicFeedContext(context) ? false : value)
   );
 
+  /* Core sideloads `flair_groups` with every topic list but only stitches
+   * `primary_groups` onto posters. */
+  api.registerValueTransformer(
+    "topic-list-topics-from",
+    ({ value: topics, context: { result } }) => {
+      const flairGroups = new Map(
+        (result.flair_groups ?? []).map((group) => [group.id, group])
+      );
+
+      if (flairGroups.size) {
+        for (const topic of topics) {
+          for (const poster of topic.posters ?? []) {
+            poster.flair_group ??= flairGroups.get(poster.flair_group_id);
+          }
+        }
+      }
+
+      return topics;
+    }
+  );
+
+  const discovery = api.container.lookup("service:discovery");
+  const mediaTags = settings.media_list_tags.split("|").filter(Boolean);
+
+  const rowFor = ({ listContext }) => {
+    if (listContext === "channel") {
+      return CjChannelRow;
+    }
+    if (mediaTags.includes(discovery.tag?.name)) {
+      return CjMediaRow;
+    }
+    return CjTopicRow;
+  };
+
   /* A class on the table beats `:has(.cj-feed)` for styling. */
   api.registerValueTransformer(
     "topic-list-class",
-    ({ value: classes, context }) =>
-      isTopicFeedContext(context) ? [...classes, "--cj-feed"] : classes
+    ({ value: classes, context }) => {
+      if (!isTopicFeedContext(context)) {
+        return classes;
+      }
+      return context.listContext === "channel"
+        ? [...classes, "--cj-feed", "--cj-channel"]
+        : [...classes, "--cj-feed"];
+    }
   );
 
   api.registerValueTransformer(
@@ -65,7 +109,7 @@ export default apiInitializer((api) => {
 
       /* One cell carries the whole row. The header is suppressed in CSS — a
        * feed has no column labels to sort by. */
-      columns.add("cj-feed", { item: CjTopicRow });
+      columns.add("cj-feed", { item: rowFor(context) });
 
       return columns;
     }

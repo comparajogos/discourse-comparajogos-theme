@@ -28,6 +28,14 @@ topic_list_feed:
     en: "Show discovery lists as feed rows — author, title, engagement, last reply — instead of a column table."
     pt_BR: "Mostra as listas como linhas de feed — autor, título, engajamento, última resposta — em vez de tabela."
 
+media_list_tags:
+  default: "video"
+  type: list
+  list_type: tag
+  description:
+    en: "Tags whose topic lists show each topic's image beside its title and excerpt."
+    pt_BR: "Etiquetas cujas listas mostram a imagem de cada tópico ao lado do título e do resumo."
+
 show_mobile_tab_bar:
   default: true
   description:

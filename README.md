@@ -186,11 +186,23 @@ including that surface's own media queries.
 ## Creator channels
 
 Groups with the plugin's `is_channel: true` marker open with their description,
-image and recent topics. The Team tab (`?channel_team=true`) keeps the native
-membership UI; management and the full `/g/:name/activity/topics` archive remain
-Discourse pages. Publications use `/topics/groups/:name.json`, ordered by creation.
-They reflect current membership, including existing topics, and retain core visibility
-checks. The theme does not persist topic attribution.
+image and publications. The Team tab (`?channel_team=true`) keeps the native
+membership UI; management remains a Discourse page. Publications are core's topic
+list over `/topics/groups/:name.json` with `listContext: "channel"`, ordered by
+creation, with core infinite loading. They reflect current membership, including
+existing topics, and retain core visibility checks. The theme does not persist topic
+attribution.
+
+The `topic-list-columns` transformer picks the feed row variant from the list
+context. Channel lists render cards — thumbnail (or, for text posts, an excerpt tile),
+title and date — in a three-column grid on desktop, two on tablet and compact rows on mobile.
+Lists for the tags in `media_list_tags` (read through `service:discovery`) show the
+thumbnail beside the title and excerpt. Rows that show an excerpt lead with the
+title; compact rows keep the byline first. Zero counts are left out of the stats.
+The cards are a feed variant: with `topic_list_feed` off, channels fall back to core's
+topic table.
+
+Feed bylines show the author's image flair, when set, in place of their avatar.
 
 Profiles, user cards and topic opening posts link to the author's visible channel
 groups. Membership comes from the secured user endpoint and is cached for one minute.

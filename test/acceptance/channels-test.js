@@ -1,4 +1,4 @@
-import { click, currentURL, visit } from "@ember/test-helpers";
+import { click, currentURL, triggerEvent, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import GroupFixtures from "discourse/tests/fixtures/group-fixtures";
@@ -78,6 +78,15 @@ acceptance("Creator channels", function (needs) {
                   url: "/uploads/default/optimized/1X/small.jpeg",
                 },
               ],
+              posters: [],
+            },
+            {
+              id: 457,
+              slug: "texto",
+              title: "Texto da equipe",
+              created_at: "2026-10-01T12:00:00Z",
+              excerpt: "Uma análise sem imagem.",
+              posters: [],
             },
           ],
         },
@@ -91,31 +100,33 @@ acceptance("Creator channels", function (needs) {
       .dom(".cj-channel-page h1")
       .hasText("Canal de exemplo", "uses the channel identity");
     assert
-      .dom(".cj-channel-publication h2")
+      .dom(".cj-channel-page .cj-feed__title")
       .hasText(
         "Publicação da equipe",
-        "loads topics from the group's native endpoint"
+        "loads topics from the group's native endpoint as feed rows"
       );
     assert
-      .dom(".cj-channel-publication__image img")
+      .dom(".cj-channel-page img.cj-feed__media")
       .hasAttribute(
         "src",
         "/uploads/default/optimized/1X/small.jpeg",
         "uses the small registered thumbnail instead of the share image"
       );
     assert
-      .dom(".cj-channel-page__more")
-      .hasAttribute(
-        "href",
-        "/g/discourse/activity/topics",
-        "links to the existing topic archive"
+      .dom(".cj-channel-page .cj-feed__tile")
+      .hasText(
+        "Uma análise sem imagem.",
+        "text-only publications show their excerpt in place of a thumbnail"
       );
+    assert
+      .dom(".cj-channel-page .cj-feed__author")
+      .doesNotExist("the channel already names its author");
     await click('.cj-channel-page__nav a[href*="channel_team=true"]');
     assert
       .dom(".cj-channel-page")
       .hasAttribute("data-view", "team", "selects the team view");
     assert
-      .dom(".cj-channel-publication")
+      .dom(".cj-channel-page .cj-feed")
       .doesNotExist("does not mix publications with the team table");
     assert.dom(".group-members").exists("retains the native member list");
     assert
@@ -126,6 +137,14 @@ acceptance("Creator channels", function (needs) {
       "/g/discourse?channel_team=true",
       "team view can be linked directly"
     );
+  });
+
+  test("a broken thumbnail falls back to the excerpt tile", async function (assert) {
+    await visit("/g/discourse");
+    await triggerEvent(".cj-channel-page img.cj-feed__media", "error");
+
+    assert.dom(".cj-channel-page img.cj-feed__media").doesNotExist();
+    assert.dom(".cj-channel-page .cj-feed__tile").exists({ count: 2 });
   });
 
   test("profile links only to channel groups", async function (assert) {
