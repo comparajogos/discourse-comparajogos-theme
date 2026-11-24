@@ -1,4 +1,9 @@
 import { apiInitializer } from "discourse/lib/api";
+import { optionalRequire } from "discourse/lib/utilities";
+
+const aiBotReplies = optionalRequire(
+  "discourse/plugins/discourse-ai/discourse/initializers/ai-bot-replies"
+);
 
 export default {
   ...apiInitializer((api) => {
@@ -16,5 +21,5 @@ export default {
       }
     );
   }),
-  after: ["inject-objects", "discourse-ai-bot-replies"],
+  after: ["inject-objects", ...(aiBotReplies ? [aiBotReplies.name] : [])],
 };
