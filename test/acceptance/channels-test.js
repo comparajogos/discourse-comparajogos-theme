@@ -1,4 +1,4 @@
-import { click, currentURL, triggerEvent, visit } from "@ember/test-helpers";
+import { click, currentURL, settled, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import GroupFixtures from "discourse/tests/fixtures/group-fixtures";
@@ -61,6 +61,7 @@ acceptance("Creator channels", function (needs) {
               id: 456,
               slug: "publicacao",
               title: "Publicação da equipe",
+              fancy_title: "Publicação da equipe",
               created_at: "2026-11-01T12:00:00Z",
               excerpt: "Uma apresentação do jogo.",
               views: 15,
@@ -72,6 +73,7 @@ acceptance("Creator channels", function (needs) {
               id: 457,
               slug: "texto",
               title: "Texto da equipe",
+              fancy_title: "Texto da equipe",
               created_at: "2026-10-01T12:00:00Z",
               excerpt: "Uma análise sem imagem.",
               posters: [],
@@ -137,7 +139,10 @@ acceptance("Creator channels", function (needs) {
 
   test("a broken thumbnail falls back to the excerpt tile", async function (assert) {
     await visit("/g/discourse");
-    await triggerEvent(".cj-channel-page img.cj-feed__media", "error");
+    document
+      .querySelector(".cj-channel-page img.cj-feed__media")
+      .dispatchEvent(new Event("error"));
+    await settled();
 
     assert.dom(".cj-channel-page img.cj-feed__media").doesNotExist();
     assert.dom(".cj-channel-page .cj-feed__tile").exists({ count: 2 });

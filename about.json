@@ -70,5 +70,10 @@
       "success": "4ade80",
       "love": "fb7185"
     }
+  },
+  "tests": {
+    "requiredPlugins": [
+      "https://github.com/comparajogos/discourse-creator-channels"
+    ]
   }
 }
