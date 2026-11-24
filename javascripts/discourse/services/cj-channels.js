@@ -2,14 +2,25 @@ import Service from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
 
-const PUBLICATION_THUMBNAIL_WIDTH = 512;
+const UPLOADS_ORIGIN = "https://uploads.comparajogos.com.br";
+const RESIZABLE_PATH = /^\/[\w/.-]+$/;
 
 export function topicThumbnail(topic) {
-  return (
-    topic.thumbnails?.find(
-      ({ max_width }) => max_width === PUBLICATION_THUMBNAIL_WIDTH
-    )?.url || topic.image_url
-  );
+  const url = topic.image_url?.replace(/^\/\//, "https://");
+  if (!url) {
+    return null;
+  }
+  const path = url.startsWith(`${UPLOADS_ORIGIN}/`)
+    ? url.slice(UPLOADS_ORIGIN.length)
+    : null;
+  if (!path || !RESIZABLE_PATH.test(path) || path.includes("..")) {
+    return { src: topic.image_url };
+  }
+  const resized = (width) => `${UPLOADS_ORIGIN}/_/w${width}/plain${path}`;
+  return {
+    src: resized(384),
+    srcset: `${resized(384)} 384w, ${resized(828)} 828w`,
+  };
 }
 
 export function channelImage(url) {

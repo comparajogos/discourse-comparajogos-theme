@@ -63,21 +63,8 @@ acceptance("Creator channels", function (needs) {
               title: "Publicação da equipe",
               created_at: "2026-11-01T12:00:00Z",
               excerpt: "Uma apresentação do jogo.",
-              image_url: "/uploads/default/original/1X/full.jpeg",
-              thumbnails: [
-                {
-                  max_width: null,
-                  url: "/uploads/default/original/1X/full.jpeg",
-                },
-                {
-                  max_width: 1024,
-                  url: "/uploads/default/optimized/1X/share.jpeg",
-                },
-                {
-                  max_width: 512,
-                  url: "/uploads/default/optimized/1X/small.jpeg",
-                },
-              ],
+              image_url:
+                "https://uploads.comparajogos.com.br/optimized/1X/share.jpeg",
               posters: [],
             },
             {
@@ -109,8 +96,13 @@ acceptance("Creator channels", function (needs) {
       .dom(".cj-channel-page img.cj-feed__media")
       .hasAttribute(
         "src",
-        "/uploads/default/optimized/1X/small.jpeg",
-        "uses the small registered thumbnail instead of the share image"
+        "https://uploads.comparajogos.com.br/_/w384/plain/optimized/1X/share.jpeg",
+        "serves the card through the imgproxy preset instead of the share image"
+      )
+      .hasAttribute(
+        "srcset",
+        "https://uploads.comparajogos.com.br/_/w384/plain/optimized/1X/share.jpeg 384w, https://uploads.comparajogos.com.br/_/w828/plain/optimized/1X/share.jpeg 828w",
+        "offers a larger preset for wide or high-density cards"
       );
     assert
       .dom(".cj-channel-page .cj-feed__tile")
