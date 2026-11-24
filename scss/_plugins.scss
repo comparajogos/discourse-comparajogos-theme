@@ -464,6 +464,11 @@ body:has(.user-location-selector .d-multi-select-trigger.-expanded)
   margin-block-start: var(--space-4);
 }
 
+.ai-bot-conversations__input-wrapper #ai-bot-conversations-input {
+  background: transparent;
+  padding-inline: var(--space-1);
+}
+
 @include viewport.until(md) {
   /* Category descriptions are how a newcomer picks a category; core hides them
    * at this width. */
