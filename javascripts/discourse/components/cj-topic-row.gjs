@@ -26,6 +26,48 @@ import { channelImage, topicThumbnail } from "../services/cj-channels";
 
 const UPDATED_AFTER_LAST_POST_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
+const FeedStats = <template>
+  {{#if (or @topic.like_count @topic.views @topic.replyCount)}}
+    <div class="cj-feed__stats">
+      {{#if @topic.like_count}}
+        <span
+          class="cj-feed__stat {{if @topic.liked '--liked'}}"
+          title={{i18n "likes_lowercase" count=@topic.like_count}}
+        >
+          {{dIcon (if @topic.liked "heart" "far-heart")}}
+          {{@topic.like_count}}
+        </span>
+      {{/if}}
+
+      {{#if @topic.views}}
+        <span class="cj-feed__stat">
+          {{dIcon "far-eye"}}
+          <PluginOutlet
+            @name="topic-list-before-view-count"
+            @outletArgs={{lazyHash topic=@topic}}
+          />
+          {{dNumber @topic.views numberKey="views_long"}}
+        </span>
+      {{/if}}
+
+      {{#if @topic.replyCount}}
+        <a
+          class="cj-feed__stat badge-posts"
+          href={{@topic.firstPostUrl}}
+          aria-label={{i18n "topic.reply_count_link" count=@topic.replyCount}}
+        >
+          {{dIcon "far-comment"}}
+          <PluginOutlet
+            @name="topic-list-before-reply-count"
+            @outletArgs={{lazyHash topic=@topic}}
+          />
+          {{dNumber @topic.replyCount noTitle="true"}}
+        </a>
+      {{/if}}
+    </div>
+  {{/if}}
+</template>;
+
 /**
  * A feed row, replacing the whole set of topic-list columns with one cell.
  *
@@ -42,6 +84,7 @@ export default class CjTopicRow extends Component {
 
   showMedia = false;
   showAttribution = true;
+  inlineStats = false;
   textTile = false;
 
   get image() {
@@ -187,6 +230,9 @@ export default class CjTopicRow extends Component {
             <span class="cj-feed__age">
               {{dFormatDate @topic.createdAt format="tiny" noTitle="true"}}
             </span>
+            {{#if this.inlineStats}}
+              <FeedStats @topic={{@topic}} />
+            {{/if}}
 
             {{#if this.showAttribution}}
               <div class="cj-feed__taxonomy">
@@ -279,48 +325,9 @@ export default class CjTopicRow extends Component {
             @outletArgs={{lazyHash topic=@topic expandPinned=@expandPinned}}
           />
 
-          {{#if (or @topic.like_count @topic.views @topic.replyCount)}}
-            <div class="cj-feed__stats">
-              {{#if @topic.like_count}}
-                <span
-                  class="cj-feed__stat {{if @topic.liked '--liked'}}"
-                  title={{i18n "likes_lowercase" count=@topic.like_count}}
-                >
-                  {{dIcon (if @topic.liked "heart" "far-heart")}}
-                  {{@topic.like_count}}
-                </span>
-              {{/if}}
-
-              {{#if @topic.views}}
-                <span class="cj-feed__stat">
-                  {{dIcon "far-eye"}}
-                  <PluginOutlet
-                    @name="topic-list-before-view-count"
-                    @outletArgs={{lazyHash topic=@topic}}
-                  />
-                  {{dNumber @topic.views numberKey="views_long"}}
-                </span>
-              {{/if}}
-
-              {{#if @topic.replyCount}}
-                <a
-                  class="cj-feed__stat badge-posts"
-                  href={{@topic.firstPostUrl}}
-                  aria-label={{i18n
-                    "topic.reply_count_link"
-                    count=@topic.replyCount
-                  }}
-                >
-                  {{dIcon "far-comment"}}
-                  <PluginOutlet
-                    @name="topic-list-before-reply-count"
-                    @outletArgs={{lazyHash topic=@topic}}
-                  />
-                  {{dNumber @topic.replyCount noTitle="true"}}
-                </a>
-              {{/if}}
-            </div>
-          {{/if}}
+          {{#unless this.inlineStats}}
+            <FeedStats @topic={{@topic}} />
+          {{/unless}}
 
           {{#if this.showLastReply}}
             <a
@@ -383,6 +390,7 @@ export class CjMediaRow extends CjTopicRow {
 export class CjChannelRow extends CjTopicRow {
   showMedia = true;
   showAttribution = false;
+  inlineStats = true;
   textTile = true;
 
   get showExcerpt() {

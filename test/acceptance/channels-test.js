@@ -63,6 +63,7 @@ acceptance("Creator channels", function (needs) {
               title: "Publicação da equipe",
               created_at: "2026-11-01T12:00:00Z",
               excerpt: "Uma apresentação do jogo.",
+              views: 15,
               image_url:
                 "https://uploads.comparajogos.com.br/optimized/1X/share.jpeg",
               posters: [],
@@ -113,6 +114,9 @@ acceptance("Creator channels", function (needs) {
     assert
       .dom(".cj-channel-page .cj-feed__author")
       .doesNotExist("the channel already names its author");
+    assert
+      .dom(".cj-channel-page .cj-feed__byline .cj-feed__stats")
+      .exists("stats share the date's line");
     await click('.cj-channel-page__nav a[href*="channel_team=true"]');
     assert
       .dom(".cj-channel-page")
