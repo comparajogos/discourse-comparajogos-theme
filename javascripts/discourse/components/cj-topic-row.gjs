@@ -146,7 +146,7 @@ export default class CjTopicRow extends Component {
             class="cj-feed__media"
             src={{this.image.src}}
             srcset={{this.image.srcset}}
-            sizes="auto, (min-width: 640px) 360px, 120px"
+            sizes="(min-width: 640px) 360px, 120px"
             alt=""
             loading="lazy"
             {{on "error" this.onImageError}}
