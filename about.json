@@ -36,7 +36,12 @@
     ],
     "only_theme_color_schemes": true,
     "serialize_topic_excerpts": true,
-    "topic_thumbnail_sizes": [[512, 512]]
+    "topic_thumbnail_sizes": [
+      [
+        512,
+        512
+      ]
+    ]
   },
   "theme_site_settings": {
     "search_experience": "search_field",
