@@ -75,7 +75,8 @@
   display: none;
 }
 
-.agent-flair__model,
+/* Core's `.names > span` sets display: inline-block on topic metadata. */
+.names .agent-flair__model,
 .ai-chat-message__model {
   display: none;
 }
